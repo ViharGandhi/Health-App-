@@ -19,7 +19,7 @@ import type { DashboardData } from '@/lib/types';
 import styles from './page.module.css';
 
 const RECOVERY_COLOR: Record<string, string> = {
-  green:  '#00F076', // Vivid WHOOP neon lime green
+  green:  '#22E600', // Crisp WHOOP electric lime green
   yellow: '#F5C518',
   red:    '#FF3B3B',
 };
@@ -173,18 +173,18 @@ export default function DashboardPage() {
           {/* HEALTH MONITOR */}
           <div className={styles.monitorCard} onClick={() => router.push('/recovery')} role="button" tabIndex={0}>
             <div className={styles.cardHeaderRow}>
-              <span className={styles.cardTitle}>HEALTH<br />MONITOR</span>
+              <span className={styles.cardTitle}>HEALTH MONITOR</span>
               <span className={styles.cardChevron}>›</span>
             </div>
             <div className={styles.monitorBody}>
               <div className={styles.checkIconBox}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00F076" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2BD67E" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               </div>
               <div className={styles.monitorTextStack}>
-                <span className={styles.monitorHighlight} style={{ color: '#00F076' }}>
-                  WITHIN<br />RANGE
+                <span className={styles.monitorHighlight} style={{ color: '#2BD67E' }}>
+                  WITHIN RANGE
                 </span>
                 <span className={styles.monitorSubtext}>5/5 Metrics</span>
               </div>
@@ -194,13 +194,13 @@ export default function DashboardPage() {
           {/* STRESS MONITOR */}
           <div className={styles.monitorCard} onClick={() => router.push('/strain')} role="button" tabIndex={0}>
             <div className={styles.cardHeaderRow}>
-              <span className={styles.cardTitle}>STRESS<br />MONITOR</span>
+              <span className={styles.cardTitle}>STRESS MONITOR</span>
               <span className={styles.cardChevron}>›</span>
             </div>
             <div className={styles.monitorBody}>
               <div className={styles.stressScoreBadge}>0.4</div>
               <div className={styles.monitorTextStack}>
-                <span className={styles.monitorHighlight} style={{ color: '#4EA5B7' }}>
+                <span className={styles.monitorHighlight} style={{ color: '#5CB3CC' }}>
                   LOW
                 </span>
                 <span className={styles.monitorSubtext}>7:30 AM</span>

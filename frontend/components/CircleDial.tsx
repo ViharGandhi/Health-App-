@@ -36,7 +36,7 @@ export default function CircleDial({
   // If value > 0 ensure tiny minimum arc is visible like WHOOP's 0.1 strain tick
   const pct = value > 0 ? Math.max(rawPct, 0.016) : 0;
 
-  const strokeWidth = isPrimary ? 7.5 : 6;
+  const strokeWidth = isPrimary ? 6.5 : 5.5;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const dashOffset = circumference * (1 - pct);
@@ -65,7 +65,7 @@ export default function CircleDial({
             stroke="rgba(255, 255, 255, 0.12)"
             strokeWidth={strokeWidth}
           />
-          {/* Active colored arc */}
+          {/* Active colored arc — crisp flat stroke, no glow */}
           <circle
             cx={center}
             cy={center}
@@ -78,7 +78,6 @@ export default function CircleDial({
             strokeDashoffset={dashOffset}
             transform={`rotate(-90 ${center} ${center})`}
             style={{
-              filter: isPrimary ? `drop-shadow(0 0 6px ${color}80)` : `drop-shadow(0 0 3px ${color}40)`,
               transition: 'stroke-dashoffset 1s cubic-bezier(0.25, 1, 0.5, 1)',
             }}
           />
