@@ -85,26 +85,23 @@
 
 /* Label row: "RECOVERY >" */
 .labelRow {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
 }
 
 .labelText {
   font-family: var(--font-body);
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
-  color: #FFFFFF;
-}
-
-.chevron {
-  font-family: var(--font-body);
   font-size: 11px;
   font-weight: 700;
-  color: #8E95A2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #FFFFFF;
   line-height: 1;
-  transform: translateY(-0.5px);
+}
+
+.chevronSvg {
+  display: block;
+  flex-shrink: 0;
 }

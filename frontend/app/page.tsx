@@ -104,14 +104,18 @@ export default function DashboardPage() {
           </div>
 
           <div className={styles.datePill}>
-            <span className={styles.pillArrow}>&lt;</span>
+            <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ transform: 'rotate(180deg)' }}>
+              <path d="M1 1.5L4.5 5L1 8.5" />
+            </svg>
             <span className={styles.pillText}>TODAY</span>
-            <span className={styles.pillArrow}>&gt;</span>
+            <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M1 1.5L4.5 5L1 8.5" />
+            </svg>
           </div>
 
           <div className={styles.headerRight}>
             <span className={styles.batteryPct}>94%</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00F076" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={styles.batteryIcon}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22E600" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={styles.batteryIcon}>
               <rect x="2" y="7" width="16" height="10" rx="2" ry="2" />
               <line x1="20" y1="11" x2="20" y2="13" />
             </svg>
@@ -174,7 +178,9 @@ export default function DashboardPage() {
           <div className={styles.monitorCard} onClick={() => router.push('/recovery')} role="button" tabIndex={0}>
             <div className={styles.cardHeaderRow}>
               <span className={styles.cardTitle}>HEALTH MONITOR</span>
-              <span className={styles.cardChevron}>›</span>
+              <svg className={styles.cardChevronSvg} width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 1.5L4.5 5L1 8.5" />
+              </svg>
             </div>
             <div className={styles.monitorBody}>
               <div className={styles.checkIconBox}>
@@ -195,12 +201,14 @@ export default function DashboardPage() {
           <div className={styles.monitorCard} onClick={() => router.push('/strain')} role="button" tabIndex={0}>
             <div className={styles.cardHeaderRow}>
               <span className={styles.cardTitle}>STRESS MONITOR</span>
-              <span className={styles.cardChevron}>›</span>
+              <svg className={styles.cardChevronSvg} width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 1.5L4.5 5L1 8.5" />
+              </svg>
             </div>
             <div className={styles.monitorBody}>
               <div className={styles.stressScoreBadge}>0.4</div>
               <div className={styles.monitorTextStack}>
-                <span className={styles.monitorHighlight} style={{ color: '#5CB3CC' }}>
+                <span className={styles.monitorHighlight} style={{ color: '#2BD67E' }}>
                   LOW
                 </span>
                 <span className={styles.monitorSubtext}>7:30 AM</span>

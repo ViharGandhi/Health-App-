@@ -95,7 +95,11 @@ export default function CircleDial({
       {/* Label under dial: "SLEEP >", "RECOVERY >", "STRAIN >" */}
       <div className={styles.labelRow}>
         <span className={styles.labelText}>{label}</span>
-        {showChevron && <span className={styles.chevron}>&gt;</span>}
+        {showChevron && (
+          <svg className={styles.chevronSvg} width="6" height="9" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M1 1.5L4.5 5L1 8.5" />
+          </svg>
+        )}
       </div>
     </div>
   );

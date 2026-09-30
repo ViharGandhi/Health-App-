@@ -4,7 +4,7 @@
  * Clean sans-serif typography matching WHOOP's aesthetic.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@600;700;800;900&family=Montserrat:wght@500;600;700;800;900&display=swap');
 
 /* Reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,8 +48,9 @@
   --card-radius:  14px;
   --section-gap:  18px;
 
-  --font-body: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* WHOOP typography: Proxima Nova for UI & text, DINPro for numbers & data */
+  --font-body: 'Proxima Nova', 'ProximaNova', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'DIN Pro', 'DINPro', 'DIN Alternate', 'Barlow', 'Montserrat', sans-serif;
 
   --shadow-card:     0 2px 8px rgba(0, 0, 0, 0.35);
   --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.5);
