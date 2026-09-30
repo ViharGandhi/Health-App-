@@ -156,10 +156,13 @@ class SleepEfficiencyTrendResponse(BaseModel):
     average_time_in_bed_hours: float
     average_awake_minutes: float
     prior_week_change: float
+    comparison_label: Optional[str] = "vs. prior week"
     range_label: str
     insight: str
+    current_day_score: Optional[float] = None
     days: List[SleepEfficiencyDay]
     breakdown: SleepEfficiencyBreakdown
+
 
 
 

@@ -2,14 +2,26 @@
 
 /**
  * Trend View — Sleep Efficiency (/sleep/efficiency)
- * WHOOP app Sleep Efficiency Trend screen:
+ * WHOOP-exact Sleep Efficiency Trend Screen:
  * - Top header with back button and "TREND VIEW"
- * - Metric dropdown pill with efficiency icon: "SLEEP EFFICIENCY"
- * - Summary section with Average %, vs. prior week badge, W / M / 6M toggle, and date navigator
- * - Narrative insight paragraph
- * - 7-day Bar chart with score values hugging tops of bars, y-axis gridlines, and day/date labels
- * - Sleep Efficiency Breakdown segmented bar and days counts (Optimal / Sufficient / Poor)
- * - Average Asleep / In Bed / Awake stats row
+ * - Dropdown pill: bed + histogram icon, "SLEEP EFFICIENCY", chevron
+ * - Summary section:
+ *    - AVERAGE 95%
+ *    - "• 0% vs. prior month" pill
+ *    - Timeframe toggle: W | M | 6M (M active by default)
+ *    - Date range navigator: < MAR 17 - APR 15, 26 >
+ * - Narrative insight:
+ *    "Your average sleep efficiency (95%) this month was consistent with your previous 30-day average of 95%."
+ * - High-precision SVG Line & Area chart:
+ *    - Y-Axis: 100%, 96%, 92%, 88%, 84% with gridlines
+ *    - Dashed horizontal average reference line with "[ AVG. ]" white capsule pill
+ *    - Continuous cyan/teal curve with gradient fill
+ *    - Open circular marker on last day with "96%" score above it
+ *    - X-Axis ticks: Mar 18, Mar 25, Apr 1, Apr 8, Apr 15
+ * - SLEEP EFFICIENCY BREAKDOWN (DAYS):
+ *    - Bright luminous cyan/mint bar (#00E5A3)
+ *    - 30x Optimal (90%+)
+ *    - 0x Sufficient (80-89%)
  */
 
 import { useEffect, useState } from 'react';
@@ -22,16 +34,17 @@ export default function SleepEfficiencyTrendPage() {
   const router = useRouter();
   const [trend, setTrend] = useState<SleepEfficiencyTrend | null>(null);
   const [loading, setLoading] = useState(true);
-  const [timeframe, setTimeframe] = useState<'W' | 'M' | '6M'>('W');
+  const [timeframe, setTimeframe] = useState<'W' | 'M' | '6M'>('M');
 
   useEffect(() => {
-    api.getSleepEfficiencyTrend()
+    setLoading(true);
+    api.getSleepEfficiencyTrend(timeframe)
       .then(setTrend)
       .catch((err) => {
         console.error('Failed to load efficiency trend', err);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [timeframe]);
 
   if (loading || !trend) {
     return (
@@ -48,19 +61,63 @@ export default function SleepEfficiencyTrendPage() {
   const {
     average_score,
     prior_week_change,
+    comparison_label = 'vs. prior month',
     range_label,
     insight,
     days,
     breakdown,
-    average_time_asleep_hours,
-    average_time_in_bed_hours,
-    average_awake_minutes,
   } = trend;
 
-  const totalDays = breakdown.total_days || 7;
+  const totalDays = breakdown.total_days || days.length || 30;
   const optimalRatio = (breakdown.optimal_days / totalDays) * 100;
   const sufficientRatio = (breakdown.sufficient_days / totalDays) * 100;
   const poorRatio = (breakdown.poor_days / totalDays) * 100;
+
+  // Chart coordinate math
+  // Y-axis spans from 84% to 100%
+  const yMin = 84;
+  const yMax = 100;
+  const yTicks = [100, 96, 92, 88, 84];
+
+  const svgWidth = 320;
+  const svgHeight = 175;
+  const chartTop = 15;
+  const chartBottom = 160;
+  const chartLeft = 0;
+  const chartRight = svgWidth;
+  const plotWidth = chartRight - chartLeft;
+  const plotHeight = chartBottom - chartTop;
+
+  const getYCoord = (val: number) => {
+    const clamped = Math.max(yMin, Math.min(yMax, val));
+    const ratio = (yMax - clamped) / (yMax - yMin);
+    return chartTop + ratio * plotHeight;
+  };
+
+  const n = days.length;
+  const points = days.map((d, i) => {
+    const x = chartLeft + (i / Math.max(1, n - 1)) * plotWidth;
+    const y = getYCoord(d.score);
+    return { x, y, score: d.score, day: d };
+  });
+
+  // SVG path definitions
+  const linePathD = points.length > 0
+    ? `M ${points.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' L ')}`
+    : '';
+
+  const areaPathD = points.length > 0
+    ? `${linePathD} L ${points[points.length - 1].x.toFixed(1)},${chartBottom} L ${points[0].x.toFixed(1)},${chartBottom} Z`
+    : '';
+
+  const avgY = getYCoord(average_score);
+  const lastPoint = points[points.length - 1];
+
+  // Specific ticks for X-axis in Month mode
+  // Ticks: Mar 18, Mar 25, Apr 1, Apr 8, Apr 15
+  const monthTickIndices = timeframe === 'M'
+    ? [1, 8, 15, 22, 29]
+    : [0, 1, 2, 3, 4, 5, 6];
 
   return (
     <div className={styles.pageWrapper}>
@@ -80,10 +137,15 @@ export default function SleepEfficiencyTrendPage() {
         <div className={styles.metricSelectorPill}>
           <div className={styles.selectorLeft}>
             <div className={styles.selectorIcon}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="20" x2="18" y2="10" />
-                <line x1="12" y1="20" x2="12" y2="4" />
-                <line x1="6" y1="20" x2="6" y2="14" />
+              {/* WHOOP Sleep Efficiency Icon: Bed with 3 vertical bars */}
+              <svg width="22" height="18" viewBox="0 0 24 20" fill="none" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="6" y1="9" x2="6" y2="4" />
+                <line x1="12" y1="9" x2="12" y2="2" />
+                <line x1="18" y1="9" x2="18" y2="5" />
+                <path d="M2 13h20" />
+                <path d="M2 17v-6" />
+                <path d="M22 17v-4" />
+                <path d="M2 13a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3" />
               </svg>
             </div>
             <span className={styles.selectorTitle}>SLEEP EFFICIENCY</span>
@@ -103,8 +165,22 @@ export default function SleepEfficiencyTrendPage() {
               <span className={styles.scoreUnit}>%</span>
             </div>
             <div className={styles.deltaPill}>
-              <span className={styles.deltaArrow}>{prior_week_change >= 0 ? '▲' : '▼'}</span>
-              <span>{Math.abs(prior_week_change)}% vs. prior week</span>
+              {prior_week_change === 0 ? (
+                <>
+                  <span className={styles.deltaDot}>•</span>
+                  <span>0% {comparison_label}</span>
+                </>
+              ) : prior_week_change > 0 ? (
+                <>
+                  <span className={styles.deltaArrowGreen}>▲</span>
+                  <span className={styles.deltaTextGreen}>{prior_week_change}% {comparison_label}</span>
+                </>
+              ) : (
+                <>
+                  <span className={styles.deltaArrowRed}>▼</span>
+                  <span className={styles.deltaTextRed}>{Math.abs(prior_week_change)}% {comparison_label}</span>
+                </>
+              )}
             </div>
           </div>
 
@@ -123,13 +199,13 @@ export default function SleepEfficiencyTrendPage() {
             </div>
 
             <div className={styles.dateNavRow}>
-              <button className={styles.dateArrowBtn} aria-label="Previous week">
+              <button className={styles.dateArrowBtn} aria-label="Previous range">
                 <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 1.5L1.5 5L5 8.5" />
                 </svg>
               </button>
               <span className={styles.dateRangeText}>{range_label}</span>
-              <button className={styles.dateArrowBtn} aria-label="Next week">
+              <button className={styles.dateArrowBtn} aria-label="Next range">
                 <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M1 1.5L4.5 5L1 8.5" />
                 </svg>
@@ -141,57 +217,121 @@ export default function SleepEfficiencyTrendPage() {
         {/* -- Insight Narrative Text -- */}
         <p className={styles.insightText}>{insight}</p>
 
-        {/* -- Bar Chart Trend Graph -- */}
-        <div className={styles.chartContainer}>
-          {/* Y-Axis Gridlines */}
-          <div className={styles.gridlinesWrapper}>
-            {[100, 75, 50, 25, 0].map((val) => (
-              <div key={val} className={styles.gridlineRow}>
-                <span className={styles.yAxisLabel}>{val}%</span>
-                <div className={styles.gridline} />
-              </div>
-            ))}
-          </div>
-
-          {/* 7 Daily Bars */}
-          <div className={styles.barsRow}>
-            {days.map((day) => {
-              const heightPct = Math.max(8, Math.min(100, day.score));
+        {/* -- WHOOP Line & Area Chart Container -- */}
+        <div className={styles.chartWrapper}>
+          {/* Y-Axis Column */}
+          <div className={styles.yAxisCol}>
+            {yTicks.map((val) => {
+              const isAvgVal = val === 96; // near average 95
               return (
-                <div key={day.date} className={styles.barCol}>
-                  {/* Bar pillar with score resting right on top */}
-                  <div className={styles.barTrack}>
-                    <div className={styles.barPillarWrapper} style={{ height: `${heightPct}%` }}>
-                      <span className={styles.barScoreLabel}>{Math.round(day.score)}%</span>
-                      <div className={styles.barFill} />
-                    </div>
-                  </div>
-
-                  {/* Day name & date under bar */}
-                  <div className={styles.barMeta}>
-                    <span className={styles.barDayName}>{day.day_name}</span>
-                    <span className={styles.barDayNum}>{day.day_num}</span>
-                  </div>
+                <div key={val} className={styles.yTickItem}>
+                  {isAvgVal ? (
+                    <div className={styles.avgPill}>AVG.</div>
+                  ) : (
+                    <span className={styles.yTickLabel}>{val}%</span>
+                  )}
                 </div>
               );
             })}
           </div>
+
+          {/* Graph Body */}
+          <div className={styles.graphBody}>
+            {/* Background Gridlines */}
+            <div className={styles.gridlinesBody}>
+              {yTicks.map((val) => (
+                <div key={val} className={styles.gridlineRow} />
+              ))}
+            </div>
+
+            {/* SVG Plot */}
+            <svg
+              className={styles.svgPlot}
+              viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <linearGradient id="efficiencyGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#62A4B7" stopOpacity="0.22" />
+                  <stop offset="100%" stopColor="#62A4B7" stopOpacity="0.0" />
+                </linearGradient>
+              </defs>
+
+              {/* Dashed Average Line across chart */}
+              <line
+                x1={0}
+                y1={avgY}
+                x2={svgWidth}
+                y2={avgY}
+                stroke="#8E95A2"
+                strokeWidth="1.2"
+                strokeDasharray="4 4"
+                opacity="0.55"
+              />
+
+              {/* Subtle Gradient Area Fill Under Curve */}
+              {areaPathD && (
+                <path d={areaPathD} fill="url(#efficiencyGradient)" />
+              )}
+
+              {/* Cyan / Teal Line */}
+              {linePathD && (
+                <path
+                  d={linePathD}
+                  fill="none"
+                  stroke="#62A4B7"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              )}
+
+              {/* Open Circular Marker on latest day */}
+              {lastPoint && (
+                <circle
+                  cx={lastPoint.x}
+                  cy={lastPoint.y}
+                  r="4"
+                  fill="#0E1217"
+                  stroke="#FFFFFF"
+                  strokeWidth="2.4"
+                />
+              )}
+            </svg>
+
+            {/* Floating 96% score directly above last point */}
+            {lastPoint && (
+              <span
+                className={styles.endpointLabel}
+                style={{
+                  left: `${(lastPoint.x / svgWidth) * 100}%`,
+                  top: `${(lastPoint.y / svgHeight) * 100}%`,
+                }}
+              >
+                {Math.round(lastPoint.score)}%
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* -- Duration Breakdown Metrics Cards -- */}
-        <div className={styles.statsCardsRow}>
-          <div className={styles.statCard}>
-            <span className={styles.statLabel}>AVG ASLEEP</span>
-            <span className={styles.statValue}>{average_time_asleep_hours.toFixed(1)} <span className={styles.statUnit}>hrs</span></span>
-          </div>
-          <div className={styles.statCard}>
-            <span className={styles.statLabel}>AVG IN BED</span>
-            <span className={styles.statValue}>{average_time_in_bed_hours.toFixed(1)} <span className={styles.statUnit}>hrs</span></span>
-          </div>
-          <div className={styles.statCard}>
-            <span className={styles.statLabel}>AVG AWAKE</span>
-            <span className={styles.statValue}>{Math.round(average_awake_minutes)} <span className={styles.statUnit}>min</span></span>
-          </div>
+        {/* -- X-Axis Dates Row -- */}
+        <div className={styles.xAxisRow}>
+          {monthTickIndices.map((idx) => {
+            const pt = points[idx];
+            if (!pt) return null;
+            const d = pt.day;
+            const pct = (pt.x / svgWidth) * 100;
+            return (
+              <div
+                key={d.date}
+                className={styles.xTickItem}
+                style={{ left: `${pct}%` }}
+              >
+                <span className={styles.xTickMonth}>{d.date.slice(5, 7) === '03' ? 'Mar' : 'Apr'}</span>
+                <span className={styles.xTickDay}>{d.day_num}</span>
+              </div>
+            );
+          })}
         </div>
 
         {/* -- Sleep Efficiency Breakdown Section -- */}
@@ -201,16 +341,18 @@ export default function SleepEfficiencyTrendPage() {
             <span className={styles.breakdownUnit}>(DAYS)</span>
           </div>
 
-          {/* Segmented Bar */}
+          {/* Single/Dual Segmented Bar (100% luminous cyan in WHOOP screenshot) */}
           <div className={styles.breakdownProgressBar}>
             <div className={styles.optimalBarSegment} style={{ width: `${optimalRatio}%` }} />
-            <div className={styles.sufficientBarSegment} style={{ width: `${sufficientRatio}%` }} />
+            {sufficientRatio > 0 && (
+              <div className={styles.sufficientBarSegment} style={{ width: `${sufficientRatio}%` }} />
+            )}
             {poorRatio > 0 && (
               <div className={styles.poorBarSegment} style={{ width: `${poorRatio}%` }} />
             )}
           </div>
 
-          {/* Legend rows */}
+          {/* Legend rows with square dots matching screenshot */}
           <div className={styles.breakdownLegend}>
             <div className={styles.legendRow}>
               <span className={styles.legendDotOptimal} />

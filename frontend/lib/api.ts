@@ -38,8 +38,9 @@ export const api = {
     apiFetch<import('./types').SleepConsistencyTrend>('/api/sleep/consistency'),
 
   /** Sleep efficiency trend history */
-  getSleepEfficiencyTrend: (): Promise<import('./types').SleepEfficiencyTrend> =>
-    apiFetch<import('./types').SleepEfficiencyTrend>('/api/sleep/efficiency'),
+  getSleepEfficiencyTrend: (timeframe: string = 'M'): Promise<import('./types').SleepEfficiencyTrend> =>
+    apiFetch<import('./types').SleepEfficiencyTrend>(`/api/sleep/efficiency?timeframe=${timeframe}`),
+
 
 
   /** Strain score + zones */

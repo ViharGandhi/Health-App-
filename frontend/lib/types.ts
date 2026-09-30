@@ -133,11 +133,14 @@ export interface SleepEfficiencyTrend {
   average_time_in_bed_hours: number;
   average_awake_minutes: number;
   prior_week_change: number;
+  comparison_label?: string;
   range_label: string;
   insight: string;
+  current_day_score?: number;
   days: SleepEfficiencyDay[];
   breakdown: SleepEfficiencyBreakdown;
 }
+
 
 export interface AuthStatus {
   connected: boolean;

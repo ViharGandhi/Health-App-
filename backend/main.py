@@ -472,18 +472,20 @@ async def sleep_consistency_endpoint(request: Request):
 
 
 @app.get("/api/sleep/efficiency", response_model=SleepEfficiencyTrendResponse)
-async def sleep_efficiency_endpoint(request: Request):
+async def sleep_efficiency_endpoint(request: Request, timeframe: str = "M"):
     """
-    Returns 7-day sleep efficiency trend and daily breakdown.
+    Returns sleep efficiency trend and daily breakdown (Week or Month).
+    Defaults to Month (M) matching WHOOP app reference.
     """
     token = await _get_token(request)
     if not token:
-        return get_mock_sleep_efficiency_trend()
+        return get_mock_sleep_efficiency_trend(timeframe=timeframe)
 
+    days_count = 30 if timeframe.upper() == "M" else 7
     client = GoogleHealthClient(token)
-    history = await client.get_sleep_efficiency_history(days=7)
+    history = await client.get_sleep_efficiency_history(days=days_count)
     if not history:
-        return get_mock_sleep_efficiency_trend()
+        return get_mock_sleep_efficiency_trend(timeframe=timeframe)
 
     nights = [
         SleepEfficiencyNight(
@@ -510,6 +512,8 @@ async def sleep_efficiency_endpoint(request: Request):
         for d in trend_res.days
     ]
 
+    last_score = days_data[-1].score if days_data else 96.0
+
     return SleepEfficiencyTrendResponse(
         average_score=trend_res.average_efficiency_pct,
         status=trend_res.status,
@@ -517,8 +521,10 @@ async def sleep_efficiency_endpoint(request: Request):
         average_time_in_bed_hours=trend_res.average_time_in_bed_hours,
         average_awake_minutes=trend_res.average_awake_minutes,
         prior_week_change=trend_res.prior_week_change,
+        comparison_label="vs. prior month" if timeframe.upper() == "M" else "vs. prior week",
         range_label=trend_res.range_label,
         insight=trend_res.insight,
+        current_day_score=last_score,
         days=days_data,
         breakdown=SleepEfficiencyBreakdown(
             optimal_days=trend_res.optimal_days,
@@ -527,5 +533,6 @@ async def sleep_efficiency_endpoint(request: Request):
             total_days=trend_res.total_days,
         ),
     )
+
 
 

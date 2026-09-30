@@ -1,4 +1,4 @@
-/* page.module.css — WHOOP Sleep Efficiency Trend View */
+/* page.module.css — Exact WHOOP Sleep Efficiency Trend View */
 
 .pageWrapper {
   min-height: 100dvh;
@@ -72,7 +72,7 @@
 .selectorLeft {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .selectorIcon {
@@ -80,7 +80,7 @@
   align-items: center;
   justify-content: center;
   color: #FFFFFF;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .selectorTitle {
@@ -103,7 +103,7 @@
 .averageBlock {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .averageLabel {
@@ -118,7 +118,7 @@
 .scoreRow {
   display: inline-flex;
   align-items: baseline;
-  gap: 1px;
+  gap: 2px;
 }
 
 .scoreBig {
@@ -141,21 +141,40 @@
 .deltaPill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: rgba(34, 230, 0, 0.12);
-  border: 1px solid rgba(34, 230, 0, 0.25);
+  gap: 5px;
+  background: #171A21;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 4px;
-  padding: 3px 6px;
+  padding: 3px 7px;
   font-family: var(--font-body);
   font-size: 10px;
-  font-weight: 800;
-  color: #22E600;
+  font-weight: 700;
+  color: #8E95A2;
   margin-top: 2px;
   width: fit-content;
 }
 
-.deltaArrow {
+.deltaDot {
+  font-size: 10px;
+  color: #8E95A2;
+}
+
+.deltaArrowGreen {
   font-size: 8px;
+  color: #22E600;
+}
+
+.deltaTextGreen {
+  color: #22E600;
+}
+
+.deltaArrowRed {
+  font-size: 8px;
+  color: #FF3B30;
+}
+
+.deltaTextRed {
+  color: #FF3B30;
 }
 
 /* Right Controls (Timeframe & Date range) */
@@ -169,7 +188,7 @@
 .timeframeToggle {
   display: flex;
   align-items: center;
-  background: #14171D;
+  background: #12151B;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   padding: 3px;
@@ -235,21 +254,61 @@
   margin: 10px 0 24px;
 }
 
-/* ---- Bar Chart Trend Graph ---- */
-.chartContainer {
-  position: relative;
+/* ---- WHOOP Line Chart Container ---- */
+.chartWrapper {
+  display: flex;
   width: 100%;
-  height: 250px;
-  margin-bottom: 24px;
-  padding-top: 14px;
+  height: 175px;
+  position: relative;
+  margin-bottom: 6px;
 }
 
-.gridlinesWrapper {
+.yAxisCol {
+  width: 44px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-right: 6px;
+  user-select: none;
+}
+
+.yTickItem {
+  height: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.yTickLabel {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  color: #5C626E;
+  line-height: 1;
+}
+
+.avgPill {
+  background: #FFFFFF;
+  color: #0E1217;
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.graphBody {
+  flex: 1;
+  position: relative;
+  height: 100%;
+}
+
+.gridlinesBody {
   position: absolute;
-  top: 14px;
-  left: 0;
-  right: 0;
-  bottom: 38px;
+  inset: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -257,156 +316,60 @@
 }
 
 .gridlineRow {
-  display: flex;
-  align-items: center;
   width: 100%;
-  gap: 8px;
-}
-
-.yAxisLabel {
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 600;
-  color: #5C626E;
-  min-width: 32px;
-  text-align: right;
-}
-
-.gridline {
-  flex: 1;
   height: 1px;
   background: rgba(255, 255, 255, 0.07);
 }
 
-/* 7 Bars */
-.barsRow {
+.svgPlot {
   position: absolute;
-  top: 14px;
-  left: 40px;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding-right: 6px;
-}
-
-.barCol {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  justify-content: flex-end;
-  flex: 1;
-  gap: 6px;
-}
-
-.barTrack {
-  position: relative;
+  inset: 0;
   width: 100%;
-  height: calc(100% - 44px);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  height: 100%;
+  overflow: visible;
 }
 
-.barPillarWrapper {
-  position: relative;
-  width: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  transition: height 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.barScoreLabel {
+.endpointLabel {
   position: absolute;
-  top: -18px;
-  left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -18px);
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 800;
   color: #FFFFFF;
-  letter-spacing: -0.3px;
-  line-height: 1;
+  letter-spacing: -0.2px;
+  pointer-events: none;
   white-space: nowrap;
 }
 
-.barFill {
-  width: 100%;
-  height: 100%;
-  background: #68A1B4;
-  border-radius: 3px 3px 0 0;
+/* ---- X-Axis Dates Row ---- */
+.xAxisRow {
+  position: relative;
+  height: 38px;
+  margin-left: 44px;
+  margin-bottom: 26px;
 }
 
-.barCol:hover .barFill {
-  background: #7FB6C8;
-}
-
-.barMeta {
+.xTickItem {
+  position: absolute;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1px;
-  height: 32px;
+  user-select: none;
 }
 
-.barDayName {
+.xTickMonth {
   font-family: var(--font-body);
   font-size: 10px;
   font-weight: 600;
   color: #8E95A2;
 }
 
-.barDayNum {
+.xTickDay {
   font-family: var(--font-display);
   font-size: 10.5px;
   font-weight: 700;
-  color: #8E95A2;
-}
-
-/* ---- Duration Stats Row ---- */
-.statsCardsRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 26px;
-}
-
-.statCard {
-  background: #15181F;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  padding: 10px 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.statLabel {
-  font-family: var(--font-body);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: #8E95A2;
-}
-
-.statValue {
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 800;
-  color: #FFFFFF;
-  line-height: 1.1;
-}
-
-.statUnit {
-  font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 600;
   color: #8E95A2;
 }
 
@@ -443,8 +406,8 @@
 
 .breakdownProgressBar {
   width: 100%;
-  height: 7px;
-  border-radius: 4px;
+  height: 6px;
+  border-radius: 3px;
   display: flex;
   overflow: hidden;
   background: #252A34;
@@ -452,12 +415,12 @@
 
 .optimalBarSegment {
   height: 100%;
-  background: #22E600;
+  background: #00E5A3;
 }
 
 .sufficientBarSegment {
   height: 100%;
-  background: #3A414E;
+  background: #2A303C;
 }
 
 .poorBarSegment {
@@ -479,22 +442,22 @@
 }
 
 .legendDotOptimal {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 2px;
-  background: #22E600;
+  background: #00E5A3;
 }
 
 .legendDotSufficient {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 2px;
-  background: #3A414E;
+  background: #2A303C;
 }
 
 .legendDotPoor {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 2px;
   background: #FF3B30;
 }

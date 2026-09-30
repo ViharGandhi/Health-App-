@@ -368,38 +368,85 @@ def get_mock_sleep_consistency_trend() -> SleepConsistencyTrendResponse:
     )
 
 
-def get_mock_sleep_efficiency_trend() -> SleepEfficiencyTrendResponse:
+def get_mock_sleep_efficiency_trend(timeframe: str = "M") -> SleepEfficiencyTrendResponse:
     """
-    Returns 7-day sleep efficiency trend data matching WHOOP trend view.
+    Returns sleep efficiency trend data matching WHOOP trend view.
+    Defaults to 30-day Month view as shown in the WHOOP screenshot.
     """
-    days_data = [
-        SleepEfficiencyDay(day_name="Thu", day_num=9, date="2026-04-09", score=91.0, status="Optimal", asleep_hours=7.2, in_bed_hours=7.9, awake_minutes=42.0),
-        SleepEfficiencyDay(day_name="Fri", day_num=10, date="2026-04-10", score=94.0, status="Optimal", asleep_hours=7.5, in_bed_hours=8.0, awake_minutes=30.0),
-        SleepEfficiencyDay(day_name="Sat", day_num=11, date="2026-04-11", score=88.0, status="Sufficient", asleep_hours=7.0, in_bed_hours=7.95, awake_minutes=57.0),
-        SleepEfficiencyDay(day_name="Sun", day_num=12, date="2026-04-12", score=85.0, status="Sufficient", asleep_hours=6.8, in_bed_hours=8.0, awake_minutes=72.0),
-        SleepEfficiencyDay(day_name="Mon", day_num=13, date="2026-04-13", score=92.0, status="Optimal", asleep_hours=7.4, in_bed_hours=8.05, awake_minutes=39.0),
-        SleepEfficiencyDay(day_name="Tue", day_num=14, date="2026-04-14", score=95.0, status="Optimal", asleep_hours=7.8, in_bed_hours=8.2, awake_minutes=24.0),
-        SleepEfficiencyDay(day_name="Wed", day_num=15, date="2026-04-15", score=96.0, status="Optimal", asleep_hours=7.5, in_bed_hours=7.8, awake_minutes=18.0),
+    if timeframe.upper() == "W":
+        days_data = [
+            SleepEfficiencyDay(day_name="Thu", day_num=9, date="2026-04-09", score=97.0, status="Optimal", asleep_hours=7.6, in_bed_hours=7.8, awake_minutes=14.0),
+            SleepEfficiencyDay(day_name="Fri", day_num=10, date="2026-04-10", score=96.0, status="Optimal", asleep_hours=7.5, in_bed_hours=7.8, awake_minutes=18.0),
+            SleepEfficiencyDay(day_name="Sat", day_num=11, date="2026-04-11", score=95.0, status="Optimal", asleep_hours=7.4, in_bed_hours=7.8, awake_minutes=24.0),
+            SleepEfficiencyDay(day_name="Sun", day_num=12, date="2026-04-12", score=95.0, status="Optimal", asleep_hours=7.3, in_bed_hours=7.7, awake_minutes=24.0),
+            SleepEfficiencyDay(day_name="Mon", day_num=13, date="2026-04-13", score=94.0, status="Optimal", asleep_hours=7.4, in_bed_hours=7.9, awake_minutes=30.0),
+            SleepEfficiencyDay(day_name="Tue", day_num=14, date="2026-04-14", score=96.0, status="Optimal", asleep_hours=7.7, in_bed_hours=8.0, awake_minutes=20.0),
+            SleepEfficiencyDay(day_name="Wed", day_num=15, date="2026-04-15", score=96.0, status="Optimal", asleep_hours=7.6, in_bed_hours=7.9, awake_minutes=19.0),
+        ]
+        return SleepEfficiencyTrendResponse(
+            average_score=95.0,
+            status="Optimal",
+            average_time_asleep_hours=7.5,
+            average_time_in_bed_hours=7.9,
+            average_awake_minutes=21.0,
+            prior_week_change=1.0,
+            comparison_label="vs. prior week",
+            range_label="APR 9 - APR 15, 26",
+            insight="Your average sleep efficiency (95%) this week was consistent with your previous 7-day average of 94%.",
+            current_day_score=96.0,
+            days=days_data,
+            breakdown=SleepEfficiencyBreakdown(
+                optimal_days=7,
+                sufficient_days=0,
+                poor_days=0,
+                total_days=7,
+            ),
+        )
+
+    # 30-Day Month View (Exact curve from WHOOP reference screenshot)
+    # Mar 17 -> Apr 15, 2026
+    start_date = date(2026, 3, 17)
+    month_scores = [
+        98.0, 96.0, 96.0, 93.0, 92.0, 94.0, 94.0, 94.0, 90.0, 98.0,
+        99.0, 96.0, 94.0, 94.0, 90.0, 95.0, 93.0, 92.0, 96.0, 95.0,
+        96.0, 94.0, 96.0, 97.0, 96.0, 95.0, 95.0, 94.0, 96.0, 96.0
     ]
 
-    avg_score = round(sum(d.score for d in days_data) / len(days_data), 1)
+    days_data = []
+    for i, sc in enumerate(month_scores):
+        d = start_date + timedelta(days=i)
+        days_data.append(
+            SleepEfficiencyDay(
+                day_name=d.strftime("%a"),
+                day_num=d.day,
+                date=d.strftime("%Y-%m-%d"),
+                score=sc,
+                status="Optimal" if sc >= 90.0 else ("Sufficient" if sc >= 80.0 else "Poor"),
+                asleep_hours=round(7.2 + (sc - 90) * 0.05, 2),
+                in_bed_hours=round(7.8 + (sc - 90) * 0.02, 2),
+                awake_minutes=round((100.0 - sc) * 4.8, 1),
+            )
+        )
 
     return SleepEfficiencyTrendResponse(
-        average_score=avg_score,
-        status="Optimal" if avg_score >= 90.0 else ("Sufficient" if avg_score >= 80.0 else "Poor"),
-        average_time_asleep_hours=7.3,
-        average_time_in_bed_hours=8.0,
-        average_awake_minutes=40.3,
-        prior_week_change=3.0,
-        range_label="APR 9 - APR 15, 26",
-        insight=f"Your average Sleep Efficiency ({avg_score}%) this week was optimal. You spent an average of 40 minutes awake in bed each night.",
+        average_score=95.0,
+        status="Optimal",
+        average_time_asleep_hours=7.5,
+        average_time_in_bed_hours=7.9,
+        average_awake_minutes=24.0,
+        prior_week_change=0.0,
+        comparison_label="vs. prior month",
+        range_label="MAR 17 - APR 15, 26",
+        insight="Your average sleep efficiency (95%) this month was consistent with your previous 30-day average of 95%.",
+        current_day_score=96.0,
         days=days_data,
         breakdown=SleepEfficiencyBreakdown(
-            optimal_days=5,
-            sufficient_days=2,
+            optimal_days=30,
+            sufficient_days=0,
             poor_days=0,
-            total_days=7,
+            total_days=30,
         ),
     )
+
 
 
