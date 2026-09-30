@@ -107,6 +107,62 @@ class SleepResponse(BaseModel):
     is_mock: bool = True
 
 
+class SleepConsistencyDay(BaseModel):
+    day_name: str
+    day_num: int
+    date: str
+    score: float
+    status: str
+
+
+class SleepConsistencyBreakdown(BaseModel):
+    optimal_days: int
+    sufficient_days: int
+    poor_days: int
+    total_days: int
+
+
+class SleepConsistencyTrendResponse(BaseModel):
+    average_score: float
+    prior_week_change: float
+    range_label: str
+    insight: str
+    days: List[SleepConsistencyDay]
+    breakdown: SleepConsistencyBreakdown
+
+
+class SleepEfficiencyDay(BaseModel):
+    day_name: str
+    day_num: int
+    date: str
+    score: float
+    status: str
+    asleep_hours: float
+    in_bed_hours: float
+    awake_minutes: float
+
+
+class SleepEfficiencyBreakdown(BaseModel):
+    optimal_days: int
+    sufficient_days: int
+    poor_days: int
+    total_days: int
+
+
+class SleepEfficiencyTrendResponse(BaseModel):
+    average_score: float
+    status: str
+    average_time_asleep_hours: float
+    average_time_in_bed_hours: float
+    average_awake_minutes: float
+    prior_week_change: float
+    range_label: str
+    insight: str
+    days: List[SleepEfficiencyDay]
+    breakdown: SleepEfficiencyBreakdown
+
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 # Dashboard (all three in one call)
 # ──────────────────────────────────────────────────────────────────────────────

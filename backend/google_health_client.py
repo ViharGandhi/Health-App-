@@ -290,3 +290,64 @@ class GoogleHealthClient:
         # Sort chronologically
         nights.sort(key=lambda x: x["bed_time"])
         return nights
+
+    async def get_sleep_efficiency_history(self, days: int = 7) -> list[dict]:
+        """
+        Fetches up to `days` of sleep history to compute Sleep Efficiency trend.
+        Google Health API: GET /v1/users/me/sleep?startDate={start}&endDate={end}
+        Returns list of parsed dicts: [
+            {
+                "date": date,
+                "time_asleep_minutes": float,
+                "time_in_bed_minutes": float,
+                "awake_minutes": float,
+                "start_time": datetime,
+                "end_time": datetime
+            },
+            ...
+        ]
+        """
+        end_date = date.today()
+        start_date = end_date - timedelta(days=days)
+        url = f"{BASE_URL}/users/me/sleep"
+        params = {
+            "startDate": start_date.strftime("%Y-%m-%d"),
+            "endDate":   end_date.strftime("%Y-%m-%d"),
+        }
+
+        async with httpx.AsyncClient() as client:
+            resp = await client.get(url, headers=self.headers, params=params)
+
+        if resp.status_code != 200:
+            return []
+
+        data = resp.json()
+        sessions = data.get("sleepSessions", [])
+        nights = []
+
+        for s in sessions:
+            try:
+                start_dt = datetime.fromisoformat(s["startTime"].replace("Z", "+00:00")).replace(tzinfo=None)
+                end_dt   = datetime.fromisoformat(s["endTime"].replace("Z", "+00:00")).replace(tzinfo=None)
+                night_date = end_dt.date()
+                total_sec = s.get("totalDurationSeconds", 0)
+                in_bed_sec = s.get("inBedDurationSeconds", 0)
+                stages = s.get("stages", {})
+                awake_sec = stages.get("wakeDurationSeconds", 0)
+                if in_bed_sec <= 0:
+                    in_bed_sec = total_sec + awake_sec
+
+                nights.append({
+                    "date": night_date,
+                    "time_asleep_minutes": round(total_sec / 60.0, 1),
+                    "time_in_bed_minutes": round(in_bed_sec / 60.0, 1),
+                    "awake_minutes": round(awake_sec / 60.0, 1),
+                    "start_time": start_dt,
+                    "end_time": end_dt,
+                })
+            except (KeyError, ValueError):
+                continue
+
+        nights.sort(key=lambda x: x["start_time"])
+        return nights
+

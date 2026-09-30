@@ -1,0 +1,459 @@
+/* page.module.css — WHOOP Sleep Consistency Trend View */
+
+.pageWrapper {
+  min-height: 100dvh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 440px;
+  padding: 12px 16px 110px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Top Header (< TREND VIEW) ---- */
+.topNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 0 14px;
+}
+
+.navBackBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  transition: opacity 0.15s ease;
+}
+
+.navBackBtn:hover {
+  opacity: 0.75;
+}
+
+.navTitle {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+/* ---- Metric Selector Dropdown Pill ---- */
+.metricSelectorPill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1A1E25;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 22px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.metricSelectorPill:hover {
+  background: #222731;
+}
+
+.selectorLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.selectorIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  opacity: 0.85;
+}
+
+.selectorTitle {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+/* ---- Summary Row (Average & Controls) ---- */
+.summaryRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.averageBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.averageLabel {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #8E95A2;
+}
+
+.scoreRow {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+}
+
+.scoreBig {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1;
+  color: #FFFFFF;
+  letter-spacing: -1.2px;
+}
+
+.scoreUnit {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.deltaPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(34, 230, 0, 0.12);
+  border: 1px solid rgba(34, 230, 0, 0.25);
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 800;
+  color: #22E600;
+  margin-top: 2px;
+  width: fit-content;
+}
+
+.deltaArrow {
+  font-size: 8px;
+}
+
+/* Right Controls (Timeframe & Date range) */
+.controlsBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.timeframeToggle {
+  display: flex;
+  align-items: center;
+  background: #14171D;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.toggleBtn {
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  color: #8E95A2;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.toggleActive {
+  background: #242A34;
+  color: #FFFFFF !important;
+}
+
+.dateNavRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dateArrowBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8E95A2;
+  transition: color 0.15s ease;
+}
+
+.dateArrowBtn:hover {
+  color: #FFFFFF;
+}
+
+.dateRangeText {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+
+/* ---- Insight Narrative Text ---- */
+.insightText {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.55;
+  color: #FFFFFF;
+  margin: 10px 0 24px;
+}
+
+/* ---- Bar Chart Trend Graph ---- */
+.chartContainer {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  margin-bottom: 30px;
+  padding-top: 14px;
+}
+
+.gridlinesWrapper {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  right: 0;
+  bottom: 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.gridlineRow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.yAxisLabel {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  color: #5C626E;
+  min-width: 32px;
+  text-align: right;
+}
+
+.gridline {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* 7 Bars */
+.barsRow {
+  position: absolute;
+  top: 14px;
+  left: 40px;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-right: 6px;
+}
+
+.barCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  flex: 1;
+  gap: 6px;
+}
+
+.barTrack {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 44px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.barPillarWrapper {
+  position: relative;
+  width: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  transition: height 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.barScoreLabel {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.3px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.barFill {
+  width: 100%;
+  height: 100%;
+  background: #68A1B4;
+  border-radius: 3px 3px 0 0;
+}
+
+.barCol:hover .barFill {
+  background: #7FB6C8;
+}
+
+.barMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  height: 32px;
+}
+
+.barDayName {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  color: #8E95A2;
+}
+
+.barDayNum {
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #8E95A2;
+}
+
+/* ---- Breakdown Section ---- */
+.breakdownSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.breakdownTitleRow {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.breakdownTitle {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+.breakdownUnit {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  color: #8E95A2;
+  text-transform: uppercase;
+}
+
+.breakdownProgressBar {
+  width: 100%;
+  height: 7px;
+  border-radius: 4px;
+  display: flex;
+  overflow: hidden;
+  background: #252A34;
+}
+
+.optimalBarSegment {
+  height: 100%;
+  background: #22E600;
+}
+
+.sufficientBarSegment {
+  height: 100%;
+  background: #3A414E;
+}
+
+.breakdownLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.legendRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legendDotOptimal {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: #22E600;
+}
+
+.legendDotSufficient {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: #3A414E;
+}
+
+.legendCount {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.legendDesc {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  color: #8E95A2;
+}

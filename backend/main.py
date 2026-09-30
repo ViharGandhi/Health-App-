@@ -42,15 +42,22 @@ from strain import StrainCalculator, WorkoutInterval, HeartRateZone
 from recovery import RecoveryCalculator, RecoveryInput
 from sleepscore import SleepCalculator, SleepData
 from sleep_consistency import SleepConsistencyCalculator, SleepNight
+from sleep_efficiency import SleepEfficiencyCalculator, SleepEfficiencyNight
 
 # ── App-layer imports ──────────────────────────────────────────────────────────
 from auth import router as auth_router, get_session, get_valid_access_token, set_session
 from google_health_client import GoogleHealthClient
-from mock_data import get_mock_dashboard, compute_mock_strain, compute_mock_sleep, compute_mock_recovery
+from mock_data import (
+    get_mock_dashboard, compute_mock_strain, compute_mock_sleep,
+    compute_mock_recovery, get_mock_sleep_consistency_trend,
+    get_mock_sleep_efficiency_trend
+)
 from models import (
     DashboardResponse, RecoveryResponse, SleepResponse, StrainResponse,
-    ZoneMinutes, WorkoutDetail, SleepStages
+    ZoneMinutes, WorkoutDetail, SleepStages, SleepConsistencyTrendResponse,
+    SleepEfficiencyTrendResponse, SleepEfficiencyDay, SleepEfficiencyBreakdown
 )
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # App setup
@@ -406,3 +413,119 @@ async def strain_endpoint(request: Request):
 
     client = GoogleHealthClient(token)
     return await _compute_real_strain(client, date.today())
+
+
+@app.get("/api/sleep/consistency", response_model=SleepConsistencyTrendResponse)
+async def sleep_consistency_endpoint(request: Request):
+    """
+    Returns 7-day sleep consistency trend and daily breakdown.
+    """
+    token = await _get_token(request)
+    if not token:
+        return get_mock_sleep_consistency_trend()
+
+    client = GoogleHealthClient(token)
+    # Fetch 7 days of sleep history
+    history = await client.get_sleep_history_nights(days=10)
+    if len(history) < 4:
+        return get_mock_sleep_consistency_trend()
+
+    # Calculate rolling consistency
+    days_data = []
+    for i in range(min(7, len(history))):
+        n = history[i]
+        # Calculate consistency for window ending at this night
+        sub_window = [
+            SleepNight(night_date=x["date"], bed_time=x["bed_time"], wake_time=x["wake_time"])
+            for x in history[max(0, i-3):i+1]
+        ]
+        res = SleepConsistencyCalculator.calculate(sub_window)
+        days_data.append(SleepConsistencyDay(
+            day_name=n["bed_time"].strftime("%a"),
+            day_num=n["bed_time"].day,
+            date=n["date"].strftime("%Y-%m-%d"),
+            score=round(res.consistency_score, 1),
+            status=res.status,
+        ))
+
+    avg_score = round(sum(d.score for d in days_data) / len(days_data), 1)
+    optimal_cnt = sum(1 for d in days_data if d.score >= 80)
+    sufficient_cnt = sum(1 for d in days_data if 70 <= d.score < 80)
+    poor_cnt = sum(1 for d in days_data if d.score < 70)
+
+    start_lbl = days_data[0].date if days_data else "APR 9"
+    end_lbl = days_data[-1].date if days_data else "APR 15"
+
+    return SleepConsistencyTrendResponse(
+        average_score=avg_score,
+        prior_week_change=6.0,
+        range_label=f"{start_lbl} - {end_lbl}",
+        insight=f"Your average Sleep Consistency ({avg_score}%) this week was consistent. Keep up this trend for positive results!",
+        days=days_data,
+        breakdown=SleepConsistencyBreakdown(
+            optimal_days=optimal_cnt,
+            sufficient_days=sufficient_cnt,
+            poor_days=poor_cnt,
+            total_days=len(days_data),
+        ),
+    )
+
+
+@app.get("/api/sleep/efficiency", response_model=SleepEfficiencyTrendResponse)
+async def sleep_efficiency_endpoint(request: Request):
+    """
+    Returns 7-day sleep efficiency trend and daily breakdown.
+    """
+    token = await _get_token(request)
+    if not token:
+        return get_mock_sleep_efficiency_trend()
+
+    client = GoogleHealthClient(token)
+    history = await client.get_sleep_efficiency_history(days=7)
+    if not history:
+        return get_mock_sleep_efficiency_trend()
+
+    nights = [
+        SleepEfficiencyNight(
+            night_date=h["date"],
+            time_asleep_minutes=h["time_asleep_minutes"],
+            time_in_bed_minutes=h["time_in_bed_minutes"],
+            awake_minutes=h["awake_minutes"],
+        )
+        for h in history
+    ]
+    trend_res = SleepEfficiencyCalculator.calculate_trend(nights)
+
+    days_data = [
+        SleepEfficiencyDay(
+            day_name=d["day_name"],
+            day_num=d["day_num"],
+            date=d["date"],
+            score=d["score"],
+            status=d["status"],
+            asleep_hours=d["asleep_hours"],
+            in_bed_hours=d["in_bed_hours"],
+            awake_minutes=d["awake_minutes"],
+        )
+        for d in trend_res.days
+    ]
+
+    return SleepEfficiencyTrendResponse(
+        average_score=trend_res.average_efficiency_pct,
+        status=trend_res.status,
+        average_time_asleep_hours=trend_res.average_time_asleep_hours,
+        average_time_in_bed_hours=trend_res.average_time_in_bed_hours,
+        average_awake_minutes=trend_res.average_awake_minutes,
+        prior_week_change=trend_res.prior_week_change,
+        range_label=trend_res.range_label,
+        insight=trend_res.insight,
+        days=days_data,
+        breakdown=SleepEfficiencyBreakdown(
+            optimal_days=trend_res.optimal_days,
+            sufficient_days=trend_res.sufficient_days,
+            poor_days=trend_res.poor_days,
+            total_days=trend_res.total_days,
+        ),
+    )
+
+

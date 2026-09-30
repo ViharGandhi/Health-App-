@@ -84,9 +84,65 @@ export interface DashboardData {
   is_mock: boolean;
 }
 
+export interface SleepConsistencyDay {
+  day_name: string;
+  day_num: number;
+  date: string;
+  score: number;
+  status: string;
+}
+
+export interface SleepConsistencyBreakdown {
+  optimal_days: number;
+  sufficient_days: number;
+  poor_days: number;
+  total_days: number;
+}
+
+export interface SleepConsistencyTrend {
+  average_score: number;
+  prior_week_change: number;
+  range_label: string;
+  insight: string;
+  days: SleepConsistencyDay[];
+  breakdown: SleepConsistencyBreakdown;
+}
+
+export interface SleepEfficiencyDay {
+  day_name: string;
+  day_num: number;
+  date: string;
+  score: number;
+  status: string;
+  asleep_hours: number;
+  in_bed_hours: number;
+  awake_minutes: number;
+}
+
+export interface SleepEfficiencyBreakdown {
+  optimal_days: number;
+  sufficient_days: number;
+  poor_days: number;
+  total_days: number;
+}
+
+export interface SleepEfficiencyTrend {
+  average_score: number;
+  status: string;
+  average_time_asleep_hours: number;
+  average_time_in_bed_hours: number;
+  average_awake_minutes: number;
+  prior_week_change: number;
+  range_label: string;
+  insight: string;
+  days: SleepEfficiencyDay[];
+  breakdown: SleepEfficiencyBreakdown;
+}
+
 export interface AuthStatus {
   connected: boolean;
   is_mock: boolean;
   user_email: string | null;
   user_name: string | null;
 }
+

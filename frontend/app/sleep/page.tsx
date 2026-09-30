@@ -173,8 +173,14 @@ export default function SleepPage() {
             </div>
           </div>
 
-          {/* Row 2: SLEEP CONSISTENCY */}
-          <div className={styles.metricRow}>
+          {/* Row 2: SLEEP CONSISTENCY (Clickable -> Trend View) */}
+          <div
+            className={styles.metricRow}
+            onClick={() => router.push('/sleep/consistency')}
+            role="button"
+            tabIndex={0}
+            style={{ cursor: 'pointer' }}
+          >
             <div className={styles.metricLeft}>
               <div className={styles.iconCircle}>
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -194,11 +200,20 @@ export default function SleepPage() {
             <div className={styles.metricRight}>
               <SegmentIndicator value={consistencyPct} />
               <span className={styles.metricValue}>{consistencyPct}%</span>
+              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 1.5L4.5 5L1 8.5" />
+              </svg>
             </div>
           </div>
 
-          {/* Row 3: SLEEP EFFICIENCY */}
-          <div className={styles.metricRow}>
+          {/* Row 3: SLEEP EFFICIENCY (Clickable -> Trend View) */}
+          <div
+            className={styles.metricRow}
+            onClick={() => router.push('/sleep/efficiency')}
+            role="button"
+            tabIndex={0}
+            style={{ cursor: 'pointer' }}
+          >
             <div className={styles.metricLeft}>
               <div className={styles.iconCircle}>
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -212,8 +227,12 @@ export default function SleepPage() {
             <div className={styles.metricRight}>
               <SegmentIndicator value={efficiencyPct} />
               <span className={styles.metricValue}>{efficiencyPct}%</span>
+              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 1.5L4.5 5L1 8.5" />
+              </svg>
             </div>
           </div>
+
 
           {/* Row 4: HIGH SLEEP STRESS */}
           <div className={styles.metricRow}>
