@@ -1,72 +1,372 @@
-/* Sleep page — america.gov theme */
-.heroCard {
-  margin-bottom: 16px;
-  background: var(--bg-card);
-  border-color: var(--border-subtle);
+/* page.module.css — Exact WHOOP Sleep Performance Screen Styles */
+
+.pageWrapper {
+  min-height: 100dvh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.heroTop {
+.container {
+  width: 100%;
+  max-width: 440px;
+  padding: 12px 16px 110px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Top Navigation Bar (< TODAY ⓘ) ---- */
+.topNav {
   display: flex;
   align-items: center;
-  gap: 24px;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 0 16px;
 }
 
-.heroRight {
+.navBackBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 6px;
   display: flex;
-  flex-direction: column;
-  gap: 14px;
-  flex: 1;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  transition: opacity 0.15s ease;
 }
 
-.needBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.navBackBtn:hover {
+  opacity: 0.75;
 }
 
-.needLabel {
-  font-size: 10px;
-  font-weight: 700;
+.navTitle {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 800;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--text-tertiary);
+  color: #FFFFFF;
 }
 
-.needValue {
-  font-family: var(--font-heading);
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  line-height: 1;
-  color: var(--text-primary);
-}
-
-/* Score breakdown rows */
-.scoreRow {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.scoreRow:last-child { margin-bottom: 0; }
-
-.scoreRowLabel {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.scoreRowBar {
+.navInfoBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  color: #8E95A2;
+  transition: color 0.15s ease;
+}
+
+.navInfoBtn:hover {
+  color: #FFFFFF;
+}
+
+/* ---- Circular Dial Section ---- */
+.dialSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 10px 0 0;
+}
+
+.dialBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svgRing {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.dialInner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.scoreRow {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.scoreNumber {
+  font-family: var(--font-display);
+  font-size: 52px;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1;
+  letter-spacing: -1.5px;
+}
+
+.scoreUnit {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1;
+  margin-left: 2px;
+  transform: translateY(-2px);
+}
+
+.scoreLabel {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  line-height: 1.35;
+  margin-top: 2px;
+}
+
+.dialSegments {
+  margin-top: 6px;
+}
+
+/* Subtle caret pointing to card */
+.cardCaret {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #1A1D23;
+  margin-top: 14px;
+  margin-bottom: -1px;
+  z-index: 2;
+}
+
+/* ---- Main Breakdown Card ---- */
+.breakdownCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.metricRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.metricRow:last-of-type {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.metricLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  opacity: 0.85;
+}
+
+.metricTitle {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+.metricRight {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Segment Bar: 3 dashes */
+.segmentTrack {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.segment {
+  width: 14px;
+  height: 3.5px;
+  border-radius: 2px;
+  transition: background 0.2s ease;
+}
+
+.segmentInactive {
+  background: #2A2F3A;
+}
+
+.segmentPoor {
+  background: #FF9800;
+}
+
+.segmentSufficient {
+  background: #4EA5B7;
+}
+
+.segmentOptimal {
+  background: #22E600;
+}
+
+.metricValue {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  color: #FFFFFF;
+  min-width: 42px;
+  text-align: right;
+  letter-spacing: -0.2px;
+}
+
+/* ---- Legend Row ---- */
+.legendRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 14px 4px 2px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legendBarPoor {
+  width: 12px;
+  height: 3.5px;
+  background: #FF9800;
+  border-radius: 2px;
+}
+
+.legendBarSufficient {
+  width: 12px;
+  height: 3.5px;
+  background: #3A404E;
+  border-radius: 2px;
+}
+
+.legendBarOptimal {
+  width: 12px;
+  height: 3.5px;
+  background: #22E600;
+  border-radius: 2px;
+}
+
+.legendText {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  color: #8E95A2;
+}
+
+/* ---- Stages Section ---- */
+.stagesSection {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stagesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stagesTitle {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+.stagesTotal {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  color: #8E95A2;
+}
+
+.stagesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
-.scoreRowVal {
-  font-size: 13px;
+.stageCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stageLabel {
+  font-family: var(--font-body);
+  font-size: 10px;
   font-weight: 700;
-  color: var(--text-tertiary);
-  min-width: 26px;
-  text-align: right;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8E95A2;
+}
+
+.stageDuration {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.stagePct {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  color: #4EA5B7;
+}
+
+/* Loading state */
+.loadingPage {
+  min-height: 70dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
 }
