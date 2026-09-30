@@ -1,0 +1,45 @@
+/* ZoneBar — theme-aware */
+.wrapper { display: flex; flex-direction: column; gap: 12px; }
+
+.row {
+  display: grid;
+  grid-template-columns: 100px 1fr 52px;
+  align-items: center;
+  gap: 12px;
+}
+
+.zoneLabel { display: flex; flex-direction: column; gap: 1px; }
+
+.zoneName {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-primary);
+}
+
+.zoneSub {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.3px;
+}
+
+.barTrack {
+  height: 7px;
+  background: var(--border-subtle);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 1s cubic-bezier(0.34,1.56,0.64,1);
+  min-width: 2px;
+}
+
+.zoneTime {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: right;
+}

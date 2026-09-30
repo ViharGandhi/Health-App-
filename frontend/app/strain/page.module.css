@@ -1,0 +1,111 @@
+/* Strain page — america.gov theme */
+.heroCard {
+  margin-bottom: 16px;
+  background: var(--bg-card);
+}
+
+.heroContent {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.heroStats {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+}
+
+.heroStat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.heroStatLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.heroStatValue {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+.heroStatUnit {
+  font-size: 13px;
+  font-weight: 500;
+  margin-left: 2px;
+  color: var(--text-secondary);
+}
+
+.heroStatSub {
+  font-size: 10px;
+  color: var(--text-tertiary);
+}
+
+.calibrationNote {
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: rgba(201, 135, 10, 0.08);
+  border: 1px solid rgba(201, 135, 10, 0.2);
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--accent-warn);
+}
+
+/* Workout rows */
+.workoutRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.workoutRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.workoutIcon { font-size: 24px; flex-shrink: 0; }
+
+.workoutInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.workoutName {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.workoutStrain {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.workoutScore {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.workoutScoreUnit {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-left: 1px;
+}

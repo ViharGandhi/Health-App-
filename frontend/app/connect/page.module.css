@@ -1,0 +1,185 @@
+/* Connect page — america.gov theme */
+
+/* Hero section */
+.heroSection {
+  position: relative;
+  text-align: center;
+  padding: 40px 20px 32px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.heroGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(26,35,64,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.heroIcon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.heroTitle {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.heroSubtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* Steps */
+.stepsCard { margin-bottom: 20px; }
+
+.step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.step:last-child { margin-bottom: 0; }
+
+.stepNum {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stepInfo { display: flex; flex-direction: column; gap: 3px; }
+
+.stepTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stepDesc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Connect button */
+.connectBtn { margin-bottom: 16px; font-size: 16px; }
+
+.note {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+/* Setup card */
+.setupCard { background: var(--bg-surface); }
+
+.setupText {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+.setupList {
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.setupList li {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.setupList strong { color: var(--text-primary); }
+
+.code {
+  background: var(--border-subtle);
+  border: 1px solid var(--border-default);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 11px;
+  color: var(--strain-blue);
+}
+
+/* Connected state */
+.connectedCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  background: rgba(26,138,90,0.06);
+  border-color: rgba(26,138,90,0.2);
+}
+
+.connectedIcon { font-size: 36px; flex-shrink: 0; }
+
+.connectedInfo { display: flex; flex-direction: column; gap: 3px; }
+
+.connectedTitle {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--recovery-green);
+}
+
+.connectedName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.connectedEmail {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.steps {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  padding: 18px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.stepsTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.stepsText {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}

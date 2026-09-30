@@ -1,0 +1,72 @@
+/* Sleep page — america.gov theme */
+.heroCard {
+  margin-bottom: 16px;
+  background: var(--bg-card);
+  border-color: var(--border-subtle);
+}
+
+.heroTop {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.heroRight {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+.needBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.needLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.needValue {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+/* Score breakdown rows */
+.scoreRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.scoreRow:last-child { margin-bottom: 0; }
+
+.scoreRowLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.scoreRowBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scoreRowVal {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  min-width: 26px;
+  text-align: right;
+}

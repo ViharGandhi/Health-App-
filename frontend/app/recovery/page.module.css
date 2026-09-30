@@ -1,0 +1,158 @@
+/* Recovery page — WHOOP dark theme */
+.heroCard {
+  margin-bottom: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.heroContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.heroStats {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+}
+
+.heroStat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.heroStatLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.heroStatValue {
+  font-family: var(--font-body);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.heroStatUnit {
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: 2px;
+  color: var(--text-secondary);
+}
+
+.heroStatSub {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+/* Component breakdown */
+.compCard {
+  margin-bottom: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.compRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.compRow:last-child { margin-bottom: 0; }
+
+.compInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.compLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.compWeight {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  letter-spacing: 0.5px;
+}
+
+.compBarWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.compValue {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  min-width: 28px;
+  text-align: right;
+}
+
+.penaltyRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 4px;
+}
+
+.penaltyLabel {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.penaltyValue {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--recovery-red);
+}
+
+/* Metrics grid */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+/* Recommendation */
+.recBox {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.recLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+}
+
+.recText {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
