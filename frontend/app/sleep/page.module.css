@@ -203,6 +203,20 @@
   color: #FFFFFF;
 }
 
+.metricTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metricSubtitle {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  color: #8E95A2;
+  letter-spacing: 0.03em;
+}
+
 .metricRight {
   display: flex;
   align-items: center;

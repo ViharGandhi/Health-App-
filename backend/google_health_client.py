@@ -248,3 +248,45 @@ class GoogleHealthClient:
         result["waking_hr"]    = biometrics.get("wakingHeartRate")
 
         return result
+
+    async def get_sleep_history_nights(self, days: int = 4) -> list[dict]:
+        """
+        Fetches up to `days` of sleep history to compute Sleep Consistency.
+        Google Health API: GET /v1/users/me/sleep?startDate={start}&endDate={end}
+        Returns list of parsed dicts: [{"date": date, "bed_time": datetime, "wake_time": datetime}, ...]
+        """
+        end_date = date.today()
+        start_date = end_date - timedelta(days=days)
+        url = f"{BASE_URL}/users/me/sleep"
+        params = {
+            "startDate": start_date.strftime("%Y-%m-%d"),
+            "endDate":   end_date.strftime("%Y-%m-%d"),
+        }
+
+        async with httpx.AsyncClient() as client:
+            resp = await client.get(url, headers=self.headers, params=params)
+
+        if resp.status_code != 200:
+            return []
+
+        data = resp.json()
+        sessions = data.get("sleepSessions", [])
+        nights = []
+
+        for s in sessions:
+            try:
+                start_dt = datetime.fromisoformat(s["startTime"].replace("Z", "+00:00")).replace(tzinfo=None)
+                end_dt   = datetime.fromisoformat(s["endTime"].replace("Z", "+00:00")).replace(tzinfo=None)
+                # Night date is determined by wake date
+                night_date = end_dt.date()
+                nights.append({
+                    "date": night_date,
+                    "bed_time": start_dt,
+                    "wake_time": end_dt,
+                })
+            except (KeyError, ValueError):
+                continue
+
+        # Sort chronologically
+        nights.sort(key=lambda x: x["bed_time"])
+        return nights

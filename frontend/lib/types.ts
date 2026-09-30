@@ -64,6 +64,9 @@ export interface SleepData {
   sleeping_hrv: number | null;
   sleeping_hr: number | null;
   consistency_score: number | null;
+  average_bed_time?: string | null;
+  average_wake_time?: string | null;
+  consistency_status?: string | null;
   sleep_start: string | null;
   sleep_end: string | null;
   duration_score: number;

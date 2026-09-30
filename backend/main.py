@@ -40,7 +40,8 @@ load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 # ── Algorithm imports ──────────────────────────────────────────────────────────
 from strain import StrainCalculator, WorkoutInterval, HeartRateZone
 from recovery import RecoveryCalculator, RecoveryInput
-from sleepscore import SleepCalculator, SleepData, SleepConsistencyCalculator
+from sleepscore import SleepCalculator, SleepData
+from sleep_consistency import SleepConsistencyCalculator, SleepNight
 
 # ── App-layer imports ──────────────────────────────────────────────────────────
 from auth import router as auth_router, get_session, get_valid_access_token, set_session
@@ -253,7 +254,13 @@ async def _compute_real_sleep(client: GoogleHealthClient, target_date: date, yes
     d_s = min(100.0, (sleep.deep_sleep_duration / sn_s / deep_tgt) * 100) if sn_s > 0 else 0
     r_s = min(100.0, (sleep.rem_sleep_duration  / sn_s / 0.20) * 100) if sn_s > 0 else 0
     c_s = min(100.0, (sleep.core_sleep_duration / sn_s / 0.50) * 100) if sn_s > 0 else 0
-    stage_score = 0.40 * d_s + 0.40 * r_s + 0.20 * c_s
+    # 4-day sleep consistency calculation
+    history_nights = await client.get_sleep_history_nights(days=4)
+    parsed_nights = [
+        SleepNight(night_date=n["date"], bed_time=n["bed_time"], wake_time=n["wake_time"])
+        for n in history_nights
+    ]
+    consistency_res = SleepConsistencyCalculator.calculate(parsed_nights)
 
     return SleepResponse(
         score=round(score, 1),
@@ -264,7 +271,10 @@ async def _compute_real_sleep(client: GoogleHealthClient, target_date: date, yes
         stages=stages,
         sleeping_hrv=sleeping_hrv,
         sleeping_hr=sleeping_hr,
-        consistency_score=None,
+        consistency_score=round(consistency_res.consistency_score, 1),
+        average_bed_time=consistency_res.average_bed_time_str,
+        average_wake_time=consistency_res.average_wake_time_str,
+        consistency_status=consistency_res.status,
         sleep_start=raw.get("sleep_start_time") and raw["sleep_start_time"].strftime("%I:%M %p"),
         sleep_end=raw.get("sleep_end_time") and raw["sleep_end_time"].strftime("%I:%M %p"),
         duration_score=round(dur_score, 1),

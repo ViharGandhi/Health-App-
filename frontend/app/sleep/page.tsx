@@ -182,7 +182,14 @@ export default function SleepPage() {
                   <path d="M19 12.79A7 7 0 1 1 11.21 5" />
                 </svg>
               </div>
-              <span className={styles.metricTitle}>SLEEP CONSISTENCY</span>
+              <div className={styles.metricTextGroup}>
+                <span className={styles.metricTitle}>SLEEP CONSISTENCY</span>
+                {data.average_bed_time && data.average_wake_time && (
+                  <span className={styles.metricSubtitle}>
+                    4-Day Avg: {data.average_bed_time} – {data.average_wake_time}
+                  </span>
+                )}
+              </div>
             </div>
             <div className={styles.metricRight}>
               <SegmentIndicator value={consistencyPct} />

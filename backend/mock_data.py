@@ -18,7 +18,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from strain import StrainCalculator, WorkoutInterval, HeartRateZone
 from recovery import RecoveryCalculator, RecoveryInput
-from sleepscore import SleepCalculator, SleepData, SleepConsistencyCalculator
+from sleepscore import SleepCalculator, SleepData
+from sleep_consistency import SleepConsistencyCalculator, SleepNight
 
 from models import (
     StrainResponse, RecoveryResponse, SleepResponse,
@@ -217,6 +218,32 @@ def compute_mock_sleep() -> SleepResponse:
     c_s = min(100.0, (sleep.core_sleep_duration / sn_s / 0.50) * 100)
     stage_score = 0.40 * d_s + 0.40 * r_s + 0.20 * c_s
 
+    # 4-Day Sleep Consistency calculation
+    today_dt = date.today()
+    mock_4day_nights = [
+        SleepNight(
+            night_date=today_dt - timedelta(days=3),
+            bed_time=datetime.combine(today_dt - timedelta(days=4), datetime.min.time()).replace(hour=23, minute=15),
+            wake_time=datetime.combine(today_dt - timedelta(days=3), datetime.min.time()).replace(hour=7, minute=18),
+        ),
+        SleepNight(
+            night_date=today_dt - timedelta(days=2),
+            bed_time=datetime.combine(today_dt - timedelta(days=3), datetime.min.time()).replace(hour=23, minute=30),
+            wake_time=datetime.combine(today_dt - timedelta(days=2), datetime.min.time()).replace(hour=7, minute=25),
+        ),
+        SleepNight(
+            night_date=today_dt - timedelta(days=1),
+            bed_time=datetime.combine(today_dt - timedelta(days=2), datetime.min.time()).replace(hour=23, minute=10),
+            wake_time=datetime.combine(today_dt - timedelta(days=1), datetime.min.time()).replace(hour=7, minute=12),
+        ),
+        SleepNight(
+            night_date=today_dt,
+            bed_time=sleep.sleep_start_time if sleep.sleep_start_time else datetime.combine(today_dt - timedelta(days=1), datetime.min.time()).replace(hour=23, minute=20),
+            wake_time=sleep.sleep_end_time if sleep.sleep_end_time else datetime.combine(today_dt, datetime.min.time()).replace(hour=7, minute=20),
+        ),
+    ]
+    consistency_res = SleepConsistencyCalculator.calculate(mock_4day_nights)
+
     return SleepResponse(
         score=round(score, 1),
         sleep_need_hours=round(sleep_need, 2),
@@ -226,7 +253,10 @@ def compute_mock_sleep() -> SleepResponse:
         stages=stages,
         sleeping_hrv=sleeping_hrv,
         sleeping_hr=sleeping_hr,
-        consistency_score=None,
+        consistency_score=round(consistency_res.consistency_score, 1),
+        average_bed_time=consistency_res.average_bed_time_str,
+        average_wake_time=consistency_res.average_wake_time_str,
+        consistency_status=consistency_res.status,
         sleep_start=sleep.sleep_start_time.strftime("%I:%M %p") if sleep.sleep_start_time else None,
         sleep_end=sleep.sleep_end_time.strftime("%I:%M %p") if sleep.sleep_end_time else None,
         duration_score=round(dur_score, 1),

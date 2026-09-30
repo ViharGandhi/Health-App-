@@ -95,6 +95,9 @@ class SleepResponse(BaseModel):
     sleeping_hrv: Optional[float] = None
     sleeping_hr: Optional[float] = None
     consistency_score: Optional[float] = None
+    average_bed_time: Optional[str] = None
+    average_wake_time: Optional[str] = None
+    consistency_status: Optional[str] = None
     sleep_start: Optional[str] = None
     sleep_end: Optional[str] = None
     duration_score: float
