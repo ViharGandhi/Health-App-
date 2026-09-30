@@ -4,46 +4,55 @@
  * Clean sans-serif typography matching WHOOP's aesthetic.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 /* Reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ---- Dark mode tokens (WHOOP style) ---- */
+/* ---- Exact WHOOP Dark Palette & Tokens ---- */
 :root {
-  --bg-primary:    #1a1c22;
-  --bg-surface:    #22252d;
-  --bg-card:       #282b33;
-  --bg-elevated:   #2e3139;
-  --bg-hover:      #34373f;
-  --bg-nav:        rgba(26, 28, 34, 0.95);
+  --bg-primary:     #121417;
+  --bg-surface:     #181B20;
+  --bg-card:        #1A1D23;
+  --bg-elevated:    #22262E;
+  --bg-pill:        #232830;
+  --bg-hover:       #2A2F3A;
+  --bg-nav:         rgba(18, 20, 23, 0.95);
 
-  --border-subtle:  rgba(255, 255, 255, 0.06);
-  --border-default: rgba(255, 255, 255, 0.10);
+  --border-subtle:   rgba(255, 255, 255, 0.08);
+  --border-default:  rgba(255, 255, 255, 0.12);
 
-  --text-primary:   #e8e8ea;
-  --text-secondary: rgba(232, 232, 234, 0.55);
-  --text-tertiary:  rgba(232, 232, 234, 0.35);
+  --text-primary:    #FFFFFF;
+  --text-secondary:  #8E95A2;
+  --text-tertiary:   #5C626E;
 
-  --recovery-green:  #04d98b;
-  --recovery-yellow: #f5c518;
-  --recovery-red:    #ff3b3b;
-  --sleep-green:     #04d98b;
-  --strain-blue:     #00a1e4;
+  /* WHOOP Signature Metric Colors */
+  --whoop-green:     #00F076; /* Vivid recovery lime */
+  --whoop-yellow:    #F5C518;
+  --whoop-red:       #FF3B3B;
+  --whoop-sleep:     #4EA5B7; /* Whoop sleep cyan/teal */
+  --whoop-strain:    #3078F0; /* Whoop strain blue */
 
-  --accent-primary:  #e8e8ea;
-  --accent-cta:      #04d98b;
-  --accent-warn:     #f5c518;
-  --accent-danger:   #ff3b3b;
+  --recovery-green:  var(--whoop-green);
+  --recovery-yellow: var(--whoop-yellow);
+  --recovery-red:    var(--whoop-red);
+  --sleep-blue:      var(--whoop-sleep);
+  --strain-blue:     var(--whoop-strain);
+
+  --accent-primary:  #FFFFFF;
+  --accent-cta:      var(--whoop-green);
+  --accent-warn:     var(--whoop-yellow);
+  --accent-danger:   var(--whoop-red);
 
   --page-padding: 16px;
-  --card-radius:  16px;
-  --section-gap:  20px;
+  --card-radius:  14px;
+  --section-gap:  18px;
 
-  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  --shadow-card:     0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.15);
-  --shadow-elevated: 0 2px 8px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.2);
+  --shadow-card:     0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
 /* ---- Base ---- */

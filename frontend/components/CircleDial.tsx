@@ -1,7 +1,6 @@
 /**
  * CircleDial.tsx
- * WHOOP-style full circle dial with percentage inside.
- * Renders an SVG ring that fills based on score percentage.
+ * WHOOP-exact circular gauge dial with bold white score inside and label underneath.
  */
 'use client';
 
@@ -27,16 +26,17 @@ export default function CircleDial({
   maxValue,
   unit,
   color,
-  sublabel,
-  size = 110,
+  size = 94,
   onClick,
-  showChevron = false,
+  showChevron = true,
   isPrimary = false,
 }: CircleDialProps) {
-  const pct = Math.min(1, Math.max(0, value / maxValue));
+  // Normalize percentage (0 to 1)
+  const rawPct = Math.min(1, Math.max(0, value / maxValue));
+  // If value > 0 ensure tiny minimum arc is visible like WHOOP's 0.1 strain tick
+  const pct = value > 0 ? Math.max(rawPct, 0.016) : 0;
 
-  // SVG full circle
-  const strokeWidth = isPrimary ? 8 : 6;
+  const strokeWidth = isPrimary ? 7.5 : 6;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const dashOffset = circumference * (1 - pct);
@@ -48,24 +48,24 @@ export default function CircleDial({
 
   return (
     <div
-      className={`${styles.wrapper} ${isPrimary ? styles.primary : ''}`}
-      style={{ width: size, height: 'auto' }}
+      className={`${styles.dialWrapper} ${isPrimary ? styles.isPrimary : ''}`}
+      style={{ width: size }}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
-      <div className={styles.ringContainer} style={{ width: size, height: size }}>
+      <div className={styles.ringBox} style={{ width: size, height: size }}>
         <svg width={size} height={size} className={styles.svg}>
-          {/* Background track */}
+          {/* Subtle dark background track */}
           <circle
             cx={center}
             cy={center}
             r={radius}
             fill="none"
-            stroke="rgba(255,255,255,0.08)"
+            stroke="rgba(255, 255, 255, 0.12)"
             strokeWidth={strokeWidth}
           />
-          {/* Filled arc — starts from top (-90 deg rotation) */}
+          {/* Active colored arc */}
           <circle
             cx={center}
             cy={center}
@@ -78,25 +78,25 @@ export default function CircleDial({
             strokeDashoffset={dashOffset}
             transform={`rotate(-90 ${center} ${center})`}
             style={{
-              filter: `drop-shadow(0 0 8px ${color}66)`,
-              transition: 'stroke-dashoffset 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              filter: isPrimary ? `drop-shadow(0 0 6px ${color}80)` : `drop-shadow(0 0 3px ${color}40)`,
+              transition: 'stroke-dashoffset 1s cubic-bezier(0.25, 1, 0.5, 1)',
             }}
           />
         </svg>
 
-        {/* Center content */}
-        <div className={styles.inner}>
-          <span className={styles.value} style={{ color }}>
-            {displayValue}
+        {/* Center score - PURE WHITE as in WHOOP */}
+        <div className={styles.centerContent}>
+          <div className={styles.valueRow}>
+            <span className={styles.number}>{displayValue}</span>
             {unit && <span className={styles.unit}>{unit}</span>}
-          </span>
+          </div>
         </div>
       </div>
 
-      {/* Label below */}
+      {/* Label under dial: "SLEEP >", "RECOVERY >", "STRAIN >" */}
       <div className={styles.labelRow}>
-        <span className={styles.label}>{label}</span>
-        {showChevron && <span className={styles.chevron}>›</span>}
+        <span className={styles.labelText}>{label}</span>
+        {showChevron && <span className={styles.chevron}>&gt;</span>}
       </div>
     </div>
   );

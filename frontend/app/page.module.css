@@ -1,369 +1,516 @@
-/* Dashboard page — WHOOP dark design */
+/* page.module.css — Exact WHOOP Dashboard Styling */
+
 .pageWrapper {
   min-height: 100dvh;
   background: var(--bg-primary);
-}
-
-/* Brand header */
-.brandHeader {
+  color: var(--text-primary);
   display: flex;
-  justify-content: center;
-  padding: 16px 0 8px;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow-x: hidden;
 }
 
-.brandName {
+.container {
+  width: 100%;
+  max-width: 440px;
+  padding: 12px 16px 110px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Top Header (Avatar, < TODAY >, Battery) ---- */
+.topHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 4px 0 16px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatarCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.streakBadge {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.flame {
+  font-size: 15px;
+}
+
+.streakNum {
+  font-size: 14px;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+/* Date Pill: < TODAY > */
+.datePill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #20242B;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.datePill:hover {
+  background: #282D36;
+}
+
+.pillText {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #FFFFFF;
+}
+
+.pillArrow {
+  font-size: 14px;
+  font-weight: 700;
+  color: #8E95A2;
+  line-height: 1;
+}
+
+/* Battery: 94% [battery] */
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.batteryPct {
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--text-secondary);
+  color: #8E95A2;
 }
 
-/* Three dials row */
-.dialsRow {
+.batteryIcon {
+  color: #00F076;
+}
+
+/* ---- WHOOP Centered Wordmark ---- */
+.brandBar {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  gap: 0;
-  padding: 12px 0 24px;
+  align-items: center;
+  padding: 0 0 14px;
 }
 
-/* Health/Stress monitors */
-.monitorsRow {
+.whoopLogo {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 3.5px;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+/* ---- Three Dials: SLEEP | RECOVERY | STRAIN ---- */
+.dialsSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 4px 22px;
+}
+
+.dialCol {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.dialColCenter {
+  flex: 1.15;
+  display: flex;
+  justify-content: center;
+}
+
+/* ---- Health Monitor & Stress Monitor (2-Column Grid) ---- */
+.monitorsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
+  width: 100%;
 }
 
 .monitorCard {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-radius: 14px;
-  padding: 14px;
+  border-radius: var(--card-radius);
+  padding: 14px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 110px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
 
 .monitorCard:hover {
   background: var(--bg-elevated);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
-.monitorHeader {
+.cardHeaderRow {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
 }
 
-.monitorTitle {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-}
-
-.monitorChevron {
-  font-size: 16px;
-  color: var(--text-tertiary);
-}
-
-.monitorContent {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.monitorIcon {
-  font-size: 16px;
-  flex-shrink: 0;
-}
-
-.monitorInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.monitorStatus {
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-}
-
-.monitorSub {
+.cardTitle {
+  font-family: var(--font-body);
   font-size: 11px;
-  color: var(--text-tertiary);
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  line-height: 1.25;
+  color: #FFFFFF;
+  text-transform: uppercase;
 }
 
-/* My Day section */
-.myDaySection {
-  margin-bottom: 4px;
-}
-
-.myDayTitle {
-  font-size: 24px;
+.cardChevron {
+  font-size: 15px;
   font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: -0.3px;
-  margin-bottom: 12px;
+  color: #8E95A2;
+  line-height: 1;
 }
 
-.dividerLine {
-  height: 1px;
-  background: var(--border-subtle);
-  margin-bottom: 12px;
-}
-
-.dailyOutlook {
+.monitorBody {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 14px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  transition: background 0.2s ease;
+  margin-top: 10px;
 }
 
-.dailyOutlook:hover {
-  background: var(--bg-elevated);
-}
-
-.outlookIcon {
-  font-size: 18px;
-}
-
-.outlookText {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-/* Today's Activities */
-.activitiesSection {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 20px;
-}
-
-.activitiesHeader {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-  margin-bottom: 16px;
-}
-
-.activityRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.activityRow:last-of-type {
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.activityLeft {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.activityIconWrap {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+/* Green Check Square */
+.checkIconBox {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background: rgba(0, 240, 118, 0.15);
+  border: 1.5px solid #00F076;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.activityIcon {
-  font-size: 18px;
+/* Blue Stress Score Badge */
+.stressScoreBadge {
+  background: rgba(78, 165, 183, 0.22);
+  color: #4EA5B7;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
 }
 
-.activityMeta {
+.monitorTextStack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.monitorHighlight {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  line-height: 1.15;
+}
+
+.monitorSubtext {
+  font-size: 11px;
+  font-weight: 500;
+  color: #8E95A2;
+}
+
+/* ---- My Day Section ---- */
+.myDaySection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.myDayTitle {
+  font-family: var(--font-body);
+  font-size: 22px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.4px;
+}
+
+/* Daily Outlook Banner with subtle gradient */
+.outlookBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: linear-gradient(90deg, #242830 0%, #292826 45%, #23272F 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--card-radius);
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.outlookBanner:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.outlookLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.whoopIconPill {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.outlookContent {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sunIcon {
+  font-size: 14px;
+  color: #D1D5DB;
+}
+
+.outlookLabel {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.outlookChevron {
+  font-size: 16px;
+  font-weight: 700;
+  color: #8E95A2;
+}
+
+/* ---- Today's Activities Box ---- */
+.activitiesContainer {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.activitiesHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.activitiesSectionTitle {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+
+.activityItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.activityLeftPart {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sleepBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #252B35;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.moonIcon {
+  font-size: 14px;
+  color: #4EA5B7;
+}
+
+.sleepTimeText {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.3px;
+}
+
+.activityName {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #FFFFFF;
+}
+
+.activityTimeline {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.activityValue {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.3px;
-}
-
-.activityLabel {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-  letter-spacing: 0.5px;
-}
-
-.activityRight {
+.timeStack {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 2px;
 }
 
-.activityTime {
+.timeVal {
   font-size: 11px;
-  color: var(--text-tertiary);
+  font-weight: 600;
+  color: #8E95A2;
 }
 
-.activityTimeSub {
-  font-size: 11px;
-  color: var(--text-tertiary);
+.timelineBar {
+  width: 3px;
+  height: 28px;
+  background: #4EA5B7;
+  border-radius: 2px;
 }
 
-/* Action buttons */
-.activityActions {
+/* Action Buttons: [+ ADD ACTIVITY] [⏱ START ACTIVITY] */
+.actionButtonsRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  padding-top: 14px;
+  padding-top: 4px;
 }
 
-.actionBtn {
-  display: flex;
+.whoopBtn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 10px 12px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-default);
+  background: #23272F;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 100px;
-  color: var(--text-primary);
+  padding: 10px 12px;
+  color: #FFFFFF;
   font-family: var(--font-body);
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.15s ease, transform 0.15s ease;
 }
 
-.actionBtn:hover {
-  background: var(--bg-elevated);
+.whoopBtn:hover {
+  background: #2C313C;
+  transform: translateY(-1px);
 }
 
-.actionPlus {
-  font-size: 16px;
-  font-weight: 400;
+.whoopBtn:active {
+  transform: translateY(0);
+}
+
+.plusSign {
+  font-size: 15px;
+  font-weight: 700;
   line-height: 1;
 }
 
-.actionTimer {
+.timerIcon {
   font-size: 13px;
 }
 
-/* Tonight's Sleep */
-.tonightSection {
-  margin-bottom: 16px;
-}
-
-.tonightHeader {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-  margin-bottom: 12px;
-}
-
-.tonightCard {
+/* Floating White '+' Button */
+.floatingActionBtn {
+  position: fixed;
+  bottom: 84px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   display: flex;
-  gap: 20px;
-  padding: 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 14px;
-}
-
-.tonightInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  flex: 1;
-}
-
-.tonightLabel {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-}
-
-.tonightValue {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.3px;
-}
-
-/* Training recommendation */
-.recCard {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 14px;
-  padding: 16px;
-  margin-bottom: 20px;
-}
-
-.recHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.recPill {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 100px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-.recScore {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-
-.recText {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
-
-/* Loading state */
-.loading {
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 60dvh;
-  gap: 32px;
+  cursor: pointer;
+  z-index: 99;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-.loadingDials { display: flex; gap: 16px; }
+.floatingActionBtn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+.floatingActionBtn:active {
+  transform: scale(0.96);
+}
+
+/* Loading & Error States */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70dvh;
+}
+
+.loadingDials {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 
 .errorState {
   display: flex;
@@ -372,7 +519,6 @@
   justify-content: center;
   min-height: 60dvh;
   text-align: center;
-  padding: 20px;
-  font-size: 16px;
+  padding: 24px;
   color: var(--text-secondary);
 }
