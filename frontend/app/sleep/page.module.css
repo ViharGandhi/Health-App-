@@ -307,396 +307,73 @@
 }
 
 /* ---- Stages Section ---- */
-/* ---- Last Night's Sleep Section ---- */
-.lastNightSection {
-  margin-top: 26px;
+.stagesSection {
+  margin-top: 22px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  width: 100%;
 }
 
-.lastNightHeader {
+.stagesHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4px;
 }
 
-.lastNightTitles {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.lastNightTitle {
-  font-family: var(--font-body);
-  font-size: 19px;
-  font-weight: 800;
-  color: #FFFFFF;
-  margin: 0;
-  letter-spacing: -0.2px;
-}
-
-.lastNightSubtitle {
-  font-family: var(--font-body);
-  font-size: 11.5px;
-  font-weight: 500;
-  color: #8E95A2;
-}
-
-.editBtn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: transparent;
-  border: none;
-  color: #FFFFFF;
+.stagesTitle {
   font-family: var(--font-body);
   font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  cursor: pointer;
-  padding: 6px 8px;
-  transition: opacity 0.15s ease;
-}
-
-.editBtn:hover {
-  opacity: 0.75;
-}
-
-/* Sleep Detail Card */
-.sleepDetailCard {
-  background: #14171E;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 20px 16px 18px;
-  display: flex;
-  flex-direction: column;
-}
-
-.hoursHeaderRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2px;
-}
-
-.hoursHeaderLabel {
-  font-family: var(--font-body);
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 1px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+.stagesTotal {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
   color: #8E95A2;
 }
 
-.hoursValueRow {
-  display: inline-flex;
-  align-items: baseline;
+.stagesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.stageCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
   gap: 4px;
 }
 
-.hoursValueBig {
-  font-family: var(--font-display);
-  font-size: 40px;
-  font-weight: 800;
-  color: #FFFFFF;
-  line-height: 1;
-  letter-spacing: -1px;
-}
-
-.hoursGreenArrow {
-  font-size: 9px;
-  color: #22E600;
-}
-
-.hoursBaseline {
+.stageLabel {
   font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 600;
-  color: #8E95A2;
-  margin-top: 2px;
-  margin-bottom: 14px;
-}
-
-/* Heart Rate Intraday Graph */
-.hrGraphWrapper {
-  display: flex;
-  width: 100%;
-  height: 95px;
-  margin-bottom: 20px;
-}
-
-.hrYAxis {
-  width: 26px;
-  height: 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  font-family: var(--font-body);
-  font-size: 9px;
-  font-weight: 600;
-  color: #5C626E;
-  line-height: 1;
-  user-select: none;
-}
-
-.hrChartBody {
-  flex: 1;
-  position: relative;
-  height: 100%;
-}
-
-.hrSvg {
-  width: 100%;
-  height: 80px;
-  overflow: visible;
-}
-
-.hrTimeLabels {
-  position: relative;
-  width: 100%;
-  height: 14px;
-}
-
-.hrTimeStart {
-  position: absolute;
-  left: 22px;
-  top: 1px;
-  font-family: var(--font-display);
   font-size: 10px;
   font-weight: 700;
-  color: #8E95A2;
-}
-
-.hrTimeEnd {
-  position: absolute;
-  right: 22px;
-  top: 1px;
-  font-family: var(--font-display);
-  font-size: 10px;
-  font-weight: 700;
-  color: #8E95A2;
-}
-
-/* Typical Header Row */
-.typicalHeaderRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  padding-top: 6px;
-}
-
-.typicalLeft {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-body);
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #8E95A2;
 }
-
-.typicalBoxIcon {
-  width: 10px;
-  height: 10px;
-  border: 1px dashed #8E95A2;
-  border-radius: 2px;
-}
-
-.durationRight {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-}
-
-.durationLabel {
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  color: #8E95A2;
-  text-transform: uppercase;
-}
-
-.durationVal {
-  font-family: var(--font-display);
-  font-size: 13.5px;
-  font-weight: 800;
-  color: #FFFFFF;
-}
-
-/* Stages List */
-.stagesList {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.stageItem {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.stageItemHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.stageTitleGroup {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.stageCircleIcon {
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  border: 2px solid #FFFFFF;
-}
-
-.circleAwake { border-color: #FFFFFF; }
-.circleLight { border-color: #9E96EB; }
-.circleDeep { border-color: #FF529A; }
-.circleRem { border-color: #A855F7; }
-
-.stageName {
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  color: #FFFFFF;
-}
-
-.stagePct {
-  font-family: var(--font-display);
-  font-size: 11.5px;
-  font-weight: 700;
-  color: #8E95A2;
-}
-
-.pctLight { color: #9E96EB; }
-.pctDeep { color: #FF529A; }
-.pctRem { color: #A855F7; }
 
 .stageDuration {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 800;
-  color: #FFFFFF;
-}
-
-/* Diagonal Stripe Bar Track */
-.stageTrack {
-  position: relative;
-  width: 100%;
-  height: 12px;
-  border-radius: 6px;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(255, 255, 255, 0.05),
-    rgba(255, 255, 255, 0.05) 4px,
-    rgba(255, 255, 255, 0.015) 4px,
-    rgba(255, 255, 255, 0.015) 8px
-  );
-  overflow: visible;
-}
-
-.stageFill {
-  height: 100%;
-  border-radius: 6px;
-  transition: width 0.8s ease;
-}
-
-.fillAwake { background: #FFFFFF; }
-.fillLight { background: #9E96EB; }
-.fillDeep { background: #FF529A; }
-.fillRem { background: #A855F7; }
-
-.typicalRangeBox {
-  position: absolute;
-  top: -2px;
-  bottom: -2px;
-  border: 1px dashed rgba(255, 255, 255, 0.4);
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.04);
-  pointer-events: none;
-}
-
-/* Restorative Sleep Bottom Row */
-.restorativeRow {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.restorativeLeft {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.restorativeSquareIcon {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-  background: linear-gradient(135deg, #A855F7 50%, #FF529A 50%);
-}
-
-.restorativeTitle {
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: #FFFFFF;
-}
-
-.restorativeRight {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 1px;
-}
-
-.restorativeValRow {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
-}
-
-.restorativeVal {
   font-family: var(--font-display);
   font-size: 18px;
   font-weight: 800;
   color: #FFFFFF;
-  line-height: 1;
 }
 
-.restorativeGreenArrow {
-  font-size: 8px;
-  color: #22E600;
-}
-
-.restorativeBaseline {
+.stagePct {
   font-family: var(--font-body);
   font-size: 11px;
   font-weight: 600;
-  color: #8E95A2;
+  color: #4EA5B7;
 }
-
 
 /* Loading state */
 .loadingPage {
