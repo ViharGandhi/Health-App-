@@ -277,33 +277,190 @@ export default function SleepPage() {
           </div>
         </section>
 
-        {/* -- Sleep Stages Breakdown Section -- */}
-        <section className={styles.stagesSection}>
-          <div className={styles.stagesHeader}>
-            <span className={styles.stagesTitle}>SLEEP STAGES</span>
-            <span className={styles.stagesTotal}>{data.total_sleep_hours.toFixed(1)} hrs total</span>
+        {/* -- Last Night's Sleep Detailed Breakdown (Exact WHOOP UI) -- */}
+        <section className={styles.lastNightSection}>
+          {/* Section Header */}
+          <div className={styles.lastNightHeader}>
+            <div className={styles.lastNightTitles}>
+              <h2 className={styles.lastNightTitle}>Last Night&apos;s Sleep</h2>
+              <span className={styles.lastNightSubtitle}>Today vs. prior 30 days</span>
+            </div>
+            <button className={styles.editBtn} aria-label="Edit sleep times">
+              <span>EDIT</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </button>
           </div>
 
-          <div className={styles.stagesGrid}>
-            <div className={styles.stageCard}>
-              <span className={styles.stageLabel}>DEEP</span>
-              <span className={styles.stageDuration}>{formatMins(stages.deep_minutes)}</span>
-              <span className={styles.stagePct}>{Math.round((stages.deep_minutes / stages.total_minutes) * 100)}%</span>
+          {/* Main Card */}
+          <div className={styles.sleepDetailCard}>
+            {/* Hours of Sleep Header */}
+            <div className={styles.hoursHeaderRow}>
+              <span className={styles.hoursHeaderLabel}>HOURS OF SLEEP</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8E95A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="16" x2="12" y2="12" />
+                <line x1="12" y1="8" x2="12.01" y2="8" />
+              </svg>
             </div>
-            <div className={styles.stageCard}>
-              <span className={styles.stageLabel}>REM</span>
-              <span className={styles.stageDuration}>{formatMins(stages.rem_minutes)}</span>
-              <span className={styles.stagePct}>{Math.round((stages.rem_minutes / stages.total_minutes) * 100)}%</span>
+
+            {/* Score & Baseline */}
+            <div className={styles.hoursValueRow}>
+              <span className={styles.hoursValueBig}>9:06</span>
+              <span className={styles.hoursGreenArrow}>▲</span>
             </div>
-            <div className={styles.stageCard}>
-              <span className={styles.stageLabel}>LIGHT / CORE</span>
-              <span className={styles.stageDuration}>{formatMins(stages.core_minutes)}</span>
-              <span className={styles.stagePct}>{Math.round((stages.core_minutes / stages.total_minutes) * 100)}%</span>
+            <span className={styles.hoursBaseline}>7:36</span>
+
+            {/* Heart Rate / Sleep Intraday Graph */}
+            <div className={styles.hrGraphWrapper}>
+              {/* Y-axis labels on left */}
+              <div className={styles.hrYAxis}>
+                <span>110</span>
+                <span>90</span>
+                <span>70</span>
+                <span>50</span>
+                <span>30</span>
+              </div>
+
+              {/* Chart body */}
+              <div className={styles.hrChartBody}>
+                <svg className={styles.hrSvg} viewBox="0 0 320 85" preserveAspectRatio="none">
+                  {/* Subtle horizontal grid lines */}
+                  <line x1="0" y1="5" x2="320" y2="5" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+                  <line x1="0" y1="24" x2="320" y2="24" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+                  <line x1="0" y1="43" x2="320" y2="43" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+                  <line x1="0" y1="62" x2="320" y2="62" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+                  <line x1="0" y1="80" x2="320" y2="80" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+
+                  {/* Pre-sleep dim shade (x 0 to 22) */}
+                  <rect x="0" y="0" width="22" height="85" fill="rgba(0,0,0,0.3)" />
+
+                  {/* Sleep onset dotted vertical line at 00:14 */}
+                  <line x1="22" y1="2" x2="22" y2="85" stroke="#FFFFFF" strokeDasharray="2 2" strokeWidth="1.2" opacity="0.65" />
+                  <circle cx="22" cy="3" r="2.2" fill="#FFFFFF" />
+
+                  {/* Wake-up dotted vertical line at 09:44 */}
+                  <line x1="298" y1="2" x2="298" y2="85" stroke="#FFFFFF" strokeDasharray="2 2" strokeWidth="1.2" opacity="0.65" />
+                  <circle cx="298" cy="3" r="2.2" fill="#FFFFFF" />
+
+                  {/* Post-wake dim shade (x 298 to 320) */}
+                  <rect x="298" y="0" width="22" height="85" fill="rgba(0,0,0,0.3)" />
+
+                  {/* Heart rate trace (replicates exact WHOOP nocturnal signal) */}
+                  <path
+                    d="M 0,38 L 4,32 L 8,36 L 12,28 L 16,34 L 20,40 L 22,12 L 24,48 L 28,42 L 32,54 L 36,46 L 40,58 L 44,52 L 48,56 L 52,48 L 56,60 L 60,54 L 64,52 L 68,48 L 72,55 L 76,50 L 80,48 L 84,40 L 88,52 L 92,46 L 96,56 L 100,50 L 104,52 L 108,44 L 112,56 L 116,48 L 120,54 L 124,42 L 128,50 L 132,48 L 136,56 L 140,52 L 144,46 L 148,58 L 152,50 L 156,54 L 160,44 L 164,52 L 168,48 L 172,56 L 176,38 L 180,50 L 184,46 L 188,54 L 192,50 L 196,48 L 200,56 L 204,52 L 208,48 L 212,54 L 216,46 L 220,52 L 224,36 L 228,48 L 232,46 L 236,54 L 240,48 L 244,52 L 248,46 L 252,54 L 256,44 L 260,52 L 264,48 L 268,54 L 272,46 L 276,52 L 280,48 L 284,54 L 288,44 L 292,50 L 296,28 L 298,14 L 302,46 L 306,32 L 310,42 L 314,30 L 320,44"
+                    fill="none"
+                    stroke="#5A99B8"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+
+                {/* Start & End time markers under vertical lines */}
+                <div className={styles.hrTimeLabels}>
+                  <span className={styles.hrTimeStart}>00:14</span>
+                  <span className={styles.hrTimeEnd}>09:44</span>
+                </div>
+              </div>
             </div>
-            <div className={styles.stageCard}>
-              <span className={styles.stageLabel}>AWAKE</span>
-              <span className={styles.stageDuration}>{formatMins(stages.awake_minutes)}</span>
-              <span className={styles.stagePct}>{Math.round((stages.awake_minutes / stages.total_minutes) * 100)}%</span>
+
+            {/* Typical Range & Duration Row */}
+            <div className={styles.typicalHeaderRow}>
+              <div className={styles.typicalLeft}>
+                <span className={styles.typicalBoxIcon} />
+                <span>TYPICAL RANGE</span>
+              </div>
+              <div className={styles.durationRight}>
+                <span className={styles.durationLabel}>DURATION</span>
+                <span className={styles.durationVal}>9:30</span>
+              </div>
+            </div>
+
+            {/* The 4 Sleep Stage Rows with Diagonal Stripe Pattern & Range Boxes */}
+            <div className={styles.stagesList}>
+              {/* Row 1: AWAKE 4% (0:24) */}
+              <div className={styles.stageItem}>
+                <div className={styles.stageItemHeader}>
+                  <div className={styles.stageTitleGroup}>
+                    <span className={`${styles.stageCircleIcon} ${styles.circleAwake}`} />
+                    <span className={styles.stageName}>AWAKE</span>
+                    <span className={styles.stagePct}>4%</span>
+                  </div>
+                  <span className={styles.stageDuration}>0:24</span>
+                </div>
+                <div className={styles.stageTrack}>
+                  <div className={`${styles.stageFill} ${styles.fillAwake}`} style={{ width: '6%' }} />
+                  {/* Dashed Typical Range Overlay */}
+                  <div className={styles.typicalRangeBox} style={{ left: '2%', width: '8%' }} />
+                </div>
+              </div>
+
+              {/* Row 2: LIGHT 52% (4:51) */}
+              <div className={styles.stageItem}>
+                <div className={styles.stageItemHeader}>
+                  <div className={styles.stageTitleGroup}>
+                    <span className={`${styles.stageCircleIcon} ${styles.circleLight}`} />
+                    <span className={styles.stageName}>LIGHT</span>
+                    <span className={`${styles.stagePct} ${styles.pctLight}`}>52%</span>
+                  </div>
+                  <span className={styles.stageDuration}>4:51</span>
+                </div>
+                <div className={styles.stageTrack}>
+                  <div className={`${styles.stageFill} ${styles.fillLight}`} style={{ width: '52%' }} />
+                  <div className={styles.typicalRangeBox} style={{ left: '46%', width: '14%' }} />
+                </div>
+              </div>
+
+              {/* Row 3: SWS (DEEP) 18% (1:43) */}
+              <div className={styles.stageItem}>
+                <div className={styles.stageItemHeader}>
+                  <div className={styles.stageTitleGroup}>
+                    <span className={`${styles.stageCircleIcon} ${styles.circleDeep}`} />
+                    <span className={styles.stageName}>SWS (DEEP)</span>
+                    <span className={`${styles.stagePct} ${styles.pctDeep}`}>18%</span>
+                  </div>
+                  <span className={styles.stageDuration}>1:43</span>
+                </div>
+                <div className={styles.stageTrack}>
+                  <div className={`${styles.stageFill} ${styles.fillDeep}`} style={{ width: '18%' }} />
+                  <div className={styles.typicalRangeBox} style={{ left: '16%', width: '10%' }} />
+                </div>
+              </div>
+
+              {/* Row 4: REM 26% (2:32) */}
+              <div className={styles.stageItem}>
+                <div className={styles.stageItemHeader}>
+                  <div className={styles.stageTitleGroup}>
+                    <span className={`${styles.stageCircleIcon} ${styles.circleRem}`} />
+                    <span className={styles.stageName}>REM</span>
+                    <span className={`${styles.stagePct} ${styles.pctRem}`}>26%</span>
+                  </div>
+                  <span className={styles.stageDuration}>2:32</span>
+                </div>
+                <div className={styles.stageTrack}>
+                  <div className={`${styles.stageFill} ${styles.fillRem}`} style={{ width: '26%' }} />
+                  <div className={styles.typicalRangeBox} style={{ left: '20%', width: '12%' }} />
+                </div>
+              </div>
+            </div>
+
+            {/* Restorative Sleep Divider & Bottom Metric */}
+            <div className={styles.restorativeRow}>
+              <div className={styles.restorativeLeft}>
+                {/* Diagonal split square: half REM purple, half SWS pink */}
+                <div className={styles.restorativeSquareIcon} />
+                <span className={styles.restorativeTitle}>RESTORATIVE SLEEP</span>
+              </div>
+              <div className={styles.restorativeRight}>
+                <div className={styles.restorativeValRow}>
+                  <span className={styles.restorativeVal}>4:15</span>
+                  <span className={styles.restorativeGreenArrow}>▲</span>
+                </div>
+                <span className={styles.restorativeBaseline}>3:02</span>
+              </div>
             </div>
           </div>
         </section>
@@ -311,3 +468,4 @@ export default function SleepPage() {
     </div>
   );
 }
+
