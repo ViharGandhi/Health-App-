@@ -1,11 +1,12 @@
+/* MockBanner — WHOOP dark theme */
 .banner {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 8px 16px;
-  background: #161616;
-  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(245, 197, 24, 0.08);
+  border-bottom: 1px solid rgba(245, 197, 24, 0.15);
   font-size: 12px;
   font-weight: 500;
 }
@@ -14,14 +15,20 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--text-secondary);
+  background: #f5c518;
+  animation: pulse 2s infinite;
   flex-shrink: 0;
 }
 
-.text { color: var(--text-secondary); letter-spacing: 0.1em; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.85); }
+}
+
+.text { color: rgba(245, 197, 24, 0.7); }
 
 .link {
-  color: var(--text-primary);
+  color: #f5c518;
   text-decoration: none;
   font-weight: 700;
   letter-spacing: 0.3px;

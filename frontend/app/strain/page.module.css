@@ -1,29 +1,26 @@
 /* Strain page — america.gov theme */
 .heroCard {
-  padding: 36px 0 24px;
+  margin-bottom: 16px;
+  background: var(--bg-card);
 }
 
 .heroContent {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 20px;
 }
 
 .heroStats {
   display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
 }
 
 .heroStat {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  flex: 1;
-  min-width: 0;
-  padding: 12px;
-  background: var(--bg-card);
-  border-radius: 14px;
 }
 
 .heroStatLabel {
@@ -35,17 +32,13 @@
 }
 
 .heroStatValue {
-  font-family: var(--font-display);
+  font-family: var(--font-heading);
   font-size: 26px;
   font-weight: 700;
   letter-spacing: -0.5px;
   line-height: 1;
   color: var(--text-primary);
 }
-
-.summaryCard { margin-bottom: 18px; }
-.summaryCard h1 { font-size: 17px; margin-bottom: 6px; }
-.summaryCard p { color: var(--text-secondary); font-size: 12px; line-height: 1.6; }
 
 .heroStatUnit {
   font-size: 13px;
@@ -62,12 +55,11 @@
 .calibrationNote {
   margin-top: 16px;
   padding: 10px 14px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: rgba(201, 135, 10, 0.08);
+  border: 1px solid rgba(201, 135, 10, 0.2);
   border-radius: 10px;
   font-size: 12px;
-  color: var(--text-secondary);
-  margin-bottom: 16px;
+  color: var(--accent-warn);
 }
 
 /* Workout rows */

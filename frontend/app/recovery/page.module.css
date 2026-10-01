@@ -1,29 +1,30 @@
 /* Recovery page — WHOOP dark theme */
 .heroCard {
-  padding: 36px 0 24px;
+  margin-bottom: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 20px;
 }
 
 .heroContent {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .heroStats {
   display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
 }
 
 .heroStat {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  flex: 1;
-  min-width: 0;
-  padding: 16px;
-  border-radius: 14px;
-  background: var(--bg-card);
 }
 
 .heroStatLabel {
@@ -35,17 +36,12 @@
 }
 
 .heroStatValue {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.5px;
   line-height: 1;
 }
-
-.summaryCard { margin-bottom: 18px; }
-.summaryCard h1 { font-size: 17px; margin-bottom: 6px; }
-.summaryCard p, .recNote { color: var(--text-secondary); font-size: 12px; line-height: 1.6; }
-.recNote { margin-top: 8px; color: var(--text-tertiary); }
 
 .heroStatUnit {
   font-size: 13px;

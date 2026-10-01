@@ -3,13 +3,13 @@ import './globals.css';
 import NavBar from '@/components/NavBar';
 
 export const metadata: Metadata = {
-  title: 'Ojas — Your Fitness Dashboard',
+  title: 'WHOOP — Your Fitness Dashboard',
   description: 'Personal fitness tracking with Recovery, Sleep Score, and Strain — powered by your data.',
   icons: { icon: '/favicon.ico' },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0B0B0B',
+  themeColor: '#1a1c22',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,

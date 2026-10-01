@@ -8,17 +8,14 @@
 import { useEffect, useState } from 'react';
 import CircleDial from '@/components/CircleDial';
 import MetricCard from '@/components/MetricCard';
-import MetricNav from '@/components/MetricNav';
-import MockBanner from '@/components/MockBanner';
-import ShareButton from '@/components/ShareButton';
 import { api } from '@/lib/api';
 import type { RecoveryData } from '@/lib/types';
 import styles from './page.module.css';
 
 const RECOVERY_COLOR: Record<string, string> = {
-  green:  '#16EC06',
-  yellow: '#FFDE00',
-  red:    '#FF0026',
+  green:  '#04d98b',
+  yellow: '#f5c518',
+  red:    '#ff3b3b',
 };
 
 interface ComponentRowProps {
@@ -51,16 +48,13 @@ function ComponentRow({ label, value, weight, color }: ComponentRowProps) {
 export default function RecoveryPage() {
   const [data, setData] = useState<RecoveryData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     api.getRecovery()
       .then(setData)
-      .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
 
-  if (error) return <div className="page" style={{ paddingTop: 24 }}>Could not load recovery data.</div>;
   if (loading || !data) {
     return (
       <div className="page" style={{ paddingTop: 24 }}>
@@ -70,40 +64,32 @@ export default function RecoveryPage() {
     );
   }
 
-  const color = RECOVERY_COLOR[data.status] ?? '#16EC06';
+  const color = RECOVERY_COLOR[data.status] ?? '#04d98b';
   const statusLabel = data.status === 'green' ? 'Recovered' : data.status === 'yellow' ? 'Moderate' : 'Low Recovery';
 
   return (
-    <>
-      <MockBanner isMock={data.is_mock} />
-      <div className="page">
-      <MetricNav active="recovery" isMock={data.is_mock}>
+    <div className="page">
+      {/* Header */}
+      <div className="page-header">
+        <h1 className="page-title">Recovery</h1>
+        <span className={`pill pill-${data.status}`}>{statusLabel}</span>
+      </div>
 
       {/* Hero score */}
       <div className={`${styles.heroCard} fade-in`}>
         <div className={styles.heroContent}>
           <CircleDial
-            label="RECOVERY"
+            label="Recovery"
             value={data.score}
             maxValue={100}
             color={color}
             unit="%"
-            size={270}
-            hero
+            size={160}
           />
-          <ShareButton metric="Recovery" value={`${Math.round(data.score)}%`} isMock={data.is_mock} />
-        </div>
-      </div>
-
-      <div className={styles.summaryCard}>
-        <h1>{statusLabel}</h1>
-        <p>{data.is_mock ? 'Illustrative recovery estimate from sample measurements.' : 'Recovery estimate based on recent measurements.'}</p>
-      </div>
-
-      <div className={styles.heroStats}>
+          <div className={styles.heroStats}>
             <div className={styles.heroStat}>
               <span className={styles.heroStatLabel}>HRV</span>
-              <span className={styles.heroStatValue}>
+              <span className={styles.heroStatValue} style={{ color: '#04d98b' }}>
                 {data.today_hrv?.toFixed(0) ?? '—'}
                 <span className={styles.heroStatUnit}>ms</span>
               </span>
@@ -111,12 +97,14 @@ export default function RecoveryPage() {
             </div>
             <div className={styles.heroStat}>
               <span className={styles.heroStatLabel}>Resting HR</span>
-              <span className={styles.heroStatValue}>
+              <span className={styles.heroStatValue} style={{ color: '#ff3b3b' }}>
                 {data.today_rhr?.toFixed(0) ?? '—'}
                 <span className={styles.heroStatUnit}>bpm</span>
               </span>
               <span className={styles.heroStatSub}>Baseline {data.rhr_baseline?.toFixed(0) ?? '—'}</span>
             </div>
+          </div>
+        </div>
       </div>
 
       {/* Component breakdown */}
@@ -126,25 +114,25 @@ export default function RecoveryPage() {
           label="HRV Score"
           value={data.hrv_component}
           weight="40%"
-          color="var(--text-secondary)"
+          color="#04d98b"
         />
         <ComponentRow
           label="Resting HR"
           value={data.rhr_component}
           weight="25%"
-          color="var(--text-secondary)"
+          color="#ff3b3b"
         />
         <ComponentRow
           label="Sleep Quality"
           value={data.sleep_component}
           weight="25%"
-          color="var(--sleep-blue)"
+          color="#9B6DFF"
         />
         <ComponentRow
           label="Strain Recovery"
           value={data.strain_component}
           weight="10%"
-          color="var(--strain-blue)"
+          color="#00a1e4"
         />
         {data.acr_penalty > 0 && (
           <div className={styles.penaltyRow}>
@@ -161,25 +149,24 @@ export default function RecoveryPage() {
           value={data.today_hrv?.toFixed(0) ?? '—'}
           unit="ms"
           sublabel="rMSSD overnight"
-          accent="var(--text-secondary)"
+          accent="#04d98b"
+          icon="📈"
         />
         <MetricCard
           label="Resting HR"
           value={data.today_rhr?.toFixed(0) ?? '—'}
           unit="bpm"
           sublabel="Morning resting"
-          accent="var(--text-secondary)"
+          accent="#ff3b3b"
+          icon="❤️"
         />
       </div>
 
       {/* Training recommendation */}
       <div className={`${styles.recBox} fade-in fade-in-delay-3`} style={{ borderLeft: `3px solid ${color}` }}>
-        <p className={styles.recLabel}>Estimated guidance</p>
+        <p className={styles.recLabel}>Training Recommendation</p>
         <p className={styles.recText}>{data.training_recommendation}</p>
-        <p className={styles.recNote}>This formula is under review; treat the guidance as illustrative.</p>
       </div>
-      </MetricNav>
     </div>
-    </>
   );
 }

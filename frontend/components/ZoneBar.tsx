@@ -13,11 +13,11 @@ interface Props {
 }
 
 const ZONE_CONFIG = [
-  { key: 'zone1' as const, label: 'Zone 1', sublabel: 'Light' },
-  { key: 'zone2' as const, label: 'Zone 2', sublabel: 'Easy' },
-  { key: 'zone3' as const, label: 'Zone 3', sublabel: 'Steady' },
-  { key: 'zone4' as const, label: 'Zone 4', sublabel: 'Hard' },
-  { key: 'zone5' as const, label: 'Zone 5', sublabel: 'Very hard' },
+  { key: 'zone1' as const, label: 'Zone 1', sublabel: 'Warm Up', color: '#64D9FF' },
+  { key: 'zone2' as const, label: 'Zone 2', sublabel: 'Fat Burn', color: '#48CFAD' },
+  { key: 'zone3' as const, label: 'Zone 3', sublabel: 'Aerobic',  color: '#FFCE54' },
+  { key: 'zone4' as const, label: 'Zone 4', sublabel: 'Threshold',color: '#FF7043' },
+  { key: 'zone5' as const, label: 'Zone 5', sublabel: 'Max',      color: '#FF4444' },
 ];
 
 function fmt(minutes: number): string {
@@ -31,13 +31,13 @@ export default function ZoneBar({ zones }: Props) {
 
   return (
     <div className={styles.wrapper}>
-      {ZONE_CONFIG.map(({ key, label, sublabel }) => {
+      {ZONE_CONFIG.map(({ key, label, sublabel, color }) => {
         const minutes = zones[key];
         const pct = (minutes / maxMinutes) * 100;
         return (
           <div key={key} className={styles.row}>
             <div className={styles.zoneLabel}>
-              <span className={styles.zoneName}>{label}</span>
+              <span className={styles.zoneName} style={{ color }}>{label}</span>
               <span className={styles.zoneSub}>{sublabel}</span>
             </div>
             <div className={styles.barTrack}>
@@ -45,7 +45,8 @@ export default function ZoneBar({ zones }: Props) {
                 className={styles.barFill}
                 style={{
                   width: `${pct}%`,
-                  background: 'var(--strain-blue)',
+                  background: color,
+                  boxShadow: minutes > 0 ? `0 0 8px ${color}66` : 'none',
                 }}
               />
             </div>
