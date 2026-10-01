@@ -1,4 +1,4 @@
-/* page.module.css — Interactive WHOOP Sleep Consistency Trend View */
+/* page.module.css — WHOOP Sleep Stress Trend View */
 
 .pageWrapper {
   min-height: 100dvh;
@@ -72,7 +72,7 @@
 .selectorLeft {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .selectorIcon {
@@ -80,7 +80,7 @@
   align-items: center;
   justify-content: center;
   color: #FFFFFF;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .selectorTitle {
@@ -103,7 +103,7 @@
 .averageBlock {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   min-width: 130px;
 }
 
@@ -118,13 +118,13 @@
 }
 
 .averageLabelActive {
-  color: #00E5A3;
+  color: #FFAE00;
 }
 
 .scoreRow {
   display: inline-flex;
   align-items: baseline;
-  gap: 1px;
+  gap: 4px;
 }
 
 .scoreBig {
@@ -137,37 +137,43 @@
 }
 
 .scoreUnit {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 600;
   color: #FFFFFF;
   line-height: 1;
 }
 
+/* Amber Delta Badge */
 .deltaPill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: rgba(34, 230, 0, 0.12);
-  border: 1px solid rgba(34, 230, 0, 0.25);
+  gap: 5px;
+  background: rgba(255, 174, 0, 0.12);
+  border: 1px solid rgba(255, 174, 0, 0.28);
   border-radius: 4px;
-  padding: 3px 6px;
+  padding: 3px 7px;
   font-family: var(--font-body);
   font-size: 10px;
-  font-weight: 800;
-  color: #22E600;
+  font-weight: 700;
+  color: #FFAE00;
   margin-top: 2px;
   width: fit-content;
   white-space: nowrap;
 }
 
-.deltaDotGreen {
+.deltaArrowAmber {
   font-size: 8px;
-  color: #00E5A3;
+  color: #FFAE00;
 }
 
-.deltaArrow {
+.deltaTextAmber {
+  color: #FFAE00;
+}
+
+.deltaDotAmber {
   font-size: 8px;
+  color: #FFAE00;
 }
 
 /* Right Controls (Timeframe & Date range) */
@@ -181,7 +187,7 @@
 .timeframeToggle {
   display: flex;
   align-items: center;
-  background: #14171D;
+  background: #12151B;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   padding: 3px;
@@ -244,24 +250,96 @@
   font-weight: 500;
   line-height: 1.55;
   color: #FFFFFF;
-  margin: 10px 0 24px;
+  margin: 10px 0 18px;
 }
 
-/* ---- Bar Chart Trend Graph ---- */
-.chartContainer {
-  position: relative;
+/* ---- Legend Row (HIGH | MEDIUM | LOW) ---- */
+.legendRow {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legendBoxHigh {
+  width: 8px;
+  height: 8px;
+  border-radius: 1.5px;
+  background: #FFAE00;
+}
+
+.legendBoxMedium {
+  width: 8px;
+  height: 8px;
+  border-radius: 1.5px;
+  background: #00E5A3;
+}
+
+.legendBoxLow {
+  width: 8px;
+  height: 8px;
+  border-radius: 1.5px;
+  background: #5B9ECC;
+}
+
+.legendText {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #8E95A2;
+  text-transform: uppercase;
+}
+
+/* ---- 100% Stacked Bar Chart ---- */
+.chartWrapper {
+  display: flex;
   width: 100%;
-  height: 250px;
-  margin-bottom: 30px;
-  padding-top: 14px;
+  height: 220px;
+  position: relative;
+  margin-bottom: 6px;
 }
 
-.gridlinesWrapper {
+.yAxisCol {
+  width: 38px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-right: 6px;
+  user-select: none;
+}
+
+.yTickItem {
+  height: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.yTickLabel {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  color: #5C626E;
+  line-height: 1;
+}
+
+.graphBody {
+  flex: 1;
+  position: relative;
+  height: 100%;
+}
+
+.gridlinesBody {
   position: absolute;
-  top: 14px;
-  left: 0;
-  right: 0;
-  bottom: 38px;
+  inset: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -269,187 +347,164 @@
 }
 
 .gridlineRow {
-  display: flex;
-  align-items: center;
   width: 100%;
-  gap: 8px;
-}
-
-.yAxisLabel {
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 600;
-  color: #5C626E;
-  min-width: 32px;
-  text-align: right;
-}
-
-.avgPill {
-  background: #FFFFFF;
-  color: #0E1217;
-  font-family: var(--font-body);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-  padding: 2px 4px;
-  border-radius: 3px;
-  line-height: 1;
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  pointer-events: auto;
-}
-
-.avgPill:hover,
-.avgPillActive {
-  background: #00E5A3;
-  color: #0E1217;
-  box-shadow: 0 0 10px rgba(0, 229, 163, 0.4);
-}
-
-.gridline {
-  flex: 1;
   height: 1px;
   background: rgba(255, 255, 255, 0.07);
-  transition: all 0.2s ease;
 }
 
-.gridlineActive {
-  background: rgba(0, 229, 163, 0.6);
-  box-shadow: 0 0 8px rgba(0, 229, 163, 0.4);
-}
-
-/* Average horizontal guideline overlay */
-.avgGuidelineOverlay {
+/* Daily Stacked Bars */
+.barsContainer {
   position: absolute;
-  left: 40px;
-  right: 0;
-  height: 1px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.2);
-  pointer-events: auto;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 10px;
-  transition: all 0.2s ease;
-  z-index: 5;
-}
-
-.avgGuidelineActive {
-  border-top: 1.5px dashed #00E5A3;
-  box-shadow: 0 0 8px rgba(0, 229, 163, 0.4);
-}
-
-.avgGuidelineLabel {
-  background: rgba(14, 18, 23, 0.95);
-  border: 1px solid rgba(0, 229, 163, 0.4);
-  color: #00E5A3;
-  font-family: var(--font-body);
-  font-size: 9px;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transform: translateY(-50%);
-}
-
-/* 7 Bars */
-.barsRow {
-  position: absolute;
-  top: 14px;
-  left: 40px;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  padding-right: 6px;
+  padding-right: 4px;
 }
 
 .barCol {
+  flex: 1;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
   justify-content: flex-end;
-  flex: 1;
-  gap: 6px;
   cursor: pointer;
-  transition: transform 0.15s ease;
+  padding: 0 1px;
+  transition: transform 0.15s ease, filter 0.15s ease;
 }
 
 .barColActive {
   transform: translateY(-2px);
+  filter: brightness(1.25);
 }
 
-.barTrack {
-  position: relative;
+.barStack {
   width: 100%;
-  height: calc(100% - 44px);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.barPillarWrapper {
-  position: relative;
-  width: 15px;
+  max-width: 7.5px;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  transition: height 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  border-radius: 2px 2px 0 0;
+  overflow: hidden;
 }
 
-.barPillarWrapperActive {
-  width: 17px;
+.segHigh {
+  width: 100%;
+  background: #FFAE00;
+  transition: height 0.3s ease;
 }
 
-.barScoreLabel {
+.segMedium {
+  width: 100%;
+  background: #00E5A3;
+  transition: height 0.3s ease;
+}
+
+.segLow {
+  width: 100%;
+  background: #5B9ECC;
+  transition: height 0.3s ease;
+}
+
+/* Floating Tooltip */
+.hoverTooltip {
   position: absolute;
-  top: -18px;
-  left: 50%;
+  top: 10px;
   transform: translateX(-50%);
-  font-family: var(--font-display);
-  font-size: 11px;
+  background: rgba(14, 18, 23, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  z-index: 20;
+  white-space: nowrap;
+}
+
+.tooltipHeader {
+  font-family: var(--font-body);
+  font-size: 10.5px;
   font-weight: 800;
   color: #FFFFFF;
-  letter-spacing: -0.3px;
-  line-height: 1;
-  white-space: nowrap;
-  transition: all 0.15s ease;
+  margin-bottom: 2px;
 }
 
-.barScoreLabelActive {
-  top: -22px;
-  font-size: 13px;
-  color: #00E5A3;
-  text-shadow: 0 0 8px rgba(0, 229, 163, 0.5);
+.tooltipRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 9.5px;
+  color: #8E95A2;
 }
 
-.barFill {
-  width: 100%;
-  height: 100%;
-  background: #68A1B4;
-  border-radius: 3px 3px 0 0;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
+.tooltipRow strong {
+  color: #FFFFFF;
 }
 
-.barCol:hover .barFill,
-.barFillActive {
-  background: #00E5A3 !important;
-  box-shadow: 0 0 10px rgba(0, 229, 163, 0.4);
+.tooltipDotHigh {
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: #FFAE00;
 }
 
-.barMeta {
+.tooltipDotMed {
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: #00E5A3;
+}
+
+.tooltipDotLow {
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: #5B9ECC;
+}
+
+/* ---- X-Axis Dates Row ---- */
+.xAxisRow {
+  position: relative;
+  height: 38px;
+  margin-left: 38px;
+  margin-bottom: 16px;
+}
+
+.xTickItem {
+  position: absolute;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1px;
-  height: 32px;
+  user-select: none;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
 }
 
-.barDayName {
+.xTickItem:hover,
+.xTickHighlighted {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.xTickItem:hover .xTickMonth,
+.xTickHighlighted .xTickMonth {
+  color: #00E5A3;
+}
+
+.xTickItem:hover .xTickDay,
+.xTickHighlighted .xTickDay {
+  color: #FFFFFF;
+}
+
+.xTickMonth {
   font-family: var(--font-body);
   font-size: 10px;
   font-weight: 600;
@@ -457,7 +512,7 @@
   transition: color 0.15s ease;
 }
 
-.barDayNum {
+.xTickDay {
   font-family: var(--font-display);
   font-size: 10.5px;
   font-weight: 700;
@@ -465,26 +520,33 @@
   transition: color 0.15s ease;
 }
 
-.barMetaActive {
-  color: #FFFFFF !important;
-  font-weight: 800 !important;
+/* ---- Footnote Row ---- */
+.footnoteRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 30px;
+  color: #8E95A2;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
 }
 
-/* ---- Breakdown Section ---- */
-.breakdownSection {
+/* ---- Learn More Section ---- */
+.learnMoreSection {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
 }
 
-.breakdownTitleRow {
+.learnMoreHeader {
   display: flex;
   align-items: baseline;
-  gap: 5px;
+  justify-content: space-between;
 }
 
-.breakdownTitle {
+.learnMoreTitle {
   font-family: var(--font-body);
   font-size: 11px;
   font-weight: 800;
@@ -493,70 +555,61 @@
   color: #FFFFFF;
 }
 
-.breakdownUnit {
+.learnMoreViewAll {
   font-family: var(--font-body);
   font-size: 10px;
-  font-weight: 600;
-  color: #8E95A2;
-  text-transform: uppercase;
-}
-
-.breakdownProgressBar {
-  width: 100%;
-  height: 7px;
-  border-radius: 4px;
-  display: flex;
-  overflow: hidden;
-  background: #252A34;
-}
-
-.optimalBarSegment {
-  height: 100%;
-  background: #22E600;
-}
-
-.sufficientBarSegment {
-  height: 100%;
-  background: #3A414E;
-}
-
-.breakdownLegend {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 4px;
-}
-
-.legendRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.legendDotOptimal {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  background: #22E600;
-}
-
-.legendDotSufficient {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  background: #3A414E;
-}
-
-.legendCount {
-  font-family: var(--font-display);
-  font-size: 11px;
   font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #8E95A2;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: color 0.15s ease;
+}
+
+.learnMoreViewAll:hover {
   color: #FFFFFF;
 }
 
-.legendDesc {
+.podcastCardsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.podcastCard {
+  background: #15181F;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.podcastCard:hover {
+  background: #1C2028;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.podcastBadge {
   font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 600;
-  color: #8E95A2;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #00E5A3;
+  background: rgba(0, 229, 163, 0.1);
+  border-radius: 3px;
+  padding: 2px 6px;
+  width: fit-content;
+}
+
+.podcastTitle {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #FFFFFF;
 }

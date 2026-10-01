@@ -2,21 +2,19 @@
 
 /**
  * Trend View — Sleep Efficiency (/sleep/efficiency)
- * WHOOP-exact Sleep Efficiency Trend Screen:
+ * WHOOP-exact Sleep Efficiency Trend Screen with Full Scrubbing & Hover Interactivity:
  * - Top header with back button and "TREND VIEW"
  * - Dropdown pill: bed + histogram icon, "SLEEP EFFICIENCY", chevron
  * - Summary section:
- *    - AVERAGE 95%
- *    - "• 0% vs. prior month" pill
+ *    - Dynamic AVERAGE / HOVERED SCORE
+ *    - Interactive delta badge
  *    - Timeframe toggle: W | M | 6M (M active by default)
  *    - Date range navigator: < MAR 17 - APR 15, 26 >
- * - Narrative insight:
- *    "Your average sleep efficiency (95%) this month was consistent with your previous 30-day average of 95%."
- * - High-precision SVG Line & Area chart:
+ * - Interactive WHOOP Line & Area chart:
+ *    - Hover anywhere to scrub points: shows vertical dotted guide, glowing circle, and floating score tooltip
+ *    - Hover over "[ AVG. ]" badge or dashed reference line to highlight average (95%)
+ *    - Smooth fallback to latest day / average when unhovered
  *    - Y-Axis: 100%, 96%, 92%, 88%, 84% with gridlines
- *    - Dashed horizontal average reference line with "[ AVG. ]" white capsule pill
- *    - Continuous cyan/teal curve with gradient fill
- *    - Open circular marker on last day with "96%" score above it
  *    - X-Axis ticks: Mar 18, Mar 25, Apr 1, Apr 8, Apr 15
  * - SLEEP EFFICIENCY BREAKDOWN (DAYS):
  *    - Bright luminous cyan/mint bar (#00E5A3)
@@ -24,7 +22,7 @@
  *    - 0x Sufficient (80-89%)
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import type { SleepEfficiencyTrend } from '@/lib/types';
@@ -35,6 +33,11 @@ export default function SleepEfficiencyTrendPage() {
   const [trend, setTrend] = useState<SleepEfficiencyTrend | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeframe, setTimeframe] = useState<'W' | 'M' | '6M'>('M');
+  
+  // Interactive state
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isHoveringAvg, setIsHoveringAvg] = useState(false);
+  const graphRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -74,7 +77,6 @@ export default function SleepEfficiencyTrendPage() {
   const poorRatio = (breakdown.poor_days / totalDays) * 100;
 
   // Chart coordinate math
-  // Y-axis spans from 84% to 100%
   const yMin = 84;
   const yMax = 100;
   const yTicks = [100, 96, 92, 88, 84];
@@ -98,7 +100,7 @@ export default function SleepEfficiencyTrendPage() {
   const points = days.map((d, i) => {
     const x = chartLeft + (i / Math.max(1, n - 1)) * plotWidth;
     const y = getYCoord(d.score);
-    return { x, y, score: d.score, day: d };
+    return { x, y, score: d.score, day: d, index: i };
   });
 
   // SVG path definitions
@@ -111,13 +113,63 @@ export default function SleepEfficiencyTrendPage() {
     : '';
 
   const avgY = getYCoord(average_score);
-  const lastPoint = points[points.length - 1];
+  const defaultIndex = points.length - 1;
+  const activePoint = hoveredIndex !== null ? points[hoveredIndex] : points[defaultIndex];
 
   // Specific ticks for X-axis in Month mode
-  // Ticks: Mar 18, Mar 25, Apr 1, Apr 8, Apr 15
   const monthTickIndices = timeframe === 'M'
     ? [1, 8, 15, 22, 29]
     : [0, 1, 2, 3, 4, 5, 6];
+
+  // Mouse & Touch Scrubbing handlers
+  const handlePointerMove = (clientX: number) => {
+    if (!graphRef.current) return;
+    const rect = graphRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const ratio = Math.max(0, Math.min(1, x / rect.width));
+    const idx = Math.round(ratio * (points.length - 1));
+    setHoveredIndex(idx);
+    setIsHoveringAvg(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    handlePointerMove(e.clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches[0]) {
+      handlePointerMove(e.touches[0].clientX);
+    }
+  };
+
+  const handlePointerLeave = () => {
+    setHoveredIndex(null);
+  };
+
+  // Format date helper
+  const formatDateFriendly = (dateStr: string) => {
+    try {
+      const parts = dateStr.split('-');
+      const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    } catch {
+      return dateStr;
+    }
+  };
+
+  // Compute what to show in the big score display
+  let displayScore = Math.round(average_score);
+  let displayLabel = 'AVERAGE';
+  let isDisplayDay = false;
+
+  if (hoveredIndex !== null && activePoint) {
+    displayScore = Math.round(activePoint.score);
+    displayLabel = `${activePoint.day.day_name.toUpperCase()}, ${formatDateFriendly(activePoint.day.date).toUpperCase()}`;
+    isDisplayDay = true;
+  } else if (isHoveringAvg) {
+    displayScore = Math.round(average_score);
+    displayLabel = '30-DAY AVERAGE';
+  }
 
   return (
     <div className={styles.pageWrapper}>
@@ -137,7 +189,6 @@ export default function SleepEfficiencyTrendPage() {
         <div className={styles.metricSelectorPill}>
           <div className={styles.selectorLeft}>
             <div className={styles.selectorIcon}>
-              {/* WHOOP Sleep Efficiency Icon: Bed with 3 vertical bars */}
               <svg width="22" height="18" viewBox="0 0 24 20" fill="none" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="6" y1="9" x2="6" y2="4" />
                 <line x1="12" y1="9" x2="12" y2="2" />
@@ -157,15 +208,29 @@ export default function SleepEfficiencyTrendPage() {
 
         {/* -- Summary Header Row -- */}
         <div className={styles.summaryRow}>
-          {/* Left: Average Score & Delta */}
+          {/* Left: Dynamic Average or Hovered Score */}
           <div className={styles.averageBlock}>
-            <span className={styles.averageLabel}>AVERAGE</span>
+            <span className={`${styles.averageLabel} ${isDisplayDay ? styles.averageLabelActive : ''}`}>
+              {displayLabel}
+            </span>
             <div className={styles.scoreRow}>
-              <span className={styles.scoreBig}>{Math.round(average_score)}</span>
+              <span className={styles.scoreBig}>{displayScore}</span>
               <span className={styles.scoreUnit}>%</span>
             </div>
+
+            {/* Delta pill or Day status pill */}
             <div className={styles.deltaPill}>
-              {prior_week_change === 0 ? (
+              {isDisplayDay && activePoint ? (
+                <>
+                  <span className={styles.deltaDotGreen}>●</span>
+                  <span>{activePoint.day.status} • {activePoint.day.asleep_hours}h asleep</span>
+                </>
+              ) : isHoveringAvg ? (
+                <>
+                  <span className={styles.deltaDotGreen}>●</span>
+                  <span>Average across {totalDays} days</span>
+                </>
+              ) : prior_week_change === 0 ? (
                 <>
                   <span className={styles.deltaDot}>•</span>
                   <span>0% {comparison_label}</span>
@@ -217,16 +282,24 @@ export default function SleepEfficiencyTrendPage() {
         {/* -- Insight Narrative Text -- */}
         <p className={styles.insightText}>{insight}</p>
 
-        {/* -- WHOOP Line & Area Chart Container -- */}
+        {/* -- WHOOP Interactive Line & Area Chart Container -- */}
         <div className={styles.chartWrapper}>
           {/* Y-Axis Column */}
           <div className={styles.yAxisCol}>
             {yTicks.map((val) => {
-              const isAvgVal = val === 96; // near average 95
+              const isAvgVal = val === 96; // Position near 95%
               return (
                 <div key={val} className={styles.yTickItem}>
                   {isAvgVal ? (
-                    <div className={styles.avgPill}>AVG.</div>
+                    <button
+                      className={`${styles.avgPill} ${isHoveringAvg ? styles.avgPillActive : ''}`}
+                      onMouseEnter={() => { setIsHoveringAvg(true); setHoveredIndex(null); }}
+                      onMouseLeave={() => setIsHoveringAvg(false)}
+                      onClick={() => setIsHoveringAvg(!isHoveringAvg)}
+                      title="Hover to view average line"
+                    >
+                      AVG.
+                    </button>
                   ) : (
                     <span className={styles.yTickLabel}>{val}%</span>
                   )}
@@ -235,8 +308,14 @@ export default function SleepEfficiencyTrendPage() {
             })}
           </div>
 
-          {/* Graph Body */}
-          <div className={styles.graphBody}>
+          {/* Graph Body with Full Mouse & Touch Scrubbing */}
+          <div
+            ref={graphRef}
+            className={styles.graphBody}
+            onMouseMove={handleMouseMove}
+            onTouchMove={handleTouchMove}
+            onMouseLeave={handlePointerLeave}
+          >
             {/* Background Gridlines */}
             <div className={styles.gridlinesBody}>
               {yTicks.map((val) => (
@@ -252,7 +331,7 @@ export default function SleepEfficiencyTrendPage() {
             >
               <defs>
                 <linearGradient id="efficiencyGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#62A4B7" stopOpacity="0.22" />
+                  <stop offset="0%" stopColor="#62A4B7" stopOpacity="0.25" />
                   <stop offset="100%" stopColor="#62A4B7" stopOpacity="0.0" />
                 </linearGradient>
               </defs>
@@ -263,10 +342,24 @@ export default function SleepEfficiencyTrendPage() {
                 y1={avgY}
                 x2={svgWidth}
                 y2={avgY}
-                stroke="#8E95A2"
-                strokeWidth="1.2"
-                strokeDasharray="4 4"
-                opacity="0.55"
+                stroke={isHoveringAvg ? '#00E5A3' : '#8E95A2'}
+                strokeWidth={isHoveringAvg ? 2 : 1.2}
+                strokeDasharray={isHoveringAvg ? '6 4' : '4 4'}
+                opacity={isHoveringAvg ? 1.0 : 0.55}
+                style={{ transition: 'stroke 0.2s ease, opacity 0.2s ease' }}
+              />
+
+              {/* Invisible wide line for easy hover on average */}
+              <line
+                x1={0}
+                y1={avgY}
+                x2={svgWidth}
+                y2={avgY}
+                stroke="transparent"
+                strokeWidth={16}
+                style={{ cursor: 'pointer' }}
+                onMouseEnter={() => { setIsHoveringAvg(true); setHoveredIndex(null); }}
+                onMouseLeave={() => setIsHoveringAvg(false)}
               />
 
               {/* Subtle Gradient Area Fill Under Curve */}
@@ -286,30 +379,74 @@ export default function SleepEfficiencyTrendPage() {
                 />
               )}
 
-              {/* Open Circular Marker on latest day */}
-              {lastPoint && (
-                <circle
-                  cx={lastPoint.x}
-                  cy={lastPoint.y}
-                  r="4"
-                  fill="#0E1217"
-                  stroke="#FFFFFF"
-                  strokeWidth="2.4"
+              {/* Vertical Guide Line on Hovered Point */}
+              {hoveredIndex !== null && activePoint && (
+                <line
+                  x1={activePoint.x}
+                  y1={chartTop}
+                  x2={activePoint.x}
+                  y2={chartBottom}
+                  stroke="rgba(255, 255, 255, 0.45)"
+                  strokeWidth="1.2"
+                  strokeDasharray="3 3"
                 />
+              )}
+
+              {/* Active Marker Point (snaps to hovered point or defaults to last point) */}
+              {activePoint && (
+                <g>
+                  {/* Outer pulse when hovered */}
+                  {hoveredIndex !== null && (
+                    <circle
+                      cx={activePoint.x}
+                      cy={activePoint.y}
+                      r="8"
+                      fill="none"
+                      stroke="#00E5A3"
+                      strokeWidth="1.5"
+                      opacity="0.6"
+                    />
+                  )}
+                  {/* Core marker */}
+                  <circle
+                    cx={activePoint.x}
+                    cy={activePoint.y}
+                    r="4.2"
+                    fill="#0E1217"
+                    stroke={hoveredIndex !== null ? '#00E5A3' : '#FFFFFF'}
+                    strokeWidth="2.4"
+                    style={{ transition: 'cx 0.05s ease, cy 0.05s ease' }}
+                  />
+                </g>
               )}
             </svg>
 
-            {/* Floating 96% score directly above last point */}
-            {lastPoint && (
-              <span
-                className={styles.endpointLabel}
+            {/* Hover Tooltip / Score Badge */}
+            {activePoint && (
+              <div
+                className={`${styles.scrubTooltip} ${hoveredIndex !== null ? styles.scrubTooltipActive : ''}`}
                 style={{
-                  left: `${(lastPoint.x / svgWidth) * 100}%`,
-                  top: `${(lastPoint.y / svgHeight) * 100}%`,
+                  left: `${(activePoint.x / svgWidth) * 100}%`,
+                  top: `${(activePoint.y / svgHeight) * 100}%`,
                 }}
               >
-                {Math.round(lastPoint.score)}%
-              </span>
+                <span className={styles.scrubScore}>{Math.round(activePoint.score)}%</span>
+                {hoveredIndex !== null && (
+                  <span className={styles.scrubDate}>
+                    {formatDateFriendly(activePoint.day.date)}
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* Hover Tooltip for Average Line */}
+            {isHoveringAvg && (
+              <div
+                className={styles.avgFloatingTooltip}
+                style={{ top: `${(avgY / svgHeight) * 100}%` }}
+              >
+                <span>30-DAY AVG: <strong>{Math.round(average_score)}%</strong></span>
+              </div>
             )}
           </div>
         </div>
@@ -321,11 +458,14 @@ export default function SleepEfficiencyTrendPage() {
             if (!pt) return null;
             const d = pt.day;
             const pct = (pt.x / svgWidth) * 100;
+            const isHighlighted = hoveredIndex !== null && Math.abs(hoveredIndex - idx) <= 1;
+
             return (
               <div
                 key={d.date}
-                className={styles.xTickItem}
+                className={`${styles.xTickItem} ${isHighlighted ? styles.xTickHighlighted : ''}`}
                 style={{ left: `${pct}%` }}
+                onClick={() => setHoveredIndex(idx)}
               >
                 <span className={styles.xTickMonth}>{d.date.slice(5, 7) === '03' ? 'Mar' : 'Apr'}</span>
                 <span className={styles.xTickDay}>{d.day_num}</span>
@@ -341,7 +481,7 @@ export default function SleepEfficiencyTrendPage() {
             <span className={styles.breakdownUnit}>(DAYS)</span>
           </div>
 
-          {/* Single/Dual Segmented Bar (100% luminous cyan in WHOOP screenshot) */}
+          {/* Segmented Bar (100% luminous cyan in WHOOP screenshot) */}
           <div className={styles.breakdownProgressBar}>
             <div className={styles.optimalBarSegment} style={{ width: `${optimalRatio}%` }} />
             {sufficientRatio > 0 && (
@@ -352,7 +492,7 @@ export default function SleepEfficiencyTrendPage() {
             )}
           </div>
 
-          {/* Legend rows with square dots matching screenshot */}
+          {/* Legend rows */}
           <div className={styles.breakdownLegend}>
             <div className={styles.legendRow}>
               <span className={styles.legendDotOptimal} />

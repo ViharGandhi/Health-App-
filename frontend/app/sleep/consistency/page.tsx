@@ -2,19 +2,20 @@
 
 /**
  * Trend View — Sleep Consistency (/sleep/consistency)
- * Exact WHOOP app Sleep Consistency Trend screen:
+ * WHOOP app Sleep Consistency Trend screen with full hover & scrub interactivity:
  * - Top header with back button and "TREND VIEW"
- * - Metric dropdown pill with crescent icon: "SLEEP CONSISTENCY"
- * - Summary section with Average %, vs. prior week badge, W / M / 6M toggle, and date navigator
- * - Narrative insight paragraph
+ * - Metric dropdown pill: crescent icon, "SLEEP CONSISTENCY"
+ * - Summary section with dynamic Average or Hovered day score
  * - 7-day Bar chart with score values, y-axis gridlines, and day/date labels
- * - Sleep Consistency Breakdown progress bar and days counts (Optimal / Sufficient)
+ * - Interactive hover on each bar showing score, status, date, and highlighting bar
+ * - Interactive hover on AVERAGE pill / line showing 7-day average (85%)
+ * - Sleep Consistency Breakdown progress bar and days counts
  */
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import type { SleepConsistencyTrend } from '@/lib/types';
+import type { SleepConsistencyTrend, SleepConsistencyDay } from '@/lib/types';
 import styles from './page.module.css';
 
 export default function SleepConsistencyTrendPage() {
@@ -22,6 +23,10 @@ export default function SleepConsistencyTrendPage() {
   const [trend, setTrend] = useState<SleepConsistencyTrend | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeframe, setTimeframe] = useState<'W' | 'M' | '6M'>('W');
+
+  // Interactive state
+  const [hoveredDay, setHoveredDay] = useState<SleepConsistencyDay | null>(null);
+  const [isHoveringAvg, setIsHoveringAvg] = useState(false);
 
   useEffect(() => {
     api.getSleepConsistencyTrend()
@@ -47,6 +52,31 @@ export default function SleepConsistencyTrendPage() {
   const { average_score, prior_week_change, range_label, insight, days, breakdown } = trend;
   const optimalRatio = (breakdown.optimal_days / breakdown.total_days) * 100;
 
+  // Format date helper
+  const formatDateFriendly = (dateStr: string) => {
+    try {
+      const parts = dateStr.split('-');
+      const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    } catch {
+      return dateStr;
+    }
+  };
+
+  // Header display logic
+  let displayScore = Math.round(average_score);
+  let displayLabel = 'AVERAGE';
+  let isDisplayDay = false;
+
+  if (hoveredDay) {
+    displayScore = Math.round(hoveredDay.score);
+    displayLabel = `${hoveredDay.day_name.toUpperCase()}, ${formatDateFriendly(hoveredDay.date).toUpperCase()}`;
+    isDisplayDay = true;
+  } else if (isHoveringAvg) {
+    displayScore = Math.round(average_score);
+    displayLabel = '7-DAY AVERAGE';
+  }
+
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.container}>
@@ -58,7 +88,7 @@ export default function SleepConsistencyTrendPage() {
             </svg>
           </button>
           <span className={styles.navTitle}>TREND VIEW</span>
-          <div style={{ width: 24 }} /> {/* balance spacer */}
+          <div style={{ width: 24 }} />
         </header>
 
         {/* -- Metric Selector Dropdown Pill -- */}
@@ -79,16 +109,32 @@ export default function SleepConsistencyTrendPage() {
 
         {/* -- Summary Header Row -- */}
         <div className={styles.summaryRow}>
-          {/* Left: Average Score & Delta */}
+          {/* Left: Dynamic Average or Hovered Bar Score */}
           <div className={styles.averageBlock}>
-            <span className={styles.averageLabel}>AVERAGE</span>
+            <span className={`${styles.averageLabel} ${isDisplayDay ? styles.averageLabelActive : ''}`}>
+              {displayLabel}
+            </span>
             <div className={styles.scoreRow}>
-              <span className={styles.scoreBig}>{Math.round(average_score)}</span>
+              <span className={styles.scoreBig}>{displayScore}</span>
               <span className={styles.scoreUnit}>%</span>
             </div>
             <div className={styles.deltaPill}>
-              <span className={styles.deltaArrow}>▲</span>
-              <span>{prior_week_change}% vs. prior week</span>
+              {isDisplayDay && hoveredDay ? (
+                <>
+                  <span className={styles.deltaDotGreen}>●</span>
+                  <span>{hoveredDay.status} consistency</span>
+                </>
+              ) : isHoveringAvg ? (
+                <>
+                  <span className={styles.deltaDotGreen}>●</span>
+                  <span>7-Day rolling mean</span>
+                </>
+              ) : (
+                <>
+                  <span className={styles.deltaArrow}>▲</span>
+                  <span>{prior_week_change}% vs. prior week</span>
+                </>
+              )}
             </div>
           </div>
 
@@ -125,36 +171,79 @@ export default function SleepConsistencyTrendPage() {
         {/* -- Insight Narrative Text -- */}
         <p className={styles.insightText}>{insight}</p>
 
-        {/* -- Bar Chart Trend Graph -- */}
-        <div className={styles.chartContainer}>
+        {/* -- Interactive Bar Chart Trend Graph -- */}
+        <div className={styles.chartContainer} onMouseLeave={() => setHoveredDay(null)}>
           {/* Y-Axis Gridlines */}
           <div className={styles.gridlinesWrapper}>
-            {[100, 75, 50, 25, 0].map((val) => (
-              <div key={val} className={styles.gridlineRow}>
-                <span className={styles.yAxisLabel}>{val}%</span>
-                <div className={styles.gridline} />
-              </div>
-            ))}
+            {[100, 75, 50, 25, 0].map((val) => {
+              const isAvgLine = val === 75; // Near 85%
+              return (
+                <div key={val} className={styles.gridlineRow}>
+                  {val === 75 ? (
+                    <button
+                      className={`${styles.avgPill} ${isHoveringAvg ? styles.avgPillActive : ''}`}
+                      onMouseEnter={() => { setIsHoveringAvg(true); setHoveredDay(null); }}
+                      onMouseLeave={() => setIsHoveringAvg(false)}
+                      onClick={() => setIsHoveringAvg(!isHoveringAvg)}
+                      title="Hover to view average"
+                    >
+                      AVG.
+                    </button>
+                  ) : (
+                    <span className={styles.yAxisLabel}>{val}%</span>
+                  )}
+                  <div className={`${styles.gridline} ${isHoveringAvg && isAvgLine ? styles.gridlineActive : ''}`} />
+                </div>
+              );
+            })}
           </div>
 
-          {/* 7 Daily Bars */}
+          {/* Average Guideline overlay across bars */}
+          <div
+            className={`${styles.avgGuidelineOverlay} ${isHoveringAvg ? styles.avgGuidelineActive : ''}`}
+            style={{ bottom: `calc(44px + (100% - 44px) * 0.85)` }}
+            onMouseEnter={() => { setIsHoveringAvg(true); setHoveredDay(null); }}
+            onMouseLeave={() => setIsHoveringAvg(false)}
+          >
+            {isHoveringAvg && (
+              <span className={styles.avgGuidelineLabel}>7-DAY AVG: {Math.round(average_score)}%</span>
+            )}
+          </div>
+
+          {/* 7 Daily Bars with Hover & Tap Interactivity */}
           <div className={styles.barsRow}>
             {days.map((day) => {
               const heightPct = Math.max(8, Math.min(100, day.score));
+              const isBarHovered = hoveredDay?.date === day.date;
+
               return (
-                <div key={day.date} className={styles.barCol}>
+                <div
+                  key={day.date}
+                  className={`${styles.barCol} ${isBarHovered ? styles.barColActive : ''}`}
+                  onMouseEnter={() => { setHoveredDay(day); setIsHoveringAvg(false); }}
+                  onClick={() => setHoveredDay(day)}
+                >
                   {/* Bar pillar with score resting right on top */}
                   <div className={styles.barTrack}>
-                    <div className={styles.barPillarWrapper} style={{ height: `${heightPct}%` }}>
-                      <span className={styles.barScoreLabel}>{Math.round(day.score)}%</span>
-                      <div className={styles.barFill} />
+                    <div
+                      className={`${styles.barPillarWrapper} ${isBarHovered ? styles.barPillarWrapperActive : ''}`}
+                      style={{ height: `${heightPct}%` }}
+                    >
+                      <span className={`${styles.barScoreLabel} ${isBarHovered ? styles.barScoreLabelActive : ''}`}>
+                        {Math.round(day.score)}%
+                      </span>
+                      <div className={`${styles.barFill} ${isBarHovered ? styles.barFillActive : ''}`} />
                     </div>
                   </div>
 
                   {/* Day name & date under bar */}
                   <div className={styles.barMeta}>
-                    <span className={styles.barDayName}>{day.day_name}</span>
-                    <span className={styles.barDayNum}>{day.day_num}</span>
+                    <span className={`${styles.barDayName} ${isBarHovered ? styles.barMetaActive : ''}`}>
+                      {day.day_name}
+                    </span>
+                    <span className={`${styles.barDayNum} ${isBarHovered ? styles.barMetaActive : ''}`}>
+                      {day.day_num}
+                    </span>
                   </div>
                 </div>
               );

@@ -234,17 +234,18 @@ export default function SleepPage() {
           </div>
 
 
-          {/* Row 4: HIGH SLEEP STRESS */}
-          <div className={styles.metricRow}>
+          {/* Row 4: HIGH SLEEP STRESS (Clickable -> Trend View) */}
+          <div
+            className={styles.metricRow}
+            onClick={() => router.push('/sleep/stress')}
+            role="button"
+            tabIndex={0}
+            style={{ cursor: 'pointer' }}
+          >
             <div className={styles.metricLeft}>
               <div className={styles.iconCircle}>
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2v4" />
-                  <path d="M12 18v4" />
-                  <path d="M4.93 4.93l2.83 2.83" />
-                  <path d="M16.24 16.24l2.83 2.83" />
-                  <path d="M2 12h4" />
-                  <path d="M18 12h4" />
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                 </svg>
               </div>
               <span className={styles.metricTitle}>HIGH SLEEP STRESS</span>
@@ -252,8 +253,12 @@ export default function SleepPage() {
             <div className={styles.metricRight}>
               <SegmentIndicator value={sleepStressPct} isInverse />
               <span className={styles.metricValue}>{sleepStressPct}%</span>
+              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 1.5L4.5 5L1 8.5" />
+              </svg>
             </div>
           </div>
+
 
           {/* Range Legend: Poor, Sufficient, Optimal */}
           <div className={styles.legendRow}>
