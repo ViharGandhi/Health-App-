@@ -29,9 +29,8 @@ from typing import Optional
 # Allow importing the algo files from the project root
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, Response, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 
 # Load .env file (must be in the backend/ directory)
@@ -55,7 +54,8 @@ from mock_data import (
 from models import (
     DashboardResponse, RecoveryResponse, SleepResponse, StrainResponse,
     ZoneMinutes, WorkoutDetail, SleepStages, SleepConsistencyTrendResponse,
-    SleepEfficiencyTrendResponse, SleepEfficiencyDay, SleepEfficiencyBreakdown
+    SleepEfficiencyTrendResponse, SleepEfficiencyDay, SleepEfficiencyBreakdown,
+    SleepConsistencyDay, SleepConsistencyBreakdown
 )
 
 
@@ -64,8 +64,8 @@ from models import (
 # ──────────────────────────────────────────────────────────────────────────────
 
 app = FastAPI(
-    title="Soma Fitness API",
-    description="Backend for the WHOOP-style Fitbit dashboard",
+    title="Ojas Fitness API",
+    description="Backend for the Ojas fitness dashboard",
     version="1.0.0",
 )
 
@@ -101,15 +101,14 @@ _RHR_BASELINE: float = 56.0
 # Helpers
 # ──────────────────────────────────────────────────────────────────────────────
 
-async def _get_token(request: Request) -> Optional[str]:
+async def _get_token(request: Request, response: Response) -> Optional[str]:
     """Returns a valid access token from the session, or None if not connected."""
     session = get_session(request)
     if not session:
         return None
+    old_token = session.get("access_token")
     token = await get_valid_access_token(session)
-    # Persist refreshed token back to cookie
-    if token:
-        response = JSONResponse({})  # dummy — token update handled in route
+    if token and token != old_token:
         set_session(response, session)
     return token
 
@@ -261,6 +260,7 @@ async def _compute_real_sleep(client: GoogleHealthClient, target_date: date, yes
     d_s = min(100.0, (sleep.deep_sleep_duration / sn_s / deep_tgt) * 100) if sn_s > 0 else 0
     r_s = min(100.0, (sleep.rem_sleep_duration  / sn_s / 0.20) * 100) if sn_s > 0 else 0
     c_s = min(100.0, (sleep.core_sleep_duration / sn_s / 0.50) * 100) if sn_s > 0 else 0
+    stage_score = 0.40 * d_s + 0.40 * r_s + 0.20 * c_s
     # 4-day sleep consistency calculation
     history_nights = await client.get_sleep_history_nights(days=4)
     parsed_nights = [
@@ -343,16 +343,16 @@ async def _compute_real_recovery(
 
 @app.get("/")
 async def root():
-    return {"status": "ok", "message": "Soma Fitness API is running"}
+    return {"status": "ok", "message": "Ojas Fitness API is running"}
 
 
 @app.get("/api/dashboard", response_model=DashboardResponse)
-async def dashboard(request: Request):
+async def dashboard(request: Request, response: Response):
     """
     Returns all three scores in one call.
     Mock mode if no Google token is present; real mode otherwise.
     """
-    token = await _get_token(request)
+    token = await _get_token(request, response)
     if not token:
         return get_mock_dashboard()
 
@@ -376,8 +376,8 @@ async def dashboard(request: Request):
 
 
 @app.get("/api/recovery", response_model=RecoveryResponse)
-async def recovery_endpoint(request: Request):
-    token = await _get_token(request)
+async def recovery_endpoint(request: Request, response: Response):
+    token = await _get_token(request, response)
     if not token:
         mock = get_mock_dashboard()
         return mock.recovery
@@ -391,8 +391,8 @@ async def recovery_endpoint(request: Request):
 
 
 @app.get("/api/sleep", response_model=SleepResponse)
-async def sleep_endpoint(request: Request):
-    token = await _get_token(request)
+async def sleep_endpoint(request: Request, response: Response):
+    token = await _get_token(request, response)
     if not token:
         mock = get_mock_dashboard()
         return mock.sleep
@@ -405,8 +405,8 @@ async def sleep_endpoint(request: Request):
 
 
 @app.get("/api/strain", response_model=StrainResponse)
-async def strain_endpoint(request: Request):
-    token = await _get_token(request)
+async def strain_endpoint(request: Request, response: Response):
+    token = await _get_token(request, response)
     if not token:
         mock = get_mock_dashboard()
         return mock.strain
@@ -416,11 +416,11 @@ async def strain_endpoint(request: Request):
 
 
 @app.get("/api/sleep/consistency", response_model=SleepConsistencyTrendResponse)
-async def sleep_consistency_endpoint(request: Request):
+async def sleep_consistency_endpoint(request: Request, response: Response):
     """
     Returns 7-day sleep consistency trend and daily breakdown.
     """
-    token = await _get_token(request)
+    token = await _get_token(request, response)
     if not token:
         return get_mock_sleep_consistency_trend()
 
@@ -472,12 +472,12 @@ async def sleep_consistency_endpoint(request: Request):
 
 
 @app.get("/api/sleep/efficiency", response_model=SleepEfficiencyTrendResponse)
-async def sleep_efficiency_endpoint(request: Request, timeframe: str = "M"):
+async def sleep_efficiency_endpoint(request: Request, response: Response, timeframe: str = "M"):
     """
     Returns sleep efficiency trend and daily breakdown (Week or Month).
     Defaults to Month (M) matching WHOOP app reference.
     """
-    token = await _get_token(request)
+    token = await _get_token(request, response)
     if not token:
         return get_mock_sleep_efficiency_trend(timeframe=timeframe)
 
@@ -533,6 +533,3 @@ async def sleep_efficiency_endpoint(request: Request, timeframe: str = "M"):
             total_days=trend_res.total_days,
         ),
     )
-
-
-

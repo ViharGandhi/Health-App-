@@ -47,6 +47,7 @@ REDIRECT_URI  = f"{BACKEND_URL}/api/auth/callback"
 AUTH_URL  = "https://accounts.google.com/o/oauth2/v2/auth"
 TOKEN_URL = "https://oauth2.googleapis.com/token"
 USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
+IDENTITY_URL = "https://health.googleapis.com/v4/users/me/identity"
 
 # Google Health API scopes required
 SCOPES = [
@@ -59,6 +60,7 @@ SCOPES = [
 ]
 
 COOKIE_NAME = "soma_session"
+OAUTH_COOKIE_NAME = "soma_oauth"
 COOKIE_MAX_AGE = 60 * 60 * 24 * 30  # 30 days
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -93,7 +95,7 @@ def set_session(response: Response, data: dict) -> None:
         max_age=COOKIE_MAX_AGE,
         httponly=True,
         samesite="lax",
-        secure=False,  # set True in production (HTTPS)
+        secure=BACKEND_URL.startswith("https://"),
     )
 
 
@@ -137,6 +139,7 @@ async def get_valid_access_token(session: dict) -> Optional[str]:
     if not new_tokens:
         return None
     session["access_token"] = new_tokens["access_token"]
+    session["refresh_token"] = new_tokens.get("refresh_token", refresh)
     session["expires_at"]   = time.time() + new_tokens.get("expires_in", 3600)
     return session["access_token"]
 
@@ -151,12 +154,14 @@ router = APIRouter(prefix="/api/auth", tags=["auth"])
 @router.get("/login")
 async def login(request: Request):
     """Redirect the user to Google's OAuth consent screen."""
-    if not CLIENT_ID:
+    if not CLIENT_ID or not CLIENT_SECRET:
         return JSONResponse(
-            {"error": "GOOGLE_CLIENT_ID not configured. Please set up your .env file."},
+            {"error": "Google OAuth credentials are not configured. Please set up your .env file."},
             status_code=503,
         )
     state = secrets.token_urlsafe(16)
+    verifier = secrets.token_urlsafe(64)
+    challenge = base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).rstrip(b"=").decode()
     params = {
         "client_id":     CLIENT_ID,
         "redirect_uri":  REDIRECT_URI,
@@ -165,16 +170,27 @@ async def login(request: Request):
         "access_type":   "offline",
         "prompt":        "consent",
         "state":         state,
+        "code_challenge": challenge,
+        "code_challenge_method": "S256",
     }
     url = f"{AUTH_URL}?{urllib.parse.urlencode(params)}"
-    return RedirectResponse(url)
+    response = RedirectResponse(url)
+    response.set_cookie(
+        OAUTH_COOKIE_NAME, _sign({"state": state, "verifier": verifier}),
+        max_age=600, httponly=True, samesite="lax",
+        secure=BACKEND_URL.startswith("https://"),
+    )
+    return response
 
 
 @router.get("/callback")
 async def callback(request: Request, code: str = "", error: str = "", state: str = ""):
     """Handle Google's redirect back with auth code; exchange for tokens."""
+    oauth = _unsign(request.cookies.get(OAUTH_COOKIE_NAME, ""))
+    if not oauth or not secrets.compare_digest(state, oauth.get("state", "")):
+        return RedirectResponse(f"{FRONTEND_URL}/connect?error=invalid_state")
     if error:
-        return RedirectResponse(f"{FRONTEND_URL}/connect?error={error}")
+        return RedirectResponse(f"{FRONTEND_URL}/connect?error={urllib.parse.quote(error)}")
     if not code:
         return RedirectResponse(f"{FRONTEND_URL}/connect?error=no_code")
 
@@ -185,12 +201,23 @@ async def callback(request: Request, code: str = "", error: str = "", state: str
             "client_secret": CLIENT_SECRET,
             "redirect_uri":  REDIRECT_URI,
             "grant_type":    "authorization_code",
+            "code_verifier": oauth["verifier"],
         })
 
     if token_resp.status_code != 200:
         return RedirectResponse(f"{FRONTEND_URL}/connect?error=token_exchange_failed")
 
     tokens = token_resp.json()
+
+    # OAuth can succeed for a Google account with no Google Health profile.
+    async with httpx.AsyncClient() as client:
+        identity_resp = await client.get(
+            IDENTITY_URL,
+            headers={"Authorization": f"Bearer {tokens['access_token']}"},
+        )
+    if identity_resp.status_code != 200:
+        failure = "health_account_not_linked" if identity_resp.status_code == 400 else "health_access_failed"
+        return RedirectResponse(f"{FRONTEND_URL}/connect?error={failure}")
 
     # Fetch user profile
     async with httpx.AsyncClient() as client:
@@ -209,19 +236,27 @@ async def callback(request: Request, code: str = "", error: str = "", state: str
     }
 
     response = RedirectResponse(f"{FRONTEND_URL}/?connected=true")
+    response.delete_cookie(OAUTH_COOKIE_NAME)
     set_session(response, session_data)
     return response
 
 
 @router.get("/status")
-async def status(request: Request):
+async def status(request: Request, response: Response):
     """Returns connection status. Frontend polls this on load."""
     session = get_session(request)
     if not session:
-        return {"connected": False, "is_mock": True, "user_email": None, "user_name": None}
+        return {"connected": False, "is_mock": True, "can_connect": bool(CLIENT_ID and CLIENT_SECRET), "user_email": None, "user_name": None}
+    old_token = session.get("access_token")
+    token = await get_valid_access_token(session)
+    if not token:
+        return {"connected": False, "is_mock": True, "can_connect": bool(CLIENT_ID and CLIENT_SECRET), "user_email": None, "user_name": None}
+    if token != old_token:
+        set_session(response, session)
     return {
         "connected":  True,
         "is_mock":    False,
+        "can_connect": True,
         "user_email": session.get("user_email"),
         "user_name":  session.get("user_name"),
     }

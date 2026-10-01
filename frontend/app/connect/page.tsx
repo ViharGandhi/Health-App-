@@ -15,8 +15,18 @@ export default function ConnectPage() {
   const [status, setStatus] = useState<AuthStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [disconnecting, setDisconnecting] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
+    const reason = new URLSearchParams(window.location.search).get('error');
+    if (reason) {
+      setError({
+        invalid_state: 'Connection expired. Please try again.',
+        health_account_not_linked: 'This Google account is not linked to a Google Health profile.',
+        health_access_failed: 'Google Health access failed. Check that this project has API access.',
+        token_exchange_failed: 'Google sign-in could not finish. Please try again.',
+      }[reason] || 'Connection could not finish. Please try again.');
+    }
     api.getAuthStatus()
       .then(setStatus)
       .finally(() => setLoading(false));
@@ -27,7 +37,7 @@ export default function ConnectPage() {
   const handleDisconnect = async () => {
     setDisconnecting(true);
     await api.disconnect();
-    setStatus({ connected: false, is_mock: true, user_email: null, user_name: null });
+    setStatus({ connected: false, is_mock: true, can_connect: status?.can_connect ?? false, user_email: null, user_name: null });
     setDisconnecting(false);
   };
 
@@ -62,10 +72,10 @@ export default function ConnectPage() {
           </div>
 
           <div className={styles.steps}>
-            <p className={styles.stepsTitle}>Live data is enabled</p>
+            <p className={styles.stepsTitle}>Google Health is connected</p>
             <p className={styles.stepsText}>
-              Your Fitbit data is syncing automatically. Recovery, Sleep, and Strain
-              scores are calculated using your real biometric data.
+              The dashboard reads available Fitbit data from Google Health when you open it.
+              Scores depend on the measurements your device provides.
             </p>
           </div>
 
@@ -88,10 +98,12 @@ export default function ConnectPage() {
             <div className={styles.heroIcon}>âŒš</div>
             <h2 className={styles.heroTitle}>Connect Your Fitbit</h2>
             <p className={styles.heroSubtitle}>
-              Link your Google account to stream real HRV, heart rate, and sleep data
-              directly to your dashboard.
+              Link the Google account used by your Fitbit and Google Health profile
+              to read available HRV, heart rate, and sleep data.
             </p>
           </div>
+
+          {error && <p className={styles.error} role="alert">{error}</p>}
 
           {/* Steps */}
           <div className={`card ${styles.stepsCard}`}>
@@ -99,7 +111,7 @@ export default function ConnectPage() {
             {[
               { n: '1', title: 'Sign in with Google', desc: 'We use Google OAuth 2.0 â€” same account linked to your Fitbit.' },
               { n: '2', title: 'Grant Health Permissions', desc: 'Allow access to HRV, heart rate, sleep, and activity data.' },
-              { n: '3', title: 'Sync Automatically', desc: 'Your dashboard updates with real data from your Fitbit device.' },
+              { n: '3', title: 'View Your Data', desc: 'The dashboard reads available Fitbit measurements from Google Health.' },
             ].map(({ n, title, desc }) => (
               <div key={n} className={styles.step}>
                 <div className={styles.stepNum}>{n}</div>
@@ -116,29 +128,30 @@ export default function ConnectPage() {
             id="connect-btn"
             className={`btn btn-primary btn-full ${styles.connectBtn}`}
             onClick={handleConnect}
+            disabled={!status?.can_connect}
           >
-            <span>G</span> Sign in with Google
+            <span>G</span> {status?.can_connect ? 'Sign in with Google' : 'Google Health access not configured'}
           </button>
 
           {/* Note */}
           <p className={styles.note}>
-            ðŸ”’ Your data never leaves your device. All processing runs locally
-            using your algorithms in Python.
+            Google Health stores and serves your Fitbit data. This app requests read-only access
+            and calculates scores in its Python backend.
           </p>
 
           {/* Setup instructions */}
           <div className={`card ${styles.setupCard}`}>
             <p className="section-title" style={{ marginBottom: 14 }}>First-Time Setup</p>
             <p className={styles.setupText}>
-              Before connecting, you need to configure Google Cloud credentials
-              once in <code className={styles.code}>backend/.env</code>:
+              Google currently says it is not onboarding new Health API projects. When access
+              opens, configure credentials in <code className={styles.code}>backend/.env</code>:
             </p>
             <ol className={styles.setupList}>
               <li>Go to <strong>console.cloud.google.com</strong></li>
               <li>Create a project â†’ Enable <strong>Google Health API</strong></li>
               <li>Create OAuth 2.0 credentials (Web Application)</li>
               <li>Set redirect URI: <code className={styles.code}>http://localhost:8000/api/auth/callback</code></li>
-              <li>Copy <code className={styles.code}>CLIENT_ID</code> and <code className={styles.code}>CLIENT_SECRET</code> to <code className={styles.code}>.env</code></li>
+              <li>Copy <code className={styles.code}>GOOGLE_CLIENT_ID</code> and <code className={styles.code}>GOOGLE_CLIENT_SECRET</code> to <code className={styles.code}>.env</code></li>
             </ol>
           </div>
         </div>
