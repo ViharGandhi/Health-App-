@@ -277,36 +277,200 @@ export default function SleepPage() {
           </div>
         </section>
 
-        {/* -- Sleep Stages Breakdown Section -- */}
-        <section className={styles.stagesSection}>
-          <div className={styles.stagesHeader}>
-            <span className={styles.stagesTitle}>SLEEP STAGES</span>
-            <span className={styles.stagesTotal}>{data.total_sleep_hours.toFixed(1)} hrs total</span>
+        {/* -- Last Night's Sleep Section (Exact WHOOP UI) -- */}
+        <section className={styles.nightSection}>
+          <div className={styles.nightSectionHeader}>
+            <div className={styles.nightTitleBlock}>
+              <h2 className={styles.nightMainTitle}>Last Night's Sleep</h2>
+              <div className={styles.nightSubtitle}>
+                <span className={styles.nightSubBold}>Today</span>
+                <span className={styles.nightSubMuted}> vs. prior 30 days</span>
+              </div>
+            </div>
+            <button className={styles.nightEditBtn} aria-label="Edit sleep times">
+              <span>EDIT</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+              </svg>
+            </button>
           </div>
 
-          <div className={styles.stagesGrid}>
-            <div className={styles.stageCard}>
-              <span className={styles.stageLabel}>DEEP</span>
-              <span className={styles.stageDuration}>{formatMins(stages.deep_minutes)}</span>
-              <span className={styles.stagePct}>{Math.round((stages.deep_minutes / stages.total_minutes) * 100)}%</span>
+          <div className={styles.nightCard}>
+            {/* Top: HOURS OF SLEEP */}
+            <div className={styles.hoursHeaderRow}>
+              <span className={styles.hoursLabel}>HOURS OF SLEEP</span>
+              <button className={styles.hoursInfoBtn} aria-label="Hours of sleep info">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8E95A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+              </button>
             </div>
-            <div className={styles.stageCard}>
-              <span className={styles.stageLabel}>REM</span>
-              <span className={styles.stageDuration}>{formatMins(stages.rem_minutes)}</span>
-              <span className={styles.stagePct}>{Math.round((stages.rem_minutes / stages.total_minutes) * 100)}%</span>
+
+            <div className={styles.hoursScoreBlock}>
+              <div className={styles.hoursScoreMain}>
+                <span className={styles.hoursScoreValue}>9:06</span>
+                <span className={styles.hoursScoreDelta}>▲</span>
+              </div>
+              <span className={styles.hoursScoreBaseline}>7:36</span>
             </div>
-            <div className={styles.stageCard}>
-              <span className={styles.stageLabel}>LIGHT / CORE</span>
-              <span className={styles.stageDuration}>{formatMins(stages.core_minutes)}</span>
-              <span className={styles.stagePct}>{Math.round((stages.core_minutes / stages.total_minutes) * 100)}%</span>
+
+            {/* Intraday Sleep Heart Rate Graph */}
+            <div className={styles.hrChartContainer}>
+              <div className={styles.hrYAxis}>
+                <span>110</span>
+                <span>90</span>
+                <span>70</span>
+                <span>50</span>
+                <span>30</span>
+              </div>
+
+              <div className={styles.hrGraphBody}>
+                <div className={styles.hrGridlines}>
+                  <div className={styles.hrGridline} />
+                  <div className={styles.hrGridline} />
+                  <div className={styles.hrGridline} />
+                  <div className={styles.hrGridline} />
+                  <div className={styles.hrGridline} />
+                </div>
+
+                <svg className={styles.hrSvg} viewBox="0 0 320 100" preserveAspectRatio="none">
+                  {/* Sleep start dashed boundary line at x=28 (00:14) */}
+                  <line x1="28" y1="0" x2="28" y2="82" stroke="rgba(255,255,255,0.4)" strokeWidth="1" strokeDasharray="3 3" />
+                  <circle cx="28" cy="82" r="2.2" fill="#FFFFFF" />
+
+                  {/* Sleep end dashed boundary line at x=286 (09:44) */}
+                  <line x1="286" y1="0" x2="286" y2="82" stroke="rgba(255,255,255,0.4)" strokeWidth="1" strokeDasharray="3 3" />
+                  <circle cx="286" cy="82" r="2.2" fill="#FFFFFF" />
+
+                  {/* High-frequency Heart Rate waveform */}
+                  <path
+                    d="M 0,38 L 4,32 L 8,42 L 12,28 L 16,36 L 20,30 L 24,35 L 28,64 L 32,70 L 36,68 L 40,74 L 45,62 L 48,70 L 52,75 L 56,76 L 60,74 L 64,75 L 68,76 L 72,72 L 76,58 L 80,72 L 85,66 L 90,68 L 95,62 L 100,74 L 105,75 L 110,72 L 115,65 L 120,56 L 125,68 L 130,74 L 135,76 L 140,72 L 145,75 L 150,68 L 155,62 L 160,68 L 165,74 L 170,76 L 175,78 L 180,76 L 185,74 L 190,70 L 195,60 L 200,72 L 205,68 L 210,64 L 215,66 L 220,62 L 225,58 L 230,65 L 235,70 L 240,72 L 245,68 L 250,70 L 255,65 L 260,62 L 265,68 L 270,70 L 275,66 L 280,64 L 286,40 L 290,24 L 295,38 L 300,18 L 305,44 L 310,28 L 315,36 L 320,46"
+                    fill="none"
+                    stroke="#62A4B7"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+
+                <div className={styles.hrTimestamps}>
+                  <span className={styles.hrTimeStart} style={{ left: '8.75%' }}>00:14</span>
+                  <span className={styles.hrTimeEnd} style={{ left: '89.375%' }}>09:44</span>
+                </div>
+              </div>
             </div>
-            <div className={styles.stageCard}>
-              <span className={styles.stageLabel}>AWAKE</span>
-              <span className={styles.stageDuration}>{formatMins(stages.awake_minutes)}</span>
-              <span className={styles.stagePct}>{Math.round((stages.awake_minutes / stages.total_minutes) * 100)}%</span>
+
+            {/* Typical Range & Duration Header */}
+            <div className={styles.typicalRangeHeader}>
+              <div className={styles.typicalRangeTitle}>
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" className={styles.typicalRangeSvg}>
+                  <line x1="0" y1="8" x2="3" y2="8" stroke="#8E95A2" strokeWidth="1.5" />
+                  <line x1="13" y1="8" x2="16" y2="8" stroke="#8E95A2" strokeWidth="1.5" />
+                  <rect x="3" y="2" width="10" height="12" rx="2" stroke="rgba(255, 255, 255, 0.75)" strokeWidth="1.2" strokeDasharray="2 2" fill="none" />
+                </svg>
+                <span>TYPICAL RANGE</span>
+              </div>
+              <div className={styles.durationBlock}>
+                <span className={styles.durationLabel}>DURATION</span>
+                <span className={styles.durationValue}>9:30</span>
+              </div>
+            </div>
+
+            {/* The 4 Stage Rows with Protruding Transparent Optimal Range Square */}
+            <div className={styles.stagesList}>
+              {/* AWAKE 4% -> 0:24 */}
+              <div className={styles.stageItem}>
+                <div className={styles.stageTopRow}>
+                  <div className={styles.stageNameGroup}>
+                    <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
+                    <span className={styles.stageName}>AWAKE</span>
+                    <span className={styles.stagePctMuted}>4%</span>
+                  </div>
+                  <span className={styles.stageDurationVal}>0:24</span>
+                </div>
+                <div className={styles.stageTrackWrapper}>
+                  <div className={styles.stageTrackBar}>
+                    <div className={styles.stageFill} style={{ width: '4%', background: '#E2E6EE' }} />
+                  </div>
+                  <div className={styles.typicalRangeBox} style={{ left: '4.5%' }} />
+                </div>
+              </div>
+
+              {/* LIGHT 52% -> 4:51 */}
+              <div className={styles.stageItem}>
+                <div className={styles.stageTopRow}>
+                  <div className={styles.stageNameGroup}>
+                    <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
+                    <span className={styles.stageName}>LIGHT</span>
+                    <span className={styles.stagePctLavender}>52%</span>
+                  </div>
+                  <span className={styles.stageDurationVal}>4:51</span>
+                </div>
+                <div className={styles.stageTrackWrapper}>
+                  <div className={styles.stageTrackBar}>
+                    <div className={styles.stageFill} style={{ width: '52%', background: '#9B8AFB' }} />
+                  </div>
+                  <div className={styles.typicalRangeBox} style={{ left: '52.5%' }} />
+                </div>
+              </div>
+
+              {/* SWS (DEEP) 18% -> 1:43 */}
+              <div className={styles.stageItem}>
+                <div className={styles.stageTopRow}>
+                  <div className={styles.stageNameGroup}>
+                    <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
+                    <span className={styles.stageName}>SWS (DEEP)</span>
+                    <span className={styles.stagePctPink}>18%</span>
+                  </div>
+                  <span className={styles.stageDurationVal}>1:43</span>
+                </div>
+                <div className={styles.stageTrackWrapper}>
+                  <div className={styles.stageTrackBar}>
+                    <div className={styles.stageFill} style={{ width: '18%', background: '#FF5CD1' }} />
+                  </div>
+                  <div className={styles.typicalRangeBox} style={{ left: '14.5%' }} />
+                </div>
+              </div>
+
+              {/* REM 26% -> 2:32 */}
+              <div className={styles.stageItem}>
+                <div className={styles.stageTopRow}>
+                  <div className={styles.stageNameGroup}>
+                    <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
+                    <span className={styles.stageName}>REM</span>
+                    <span className={styles.stagePctPurple}>26%</span>
+                  </div>
+                  <span className={styles.stageDurationVal}>2:32</span>
+                </div>
+                <div className={styles.stageTrackWrapper}>
+                  <div className={styles.stageTrackBar}>
+                    <div className={styles.stageFill} style={{ width: '26%', background: '#B040FF' }} />
+                  </div>
+                  <div className={styles.typicalRangeBox} style={{ left: '11%' }} />
+                </div>
+              </div>
+            </div>
+
+
+            {/* RESTORATIVE SLEEP Section (Exact WHOOP Image 2) */}
+            <div className={styles.restorativeRow}>
+              <div className={styles.restorativeLeft}>
+                <span className={styles.restorativeDualSquare} />
+                <span className={styles.restorativeLabel}>RESTORATIVE SLEEP</span>
+              </div>
+              <div className={styles.restorativeRight}>
+                <div className={styles.restorativeValGroup}>
+                  <span className={styles.restorativeValue}>4:15</span>
+                  <span className={styles.restorativeDelta}>▲</span>
+                </div>
+                <span className={styles.restorativeBaseline}>3:02</span>
+              </div>
             </div>
           </div>
         </section>
+
       </div>
     </div>
   );

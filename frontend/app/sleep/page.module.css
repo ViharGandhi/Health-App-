@@ -306,74 +306,475 @@
   color: #8E95A2;
 }
 
-/* ---- Stages Section ---- */
-.stagesSection {
-  margin-top: 22px;
+/* ---- Last Night's Sleep Section ---- */
+.nightSection {
+  margin-top: 26px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
 }
 
-.stagesHeader {
+.nightSectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 2px;
+}
+
+.nightTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.nightMainTitle {
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.nightSubtitle {
+  font-family: var(--font-body);
+  font-size: 12px;
+}
+
+.nightSubBold {
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.nightSubMuted {
+  font-weight: 500;
+  color: #8E95A2;
+}
+
+.nightEditBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: #8E95A2;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.15s ease;
+}
+
+.nightEditBtn:hover {
+  color: #FFFFFF;
+}
+
+/* Main Card */
+.nightCard {
+  background: #14171E;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px 16px 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hours of Sleep Header */
+.hoursHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.hoursLabel {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #8E95A2;
+}
+
+.hoursInfoBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hoursScoreBlock {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.hoursScoreMain {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.hoursScoreValue {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  color: #FFFFFF;
+  letter-spacing: -1px;
+}
+
+.hoursScoreDelta {
+  font-size: 9px;
+  color: #00E5A3;
+  margin-left: 2px;
+}
+
+.hoursScoreBaseline {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: #8E95A2;
+  margin-top: 3px;
+}
+
+/* ---- Intraday Sleep Heart Rate Graph ---- */
+.hrChartContainer {
+  display: flex;
+  width: 100%;
+  height: 125px;
+  position: relative;
+  margin-bottom: 22px;
+}
+
+.hrYAxis {
+  width: 26px;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  user-select: none;
+}
+
+.hrYAxis span {
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: 600;
+  color: #5C626E;
+  line-height: 1;
+}
+
+.hrGraphBody {
+  flex: 1;
+  position: relative;
+  height: 100%;
+}
+
+.hrGridlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.hrGridline {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.hrSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 95px;
+  overflow: visible;
+}
+
+.hrTimestamps {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  height: 20px;
+  pointer-events: none;
+}
+
+.hrTimeStart,
+.hrTimeEnd {
+  position: absolute;
+  transform: translateX(-50%);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  color: #8E95A2;
+}
+
+/* ---- Typical Range Header ---- */
+.typicalRangeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-top: 4px;
+}
+
+.typicalRangeTitle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #8E95A2;
+}
+
+.typicalHatchBox {
+  width: 14px;
+  height: 9px;
+  border-radius: 1.5px;
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0.15) 2.5px,
+    rgba(255, 255, 255, 0.03) 2.5px,
+    rgba(255, 255, 255, 0.03) 5px
+  );
+}
+
+.durationBlock {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.durationLabel {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #8E95A2;
+}
+
+.durationValue {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+/* ---- Stages List ---- */
+.stagesList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stageItem {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.stageTopRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.stagesTitle {
+.stageNameGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stageCircleIcon {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.stageName {
   font-family: var(--font-body);
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 800;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   color: #FFFFFF;
 }
 
-.stagesTotal {
+.stagePctMuted {
   font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 600;
-  color: #8E95A2;
-}
-
-.stagesGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-.stageCard {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--card-radius);
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.stageLabel {
-  font-family: var(--font-body);
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: #8E95A2;
 }
 
-.stageDuration {
+.stagePctLavender {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #9B8AFB;
+}
+
+.stagePctPink {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #FF5CD1;
+}
+
+.stagePctPurple {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #B040FF;
+}
+
+.stageDurationVal {
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 800;
   color: #FFFFFF;
 }
 
-.stagePct {
+/* Striped Track Wrapper, Bar, and Floating Protruding Typical Range Box */
+.stageTrackWrapper {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.stageTrackBar {
+  position: relative;
+  width: 100%;
+  height: 12px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.03);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.12) 0,
+    rgba(255, 255, 255, 0.12) 2.5px,
+    transparent 2.5px,
+    transparent 6.5px
+  );
+  overflow: hidden;
+}
+
+.stageFill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.typicalRangeBox {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.75);
+  border-radius: 3px;
+  background: transparent;
+  pointer-events: none;
+  z-index: 5;
+  box-sizing: border-box;
+}
+
+.typicalRangeSvg {
+  flex-shrink: 0;
+}
+
+
+/* ---- Restorative Sleep (Image 2) ---- */
+.restorativeRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 22px;
+  padding-top: 16px;
+}
+
+.restorativeLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.restorativeDualSquare {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background: linear-gradient(135deg, #B040FF 50%, #FF5CD1 50%);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.restorativeLabel {
   font-family: var(--font-body);
   font-size: 11px;
-  font-weight: 600;
-  color: #4EA5B7;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #FFFFFF;
 }
+
+.restorativeRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.restorativeValGroup {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.restorativeValue {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.restorativeDelta {
+  font-size: 8px;
+  color: #00E5A3;
+}
+
+.restorativeBaseline {
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #8E95A2;
+  margin-top: 3px;
+}
+
 
 /* Loading state */
 .loadingPage {
