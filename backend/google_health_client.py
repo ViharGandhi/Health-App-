@@ -1,353 +1,180 @@
-"""
-google_health_client.py
-========================
-Wrapper for the Google Health API.
-Fetches all raw data needed by the three algorithm files.
-
-Data fetched:
-  - Daily HRV (rMSSD) summary        → health_metrics endpoint
-  - Resting Heart Rate                → health_metrics endpoint
-  - Intraday heart rate (1-min samples) → activity endpoint
-  - Sleep session + stages             → sleep endpoint
-  - Workout/activity sessions          → activity endpoint
-
-Reference: https://developers.google.com/health
-"""
+"""Read Fitbit wearable data from the Google Health API v4."""
 
 from __future__ import annotations
 
-import os
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta, timezone
 from typing import Optional
 
 import httpx
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Google Health API base URL
-# ──────────────────────────────────────────────────────────────────────────────
 
-BASE_URL = "https://health.googleapis.com/v1"
+BASE_URL = "https://health.googleapis.com/v4/users/me/dataTypes"
+WEARABLES = "users/me/dataSourceFamilies/google-wearables"
+
+
+def _day_filter(field: str, start: date, end: date) -> str:
+    """Build an inclusive local-date range with an exclusive upper bound."""
+    return (f'{field} >= "{start.isoformat()}" AND '
+            f'{field} < "{(end + timedelta(days=1)).isoformat()}"')
+
+
+def _local_datetime(value: str, offset: str) -> datetime:
+    """Return a naive wall-clock time in the offset supplied by Google."""
+    instant = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    seconds = float(offset.removesuffix("s")) if offset else 0.0
+    return instant.astimezone(timezone(timedelta(seconds=seconds))).replace(tzinfo=None)
+
+
+def _google_date(value: dict) -> date:
+    return date(value["year"], value["month"], value["day"])
 
 
 class GoogleHealthClient:
-    """
-    Thin async HTTP client for the Google Health API.
-    All methods return parsed Python dicts/lists ready for the algo files.
-    """
-
     def __init__(self, access_token: str):
         self.headers = {
             "Authorization": f"Bearer {access_token}",
-            "Content-Type":  "application/json",
+            "Accept": "application/json",
         }
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Daily health metrics — HRV, RHR, SpO2
-    # ──────────────────────────────────────────────────────────────────────────
+    async def _points(self, data_type: str, filter_expr: str) -> list[dict]:
+        """Fetch every page of reconciled wearable data; propagate API errors."""
+        url = f"{BASE_URL}/{data_type}/dataPoints:reconcile"
+        params = {"filter": filter_expr, "dataSourceFamily": WEARABLES}
+        points: list[dict] = []
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            while True:
+                response = await client.get(url, headers=self.headers, params=params)
+                response.raise_for_status()
+                payload = response.json()
+                points.extend(payload.get("dataPoints", []))
+                token = payload.get("nextPageToken")
+                if not token:
+                    return points
+                params["pageToken"] = token
 
     async def get_daily_hrv(self, target_date: date) -> Optional[float]:
-        """
-        Returns the rMSSD (ms) daily HRV summary for `target_date`.
-        Google Health API: GET /v1/users/me/healthMetrics/dailyHrv
-        """
-        date_str = target_date.strftime("%Y-%m-%d")
-        url = f"{BASE_URL}/users/me/healthMetrics/daily-heart-rate-variability"
-        params = {"startDate": date_str, "endDate": date_str}
-
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(url, headers=self.headers, params=params)
-
-        if resp.status_code != 200:
-            return None
-
-        data = resp.json()
-        entries = data.get("dailyHeartRateVariabilities", [])
-        if not entries:
-            return None
-
-        entry = entries[0]
-        # Google Health API returns rMSSD in ms
-        return entry.get("rmssd", {}).get("value")
+        points = await self._points(
+            "daily-heart-rate-variability",
+            _day_filter("dailyHeartRateVariability.date", target_date, target_date),
+        )
+        for point in points:
+            metric = point.get("dailyHeartRateVariability", {})
+            if "averageHeartRateVariabilityMilliseconds" in metric:
+                return float(metric["averageHeartRateVariabilityMilliseconds"])
+        return None
 
     async def get_resting_heart_rate(self, target_date: date) -> Optional[float]:
-        """
-        Returns resting heart rate (bpm) for `target_date`.
-        Google Health API: health metrics daily summary.
-        """
-        date_str = target_date.strftime("%Y-%m-%d")
-        url = f"{BASE_URL}/users/me/healthMetrics/daily-resting-heart-rate"
-        params = {"startDate": date_str, "endDate": date_str}
-
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(url, headers=self.headers, params=params)
-
-        if resp.status_code != 200:
-            return None
-
-        data = resp.json()
-        entries = data.get("dailyRestingHeartRates", [])
-        if not entries:
-            return None
-        return entries[0].get("bpm", {}).get("value")
+        points = await self._points(
+            "daily-resting-heart-rate",
+            _day_filter("dailyRestingHeartRate.date", target_date, target_date),
+        )
+        for point in points:
+            metric = point.get("dailyRestingHeartRate", {})
+            if "beatsPerMinute" in metric:
+                return float(metric["beatsPerMinute"])
+        return None
 
     async def get_hrv_history(self, days: int = 14) -> list[float]:
-        """
-        Returns up to `days` of daily HRV values (oldest → newest).
-        Used by RecoveryCalculator for log-domain z-score baseline.
-        """
-        end_date   = date.today()
-        start_date = end_date - timedelta(days=days - 1)
-        date_str_start = start_date.strftime("%Y-%m-%d")
-        date_str_end   = end_date.strftime("%Y-%m-%d")
-
-        url = f"{BASE_URL}/users/me/healthMetrics/daily-heart-rate-variability"
-        params = {"startDate": date_str_start, "endDate": date_str_end}
-
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(url, headers=self.headers, params=params)
-
-        if resp.status_code != 200:
-            return []
-
-        data = resp.json()
-        entries = data.get("dailyHeartRateVariabilities", [])
-        # Sort oldest → newest
-        entries.sort(key=lambda e: e.get("date", ""))
-        return [e.get("rmssd", {}).get("value", 0) for e in entries if e.get("rmssd")]
-
-    # ──────────────────────────────────────────────────────────────────────────
-    # Intraday heart rate (1-min samples) — for Strain
-    # ──────────────────────────────────────────────────────────────────────────
+        # Exclude today: the observation being scored cannot set its own baseline.
+        end = date.today() - timedelta(days=1)
+        start = end - timedelta(days=days - 1)
+        points = await self._points(
+            "daily-heart-rate-variability",
+            _day_filter("dailyHeartRateVariability.date", start, end),
+        )
+        dated = []
+        for point in points:
+            metric = point.get("dailyHeartRateVariability", {})
+            value = metric.get("averageHeartRateVariabilityMilliseconds")
+            if value is not None and float(value) > 0:
+                dated.append((_google_date(metric["date"]), float(value)))
+        return [value for _, value in sorted(dated)]
 
     async def get_intraday_heart_rate(self, target_date: date) -> list[tuple[datetime, float]]:
-        """
-        Returns [(datetime, bpm), ...] 1-minute intraday samples.
-        Google Health API: activity_and_fitness endpoint for HR series.
-
-        Returns samples sorted by timestamp (oldest first).
-        """
-        date_str = target_date.strftime("%Y-%m-%d")
-        url = f"{BASE_URL}/users/me/healthMetrics/heart-rate"
-        params = {
-            "startTime": f"{date_str}T00:00:00Z",
-            "endTime":   f"{date_str}T23:59:59Z",
-            "granularity": "1_MINUTE",
-        }
-
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(url, headers=self.headers, params=params)
-
-        if resp.status_code != 200:
-            return []
-
-        data = resp.json()
+        points = await self._points(
+            "heart-rate",
+            _day_filter("heartRate.sample_time.civil_time", target_date, target_date),
+        )
         samples = []
-        for point in data.get("heartRateSamples", []):
-            ts_str = point.get("timestamp", "")
-            bpm    = point.get("bpm", {}).get("value")
-            if ts_str and bpm is not None:
-                try:
-                    ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
-                    samples.append((ts.replace(tzinfo=None), float(bpm)))
-                except ValueError:
-                    continue
-        return sorted(samples, key=lambda x: x[0])
-
-    # ──────────────────────────────────────────────────────────────────────────
-    # Workout / activity sessions — for Strain workout-aware partitioning
-    # ──────────────────────────────────────────────────────────────────────────
+        for point in points:
+            metric = point.get("heartRate", {})
+            clock = metric.get("sampleTime", {})
+            if clock.get("physicalTime") and metric.get("beatsPerMinute") is not None:
+                samples.append((
+                    _local_datetime(clock["physicalTime"], clock.get("utcOffset", "0s")),
+                    float(metric["beatsPerMinute"]),
+                ))
+        return sorted(samples)
 
     async def get_workout_sessions(self, target_date: date) -> list[dict]:
-        """
-        Returns list of workout sessions for `target_date`.
-        Each dict: { start: datetime, end: datetime, activity_name: str }
-        """
-        date_str = target_date.strftime("%Y-%m-%d")
-        url = f"{BASE_URL}/users/me/activitySessions"
-        params = {
-            "startDate": date_str,
-            "endDate":   date_str,
-        }
-
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(url, headers=self.headers, params=params)
-
-        if resp.status_code != 200:
-            return []
-
-        data = resp.json()
+        points = await self._points(
+            "exercise",
+            _day_filter("exercise.interval.civil_start_time", target_date, target_date),
+        )
         sessions = []
-        for session in data.get("activitySessions", []):
-            try:
-                start = datetime.fromisoformat(session["startTime"].replace("Z", "+00:00")).replace(tzinfo=None)
-                end   = datetime.fromisoformat(session["endTime"].replace("Z", "+00:00")).replace(tzinfo=None)
-                name  = session.get("activityType", {}).get("name", "Workout")
-                sessions.append({"start": start, "end": end, "activity_name": name})
-            except (KeyError, ValueError):
-                continue
+        for point in points:
+            exercise = point.get("exercise", {})
+            interval = exercise.get("interval", {})
+            if interval.get("startTime") and interval.get("endTime"):
+                sessions.append({
+                    "start": _local_datetime(interval["startTime"], interval.get("startUtcOffset", "0s")),
+                    "end": _local_datetime(interval["endTime"], interval.get("endUtcOffset", "0s")),
+                    "activity_name": exercise.get("displayName") or exercise.get("exerciseType", "Workout"),
+                })
         return sessions
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Sleep data — for SleepScore
-    # ──────────────────────────────────────────────────────────────────────────
+    async def _sleep_records(self, start: date, end: date) -> list[dict]:
+        points = await self._points(
+            "sleep", _day_filter("sleep.interval.civil_end_time", start, end)
+        )
+        records = []
+        for point in points:
+            sleep = point.get("sleep", {})
+            interval = sleep.get("interval", {})
+            if sleep.get("metadata", {}).get("nap") or not interval.get("startTime") or not interval.get("endTime"):
+                continue
+            start_dt = _local_datetime(interval["startTime"], interval.get("startUtcOffset", "0s"))
+            end_dt = _local_datetime(interval["endTime"], interval.get("endUtcOffset", "0s"))
+            summary = sleep.get("summary", {})
+            stage_totals = {s["type"]: float(s["minutes"]) * 60 for s in summary.get("stagesSummary", [])}
+            awake_count = sum(int(s.get("count", 0)) for s in summary.get("stagesSummary", []) if s.get("type") == "AWAKE")
+            records.append({
+                "date": end_dt.date(), "sleep_start_time": start_dt, "sleep_end_time": end_dt,
+                "total_duration": float(summary.get("minutesAsleep", 0)) * 60,
+                "deep_sleep_duration": stage_totals.get("DEEP", 0.0),
+                "rem_sleep_duration": stage_totals.get("REM", 0.0),
+                "core_sleep_duration": stage_totals.get("LIGHT", 0.0),
+                "awake_duration": float(summary.get("minutesAwake", 0)) * 60,
+                "in_bed_duration": float(summary.get("minutesInSleepPeriod", 0)) * 60,
+                "interruption_count": awake_count,
+                "sleep_latency_seconds": float(summary["minutesToFallAsleep"]) * 60 if "minutesToFallAsleep" in summary else None,
+                "nap_duration_seconds": 0.0,
+                # These metrics are separate API data types, not fields on a sleep session.
+                "sleeping_hrv": None, "sleeping_hr": None, "waking_hr": None,
+            })
+        # Keep the longest session ending on each local date.
+        by_date = {}
+        for record in records:
+            day = record["date"]
+            if day not in by_date or record["total_duration"] > by_date[day]["total_duration"]:
+                by_date[day] = record
+        return [by_date[day] for day in sorted(by_date)]
 
     async def get_sleep_session(self, target_date: date) -> Optional[dict]:
-        """
-        Returns sleep data for the night ending on `target_date`.
-        Dict keys match SleepData dataclass fields (durations in seconds).
-        Also returns sleeping_hrv, sleeping_hr, waking_hr.
-        """
-        # Sleep sessions are indexed by the wake date
-        date_str = target_date.strftime("%Y-%m-%d")
-        url = f"{BASE_URL}/users/me/sleep"
-        params = {"startDate": date_str, "endDate": date_str}
-
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(url, headers=self.headers, params=params)
-
-        if resp.status_code != 200:
-            return None
-
-        data = resp.json()
-        sessions = data.get("sleepSessions", [])
-        if not sessions:
-            return None
-
-        # Use the primary (longest) sleep session
-        session = max(sessions, key=lambda s: s.get("totalDurationSeconds", 0))
-
-        stages = session.get("stages", {})
-        result = {
-            "total_duration":       session.get("totalDurationSeconds", 0),
-            "deep_sleep_duration":  stages.get("deepSleepDurationSeconds", 0),
-            "rem_sleep_duration":   stages.get("remSleepDurationSeconds", 0),
-            "core_sleep_duration":  stages.get("lightSleepDurationSeconds", 0),
-            "awake_duration":       stages.get("wakeDurationSeconds", 0),
-            "in_bed_duration":      session.get("inBedDurationSeconds", 0),
-            "interruption_count":   session.get("wakeupCount", 0),
-            "nap_duration_seconds": 0.0,
-            "sleep_latency_seconds": session.get("sleepLatencySeconds"),
-        }
-
-        # Parse start/end times
-        try:
-            result["sleep_start_time"] = datetime.fromisoformat(
-                session["startTime"].replace("Z", "+00:00")
-            ).replace(tzinfo=None)
-            result["sleep_end_time"] = datetime.fromisoformat(
-                session["endTime"].replace("Z", "+00:00")
-            ).replace(tzinfo=None)
-        except (KeyError, ValueError):
-            result["sleep_start_time"] = None
-            result["sleep_end_time"]   = None
-
-        # Biometrics during sleep
-        biometrics = session.get("biometrics", {})
-        result["sleeping_hrv"] = biometrics.get("avgHrvRmssd")
-        result["sleeping_hr"]  = biometrics.get("avgHeartRate")
-        result["waking_hr"]    = biometrics.get("wakingHeartRate")
-
-        return result
+        records = await self._sleep_records(target_date, target_date)
+        return records[0] if records else None
 
     async def get_sleep_history_nights(self, days: int = 4) -> list[dict]:
-        """
-        Fetches up to `days` of sleep history to compute Sleep Consistency.
-        Google Health API: GET /v1/users/me/sleep?startDate={start}&endDate={end}
-        Returns list of parsed dicts: [{"date": date, "bed_time": datetime, "wake_time": datetime}, ...]
-        """
-        end_date = date.today()
-        start_date = end_date - timedelta(days=days)
-        url = f"{BASE_URL}/users/me/sleep"
-        params = {
-            "startDate": start_date.strftime("%Y-%m-%d"),
-            "endDate":   end_date.strftime("%Y-%m-%d"),
-        }
-
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(url, headers=self.headers, params=params)
-
-        if resp.status_code != 200:
-            return []
-
-        data = resp.json()
-        sessions = data.get("sleepSessions", [])
-        nights = []
-
-        for s in sessions:
-            try:
-                start_dt = datetime.fromisoformat(s["startTime"].replace("Z", "+00:00")).replace(tzinfo=None)
-                end_dt   = datetime.fromisoformat(s["endTime"].replace("Z", "+00:00")).replace(tzinfo=None)
-                # Night date is determined by wake date
-                night_date = end_dt.date()
-                nights.append({
-                    "date": night_date,
-                    "bed_time": start_dt,
-                    "wake_time": end_dt,
-                })
-            except (KeyError, ValueError):
-                continue
-
-        # Sort chronologically
-        nights.sort(key=lambda x: x["bed_time"])
-        return nights
+        records = await self._sleep_records(date.today() - timedelta(days=days - 1), date.today())
+        return [{"date": r["date"], "bed_time": r["sleep_start_time"],
+                 "wake_time": r["sleep_end_time"]} for r in records]
 
     async def get_sleep_efficiency_history(self, days: int = 7) -> list[dict]:
-        """
-        Fetches up to `days` of sleep history to compute Sleep Efficiency trend.
-        Google Health API: GET /v1/users/me/sleep?startDate={start}&endDate={end}
-        Returns list of parsed dicts: [
-            {
-                "date": date,
-                "time_asleep_minutes": float,
-                "time_in_bed_minutes": float,
-                "awake_minutes": float,
-                "start_time": datetime,
-                "end_time": datetime
-            },
-            ...
-        ]
-        """
-        end_date = date.today()
-        start_date = end_date - timedelta(days=days)
-        url = f"{BASE_URL}/users/me/sleep"
-        params = {
-            "startDate": start_date.strftime("%Y-%m-%d"),
-            "endDate":   end_date.strftime("%Y-%m-%d"),
-        }
-
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(url, headers=self.headers, params=params)
-
-        if resp.status_code != 200:
-            return []
-
-        data = resp.json()
-        sessions = data.get("sleepSessions", [])
-        nights = []
-
-        for s in sessions:
-            try:
-                start_dt = datetime.fromisoformat(s["startTime"].replace("Z", "+00:00")).replace(tzinfo=None)
-                end_dt   = datetime.fromisoformat(s["endTime"].replace("Z", "+00:00")).replace(tzinfo=None)
-                night_date = end_dt.date()
-                total_sec = s.get("totalDurationSeconds", 0)
-                in_bed_sec = s.get("inBedDurationSeconds", 0)
-                stages = s.get("stages", {})
-                awake_sec = stages.get("wakeDurationSeconds", 0)
-                if in_bed_sec <= 0:
-                    in_bed_sec = total_sec + awake_sec
-
-                nights.append({
-                    "date": night_date,
-                    "time_asleep_minutes": round(total_sec / 60.0, 1),
-                    "time_in_bed_minutes": round(in_bed_sec / 60.0, 1),
-                    "awake_minutes": round(awake_sec / 60.0, 1),
-                    "start_time": start_dt,
-                    "end_time": end_dt,
-                })
-            except (KeyError, ValueError):
-                continue
-
-        nights.sort(key=lambda x: x["start_time"])
-        return nights
-
+        records = await self._sleep_records(date.today() - timedelta(days=days - 1), date.today())
+        return [{
+            "date": r["date"],
+            "time_asleep_minutes": r["total_duration"] / 60,
+            "time_in_bed_minutes": r["in_bed_duration"] / 60,
+            "awake_minutes": r["awake_duration"] / 60,
+            "start_time": r["sleep_start_time"], "end_time": r["sleep_end_time"],
+        } for r in records]

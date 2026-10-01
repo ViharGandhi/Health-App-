@@ -1,535 +1,258 @@
-/* page.module.css — Exact WHOOP Dashboard Styling */
-
 .pageWrapper {
   min-height: 100dvh;
   background: var(--bg-primary);
   color: var(--text-primary);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  overflow-x: hidden;
 }
 
 .container {
   width: 100%;
-  max-width: 440px;
-  padding: 12px 16px 110px;
-  display: flex;
-  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 8px 16px calc(104px + env(safe-area-inset-bottom));
 }
 
-/* ---- Top Header (Avatar, < TODAY >, Battery) ---- */
-.topHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 4px 0 16px;
-}
-
-.headerLeft {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.avatarCircle {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.streakBadge {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.flame {
-  font-size: 15px;
-}
-
-.streakNum {
-  font-size: 14px;
-  font-weight: 800;
-  color: #FFFFFF;
-}
-
-/* Date Pill: < TODAY > */
-.datePill {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: #20242B;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 100px;
-  padding: 6px 14px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.datePill:hover {
-  background: #282D36;
-}
-
-.pillText {
-  font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  color: #FFFFFF;
-}
-
-.pillArrow {
-  font-size: 14px;
-  font-weight: 700;
-  color: #8E95A2;
-  line-height: 1;
-}
-
-/* Battery: 94% [battery] */
-.headerRight {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.batteryPct {
-  font-size: 13px;
-  font-weight: 700;
-  color: #8E95A2;
-}
-
-.batteryIcon {
-  color: #00F076;
-}
-
-/* ---- WHOOP Centered Wordmark ---- */
-.brandBar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 0 14px;
-}
-
-.whoopLogo {
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 3.5px;
-  color: #FFFFFF;
-  text-transform: uppercase;
-  opacity: 0.9;
-}
-
-/* ---- Three Dials: SLEEP | RECOVERY | STRAIN ---- */
 .dialsSection {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 6px 4px 22px;
-}
-
-.dialCol {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.dialColCenter {
-  flex: 1.15;
-  display: flex;
-  justify-content: center;
-}
-
-/* ---- Health Monitor & Stress Monitor (2-Column Grid) ---- */
-.monitorsGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 22px;
-  width: 100%;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 2px;
+  padding: 0 0 30px;
 }
 
-.monitorCard {
+.dialCol,
+.dialColCenter {
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.insightCard {
   background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--card-radius);
-  padding: 12px 14px 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 94px;
-  cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  border-radius: 20px;
+  padding: 22px;
+  margin-bottom: 34px;
 }
 
-.monitorCard:hover {
-  background: var(--bg-elevated);
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
-}
-
-.cardHeaderRow {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 6px;
-  width: 100%;
-}
-
-.cardTitle {
-  font-family: var(--font-body);
-  font-size: 11px;
+.insightCard h2 {
+  font-size: 17px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  color: #FFFFFF;
-  text-transform: uppercase;
-  white-space: nowrap;
+  margin-bottom: 9px;
 }
 
-.cardChevronSvg {
-  display: block;
-  flex-shrink: 0;
-  color: #8E95A2;
+.insightCard p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.65;
 }
 
-.monitorBody {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-/* Original WHOOP solid dark moss/green box with soft check — NO bright border */
-.checkIconBox {
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
-  background: #1C332A;
-  border: 1px solid rgba(43, 214, 126, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-/* Original WHOOP solid dark green badge matching screenshot */
-.stressScoreBadge {
-  min-width: 22px;
-  height: 22px;
-  border-radius: 5px;
-  background: #1C332A;
-  border: 1px solid rgba(43, 214, 126, 0.08);
-  color: #2BD67E;
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 800;
-  padding: 0 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.monitorTextStack {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.monitorHighlight {
-  font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.monitorSubtext {
-  font-size: 11px;
-  font-weight: 500;
-  color: #8E95A2;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-/* ---- My Day Section ---- */
 .myDaySection {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 100%;
+  gap: 16px;
 }
 
 .myDayTitle {
-  font-family: var(--font-body);
-  font-size: 22px;
-  font-weight: 800;
-  color: #FFFFFF;
-  letter-spacing: -0.4px;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 2px;
 }
 
-/* Daily Outlook Banner with subtle gradient */
 .outlookBanner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 14px;
-  background: linear-gradient(90deg, #242830 0%, #292826 45%, #23272F 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--card-radius);
+  min-height: 62px;
+  padding: 12px 17px;
+  background: linear-gradient(110deg, #282929, #303438);
+  border-radius: 18px;
+  color: var(--text-primary);
   cursor: pointer;
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  width: 100%;
+  border: 0;
+  text-align: left;
+  font-family: var(--font-body);
 }
 
-.outlookBanner:hover {
-  transform: translateY(-1px);
-  border-color: rgba(255, 255, 255, 0.15);
-}
-
-.outlookLeft {
+.outlookLeft,
+.outlookContent,
+.activityLeftPart,
+.activityTimeline,
+.sleepBadge {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
+
+.outlookLeft { gap: 12px; }
+.outlookContent { gap: 9px; }
 
 .whoopIconPill {
-  width: 22px;
-  height: 22px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 800;
-  color: #FFFFFF;
+  background: var(--bg-primary);
+  border: 1px solid var(--text-tertiary);
+  font: 700 18px var(--font-display);
 }
 
-.outlookContent {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+.sunIcon { font-size: 20px; color: var(--text-secondary); }
+.outlookLabel { font-size: 13px; font-weight: 700; }
+.outlookChevron { font-size: 27px; color: var(--text-secondary); }
 
-.sunIcon {
-  font-size: 14px;
-  color: #D1D5DB;
-}
-
-.outlookLabel {
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 700;
-  color: #FFFFFF;
-}
-
-.outlookChevron {
-  font-size: 16px;
-  font-weight: 700;
-  color: #8E95A2;
-}
-
-/* ---- Today's Activities Box ---- */
-.activitiesContainer {
+.outlookDetail {
   background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  padding: 16px;
+  padding: 18px;
+  border-radius: 18px;
+  margin-top: -8px;
+}
+
+.outlookDetail strong { font-size: 13px; }
+.outlookDetail p { color: var(--text-secondary); font-size: 13px; line-height: 1.6; margin-top: 8px; }
+.outlookDetail small { color: var(--text-tertiary); font-size: 11px; }
+
+.activitiesContainer {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 18px;
 }
 
 .activitiesHeaderRow {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
 
-.activitiesSectionTitle {
-  font-family: var(--font-body);
+.activitiesSectionTitle,
+.activityName {
+  color: var(--text-primary);
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: 1.2px;
-  color: #FFFFFF;
-  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .activityItem {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.activityLeftPart {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.sleepBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #252B35;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 6px 10px;
-}
-
-.moonIcon {
-  font-size: 14px;
-  color: #4EA5B7;
-}
-
-.sleepTimeText {
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 800;
-  color: #FFFFFF;
-  letter-spacing: -0.3px;
-}
-
-.activityName {
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  color: #FFFFFF;
-}
-
-.activityTimeline {
-  display: flex;
-  align-items: center;
   gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-body);
 }
 
-.timeStack {
+.activityLeftPart { gap: 10px; min-width: 0; }
+.sleepBadge { gap: 6px; background: var(--sleep-blue); padding: 7px 10px; border-radius: 9px; }
+.moonIcon { color: var(--bg-primary); font-size: 17px; }
+.sleepTimeText { font: 700 18px var(--font-display); color: var(--bg-primary); font-variant-numeric: tabular-nums; }
+.activityTimeline { gap: 8px; }
+.timeStack { display: flex; flex-direction: column; align-items: flex-end; }
+.timeVal { color: var(--text-secondary); font-size: 10px; white-space: nowrap; }
+.timelineBar { width: 3px; height: 34px; border-radius: 3px; background: var(--sleep-blue); }
+
+.demoActivity {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--text-primary);
+  font-size: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 10px;
 }
 
-.timeVal {
-  font-size: 11px;
-  font-weight: 600;
-  color: #8E95A2;
-}
+.demoActivity span:nth-child(2) { color: var(--text-secondary); margin-left: auto; }
+.demoActivity button { border: 0; background: transparent; color: var(--text-secondary); font-size: 18px; cursor: pointer; }
 
-.timelineBar {
-  width: 3px;
-  height: 28px;
-  background: #4EA5B7;
-  border-radius: 2px;
-}
-
-/* Action Buttons: [+ ADD ACTIVITY] [⏱ START ACTIVITY] */
-.actionButtonsRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  padding-top: 4px;
-}
+.actionButtonsRow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 .whoopBtn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  background: #23272F;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 100px;
-  padding: 10px 12px;
-  color: #FFFFFF;
-  font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.6px;
+  gap: 7px;
+  min-height: 42px;
+  border: 1px solid var(--border-default);
+  border-radius: 24px;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font: 700 10px var(--font-body);
+  letter-spacing: 0.05em;
   cursor: pointer;
-  transition: background 0.15s ease, transform 0.15s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.whoopBtn:hover {
-  background: #2C313C;
-  transform: translateY(-1px);
-}
+.whoopBtn:hover { background: var(--bg-hover); transform: translateY(-1px); }
+.plusSign { font-size: 18px; line-height: 1; }
+.timerIcon { font-size: 15px; }
 
-.whoopBtn:active {
-  transform: translateY(0);
-}
-
-.plusSign {
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.timerIcon {
-  font-size: 13px;
-}
-
-/* Floating White '+' Button */
 .floatingActionBtn {
   position: fixed;
-  bottom: 84px;
-  right: 18px;
-  width: 44px;
-  height: 44px;
+  z-index: 91;
+  right: max(18px, calc((100vw - 480px) / 2 + 18px));
+  bottom: calc(83px + env(safe-area-inset-bottom));
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border: 0;
   border-radius: 50%;
-  background: #FFFFFF;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #fff;
+  color: var(--bg-primary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   cursor: pointer;
-  z-index: 99;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  transition: transform 0.2s ease;
 }
 
-.floatingActionBtn:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-}
+.floatingActionBtn:hover { transform: scale(1.06); }
 
-.floatingActionBtn:active {
-  transform: scale(0.96);
-}
+.loading,
+.errorState { min-height: 70dvh; display: flex; align-items: center; justify-content: center; }
+.loadingDials { display: flex; gap: 16px; }
+.errorState { flex-direction: column; padding: 24px; text-align: center; }
 
-/* Loading & Error States */
-.loading {
+.sheetBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  min-height: 70dvh;
+  background: rgba(0, 0, 0, 0.7);
 }
 
-.loadingDials {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.errorState {
+.actionSheet {
+  width: min(100%, 480px);
+  padding: 22px 20px calc(30px + env(safe-area-inset-bottom));
+  border-radius: 22px 22px 0 0;
+  background: var(--bg-card);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60dvh;
-  text-align: center;
-  padding: 24px;
-  color: var(--text-secondary);
+  gap: 18px;
+}
+
+.sheetHeader { display: flex; justify-content: space-between; align-items: center; }
+.sheetHeader h2 { font-size: 17px; }
+.sheetHeader button { background: none; border: 0; color: var(--text-primary); font-size: 26px; cursor: pointer; }
+.actionSheet label { display: flex; flex-direction: column; gap: 7px; color: var(--text-secondary); font-size: 12px; }
+.actionSheet input { background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-default); border-radius: 9px; padding: 12px; font: 14px var(--font-body); }
+.actionSheet p { color: var(--text-tertiary); font-size: 11px; line-height: 1.5; }
+.sheetSubmit { min-height: 46px; border: 0; border-radius: 23px; background: var(--text-primary); color: var(--bg-primary); font: 700 13px var(--font-body); cursor: pointer; }
+.sheetSubmit:disabled { opacity: 0.4; cursor: default; }
+.timerReadout { text-align: center; font: 700 44px var(--font-display); font-variant-numeric: tabular-nums; }
+
+@media (max-width: 350px) {
+  .container { padding-inline: 10px; }
+  .activitiesContainer { padding: 14px; }
+  .activityName { font-size: 10px; }
 }

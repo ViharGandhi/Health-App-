@@ -1,59 +1,36 @@
-/* NavBar.module.css — WHOOP Dark Mobile Tab Bar */
 .nav {
   position: fixed;
+  z-index: 90;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 90;
-  background: rgba(18, 20, 23, 0.94);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-nav);
+  border-top: 1px solid var(--border-subtle);
+  backdrop-filter: blur(18px);
 }
 
 .inner {
-  max-width: 440px;
-  margin: 0 auto;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
-  justify-content: space-around;
-  height: 64px;
-  padding: 0 12px;
+  max-width: 480px;
+  height: calc(64px + env(safe-area-inset-bottom));
+  padding: 0 8px env(safe-area-inset-bottom);
+  margin: 0 auto;
 }
 
 .item {
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  flex: 1;
+  gap: 2px;
+  color: var(--text-tertiary);
   text-decoration: none;
-  color: #6C7280;
-  transition: color 0.15s ease;
-  user-select: none;
+  transition: color 0.2s ease;
 }
 
-.item:hover {
-  color: #A3A8B5;
-}
-
-.active {
-  color: #FFFFFF !important;
-}
-
-.iconBox {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-}
-
-.label {
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  color: inherit;
-}
+.item:hover,
+.active { color: var(--text-primary); }
+.icon { font-size: 24px; line-height: 1; height: 27px; }
+.label { font-size: 10px; font-weight: 700; }

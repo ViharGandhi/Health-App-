@@ -145,7 +145,7 @@ export interface SleepEfficiencyTrend {
 export interface AuthStatus {
   connected: boolean;
   is_mock: boolean;
+  can_connect: boolean;
   user_email: string | null;
   user_name: string | null;
 }
-

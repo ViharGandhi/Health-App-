@@ -95,6 +95,17 @@
   margin-bottom: 24px;
 }
 
+.error {
+  color: var(--text-primary);
+  background: rgba(219, 75, 75, 0.12);
+  border: 1px solid rgba(219, 75, 75, 0.35);
+  border-radius: var(--card-radius);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 /* Setup card */
 .setupCard { background: var(--bg-surface); }
 

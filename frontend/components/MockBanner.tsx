@@ -1,6 +1,6 @@
 /**
  * MockBanner.tsx
- * WHOOP-style dismissable top banner shown when running in demo/mock mode.
+ * Visible label for sample measurements.
  */
 'use client';
 
@@ -17,9 +17,9 @@ export default function MockBanner({ isMock }: Props) {
   return (
     <div className={styles.banner} role="alert">
       <span className={styles.dot} />
-      <span className={styles.text}>Demo data &mdash; </span>
+      <span className={styles.text}>SAMPLE DATA</span>
       <Link href="/connect" className={styles.link}>
-        Connect your Fitbit &rarr;
+        Device setup &rarr;
       </Link>
     </div>
   );
