@@ -2,26 +2,22 @@
 
 /**
  * Dashboard — Home page (/)
- * Exact WHOOP app dashboard:
- * - Top header with Avatar, streak, `< TODAY >` pill, and strap battery
- * - "WHOOP" centered wordmark
- * - Three horizontal dials: SLEEP, RECOVERY, STRAIN with exact WHOOP layout, fonts & colors
- * - Health Monitor & Stress Monitor side-by-side
- * - My Day with "Your Daily Outlook" and "Today's Activities"
+ * Ojas dashboard with sample data and metric detail links.
  */
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import CircleDial from '@/components/CircleDial';
 import MockBanner from '@/components/MockBanner';
+import MetricNav from '@/components/MetricNav';
 import { api } from '@/lib/api';
 import type { DashboardData } from '@/lib/types';
 import styles from './page.module.css';
 
 const RECOVERY_COLOR: Record<string, string> = {
-  green:  '#22E600', // Crisp WHOOP electric lime green
-  yellow: '#F5C518',
-  red:    '#FF3B3B',
+  green:  '#16EC06',
+  yellow: '#FFDE00',
+  red:    '#FF0026',
 };
 
 function formatTime(dateStr: string | null): string {
@@ -42,12 +38,62 @@ export default function DashboardPage() {
   const router = useRouter();
   const [data, setData] = useState<DashboardData | null>(null);
   const [error, setError] = useState(false);
+  const [outlookOpen, setOutlookOpen] = useState(false);
+  const [action, setAction] = useState<'add' | 'timer' | 'unavailable' | null>(null);
+  const [activityName, setActivityName] = useState('');
+  const [activityMinutes, setActivityMinutes] = useState('30');
+  const [demoActivities, setDemoActivities] = useState<{ name: string; minutes: number }[]>([]);
+  const [startedAt, setStartedAt] = useState<number | null>(null);
+  const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
     api.getDashboard()
       .then(setData)
       .catch(() => setError(true));
+    try {
+      const saved = window.localStorage.getItem('ojas-demo-activities');
+      if (saved) setDemoActivities(JSON.parse(saved));
+    } catch { /* Ignore invalid local demo storage. */ }
   }, []);
+
+  useEffect(() => {
+    if (startedAt === null) return;
+    const timer = window.setInterval(() => setElapsed(Math.floor((Date.now() - startedAt) / 1000)), 1000);
+    return () => window.clearInterval(timer);
+  }, [startedAt]);
+
+  const openAction = (next: 'add' | 'timer') => {
+    setAction(data?.is_mock ? next : 'unavailable');
+  };
+
+  const addDemoActivity = () => {
+    const minutes = Number(activityMinutes);
+    if (!activityName.trim() || !Number.isFinite(minutes) || minutes <= 0) return;
+    const next = [...demoActivities, { name: activityName.trim(), minutes }];
+    setDemoActivities(next);
+    window.localStorage.setItem('ojas-demo-activities', JSON.stringify(next));
+    setActivityName('');
+    setAction(null);
+  };
+
+  const stopTimer = () => {
+    const next = [...demoActivities, {
+      name: activityName.trim() || 'Timed activity',
+      minutes: Math.max(0.1, Math.round((elapsed / 60) * 10) / 10),
+    }];
+    setDemoActivities(next);
+    window.localStorage.setItem('ojas-demo-activities', JSON.stringify(next));
+    setStartedAt(null);
+    setElapsed(0);
+    setActivityName('');
+    setAction(null);
+  };
+
+  const removeDemoActivity = (index: number) => {
+    const next = demoActivities.filter((_, position) => position !== index);
+    setDemoActivities(next);
+    window.localStorage.setItem('ojas-demo-activities', JSON.stringify(next));
+  };
 
   if (error) {
     return (
@@ -73,12 +119,9 @@ export default function DashboardPage() {
   }
 
   const { recovery, sleep, strain } = data;
-  const recoveryColor = RECOVERY_COLOR[recovery.status] ?? '#00F076';
-  const sleepColor = '#4EA5B7'; // Whoop sleep teal/cyan
-  const strainColor = '#3078F0'; // Whoop strain blue
-
-  const now = new Date();
-  const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  const recoveryColor = RECOVERY_COLOR[recovery.status] ?? '#16EC06';
+  const sleepColor = '#7BA1BB';
+  const strainColor = '#0093E7';
 
   const sleepHours = Math.floor(sleep.total_sleep_hours);
   const sleepMinutes = Math.round((sleep.total_sleep_hours % 1) * 60).toString().padStart(2, '0');
@@ -88,44 +131,7 @@ export default function DashboardPage() {
       <MockBanner isMock={data.is_mock} />
 
       <div className={styles.container}>
-        {/* -- Status Header (WHOOP top bar) ---------------- */}
-        <header className={styles.topHeader}>
-          <div className={styles.headerLeft}>
-            <div className={styles.avatarCircle}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </div>
-            <div className={styles.streakBadge}>
-              <span className={styles.flame}>🔥</span>
-              <span className={styles.streakNum}>6</span>
-            </div>
-          </div>
-
-          <div className={styles.datePill}>
-            <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ transform: 'rotate(180deg)' }}>
-              <path d="M1 1.5L4.5 5L1 8.5" />
-            </svg>
-            <span className={styles.pillText}>TODAY</span>
-            <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M1 1.5L4.5 5L1 8.5" />
-            </svg>
-          </div>
-
-          <div className={styles.headerRight}>
-            <span className={styles.batteryPct}>94%</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22E600" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={styles.batteryIcon}>
-              <rect x="2" y="7" width="16" height="10" rx="2" ry="2" />
-              <line x1="20" y1="11" x2="20" y2="13" />
-            </svg>
-          </div>
-        </header>
-
-        {/* -- WHOOP Wordmark -------------------------------- */}
-        <div className={styles.brandBar}>
-          <span className={styles.whoopLogo}>WHOOP</span>
-        </div>
+        <MetricNav active="overview" isMock={data.is_mock}>
 
         {/* -- Three Dials: SLEEP | RECOVERY | STRAIN --------- */}
         <section className={styles.dialsSection} aria-label="Fitness Dials">
@@ -172,49 +178,11 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* -- Health Monitor & Stress Monitor (2 Columns) --- */}
-        <div className={styles.monitorsGrid}>
-          {/* HEALTH MONITOR */}
-          <div className={styles.monitorCard} onClick={() => router.push('/recovery')} role="button" tabIndex={0}>
-            <div className={styles.cardHeaderRow}>
-              <span className={styles.cardTitle}>HEALTH MONITOR</span>
-              <svg className={styles.cardChevronSvg} width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M1 1.5L4.5 5L1 8.5" />
-              </svg>
-            </div>
-            <div className={styles.monitorBody}>
-              <div className={styles.checkIconBox}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2BD67E" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
-              <div className={styles.monitorTextStack}>
-                <span className={styles.monitorHighlight} style={{ color: '#2BD67E' }}>
-                  WITHIN RANGE
-                </span>
-                <span className={styles.monitorSubtext}>5/5 Metrics</span>
-              </div>
-            </div>
-          </div>
-
-          {/* STRESS MONITOR */}
-          <div className={styles.monitorCard} onClick={() => router.push('/strain')} role="button" tabIndex={0}>
-            <div className={styles.cardHeaderRow}>
-              <span className={styles.cardTitle}>STRESS MONITOR</span>
-              <svg className={styles.cardChevronSvg} width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M1 1.5L4.5 5L1 8.5" />
-              </svg>
-            </div>
-            <div className={styles.monitorBody}>
-              <div className={styles.stressScoreBadge}>0.4</div>
-              <div className={styles.monitorTextStack}>
-                <span className={styles.monitorHighlight} style={{ color: '#2BD67E' }}>
-                  LOW
-                </span>
-                <span className={styles.monitorSubtext}>7:30 AM</span>
-              </div>
-            </div>
-          </div>
+        <div className={styles.insightCard}>
+          <h2>{data.is_mock ? 'Sample day' : 'Your day'}</h2>
+          <p>{data.is_mock
+            ? 'Explore the sample Sleep, Recovery, and Strain readings. Connect a supported device when Google Health access is available.'
+            : 'Open each metric to see the measurements behind today’s scores.'}</p>
         </div>
 
         {/* -- My Day Section -------------------------------- */}
@@ -222,16 +190,23 @@ export default function DashboardPage() {
           <h2 className={styles.myDayTitle}>My Day</h2>
 
           {/* Daily Outlook Banner */}
-          <div className={styles.outlookBanner}>
+          <button type="button" className={styles.outlookBanner} onClick={() => setOutlookOpen((open) => !open)} aria-expanded={outlookOpen}>
             <div className={styles.outlookLeft}>
-              <div className={styles.whoopIconPill}>W</div>
+              <div className={styles.whoopIconPill}>O</div>
               <div className={styles.outlookContent}>
                 <span className={styles.sunIcon}>☼</span>
                 <span className={styles.outlookLabel}>Your Daily Outlook</span>
               </div>
             </div>
             <span className={styles.outlookChevron}>›</span>
-          </div>
+          </button>
+          {outlookOpen && (
+            <div className={styles.outlookDetail}>
+              <strong>{data.is_mock ? 'Demo outlook' : 'Today’s overview'}</strong>
+              <p>Sleep {Math.round(sleep.score)}%, Recovery {Math.round(recovery.score)}%, Strain {strain.score_21.toFixed(1)}. Open a metric for its breakdown.</p>
+              {data.is_mock && <small>Sample values only. Activity entries below do not change calculated scores.</small>}
+            </div>
+          )}
 
           {/* Today's Activities */}
           <div className={styles.activitiesContainer}>
@@ -246,7 +221,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Sleep Row */}
-            <div className={styles.activityItem}>
+            <button type="button" className={styles.activityItem} onClick={() => router.push('/sleep')}>
               <div className={styles.activityLeftPart}>
                 <div className={styles.sleepBadge}>
                   <span className={styles.moonIcon}>☽</span>
@@ -257,35 +232,69 @@ export default function DashboardPage() {
 
               <div className={styles.activityTimeline}>
                 <div className={styles.timeStack}>
-                  <span className={styles.timeVal}>{sleep.sleep_start ? formatTime(sleep.sleep_start) : '12:35 AM'}</span>
-                  <span className={styles.timeVal}>{sleep.sleep_end ? formatTime(sleep.sleep_end) : '7:26 AM'}</span>
+                  <span className={styles.timeVal}>{formatTime(sleep.sleep_start)}</span>
+                  <span className={styles.timeVal}>{formatTime(sleep.sleep_end)}</span>
                 </div>
                 <div className={styles.timelineBar} />
               </div>
-            </div>
+            </button>
+
+            {demoActivities.map((activity, index) => (
+              <div className={styles.demoActivity} key={`${activity.name}-${index}`}>
+                <span>{activity.name}</span><span>{activity.minutes} min · DEMO</span>
+                <button type="button" onClick={() => removeDemoActivity(index)} aria-label={`Remove ${activity.name}`}>×</button>
+              </div>
+            ))}
 
             {/* Action Buttons */}
             <div className={styles.actionButtonsRow}>
-              <button className={styles.whoopBtn}>
+              <button type="button" className={styles.whoopBtn} onClick={() => openAction('add')}>
                 <span className={styles.plusSign}>+</span>
                 <span>ADD ACTIVITY</span>
               </button>
-              <button className={styles.whoopBtn}>
+              <button type="button" className={styles.whoopBtn} onClick={() => openAction('timer')}>
                 <span className={styles.timerIcon}>⏱</span>
                 <span>START ACTIVITY</span>
               </button>
             </div>
           </div>
         </section>
-      </div>
-
-      {/* Floating WHOOP Action Button */}
-      <div className={styles.floatingActionBtn}>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#121417" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <button type="button" className={styles.floatingActionBtn} onClick={() => openAction('add')} aria-label="Add activity">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
           <line x1="12" y1="5" x2="12" y2="19" />
           <line x1="5" y1="12" x2="19" y2="12" />
         </svg>
+      </button>
+        </MetricNav>
       </div>
+
+      {action && (
+        <div className={styles.sheetBackdrop} onClick={() => setAction(null)}>
+          <section className={styles.actionSheet} onClick={(event) => event.stopPropagation()} aria-label="Activity action">
+            <div className={styles.sheetHeader}>
+              <h2>{action === 'add' ? 'Add demo activity' : action === 'timer' ? 'Demo activity timer' : 'Activity logging unavailable'}</h2>
+              <button type="button" onClick={() => setAction(null)} aria-label="Close">×</button>
+            </div>
+            {action === 'unavailable' ? <p>Activity logging is available in demo mode only until a device integration is ready.</p> : (
+              <>
+                <label>Activity name<input value={activityName} onChange={(event) => setActivityName(event.target.value)} placeholder="Walking" /></label>
+                {action === 'add' ? (
+                  <>
+                    <label>Duration in minutes<input type="number" min="1" value={activityMinutes} onChange={(event) => setActivityMinutes(event.target.value)} /></label>
+                    <button type="button" className={styles.sheetSubmit} onClick={addDemoActivity} disabled={!activityName.trim() || Number(activityMinutes) <= 0}>Add to My Day</button>
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.timerReadout}>{Math.floor(elapsed / 60).toString().padStart(2, '0')}:{(elapsed % 60).toString().padStart(2, '0')}</div>
+                    <button type="button" className={styles.sheetSubmit} onClick={startedAt === null ? () => setStartedAt(Date.now()) : stopTimer}>{startedAt === null ? 'Start timer' : 'Stop and save'}</button>
+                  </>
+                )}
+                <p>Demo entries do not alter Sleep, Recovery, or Strain calculations.</p>
+              </>
+            )}
+          </section>
+        </div>
+      )}
     </div>
   );
 }

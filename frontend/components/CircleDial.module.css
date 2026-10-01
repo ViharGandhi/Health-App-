@@ -30,12 +30,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
 }
 
 .svg {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .centerContent {
@@ -46,6 +50,8 @@
   justify-content: center;
   width: 100%;
   height: 100%;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .valueRow {
@@ -61,6 +67,7 @@
   line-height: 1;
   color: #FFFFFF;
   letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
 }
 
 .isPrimary .number {
@@ -81,6 +88,23 @@
 .isPrimary .unit {
   font-size: 18px;
   font-weight: 700;
+}
+
+.hero .number,
+.hero.isPrimary .number {
+  font-size: clamp(64px, 18vw, 94px);
+}
+
+.hero .unit,
+.hero.isPrimary .unit {
+  font-size: clamp(25px, 7vw, 34px);
+}
+
+.insideLabel {
+  font: 700 11px var(--font-body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-primary);
 }
 
 /* Label row: "RECOVERY >" */

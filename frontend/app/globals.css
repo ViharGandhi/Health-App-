@@ -4,34 +4,34 @@
  * Clean sans-serif typography matching WHOOP's aesthetic.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@600;700;800;900&family=Montserrat:wght@500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@500;600;700;800&display=swap');
 
 /* Reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ---- Exact WHOOP Dark Palette & Tokens ---- */
+/* ---- Dark metric palette ---- */
 :root {
-  --bg-primary:     #121417;
-  --bg-surface:     #181B20;
-  --bg-card:        #1A1D23;
-  --bg-elevated:    #22262E;
-  --bg-pill:        #232830;
-  --bg-hover:       #2A2F3A;
-  --bg-nav:         rgba(18, 20, 23, 0.95);
+  --bg-primary:     #0B0B0B;
+  --bg-surface:     #161616;
+  --bg-card:        #1C1C1E;
+  --bg-elevated:    #262628;
+  --bg-pill:        #282A2C;
+  --bg-hover:       #303033;
+  --bg-nav:         rgba(11, 11, 11, 0.96);
 
   --border-subtle:   rgba(255, 255, 255, 0.08);
   --border-default:  rgba(255, 255, 255, 0.12);
 
   --text-primary:    #FFFFFF;
-  --text-secondary:  #8E95A2;
-  --text-tertiary:   #5C626E;
+  --text-secondary:  #A6A8AA;
+  --text-tertiary:   #75787B;
 
   /* WHOOP Signature Metric Colors */
-  --whoop-green:     #22E600; /* Crisp WHOOP electric lime green matching original */
-  --whoop-yellow:    #F5C518;
-  --whoop-red:       #FF3B3B;
-  --whoop-sleep:     #4EA5B7; /* Whoop sleep cyan/teal */
-  --whoop-strain:    #3078F0; /* Whoop strain blue */
+  --whoop-green:     #16EC06;
+  --whoop-yellow:    #FFDE00;
+  --whoop-red:       #FF0026;
+  --whoop-sleep:     #7BA1BB;
+  --whoop-strain:    #0093E7;
 
   --recovery-green:  var(--whoop-green);
   --recovery-yellow: var(--whoop-yellow);
@@ -49,8 +49,9 @@
   --section-gap:  18px;
 
   /* WHOOP typography: Proxima Nova for UI & text, DINPro for numbers & data */
-  --font-body: 'Proxima Nova', 'ProximaNova', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'DIN Pro', 'DINPro', 'DIN Alternate', 'Barlow', 'Montserrat', sans-serif;
+  --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-heading: var(--font-body);
 
   --shadow-card:     0 2px 8px rgba(0, 0, 0, 0.35);
   --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.5);
@@ -72,7 +73,7 @@ body {
 .page {
   max-width: 480px;
   margin: 0 auto;
-  padding: 0 var(--page-padding) 100px;
+  padding: 0 var(--page-padding) calc(94px + env(safe-area-inset-bottom));
 }
 
 .page-header {
@@ -126,7 +127,10 @@ body {
 .score-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-tertiary); }
 
 /* ---- Score display ---- */
-.score-value { font-family: var(--font-body); font-size: 48px; font-weight: 700; letter-spacing: -1.5px; line-height: 1; }
+.score-value { font-family: var(--font-display); font-size: 48px; font-weight: 700; letter-spacing: -1px; line-height: 1; font-variant-numeric: tabular-nums; }
+
+.share-button { display: block; margin: 14px auto 0; padding: 8px 14px; border: 0; background: transparent; color: var(--text-primary); font: 700 11px var(--font-body); letter-spacing: 0.12em; cursor: pointer; }
+.share-button:hover { color: var(--text-secondary); }
 
 /* ---- Pills ---- */
 .pill {
@@ -140,10 +144,10 @@ body {
   text-transform: uppercase;
 }
 
-.pill-green  { background: rgba(4,217,139,0.15);  color: var(--recovery-green); }
-.pill-yellow { background: rgba(245,197,24,0.15); color: var(--recovery-yellow); }
-.pill-red    { background: rgba(255,59,59,0.15);  color: var(--recovery-red); }
-.pill-blue   { background: rgba(0,161,228,0.15);  color: var(--strain-blue); }
+.pill-green  { background: rgba(22,236,6,0.12);  color: var(--recovery-green); }
+.pill-yellow { background: rgba(255,222,0,0.12); color: var(--recovery-yellow); }
+.pill-red    { background: rgba(255,0,38,0.12);  color: var(--recovery-red); }
+.pill-blue   { background: rgba(0,147,231,0.12);  color: var(--strain-blue); }
 .pill-purple { background: rgba(155,109,255,0.15); color: #9B6DFF; }
 
 /* ---- Progress bar ---- */
@@ -188,7 +192,7 @@ body {
 .btn:hover  { transform: translateY(-1px); opacity: 0.9; }
 .btn:active { transform: translateY(0);    opacity: 0.85; }
 
-.btn-primary { background: var(--accent-cta); color: #0f1220; box-shadow: 0 4px 16px rgba(4,217,139,0.25); }
+.btn-primary { background: var(--accent-cta); color: #0B0B0B; box-shadow: 0 4px 16px rgba(22,236,6,0.2); }
 
 .btn-secondary { background: transparent; color: var(--text-primary); border: 1.5px solid var(--border-default); }
 .btn-danger    { background: rgba(255,59,59,0.10); color: var(--accent-danger); border: 1px solid rgba(255,59,59,0.2); }
