@@ -1,14 +1,15 @@
-"""Sleep timing variability from seven consecutive main sleep periods.
+"""Sleep timing variability and a four-night, clock-drift consistency score.
 
 Clock-time standard deviation is a descriptive sleep regularity measure.
 It is not the Sleep Regularity Index, which requires epoch-level sleep/wake data.
+The four-night percentage is an app-specific timing heuristic, not a clinical index.
 """
 
 from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 from typing import Optional
 
 
@@ -27,6 +28,63 @@ class SleepConsistencyResult:
     average_bed_time_str: Optional[str]
     average_wake_time_str: Optional[str]
     days_analyzed: int
+
+
+@dataclass
+class DailyConsistencyScore:
+    score: Optional[float]
+    drift_minutes: Optional[float]
+    prior_nights: int
+
+
+def _circular_difference(a: int, b: int) -> int:
+    difference = abs(a - b)
+    return min(difference, 1440 - difference)
+
+
+def _drift_score(drift: float) -> float:
+    if drift >= 240:
+        return 0.0
+    raw = lambda value: 1 / (1 + math.exp(0.05 * (value - 75)))
+    return max(0.0, min(100.0, 100 * (raw(drift) - raw(240)) / (raw(0) - raw(240))))
+
+
+def consistency_label(score: float) -> str:
+    if score >= 90:
+        return "Optimal"
+    if score >= 75:
+        return "Good"
+    if score >= 50:
+        return "Fair"
+    return "Poor"
+
+
+def score_main_sleep(current: SleepNight, by_date: dict[date, SleepNight]) -> DailyConsistencyScore:
+    """Score one wake date against its four preceding calendar dates."""
+    weights = (0.40, 0.30, 0.20, 0.10)
+    weighted_score = weighted_drift = weight_sum = 0.0
+    prior_nights = 0
+    for offset, weight in enumerate(weights, start=1):
+        previous = by_date.get(current.night_date - timedelta(days=offset))
+        if previous is None:
+            continue
+        onset = _circular_difference(
+            current.bed_time.hour * 60 + current.bed_time.minute,
+            previous.bed_time.hour * 60 + previous.bed_time.minute,
+        )
+        wake = _circular_difference(
+            current.wake_time.hour * 60 + current.wake_time.minute,
+            previous.wake_time.hour * 60 + previous.wake_time.minute,
+        )
+        drift = (onset + wake) / 2
+        weighted_score += weight * _drift_score(drift)
+        weighted_drift += weight * drift
+        weight_sum += weight
+        prior_nights += 1
+    if prior_nights < 2:
+        return DailyConsistencyScore(None, None, prior_nights)
+    return DailyConsistencyScore(weighted_score / weight_sum,
+                                 weighted_drift / weight_sum, prior_nights)
 
 
 def _clock_minutes(value: datetime) -> float:

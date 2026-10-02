@@ -46,16 +46,16 @@ from sleep_efficiency import SleepEfficiencyCalculator
 # ── App-layer imports ──────────────────────────────────────────────────────────
 from auth import router as auth_router, get_session, get_valid_access_token, set_session
 from google_health_client import GoogleHealthClient
-from sleep_trends import build_sleep_trend, range_start
+from sleep_trends import build_consistency_scores, build_sleep_trend, range_start
 from health_trends import build_health_response
 from mock_data import (
     get_mock_dashboard, compute_mock_strain, compute_mock_sleep,
-    compute_mock_recovery, get_mock_sleep_consistency_trend,
+    compute_mock_recovery, get_mock_sleep_consistency_trend, get_mock_sleep_consistency_score,
     get_mock_sleep_efficiency_trend, get_mock_health
 )
 from models import (
     DashboardResponse, RecoveryResponse, SleepResponse, StrainResponse,
-    ZoneMinutes, WorkoutDetail, SleepStages, SleepTrendResponse, HealthResponse
+    ZoneMinutes, WorkoutDetail, SleepStages, SleepTrendResponse, SleepConsistencyScoreResponse, HealthResponse
 )
 
 
@@ -452,6 +452,21 @@ async def sleep_consistency_endpoint(
     client = GoogleHealthClient(token)
     history = await client.get_sleep_trend_history(start - timedelta(days=6), today)
     return build_sleep_trend(history, start, today, timeframe, "consistency", False)
+
+
+@app.get("/api/sleep/consistency/score", response_model=SleepConsistencyScoreResponse)
+async def sleep_consistency_score_endpoint(
+    request: Request, response: Response, timeframe: Literal["W", "6M", "1Y"] = "W"
+):
+    today = _client_day(request)
+    token = await _get_token(request, response)
+    if not token:
+        return get_mock_sleep_consistency_score(timeframe, today)
+    start = range_start(today, timeframe)
+    previous_start = range_start(start - timedelta(days=1), timeframe)
+    client = GoogleHealthClient(token)
+    history = await client.get_main_sleep_timing_history(previous_start - timedelta(days=4), today)
+    return build_consistency_scores(history, today, timeframe, False)
 
 
 @app.get("/api/sleep/efficiency", response_model=SleepTrendResponse)

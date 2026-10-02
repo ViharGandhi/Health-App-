@@ -179,15 +179,22 @@ class GoogleHealthClient:
         for point in points:
             sleep = point.get("sleep", {})
             interval = sleep.get("interval", {})
-            if sleep.get("metadata", {}).get("nap") or not interval.get("startTime") or not interval.get("endTime"):
+            metadata = sleep.get("metadata", {})
+            if metadata.get("nap") or not interval.get("startTime") or not interval.get("endTime"):
                 continue
             start_dt = _local_datetime(interval["startTime"], interval.get("startUtcOffset", "0s"))
             end_dt = _local_datetime(interval["endTime"], interval.get("endUtcOffset", "0s"))
             summary = sleep.get("summary", {})
+            onset = start_dt + timedelta(minutes=float(summary.get("minutesToFallAsleep", 0)))
+            wake = end_dt - timedelta(minutes=float(summary.get("minutesAfterWakeUp", 0)))
+            if onset >= wake:
+                continue
             stage_totals = {s["type"]: float(s["minutes"]) * 60 for s in summary.get("stagesSummary", [])}
             awake_count = sum(int(s.get("count", 0)) for s in summary.get("stagesSummary", []) if s.get("type") == "AWAKE")
             records.append({
                 "date": end_dt.date(), "sleep_start_time": start_dt, "sleep_end_time": end_dt,
+                "sleep_onset_time": onset, "wake_up_time": wake,
+                "main_sleep": metadata.get("mainSleep"),
                 "total_duration": float(summary.get("minutesAsleep", 0)) * 60,
                 "deep_sleep_duration": stage_totals.get("DEEP", 0.0),
                 "rem_sleep_duration": stage_totals.get("REM", 0.0),
@@ -200,13 +207,18 @@ class GoogleHealthClient:
                 # These metrics are separate API data types, not fields on a sleep session.
                 "sleeping_hrv": None, "sleeping_hr": None, "waking_hr": None,
             })
-        # Keep the longest session ending on each local date.
-        by_date = {}
+        # Use Fitbit's main-sleep designation; only fall back for older records without it.
+        by_date: dict[date, list[dict]] = {}
         for record in records:
-            day = record["date"]
-            if day not in by_date or record["total_duration"] > by_date[day]["total_duration"]:
-                by_date[day] = record
-        return [by_date[day] for day in sorted(by_date)]
+            by_date.setdefault(record["date"], []).append(record)
+        selected = []
+        for day in sorted(by_date):
+            sessions = by_date[day]
+            main = [record for record in sessions if record["main_sleep"] is True]
+            if not main and any(record["main_sleep"] is not None for record in sessions):
+                continue
+            selected.append(max(main or sessions, key=lambda record: record["total_duration"]))
+        return selected
 
     async def get_sleep_session(self, target_date: date) -> Optional[dict]:
         records = await self._sleep_records(target_date, target_date)
@@ -236,4 +248,12 @@ class GoogleHealthClient:
             "wake_time": record["sleep_end_time"],
             "time_asleep_minutes": record["total_duration"] / 60,
             "time_in_bed_minutes": record["in_bed_duration"] / 60,
+        } for record in records]
+
+    async def get_main_sleep_timing_history(self, start: date, end: date) -> list[dict]:
+        records = await self._sleep_records(start, end)
+        return [{
+            "date": record["date"],
+            "bed_time": record["sleep_onset_time"],
+            "wake_time": record["wake_up_time"],
         } for record in records]

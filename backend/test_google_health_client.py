@@ -9,6 +9,30 @@ from google_health_client import GoogleHealthClient
 
 
 class GoogleHealthClientTests(unittest.TestCase):
+    def test_main_sleep_timing_uses_fitbit_flag_and_onset_latency(self):
+        client = GoogleHealthClient("token")
+        client._points = lambda *args: asyncio.sleep(0, result=[
+            {"sleep": {"interval": {"startTime": "2026-09-29T20:00:00Z", "endTime": "2026-09-30T05:00:00Z", "startUtcOffset": "7200s", "endUtcOffset": "7200s"},
+                       "metadata": {"mainSleep": False, "nap": False}, "summary": {"minutesAsleep": "500"}}},
+            {"sleep": {"interval": {"startTime": "2026-09-29T21:30:00Z", "endTime": "2026-09-30T05:30:00Z", "startUtcOffset": "7200s", "endUtcOffset": "7200s"},
+                       "metadata": {"mainSleep": True, "nap": False}, "summary": {"minutesAsleep": "420", "minutesToFallAsleep": "20", "minutesAfterWakeUp": "10"}}},
+            {"sleep": {"interval": {"startTime": "2026-09-30T08:00:00Z", "endTime": "2026-09-30T09:00:00Z", "startUtcOffset": "7200s", "endUtcOffset": "7200s"},
+                       "metadata": {"mainSleep": False, "nap": True}, "summary": {"minutesAsleep": "50"}}},
+        ])
+        result = asyncio.run(client.get_main_sleep_timing_history(date(2026, 9, 30), date(2026, 9, 30)))
+        self.assertEqual(result, [{"date": date(2026, 9, 30),
+                                   "bed_time": datetime(2026, 9, 29, 23, 50),
+                                   "wake_time": datetime(2026, 9, 30, 7, 20)}])
+
+    def test_non_main_sleep_does_not_become_a_daily_record(self):
+        client = GoogleHealthClient("token")
+        client._points = lambda *args: asyncio.sleep(0, result=[
+            {"sleep": {"interval": {"startTime": "2026-09-29T22:00:00Z", "endTime": "2026-09-30T06:00:00Z", "startUtcOffset": "0s", "endUtcOffset": "0s"},
+                       "metadata": {"mainSleep": False, "nap": False}, "summary": {"minutesAsleep": "440"}}},
+        ])
+        result = asyncio.run(client.get_main_sleep_timing_history(date(2026, 9, 30), date(2026, 9, 30)))
+        self.assertEqual(result, [])
+
     def test_reconciled_points_paginate_and_preserve_filters(self):
         requests = []
 

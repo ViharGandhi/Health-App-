@@ -137,6 +137,36 @@ class SleepTrendResponse(BaseModel):
     days: List[SleepTrendDay]
 
 
+class SleepConsistencyScorePoint(BaseModel):
+    start_date: str
+    end_date: str
+    score: Optional[float] = None
+    label: Optional[str] = None
+    scored_days: int = 0
+    drift_minutes: Optional[float] = Field(default=None, description="Weighted mean of available onset/wake drifts; weekly daily points only")
+
+
+class SleepConsistencyScoreResponse(BaseModel):
+    is_mock: bool
+    timeframe: str
+    range_start: str
+    range_end: str
+    latest_sleep_date: Optional[str] = None
+    latest_score: Optional[float] = None
+    latest_label: Optional[str] = None
+    latest_drift_minutes: Optional[float] = Field(default=None, description="Weighted mean drift, not the inverse of the nonlinear score")
+    average_score: Optional[float] = None
+    average_label: Optional[str] = None
+    scored_days: int
+    total_days: int
+    previous_average_score: Optional[float] = None
+    change_percentage_points: Optional[float] = None
+    y_axis_min: int = 0
+    y_axis_max: int = 100
+    guide_lines: List[int] = Field(default_factory=lambda: [90, 75, 50])
+    points: List[SleepConsistencyScorePoint]
+
+
 
 
 # ──────────────────────────────────────────────────────────────────────────────

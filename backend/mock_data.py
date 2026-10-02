@@ -21,7 +21,7 @@ from strain import StrainCalculator, WorkoutInterval, HeartRateZone
 from recovery import RecoveryCalculator, RecoveryInput
 from sleepscore import SleepCalculator, SleepData
 from sleep_consistency import SleepConsistencyCalculator, SleepNight
-from sleep_trends import build_sleep_trend, range_start
+from sleep_trends import build_consistency_scores, build_sleep_trend, range_start
 from health_trends import build_health_response
 
 from models import (
@@ -352,6 +352,13 @@ def get_mock_sleep_consistency_trend(timeframe: str = "W") -> SleepTrendResponse
     start = range_start(today, timeframe)
     records = _build_sample_sleep_records(start - timedelta(days=6), today)
     return build_sleep_trend(records, start, today, timeframe, "consistency", True)
+
+
+def get_mock_sleep_consistency_score(timeframe: str, today: date):
+    start = range_start(today, timeframe)
+    previous_start = range_start(start - timedelta(days=1), timeframe)
+    records = _build_sample_sleep_records(previous_start - timedelta(days=4), today)
+    return build_consistency_scores(records, today, timeframe, True)
 
 
 def get_mock_sleep_efficiency_trend(timeframe: str = "W") -> SleepTrendResponse:
