@@ -114,6 +114,37 @@ export interface SleepTrend {
   days: SleepTrendDay[];
 }
 
+export interface SleepConsistencyScorePoint {
+  start_date: string;
+  end_date: string;
+  score: number | null;
+  label: string | null;
+  scored_days: number;
+  drift_minutes: number | null;
+}
+
+export interface SleepConsistencyScore {
+  is_mock: boolean;
+  timeframe: 'W' | '6M' | '1Y';
+  range_start: string;
+  range_end: string;
+  latest_sleep_date: string | null;
+  latest_score: number | null;
+  latest_label: string | null;
+  latest_drift_minutes: number | null;
+  average_score: number | null;
+  average_label: string | null;
+  scored_days: number;
+  total_days: number;
+  previous_average_score: number | null;
+  change_percentage_points: number | null;
+  band_counts: Record<'Optimal' | 'Good' | 'Fair' | 'Poor', number>;
+  y_axis_min: number;
+  y_axis_max: number;
+  guide_lines: number[];
+  points: SleepConsistencyScorePoint[];
+}
+
 export interface HealthPoint {
   date: string;
   value: number | null;

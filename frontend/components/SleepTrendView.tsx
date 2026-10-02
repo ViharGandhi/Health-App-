@@ -3,11 +3,51 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { api } from '@/lib/api';
-import type { SleepTrend } from '@/lib/types';
+import type { SleepTrend, SleepConsistencyScore } from '@/lib/types';
 import styles from './SleepTrendView.module.css';
 
-type Timeframe = 'W' | 'M' | '6M';
+type Timeframe = 'W' | 'M' | '6M' | '1Y';
 type Metric = 'efficiency' | 'consistency';
+
+type TrendPoint = { date: string; value: number | null; start_date?: string; end_date?: string; label?: string | null; drift_minutes?: number | null; scored_days?: number };
+type TrendData = Pick<SleepTrend, 'is_mock' | 'range_start' | 'range_end' | 'average_value' | 'scored_days'> & {
+  days: TrendPoint[];
+  total_days?: number;
+  latest_sleep_date?: string | null;
+  latest_score?: number | null;
+  latest_label?: string | null;
+  previous_average_score?: number | null;
+  change_percentage_points?: number | null;
+  band_counts?: SleepConsistencyScore['band_counts'];
+  guide_lines?: number[];
+};
+
+function bandColor(score: number): string {
+  return score >= 75 ? '#16EC06' : score >= 50 ? '#FFDE00' : '#FF0026';
+}
+
+function consistencyTrend(score: SleepConsistencyScore): TrendData {
+  return {
+    is_mock: score.is_mock,
+    range_start: score.range_start,
+    range_end: score.range_end,
+    average_value: score.average_score,
+    scored_days: score.scored_days,
+    total_days: score.total_days,
+    latest_sleep_date: score.latest_sleep_date,
+    latest_score: score.latest_score,
+    latest_label: score.latest_label,
+    previous_average_score: score.previous_average_score,
+    change_percentage_points: score.change_percentage_points,
+    band_counts: score.band_counts,
+    guide_lines: score.guide_lines,
+    days: score.points.map((point) => ({
+      date: point.end_date, start_date: point.start_date, end_date: point.end_date,
+      value: point.score, label: point.label, drift_minutes: point.drift_minutes,
+      scored_days: point.scored_days,
+    })),
+  };
+}
 
 function formatDateRange(start: string, end: string): string {
   const s = new Date(`${start}T12:00:00`);
@@ -15,6 +55,12 @@ function formatDateRange(start: string, end: string): string {
   const opts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
   const year = e.getFullYear().toString().slice(2);
   return `${s.toLocaleDateString('en-US', opts).toUpperCase()} - ${e.toLocaleDateString('en-US', opts).toUpperCase()}, ${year}`;
+}
+
+function formatPointDateRange(start: string, end: string): string {
+  const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+  const first = new Date(`${start}T12:00:00`).toLocaleDateString('en-US', options);
+  return start === end ? first : `${first} – ${new Date(`${end}T12:00:00`).toLocaleDateString('en-US', options)}`;
 }
 
 interface XTick {
@@ -74,7 +120,7 @@ function TrendChart({
   isHoveringAvg,
   onHoverAvg,
 }: {
-  trend: SleepTrend;
+  trend: TrendData;
   metric: Metric;
   timeframe: Timeframe;
   hoveredIndex: number | null;
@@ -90,7 +136,7 @@ function TrendChart({
   }
 
   const average = trend.average_value ?? values.reduce((a, b) => a + b, 0) / values.length;
-  const unit = metric === 'efficiency' ? '%' : 'min';
+  const unit = '%';
 
   const rawMin = Math.min(...values, average);
   const rawMax = Math.max(...values, average);
@@ -98,19 +144,13 @@ function TrendChart({
   // Exact WHOOP Y-axis scaling (84, 88, 92, 96, 100)
   let yMin = 84;
   let yMax = 100;
-  let tickStep = 4;
+  const tickStep = 4;
 
-  if (metric === 'efficiency') {
-    if (rawMin < 84) {
-      yMin = Math.max(0, Math.floor((rawMin - 2) / 4) * 4);
-    }
-    if (rawMax > 100) {
-      yMax = Math.ceil(rawMax / 4) * 4;
-    }
-  } else {
-    yMin = Math.max(0, Math.floor((rawMin - 10) / 10) * 10);
-    yMax = Math.ceil((rawMax + 10) / 10) * 10;
-    tickStep = Math.max(5, Math.round((yMax - yMin) / 4));
+  if (rawMin < 84) {
+    yMin = Math.max(0, Math.floor((rawMin - 2) / 4) * 4);
+  }
+  if (rawMax > 100) {
+    yMax = Math.ceil(rawMax / 4) * 4;
   }
 
   const tickCount = Math.round((yMax - yMin) / tickStep) + 1;
@@ -151,9 +191,9 @@ function TrendChart({
 
   const tooltipX = hx != null ? Math.min(Math.max(hx, PLOT_LEFT + 20), PLOT_RIGHT - 20) : null;
 
-  function handleMouseMove(e: React.MouseEvent<SVGSVGElement>) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const xPos = e.clientX - rect.left;
+  function selectAt(clientX: number, svg: SVGSVGElement) {
+    const rect = svg.getBoundingClientRect();
+    const xPos = clientX - rect.left;
     const frac = (xPos - (PLOT_LEFT / W) * rect.width) / ((cW / W) * rect.width);
     const clampedIdx = Math.min(days.length - 1, Math.max(0, Math.round(frac * (days.length - 1))));
     onHover(clampedIdx);
@@ -165,15 +205,9 @@ function TrendChart({
         ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}
         className={styles.chartSvg}
-        onMouseMove={handleMouseMove}
+        onMouseMove={(event) => selectAt(event.clientX, event.currentTarget)}
         onMouseLeave={() => onHover(null)}
-        onTouchMove={(e) => {
-          const t = e.touches[0];
-          const rect = e.currentTarget.getBoundingClientRect();
-          const xPos = t.clientX - rect.left;
-          const frac = (xPos - (PLOT_LEFT / W) * rect.width) / ((cW / W) * rect.width);
-          onHover(Math.min(days.length - 1, Math.max(0, Math.round(frac * (days.length - 1)))));
-        }}
+        onTouchMove={(event) => selectAt(event.touches[0].clientX, event.currentTarget)}
         onTouchEnd={() => onHover(null)}
         role="img"
         aria-label={`${metric} trend chart`}
@@ -216,7 +250,7 @@ function TrendChart({
                   textAnchor="end"
                   fontFamily="var(--font-display)"
                 >
-                  {metric === 'efficiency' ? `${tick}%` : tick}
+                  {tick}%
                 </text>
               )}
             </g>
@@ -408,7 +442,103 @@ function TrendChart({
   );
 }
 
-function BreakdownBar({ trend, metric }: { trend: SleepTrend; metric: Metric }) {
+function ConsistencyBarChart({
+  trend, timeframe, hoveredIndex, onHover,
+}: {
+  trend: TrendData;
+  timeframe: Timeframe;
+  hoveredIndex: number | null;
+  onHover: (index: number | null) => void;
+}) {
+  const days = trend.days;
+  if (!days.some((day) => day.value != null)) {
+    return <div className={styles.emptyChart}>No scored sleeps in this range.</div>;
+  }
+
+  const width = 360;
+  const height = 246;
+  const left = 46;
+  const right = 350;
+  const top = 34;
+  const baseline = 214;
+  const slot = (right - left) / days.length;
+  const barWidth = Math.min(18, slot * 0.62);
+  const toX = (index: number) => left + slot * (index + 0.5);
+  const toY = (value: number) => baseline - (value / 100) * (baseline - top);
+  const average = trend.average_value;
+
+  function selectAt(clientX: number, svg: SVGSVGElement) {
+    const bounds = svg.getBoundingClientRect();
+    const x = ((clientX - bounds.left) / bounds.width) * width;
+    const index = Math.max(0, Math.min(days.length - 1, Math.floor((x - left) / slot)));
+    onHover(index);
+  }
+
+  return (
+    <div className={styles.chartWrap}>
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        className={styles.chartSvg}
+        role="img"
+        aria-label="Sleep consistency bar chart"
+        onMouseMove={(event) => selectAt(event.clientX, event.currentTarget)}
+        onMouseLeave={() => onHover(null)}
+        onTouchStart={(event) => selectAt(event.touches[0].clientX, event.currentTarget)}
+        onTouchMove={(event) => selectAt(event.touches[0].clientX, event.currentTarget)}
+        onClick={(event) => selectAt(event.clientX, event.currentTarget)}
+      >
+        {[0, 50, 75, 90, 100].map((tick) => (
+          <g key={tick}>
+            <line x1={left - 4} x2={right} y1={toY(tick)} y2={toY(tick)} stroke="#30363C" strokeWidth="0.8" />
+            <text x={left - 11} y={average != null && Math.abs(toY(tick) - toY(average)) < 9 ? toY(tick) - 9 : toY(tick) + 3} fill="#7B828E" fontSize="9" textAnchor="end" fontFamily="var(--font-display)">
+              {tick}%
+            </text>
+          </g>
+        ))}
+
+        {days.map((day, index) => day.value == null ? null : (
+          <g key={day.date}>
+            <rect
+              x={toX(index) - barWidth / 2}
+              y={toY(day.value)}
+              width={barWidth}
+              height={baseline - toY(day.value)}
+              fill={hoveredIndex === index ? '#B2CDE0' : '#83AAC5'}
+              rx="1"
+              tabIndex={0}
+              role="button"
+              aria-label={`${formatPointDateRange(day.start_date ?? day.date, day.end_date ?? day.date)}: ${Math.round(day.value)}%, ${day.label}`}
+              onFocus={() => onHover(index)}
+              onClick={() => onHover(index)}
+            />
+            {timeframe === 'W' && (
+              <text x={toX(index)} y={toY(day.value) - 8} fill="#91B4CE" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="var(--font-display)">
+                {Math.round(day.value)}%
+              </text>
+            )}
+          </g>
+        ))}
+
+        {average != null && (
+          <g>
+            <line x1={left - 4} x2={right} y1={toY(average)} y2={toY(average)} stroke="#D7DFE5" strokeWidth="1.4" strokeDasharray="4 3" />
+            <rect x="3" y={toY(average) - 9} width="39" height="18" rx="3" fill="#FFFFFF" />
+            <text x="22.5" y={toY(average) + 3.5} fill="#121417" fontSize="8.5" fontWeight="800" textAnchor="middle" fontFamily="var(--font-display)">AVG.</text>
+          </g>
+        )}
+
+        {getXTicks(days, timeframe).map(({ index, top: topLabel, bottom }) => (
+          <g key={index} transform={`translate(${toX(index)}, 0)`}>
+            <text x="0" y={height - 17} fill="#7B828E" fontSize="9" textAnchor="middle" fontFamily="var(--font-display)">{topLabel}</text>
+            <text x="0" y={height - 5} fill="#7B828E" fontSize="9" textAnchor="middle" fontFamily="var(--font-display)">{bottom}</text>
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+function BreakdownBar({ trend, metric }: { trend: TrendData; metric: Metric }) {
   if (metric !== 'efficiency') return null;
   const days = trend.days.filter((d) => d.value != null);
   const optimal = days.filter((d) => (d.value ?? 0) >= 90).length;
@@ -454,10 +584,43 @@ function BreakdownBar({ trend, metric }: { trend: SleepTrend; metric: Metric }) 
   );
 }
 
+function ConsistencyBreakdown({ trend }: { trend: TrendData }) {
+  const counts = trend.band_counts;
+  if (!counts) return null;
+  const bands = [
+    { label: 'Optimal', range: '90–100%', color: '#00E676' },
+    { label: 'Good', range: '75–89%', color: '#70B797' },
+    { label: 'Fair', range: '50–74%', color: '#F59E0B' },
+    { label: 'Poor', range: '<50%', color: '#FF0026' },
+  ] as const;
+
+  return (
+    <div className={styles.breakdown}>
+      <div className={styles.breakdownHeader}>
+        <span className={`${styles.breakdownTitle} ${styles.consistencyBreakdownTitle}`}>SLEEP CONSISTENCY BREAKDOWN</span>
+        <span className={styles.breakdownSub}>(DAYS)</span>
+      </div>
+      <div className={styles.breakdownBar}>
+        {bands.map((band) => counts[band.label] > 0 && (
+          <div key={band.label} style={{ width: `${(counts[band.label] / trend.scored_days) * 100}%`, background: band.color }} />
+        ))}
+      </div>
+      <div className={styles.breakdownLegend}>
+        {bands.map((band) => (
+          <div className={styles.legendRow} key={band.label}>
+            <span className={styles.legendDot} style={{ background: band.color }} />
+            <span className={styles.legendCount}>{counts[band.label]}x</span>
+            <span className={styles.legendLabel}>{band.label} ({band.range})</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function SleepTrendView({ metric }: { metric: Metric }) {
-  // Default to 'M' to match reference UI screenshot
-  const [timeframe, setTimeframe] = useState<Timeframe>('M');
-  const [trend, setTrend] = useState<SleepTrend | null>(null);
+  const [timeframe, setTimeframe] = useState<Timeframe>(metric === 'consistency' ? 'W' : 'M');
+  const [trend, setTrend] = useState<TrendData | null>(null);
   const [error, setError] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isHoveringAvg, setIsHoveringAvg] = useState(false);
@@ -471,7 +634,7 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
 
     const load = metric === 'efficiency'
       ? api.getSleepEfficiencyTrend(timeframe)
-      : api.getSleepConsistencyTrend(timeframe);
+      : api.getSleepConsistencyScore(timeframe as 'W' | '6M' | '1Y').then(consistencyTrend);
 
     load
       .then((result) => {
@@ -493,18 +656,21 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
   }, [metric, timeframe]);
 
   const title = metric === 'efficiency' ? 'SLEEP EFFICIENCY' : 'SLEEP CONSISTENCY';
-  const unit = metric === 'efficiency' ? '%' : 'min';
+  const unit = '%';
 
   const hoveredDay = hoveredIndex !== null ? trend?.days[hoveredIndex] : null;
   const displayValue =
-    hoveredIndex !== null && hoveredDay?.value != null
+    metric === 'efficiency' && hoveredIndex !== null && hoveredDay?.value != null
       ? hoveredDay.value
       : trend?.average_value;
   const showingHover = hoveredIndex !== null && hoveredDay?.value != null;
 
-  const periodLabel = timeframe === 'W' ? '7-day' : timeframe === 'M' ? '30-day' : '6-month';
+  const periodLabel = timeframe === 'W' ? '7-day' : timeframe === 'M' ? '30-day' : timeframe === '6M' ? '6-month' : 'year';
   const timeLabel = timeframe === 'W' ? 'week' : timeframe === 'M' ? 'month' : '6 months';
-  const vsLabel = timeframe === 'W' ? 'prior week' : timeframe === 'M' ? 'prior month' : 'prior 6M';
+  const vsLabel = timeframe === 'W' ? 'prior week' : timeframe === 'M' ? 'prior month' : timeframe === '6M' ? 'prior 6M' : 'prior year';
+  const timeframes: Timeframe[] = metric === 'consistency' ? ['W', '6M', '1Y'] : ['W', 'M', '6M'];
+  const consistencyPeriod = timeframe === 'W' ? 'this week' : timeframe === '6M' ? 'over 6 months' : 'over the past year';
+  const previousPeriod = timeframe === 'W' ? "last week's" : timeframe === '6M' ? "the prior 6 months'" : "last year's";
 
   return (
     <div className={styles.viewportContainer}>
@@ -523,7 +689,12 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
         {/* Metric Pill Selector Card */}
         <div className={styles.metricPill}>
           <span className={styles.metricPillIcon}>
-            {/* Custom Sleep Efficiency Icon: Bed with 3 bars */}
+            {metric === 'consistency' ? (
+              <svg width="22" height="18" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+                <path d="M10.7 2.4a7.2 7.2 0 1 0 7.1 11.3A7.8 7.8 0 0 1 10.7 2.4Z" stroke="#717886" strokeWidth="1.5" />
+                <path d="M15 3.7a6 6 0 1 0 5.4 9.7A6.7 6.7 0 0 1 15 3.7Z" stroke="#717886" strokeWidth="1.2" />
+              </svg>
+            ) : (
             <svg width="22" height="18" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="5" y="8" width="2" height="5" rx="0.8" fill="#717886" />
               <rect x="9" y="5" width="2" height="8" rx="0.8" fill="#717886" />
@@ -531,6 +702,7 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
               <path d="M2 14H22M2 11V18M22 13V18" stroke="#717886" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               <rect x="4" y="10" width="4" height="3" rx="1" stroke="#717886" strokeWidth="1.2" />
             </svg>
+            )}
           </span>
           <span className={styles.metricPillLabel}>{title}</span>
           <span className={styles.metricPillChevron}>
@@ -545,7 +717,7 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
           <div className={styles.statsTopRow}>
             <div className={styles.averageEyebrow}>AVERAGE</div>
             <div className={styles.timeframeTabs} role="group" aria-label="Time range">
-              {(['W', 'M', '6M'] as const).map((tf) => (
+              {timeframes.map((tf) => (
                 <button
                   key={tf}
                   type="button"
@@ -553,7 +725,7 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
                   onClick={() => setTimeframe(tf)}
                   aria-pressed={timeframe === tf}
                 >
-                  {tf}
+                  {metric === 'consistency' && tf === 'W' ? '1W' : tf}
                 </button>
               ))}
             </div>
@@ -562,15 +734,19 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
           <div className={styles.statsValueRow}>
             <div className={styles.averageValue}>
               {displayValue != null ? Math.round(displayValue) : '—'}
-              <span className={styles.averageUnit}>{unit}</span>
+              <span className={styles.averageUnit}>{displayValue != null ? unit : ''}</span>
             </div>
           </div>
 
           <div className={styles.statsBottomRow}>
-            <div className={styles.deltaPill}>
-              <span className={styles.deltaDot} />
+            <div className={`${styles.deltaPill} ${metric === 'consistency' && trend?.change_percentage_points != null ? trend.change_percentage_points > 0 ? styles.deltaPositive : trend.change_percentage_points < 0 ? styles.deltaNegative : '' : ''}`}>
+              {metric === 'consistency' && trend?.change_percentage_points != null && trend.change_percentage_points !== 0
+                ? <span aria-hidden="true">{trend.change_percentage_points > 0 ? '▲' : '▼'}</span>
+                : <span className={styles.deltaDot} />}
               <span className={styles.deltaText}>
-                {isHoveringAvg
+                {metric === 'consistency'
+                  ? trend?.change_percentage_points == null ? `— vs. ${vsLabel}` : `${trend.change_percentage_points > 0 ? '+' : trend.change_percentage_points < 0 ? '−' : ''}${Math.abs(trend.change_percentage_points).toFixed(1)} pp vs. ${vsLabel}`
+                  : isHoveringAvg
                   ? `Average: ${Math.round(trend?.average_value ?? 0)}${unit}`
                   : showingHover && hoveredDay
                   ? `${new Date(`${hoveredDay.date}T12:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}: ${Math.round(hoveredDay.value!)}${unit}`
@@ -580,30 +756,39 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
 
             {trend && (
               <div className={styles.dateNav}>
-                <button className={styles.navArrow} aria-label="Previous period">
+                {metric === 'efficiency' && <button className={styles.navArrow} aria-label="Previous period">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="15 18 9 12 15 6" />
                   </svg>
-                </button>
+                </button>}
                 <span className={styles.dateRange}>
                   {formatDateRange(trend.range_start, trend.range_end)}
                 </span>
-                <button className={styles.navArrow} aria-label="Next period">
+                {metric === 'efficiency' && <button className={styles.navArrow} aria-label="Next period">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="9 18 15 12 9 6" />
                   </svg>
-                </button>
+                </button>}
               </div>
             )}
           </div>
         </div>
 
         {/* Insight Paragraph */}
-        {trend && trend.average_value != null && (
+        {metric === 'efficiency' && trend && trend.average_value != null && (
           <p className={styles.insightText}>
             Your average {metric === 'efficiency' ? 'sleep efficiency' : 'sleep consistency'} (
             {Math.round(trend.average_value)}{unit}) this {timeLabel} was consistent with your
             previous {periodLabel} average of {Math.round(trend.average_value)}{unit}.
+          </p>
+        )}
+
+        {metric === 'consistency' && trend && (
+          <p className={styles.insightText}>
+            {trend.average_value != null
+              ? `Your average Sleep Consistency (${trend.average_value.toFixed(1)}%) ${consistencyPeriod} was ${trend.previous_average_score == null ? 'recorded without a previous comparable period.' : `${trend.change_percentage_points! > 0 ? 'above' : trend.change_percentage_points! < 0 ? 'below' : 'equal to'} ${previousPeriod} ${trend.previous_average_score.toFixed(1)}%.`}`
+              : 'No scored sleeps in this range yet.'}
+            {' '}{trend.scored_days} of {trend.total_days} days scored.{trend.is_mock && ' Sample data.'}
           </p>
         )}
 
@@ -614,20 +799,24 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
           <div className={styles.loading}>Loading sleep history…</div>
         ) : (
           <div className={styles.chartArea}>
-            <TrendChart
-              trend={trend}
-              metric={metric}
-              timeframe={timeframe}
-              hoveredIndex={hoveredIndex}
-              onHover={setHoveredIndex}
-              isHoveringAvg={isHoveringAvg}
-              onHoverAvg={setIsHoveringAvg}
-            />
+            {metric === 'consistency'
+              ? <ConsistencyBarChart trend={trend} timeframe={timeframe} hoveredIndex={hoveredIndex} onHover={setHoveredIndex} />
+              : <TrendChart trend={trend} metric={metric} timeframe={timeframe} hoveredIndex={hoveredIndex} onHover={setHoveredIndex} isHoveringAvg={isHoveringAvg} onHoverAvg={setIsHoveringAvg} />}
+          </div>
+        )}
+
+        {metric === 'consistency' && showingHover && hoveredDay && (
+          <div className={styles.pointDetail} role="status">
+            <strong>{formatPointDateRange(hoveredDay.start_date ?? hoveredDay.date, hoveredDay.end_date ?? hoveredDay.date)}</strong>
+            <span style={{ color: bandColor(hoveredDay.value!) }}>{Math.round(hoveredDay.value!)}% · {hoveredDay.label}</span>
+            {timeframe === 'W' && hoveredDay.drift_minutes != null && <span>{hoveredDay.drift_minutes.toFixed(1)} min weighted timing drift</span>}
+            {timeframe !== 'W' && <span>{hoveredDay.scored_days} scored days</span>}
           </div>
         )}
 
         {/* Breakdown Section */}
         {trend && <BreakdownBar trend={trend} metric={metric} />}
+        {metric === 'consistency' && trend && <ConsistencyBreakdown trend={trend} />}
       </main>
 
       {/* Floating Action Button with Whoop 'W' Logo */}

@@ -4,7 +4,7 @@
  * Automatically uses mock data when no device is connected (handled server-side).
  */
 
-import type { DashboardData, RecoveryData, SleepData, StrainData, AuthStatus, HealthData } from './types';
+import type { DashboardData, RecoveryData, SleepData, StrainData, AuthStatus, HealthData, SleepConsistencyScore } from './types';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
@@ -42,6 +42,9 @@ export const api = {
   /** Sleep consistency trend history */
   getSleepConsistencyTrend: (timeframe: string = 'W'): Promise<import('./types').SleepTrend> =>
     apiFetch<import('./types').SleepTrend>(`/api/sleep/consistency?timeframe=${timeframe}`),
+
+  getSleepConsistencyScore: (timeframe: 'W' | '6M' | '1Y' = 'W'): Promise<SleepConsistencyScore> =>
+    apiFetch<SleepConsistencyScore>(`/api/sleep/consistency/score?timeframe=${timeframe}`),
 
   /** Sleep efficiency trend history */
   getSleepEfficiencyTrend: (timeframe: string = 'W'): Promise<import('./types').SleepTrend> =>

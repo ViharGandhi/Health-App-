@@ -253,6 +253,9 @@
   background: #22E600;
 }
 
+.consistencyPoor { background: var(--whoop-red); }
+.consistencyFair { background: var(--whoop-yellow); }
+
 .metricValue {
   font-family: var(--font-display);
   font-size: 14px;

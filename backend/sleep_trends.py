@@ -136,6 +136,9 @@ def build_consistency_scores(
         ))
 
     current_values = values_between(start, end)
+    band_counts = {label: 0 for label in ("Optimal", "Good", "Fair", "Poor")}
+    for value in current_values:
+        band_counts[consistency_label(value)] += 1
     previous_values = values_between(previous_start, previous_end)
     average = mean_score(current_values)
     previous_average = mean_score(previous_values)
@@ -156,5 +159,6 @@ def build_consistency_scores(
         previous_average_score=previous_average,
         change_percentage_points=(round(average - previous_average, 1)
                                   if average is not None and previous_average is not None else None),
+        band_counts=band_counts,
         points=points,
     )

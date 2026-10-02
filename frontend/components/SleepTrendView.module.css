@@ -197,6 +197,16 @@
   white-space: nowrap;
 }
 
+.deltaPositive,
+.deltaPositive .deltaText {
+  color: #00E676;
+}
+
+.deltaNegative,
+.deltaNegative .deltaText {
+  color: #FF5A68;
+}
+
 .dateNav {
   display: flex;
   align-items: center;
@@ -266,6 +276,19 @@
   padding: 24px;
 }
 
+.pointDetail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin: -10px 0 24px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #252B30;
+  color: #c4cad4;
+  font-size: 11px;
+}
+
 /* ── Sleep Efficiency Breakdown ───────────────────────────── */
 .breakdown {
   margin-bottom: 28px;
@@ -284,6 +307,12 @@
   letter-spacing: 0.1em;
   color: #e2e4e9;
   text-transform: uppercase;
+}
+
+.consistencyBreakdownTitle {
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
 }
 
 .breakdownSub {

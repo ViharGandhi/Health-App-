@@ -19,20 +19,20 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import type { SleepData } from '@/lib/types';
+import type { SleepConsistencyScore, SleepData } from '@/lib/types';
 import styles from './page.module.css';
 
 // Segment bar helper: 3 pills (Poor, Sufficient, Optimal)
-function SegmentIndicator({ value, isInverse = false }: { value: number; isInverse?: boolean }) {
+function SegmentIndicator({ value, isInverse = false, isConsistency = false }: { value: number; isInverse?: boolean; isConsistency?: boolean }) {
   // For stress: 0% is optimal (green). For performance: >= 85% is optimal (green).
-  const isOptimal = isInverse ? value <= 15 : value >= 85;
-  const isSufficient = isInverse ? value > 15 && value <= 35 : value >= 70 && value < 85;
-  const isPoor = isInverse ? value > 35 : value < 70;
+  const isOptimal = isConsistency ? value >= 75 : isInverse ? value <= 15 : value >= 85;
+  const isSufficient = isConsistency ? value >= 50 && value < 75 : isInverse ? value > 15 && value <= 35 : value >= 70 && value < 85;
+  const isPoor = isConsistency ? value < 50 : isInverse ? value > 35 : value < 70;
 
   return (
     <div className={styles.segmentTrack}>
-      <span className={`${styles.segment} ${isPoor ? styles.segmentPoor : styles.segmentInactive}`} />
-      <span className={`${styles.segment} ${isSufficient ? styles.segmentSufficient : styles.segmentInactive}`} />
+      <span className={`${styles.segment} ${isPoor ? (isConsistency ? styles.consistencyPoor : styles.segmentPoor) : styles.segmentInactive}`} />
+      <span className={`${styles.segment} ${isSufficient ? (isConsistency ? styles.consistencyFair : styles.segmentSufficient) : styles.segmentInactive}`} />
       <span className={`${styles.segment} ${isOptimal ? styles.segmentOptimal : styles.segmentInactive}`} />
     </div>
   );
@@ -41,12 +41,14 @@ function SegmentIndicator({ value, isInverse = false }: { value: number; isInver
 export default function SleepPage() {
   const router = useRouter();
   const [data, setData] = useState<SleepData | null>(null);
+  const [consistency, setConsistency] = useState<SleepConsistencyScore | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     api.getSleep()
       .then(setData)
       .finally(() => setLoading(false));
+    api.getSleepConsistencyScore().then(setConsistency).catch(() => setConsistency(null));
   }, []);
 
   if (loading || !data) {
@@ -61,8 +63,8 @@ export default function SleepPage() {
   // Key metrics
   const sleepScore = Math.round(data.score);
   const hoursVsNeededPct = Math.min(100, Math.round((data.total_sleep_hours / data.sleep_need_hours) * 100));
-  const consistencyPct = data.consistency_score ?? 80;
-  const efficiencyPct = Math.round(data.efficiency_pct);
+  const consistencyPct = consistency?.latest_score;
+  const efficiencyPct = data.efficiency_pct == null ? null : Math.round(data.efficiency_pct);
   const sleepStressPct = 0; // Optimal (0% high stress)
 
   // Circular gauge calculations
@@ -177,6 +179,7 @@ export default function SleepPage() {
           <div
             className={styles.metricRow}
             onClick={() => router.push('/sleep/consistency')}
+            onKeyDown={(event) => { if (event.key === 'Enter') router.push('/sleep/consistency'); }}
             role="button"
             tabIndex={0}
             style={{ cursor: 'pointer' }}
@@ -190,16 +193,12 @@ export default function SleepPage() {
               </div>
               <div className={styles.metricTextGroup}>
                 <span className={styles.metricTitle}>SLEEP CONSISTENCY</span>
-                {data.average_bed_time && data.average_wake_time && (
-                  <span className={styles.metricSubtitle}>
-                    4-Day Avg: {data.average_bed_time} – {data.average_wake_time}
-                  </span>
-                )}
+                <span className={styles.metricSubtitle}>{consistency?.latest_sleep_date ? `Latest sleep · ${consistency.latest_label ?? 'Calibrating'}` : 'No score yet'}</span>
               </div>
             </div>
             <div className={styles.metricRight}>
-              <SegmentIndicator value={consistencyPct} />
-              <span className={styles.metricValue}>{consistencyPct}%</span>
+              {consistencyPct != null && <SegmentIndicator value={consistencyPct} isConsistency />}
+              <span className={styles.metricValue}>{consistencyPct == null ? '—' : `${Math.round(consistencyPct)}%`}</span>
               <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 1.5L4.5 5L1 8.5" />
               </svg>
@@ -225,8 +224,8 @@ export default function SleepPage() {
               <span className={styles.metricTitle}>SLEEP EFFICIENCY</span>
             </div>
             <div className={styles.metricRight}>
-              <SegmentIndicator value={efficiencyPct} />
-              <span className={styles.metricValue}>{efficiencyPct}%</span>
+              {efficiencyPct != null && <SegmentIndicator value={efficiencyPct} />}
+              <span className={styles.metricValue}>{efficiencyPct == null ? '—' : `${efficiencyPct}%`}</span>
               <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 1.5L4.5 5L1 8.5" />
               </svg>

@@ -76,6 +76,8 @@ class SleepTrendTests(unittest.TestCase):
         self.assertEqual(year.points[0].start_date, start.isoformat())
         self.assertEqual(year.points[-1].end_date, end.isoformat())
         self.assertEqual(sum(point.scored_days for point in year.points), year.scored_days)
+        self.assertEqual(sum(year.band_counts.values()), year.scored_days)
+        self.assertEqual(set(year.band_counts), {"Optimal", "Good", "Fair", "Poor"})
         self.assertEqual(year.y_axis_min, 0)
         self.assertEqual(year.y_axis_max, 100)
         self.assertEqual(year.guide_lines, [90, 75, 50])

@@ -7,7 +7,7 @@ Shared between main.py, google_health_client.py, and mock_data.py.
 
 from __future__ import annotations
 from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import Optional, List, Dict
 from datetime import datetime
 
 
@@ -161,6 +161,7 @@ class SleepConsistencyScoreResponse(BaseModel):
     total_days: int
     previous_average_score: Optional[float] = None
     change_percentage_points: Optional[float] = None
+    band_counts: Dict[str, int] = Field(default_factory=dict)
     y_axis_min: int = 0
     y_axis_max: int = 100
     guide_lines: List[int] = Field(default_factory=lambda: [90, 75, 50])

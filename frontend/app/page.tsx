@@ -147,10 +147,11 @@ export default function DashboardPage() {
           <div className={styles.dialColCenter}>
             <CircleDial
               label="RECOVERY"
-              value={recovery.score}
+              value={recovery.score ?? 0}
               maxValue={100}
               color={recoveryColor}
               unit="%"
+              displayText={recovery.score == null ? '—' : undefined}
               size={116}
               onClick={() => router.push('/recovery')}
               showChevron
