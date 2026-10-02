@@ -26,13 +26,15 @@ export interface StrainData {
   workouts: WorkoutDetail[];
   max_hr: number;
   avg_hr: number | null;
+  age_used: number | null;
+  age_is_default: boolean;
   is_calibrating: boolean;
   is_mock: boolean;
 }
 
 export interface RecoveryData {
   score: number | null;
-  status: 'green' | 'yellow' | 'red' | 'calibrating';
+  status: 'green' | 'yellow' | 'red' | 'signals' | 'calibrating';
   hrv_component: number | null;
   rhr_component: number | null;
   sleep_component: number | null;
@@ -42,6 +44,11 @@ export interface RecoveryData {
   today_rhr: number | null;
   hrv_baseline: number | null;
   rhr_baseline: number | null;
+  hrv_reference_count: number;
+  rhr_reference_count: number;
+  rhr_method: string | null;
+  sleep_hours: number | null;
+  sleep_efficiency_pct: number | null;
   training_recommendation: string;
   is_calibrating: boolean;
   is_mock: boolean;

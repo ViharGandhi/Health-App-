@@ -49,6 +49,8 @@ class StrainResponse(BaseModel):
     workouts: List[WorkoutDetail] = []
     max_hr: float
     avg_hr: Optional[float] = None
+    age_used: Optional[int] = None
+    age_is_default: bool = False
     is_calibrating: bool = False
     is_mock: bool = True
 
@@ -58,8 +60,8 @@ class StrainResponse(BaseModel):
 # ──────────────────────────────────────────────────────────────────────────────
 
 class RecoveryResponse(BaseModel):
-    score: Optional[float] = Field(description="Experimental recovery score 0–100, absent while calibrating")
-    status: str = Field(description="'green' | 'yellow' | 'red' | 'calibrating'")
+    score: Optional[float] = Field(description="Demo-only recovery score 0–100; absent for connected data")
+    status: str = Field(description="'green' | 'yellow' | 'red' (demo) | 'signals' | 'calibrating' (connected)")
     hrv_component: Optional[float] = None
     rhr_component: Optional[float] = None
     sleep_component: Optional[float] = None
@@ -69,6 +71,11 @@ class RecoveryResponse(BaseModel):
     today_rhr: Optional[float] = None       # bpm
     hrv_baseline: Optional[float] = None    # ms
     rhr_baseline: Optional[float] = None    # bpm
+    hrv_reference_count: int = 0
+    rhr_reference_count: int = 0
+    rhr_method: Optional[str] = None
+    sleep_hours: Optional[float] = None
+    sleep_efficiency_pct: Optional[float] = None
     training_recommendation: str
     is_calibrating: bool = False
     is_mock: bool = True

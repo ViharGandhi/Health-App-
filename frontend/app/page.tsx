@@ -72,7 +72,7 @@ export default function DashboardPage() {
   }
 
   const { recovery, sleep, strain } = data;
-  const recoveryColor = RECOVERY_COLOR[recovery.status] ?? '#8E95A2';
+  const recoveryColor = data.is_mock ? RECOVERY_COLOR[recovery.status] ?? '#8E95A2' : '#67AEE6';
   const sleepColor = '#7BA1BB';
   const strainColor = '#0093E7';
 
@@ -98,13 +98,11 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className={styles.datePill}>
-            <span className={styles.pillText}>TODAY</span>
-          </div>
+          <div className={styles.datePill}><span className={styles.pillText}>TODAY</span></div>
 
-          <div className={styles.headerRight}>
+          <button className={styles.headerRight} type="button" onClick={() => router.push('/connect')} aria-label="Connection settings">
             <span className={styles.batteryPct}>{data.is_mock ? 'DEMO' : 'FITBIT'}</span>
-          </div>
+          </button>
         </header>
 
         {/* -- Ojas name -------------------------------- */}
@@ -125,6 +123,7 @@ export default function DashboardPage() {
               size={94}
               onClick={() => router.push('/sleep')}
               showChevron
+              displayText={!data.is_mock && sleep.total_sleep_hours <= 0 ? '—' : undefined}
             />
           </div>
 
@@ -140,7 +139,7 @@ export default function DashboardPage() {
               onClick={() => router.push('/recovery')}
               showChevron
               isPrimary
-              displayText={recovery.is_calibrating ? '—' : undefined}
+              displayText={recovery.score === null ? '—' : undefined}
             />
           </div>
 
@@ -154,6 +153,7 @@ export default function DashboardPage() {
               size={94}
               onClick={() => router.push('/strain')}
               showChevron
+              displayText={!data.is_mock ? '—' : undefined}
             />
           </div>
         </section>
@@ -171,7 +171,7 @@ export default function DashboardPage() {
             <div className={styles.monitorBody}>
               <div className={styles.monitorTextStack}>
                 <span className={styles.monitorHighlight}>EXPLORE VITALS</span>
-                <span className={styles.monitorSubtext}>Your measured trends</span>
+                <span className={styles.monitorSubtext}>{data.is_mock ? 'Sample trends' : 'Your measured trends'}</span>
               </div>
             </div>
           </div>
@@ -198,12 +198,12 @@ export default function DashboardPage() {
           <h2 className={styles.myDayTitle}>My Day</h2>
 
           {/* Daily Outlook Banner */}
-          <div className={styles.outlookBanner}>
+          <div className={styles.outlookBanner} role="button" tabIndex={0} onClick={() => router.push('/recovery')} onKeyDown={(event) => { if (event.key === 'Enter') router.push('/recovery'); }}>
             <div className={styles.outlookLeft}>
               <div className={styles.whoopIconPill}>O</div>
               <div className={styles.outlookContent}>
                 <span className={styles.sunIcon}>☼</span>
-                <span className={styles.outlookLabel}>Your Daily Outlook</span>
+                <span className={styles.outlookLabel}>Your Recovery Signals</span>
               </div>
             </div>
             <span className={styles.outlookChevron}>›</span>
@@ -222,13 +222,13 @@ export default function DashboardPage() {
             </div>
 
             {/* Sleep Row */}
-            <div className={styles.activityItem}>
+            <div className={styles.activityItem} role="button" tabIndex={0} onClick={() => router.push('/sleep')} onKeyDown={(event) => { if (event.key === 'Enter') router.push('/sleep'); }}>
               <div className={styles.activityLeftPart}>
                 <div className={styles.sleepBadge}>
                   <span className={styles.moonIcon}>☽</span>
-                  <span className={styles.sleepTimeText}>{sleepHours}:{sleepMinutes}</span>
+                  <span className={styles.sleepTimeText}>{!data.is_mock && sleep.total_sleep_hours <= 0 ? '—' : `${sleepHours}:${sleepMinutes}`}</span>
                 </div>
-                <span className={styles.activityName}>SLEEP</span>
+                <span className={styles.activityName}>{!data.is_mock && sleep.total_sleep_hours <= 0 ? 'NO SLEEP RECORD' : 'SLEEP'}</span>
               </div>
 
               <div className={styles.activityTimeline}>
@@ -242,26 +242,12 @@ export default function DashboardPage() {
 
             {/* Action Buttons */}
             <div className={styles.actionButtonsRow}>
-              <button className={styles.whoopBtn}>
-                <span className={styles.plusSign}>+</span>
-                <span>ADD ACTIVITY</span>
-              </button>
-              <button className={styles.whoopBtn}>
-                <span className={styles.timerIcon}>⏱</span>
-                <span>START ACTIVITY</span>
-              </button>
+              <button className={styles.whoopBtn} onClick={() => router.push('/strain')}>VIEW ACTIVITIES</button>
             </div>
           </div>
         </section>
       </div>
 
-      {/* Floating WHOOP Action Button */}
-      <div className={styles.floatingActionBtn}>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#121417" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19" />
-          <line x1="5" y1="12" x2="19" y2="12" />
-        </svg>
-      </div>
     </div>
   );
 }

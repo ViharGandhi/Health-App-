@@ -19,6 +19,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
+import MockBanner from '@/components/MockBanner';
 import type { SleepData } from '@/lib/types';
 import styles from './page.module.css';
 
@@ -42,6 +43,7 @@ export default function SleepPage() {
   const router = useRouter();
   const [data, setData] = useState<SleepData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
     api.getSleep()
@@ -59,11 +61,11 @@ export default function SleepPage() {
   }
 
   // Key metrics
+  const noRecord = !data.is_mock && data.total_sleep_hours <= 0;
   const sleepScore = Math.round(data.score);
-  const hoursVsNeededPct = Math.min(100, Math.round((data.total_sleep_hours / data.sleep_need_hours) * 100));
+  const hoursVsNeededPct = data.sleep_need_hours > 0 ? Math.min(100, Math.round((data.total_sleep_hours / data.sleep_need_hours) * 100)) : 0;
   const consistencyMinutes = data.consistency_minutes;
   const efficiencyPct = data.efficiency_pct == null ? null : Math.round(data.efficiency_pct);
-  const sleepStressPct = 0; // Optimal (0% high stress)
 
   // Circular gauge calculations
   const dialSize = 220;
@@ -81,8 +83,17 @@ export default function SleepPage() {
     const m = Math.round(mins % 60);
     return h > 0 ? `${h}h ${m}m` : `${m}m`;
   };
+  const stageRows = [
+    { label: 'AWAKE', minutes: stages.awake_minutes, color: '#E2E6EE' },
+    { label: 'LIGHT', minutes: stages.core_minutes, color: '#7BA1BB' },
+    { label: 'DEEP', minutes: stages.deep_minutes, color: '#67AEE6' },
+    { label: 'REM', minutes: stages.rem_minutes, color: '#9B8AFB' },
+  ];
+  const stagePeriod = stageRows.reduce((total, stage) => total + stage.minutes, 0);
 
   return (
+    <>
+    <MockBanner isMock={data.is_mock} />
     <div className={styles.pageWrapper}>
       <div className={styles.container}>
         {/* -- Top Navigation Bar -- */}
@@ -95,7 +106,7 @@ export default function SleepPage() {
 
           <span className={styles.navTitle}>TODAY</span>
 
-          <button className={styles.navInfoBtn} aria-label="Info">
+          <button className={styles.navInfoBtn} aria-label="About sleep metrics" aria-expanded={showInfo} onClick={() => setShowInfo(!showInfo)}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8E95A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="16" x2="12" y2="12" />
@@ -103,6 +114,7 @@ export default function SleepPage() {
             </svg>
           </button>
         </header>
+        {showInfo && <p className={styles.hrvNote}>Sleep time and stages come from Fitbit summaries. Sleep consistency and efficiency use recorded nights. The sleep score remains an experimental app calculation; stages are wearable estimates.</p>}
 
         {/* -- Hero Circular Sleep Dial (NO WHOOP branding) -- */}
         <section className={styles.dialSection} aria-label="Sleep Performance Gauge">
@@ -138,15 +150,15 @@ export default function SleepPage() {
             {/* Inner Content: Score, SLEEP PERFORMANCE, and segment bar */}
             <div className={styles.dialInner}>
               <div className={styles.scoreRow}>
-                <span className={styles.scoreNumber}>{sleepScore}</span>
-                <span className={styles.scoreUnit}>%</span>
+                <span className={styles.scoreNumber}>{noRecord ? '—' : sleepScore}</span>
+                {!noRecord && <span className={styles.scoreUnit}>%</span>}
               </div>
               <div className={styles.scoreLabel}>
                 <span>SLEEP</span>
                 <span>PERFORMANCE</span>
               </div>
               <div className={styles.dialSegments}>
-                <SegmentIndicator value={sleepScore} />
+              {!noRecord && <SegmentIndicator value={sleepScore} />}
               </div>
             </div>
           </div>
@@ -154,6 +166,8 @@ export default function SleepPage() {
           {/* Caret pointer connecting dial to card */}
           <div className={styles.cardCaret} />
         </section>
+
+        {!data.is_mock && !noRecord && <p className={styles.hrvNote}>Experimental app sleep score. Fitbit sleep stages are estimates.</p>}
 
         {/* -- Main Breakdown Card -- */}
         <section className={styles.breakdownCard}>
@@ -177,6 +191,7 @@ export default function SleepPage() {
           <div
             className={styles.metricRow}
             onClick={() => router.push('/sleep/consistency')}
+            onKeyDown={(event) => { if (event.key === 'Enter') router.push('/sleep/consistency'); }}
             role="button"
             tabIndex={0}
             style={{ cursor: 'pointer' }}
@@ -209,6 +224,7 @@ export default function SleepPage() {
           <div
             className={styles.metricRow}
             onClick={() => router.push('/sleep/efficiency')}
+            onKeyDown={(event) => { if (event.key === 'Enter') router.push('/sleep/efficiency'); }}
             role="button"
             tabIndex={0}
             style={{ cursor: 'pointer' }}
@@ -236,10 +252,11 @@ export default function SleepPage() {
           {/* Row 4: HIGH SLEEP STRESS (Clickable -> Trend View) */}
           <div
             className={styles.metricRow}
-            onClick={() => router.push('/sleep/stress')}
-            role="button"
-            tabIndex={0}
-            style={{ cursor: 'pointer' }}
+            onClick={data.is_mock ? () => router.push('/sleep/stress') : undefined}
+            onKeyDown={data.is_mock ? (event) => { if (event.key === 'Enter') router.push('/sleep/stress'); } : undefined}
+            role={data.is_mock ? 'button' : undefined}
+            tabIndex={data.is_mock ? 0 : undefined}
+            style={{ cursor: data.is_mock ? 'pointer' : 'default' }}
           >
             <div className={styles.metricLeft}>
               <div className={styles.iconCircle}>
@@ -250,8 +267,7 @@ export default function SleepPage() {
               <span className={styles.metricTitle}>HIGH SLEEP STRESS</span>
             </div>
             <div className={styles.metricRight}>
-              <SegmentIndicator value={sleepStressPct} isInverse />
-              <span className={styles.metricValue}>{sleepStressPct}%</span>
+              <span className={styles.metricValue}>{data.is_mock ? 'SAMPLE' : '—'}</span>
               <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 1.5L4.5 5L1 8.5" />
               </svg>
@@ -281,35 +297,51 @@ export default function SleepPage() {
           </div>
         </section>
 
-        {/* -- Last Night's Sleep Section (Exact WHOOP UI) -- */}
-        <section className={styles.nightSection}>
+        {!data.is_mock && <section className={styles.nightSection}>
+          <div className={styles.nightSectionHeader}><div className={styles.nightTitleBlock}><h2 className={styles.nightMainTitle}>Last Night&apos;s Sleep</h2><span className={styles.nightSubMuted}>Fitbit sleep summary</span></div></div>
+          <div className={styles.nightCard}>
+            {noRecord ? <p className={styles.hrvNote}>No sleep session was returned for this date.</p> : <>
+              <div className={styles.hoursScoreBlock}><div className={styles.hoursScoreMain}><span className={styles.hoursScoreValue}>{formatMins(stages.total_minutes)}</span></div><span className={styles.hoursScoreBaseline}>TIME ASLEEP</span></div>
+              <p className={styles.hrvNote}>An overnight heart-rate trace is not included in this sleep response.</p>
+              <div className={styles.stagesList}>{stageRows.map((stage) => <div className={styles.stageItem} key={stage.label}>
+                <div className={styles.stageTopRow}><span className={styles.stageName}>{stage.label}</span><span className={styles.stageDurationVal}>{formatMins(stage.minutes)}</span></div>
+                <div className={styles.stageTrackBar}><div className={styles.stageFill} style={{ width: `${stagePeriod ? stage.minutes / stagePeriod * 100 : 0}%`, background: stage.color }} /></div>
+              </div>)}</div>
+              <div className={styles.restorativeRow}><span className={styles.restorativeLabel}>DEEP + REM</span><span className={styles.restorativeValue}>{formatMins(stages.deep_minutes + stages.rem_minutes)}</span></div>
+              <p className={styles.hrvNote}>Sleep stages are device estimates and can differ from laboratory sleep staging.</p>
+            </>}
+          </div>
+        </section>}
+
+        {/* Illustrative sample detail stays in demo mode only. */}
+        {data.is_mock && <section className={styles.nightSection}>
           <div className={styles.nightSectionHeader}>
             <div className={styles.nightTitleBlock}>
               <h2 className={styles.nightMainTitle}>Last Night's Sleep</h2>
               <div className={styles.nightSubtitle}>
                 <span className={styles.nightSubBold}>Today</span>
-                <span className={styles.nightSubMuted}> vs. prior 30 days</span>
+                <span className={styles.nightSubMuted}> · illustrative sample</span>
               </div>
             </div>
-            <button className={styles.nightEditBtn} aria-label="Edit sleep times">
-              <span>EDIT</span>
+            <span className={styles.nightEditBtn}>
+              <span>SAMPLE</span>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
               </svg>
-            </button>
+            </span>
           </div>
 
           <div className={styles.nightCard}>
             {/* Top: HOURS OF SLEEP */}
             <div className={styles.hoursHeaderRow}>
               <span className={styles.hoursLabel}>HOURS OF SLEEP</span>
-              <button className={styles.hoursInfoBtn} aria-label="Hours of sleep info">
+              <span className={styles.hoursInfoBtn}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8E95A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <line x1="12" y1="16" x2="12" y2="12" />
                   <line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
-              </button>
+              </span>
             </div>
 
             <div className={styles.hoursScoreBlock}>
@@ -473,9 +505,10 @@ export default function SleepPage() {
               </div>
             </div>
           </div>
-        </section>
+        </section>}
 
       </div>
     </div>
+    </>
   );
 }

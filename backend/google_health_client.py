@@ -103,7 +103,7 @@ class GoogleHealthClient:
                 dated.append((_google_date(metric["date"]), float(value)))
         return [value for _, value in sorted(dated)]
 
-    async def get_health_history(self, start: date, end: date) -> dict[str, list[dict]]:
+    async def get_health_history(self, start: date, end: date, metrics: tuple[str, ...] | None = None) -> dict[str, list[dict]]:
         """Fetch dated Fitbit Air summaries; optional API fields stay absent."""
         specs = {
             "hrv": ("daily-heart-rate-variability", "dailyHeartRateVariability", "averageHeartRateVariabilityMilliseconds"),
@@ -118,6 +118,8 @@ class GoogleHealthClient:
         history: dict[str, list[dict]] = {}
         fetched: dict[str, list[dict]] = {}
         for key, (data_type, field, value_field) in specs.items():
+            if metrics is not None and key not in metrics:
+                continue
             if data_type not in fetched:
                 fetched[data_type] = await self._points(data_type, _day_filter(f"{field}.date", start, end))
             dated = {}
@@ -210,8 +212,9 @@ class GoogleHealthClient:
         records = await self._sleep_records(target_date, target_date)
         return records[0] if records else None
 
-    async def get_sleep_history_nights(self, days: int = 4) -> list[dict]:
-        records = await self._sleep_records(date.today() - timedelta(days=days - 1), date.today())
+    async def get_sleep_history_nights(self, days: int = 4, end_date: date | None = None) -> list[dict]:
+        end = end_date or date.today()
+        records = await self._sleep_records(end - timedelta(days=days - 1), end)
         return [{"date": r["date"], "bed_time": r["sleep_start_time"],
                  "wake_time": r["sleep_end_time"]} for r in records]
 

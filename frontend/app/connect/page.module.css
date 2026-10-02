@@ -22,7 +22,7 @@
 }
 
 .heroIcon {
-  font-size: 60px;
+  color: #FFFFFF;
   margin-bottom: 20px;
 }
 
@@ -86,6 +86,7 @@
 
 /* Connect button */
 .connectBtn { margin-bottom: 16px; font-size: 16px; }
+.connectBtn:disabled { background: #292929; color: #A0A0A0; box-shadow: none; cursor: default; }
 
 .note {
   font-size: 12px;

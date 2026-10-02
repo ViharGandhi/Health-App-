@@ -21,8 +21,10 @@
  * - Full interactive hover & scrubbing
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import MockBanner from '@/components/MockBanner';
+import { api } from '@/lib/api';
 import styles from './page.module.css';
 
 interface StressDay {
@@ -73,8 +75,13 @@ const MONTH_DAYS: StressDay[] = [
 
 export default function SleepStressTrendPage() {
   const router = useRouter();
-  const [timeframe, setTimeframe] = useState<'W' | 'M' | '6M'>('M');
+  const [timeframe, setTimeframe] = useState<'W' | 'M'>('M');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [connected, setConnected] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    api.getAuthStatus().then((status) => setConnected(status.connected)).catch(() => setConnected(true));
+  }, []);
 
   // Filter days based on timeframe
   const days = timeframe === 'W'
@@ -85,7 +92,7 @@ export default function SleepStressTrendPage() {
     ? 'APR 9 - APR 15, 26'
     : timeframe === 'M'
     ? 'MAR 17 - APR 15, 26'
-    : 'NOV 25 - APR 15, 26';
+    : 'MAR 17 - APR 15, 26';
 
   const avgHighStress = timeframe === 'W' ? '0:03' : '0:04';
   const deltaText = timeframe === 'W' ? '▲ 150% vs. prior week' : '▲ 300% vs. prior month';
@@ -111,7 +118,12 @@ export default function SleepStressTrendPage() {
     ? [1, 8, 15, 22, 29] // Mar 18, Mar 25, Apr 1, Apr 8, Apr 15
     : [0, 1, 2, 3, 4, 5, 6];
 
+  if (connected === null) return <div className="page"><div className="skeleton" style={{ height: 240, borderRadius: 18, marginTop: 24 }} /></div>;
+  if (connected) return <div className="page" style={{ paddingTop: 24 }}><button className="btn" onClick={() => router.push('/sleep')}>← SLEEP</button><div className="card" style={{ marginTop: 24, padding: 24 }}><h1>Sleep stress unavailable</h1><p className="text-secondary" style={{ marginTop: 12 }}>Ojas does not calculate overnight stress zones from Fitbit Air data. Sleep duration, stages, efficiency and consistency remain available in Sleep.</p></div></div>;
+
   return (
+    <>
+    <MockBanner isMock />
     <div className={styles.pageWrapper}>
       <div className={styles.container}>
         {/* -- Top Navigation Bar -- */}
@@ -172,7 +184,7 @@ export default function SleepStressTrendPage() {
           {/* Right: Timeframe toggle + Date range */}
           <div className={styles.controlsBlock}>
             <div className={styles.timeframeToggle}>
-              {(['W', 'M', '6M'] as const).map((t) => (
+              {(['W', 'M'] as const).map((t) => (
                 <button
                   key={t}
                   className={`${styles.toggleBtn} ${timeframe === t ? styles.toggleActive : ''}`}
@@ -184,17 +196,7 @@ export default function SleepStressTrendPage() {
             </div>
 
             <div className={styles.dateNavRow}>
-              <button className={styles.dateArrowBtn} aria-label="Previous range">
-                <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 1.5L1.5 5L5 8.5" />
-                </svg>
-              </button>
               <span className={styles.dateRangeText}>{rangeLabel}</span>
-              <button className={styles.dateArrowBtn} aria-label="Next range">
-                <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M1 1.5L4.5 5L1 8.5" />
-                </svg>
-              </button>
             </div>
           </div>
         </div>
@@ -335,25 +337,9 @@ export default function SleepStressTrendPage() {
           <span>Average does not include today (Apr. 15)</span>
         </div>
 
-        {/* -- Learn More / Resources Section -- */}
-        <section className={styles.learnMoreSection}>
-          <div className={styles.learnMoreHeader}>
-            <span className={styles.learnMoreTitle}>LEARN MORE</span>
-            <span className={styles.learnMoreViewAll}>VIEW ALL</span>
-          </div>
-
-          <div className={styles.podcastCardsRow}>
-            <div className={styles.podcastCard}>
-              <div className={styles.podcastBadge}>PODCAST</div>
-              <span className={styles.podcastTitle}>The Science of Sleep Stress & Recovery</span>
-            </div>
-            <div className={styles.podcastCard}>
-              <div className={styles.podcastBadge}>PODCAST</div>
-              <span className={styles.podcastTitle}>Managing Autonomic Nervous System Elevation</span>
-            </div>
-          </div>
-        </section>
+        <p className={styles.insightText}>Illustrative sample only. These zones are not calculated from Fitbit measurements.</p>
       </div>
     </div>
+    </>
   );
 }

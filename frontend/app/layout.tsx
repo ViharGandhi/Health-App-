@@ -5,7 +5,7 @@ import NavBar from '@/components/NavBar';
 export const metadata: Metadata = {
   title: 'Ojas — Health and Recovery',
   description: 'Personal fitness tracking with Recovery, Sleep Score, and Strain — powered by your data.',
-  icons: { icon: '/favicon.ico' },
+  appleWebApp: { capable: true, title: 'Ojas', statusBarStyle: 'black-translucent' },
 };
 
 export const viewport: Viewport = {

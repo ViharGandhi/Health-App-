@@ -9,9 +9,12 @@ import type { DashboardData, RecoveryData, SleepData, StrainData, AuthStatus, He
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
 async function apiFetch<T>(path: string): Promise<T> {
+  const today = new Date();
+  const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const age = window.localStorage.getItem('ojas_age');
   const res = await fetch(`${BACKEND_URL}${path}`, {
     credentials: 'include', // send session cookie
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-User-Date': localDate, ...(age ? { 'X-User-Age': age } : {}) },
     cache: 'no-store',
   });
   if (!res.ok) {
@@ -25,7 +28,7 @@ export const api = {
   getDashboard: (): Promise<DashboardData> =>
     apiFetch<DashboardData>('/api/dashboard'),
 
-  /** Recovery score + detail */
+  /** Recovery signals, with a prototype score in demo mode */
   getRecovery: (): Promise<RecoveryData> =>
     apiFetch<RecoveryData>('/api/recovery'),
 

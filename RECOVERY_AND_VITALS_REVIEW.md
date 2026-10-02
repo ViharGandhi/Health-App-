@@ -1,6 +1,6 @@
 # Recovery and Fitbit Air vitals review
 
-This review uses peer-reviewed work for physiological interpretation. Google Health's API documentation is used only to identify data fields and units. The current Recovery formula remains unchanged pending review.
+This review uses peer-reviewed work for physiological interpretation. Google Health's API documentation is used only to identify data fields and units. The experimental Recovery formula remains in demo mode only; connected data do not produce a Recovery score.
 
 ## What the device supplies
 
@@ -18,6 +18,8 @@ This review uses peer-reviewed work for physiological interpretation. Google Hea
 
 The [Fitbit Air compatibility list](https://developers.google.com/health/data-types/device-compatibility) includes these types. The [Google Health data-point schema](https://developers.google.com/health/reference/rest/v4/users.dataTypes.dataPoints) specifies the fields and units. Optional fields are omitted rather than imputed. No Fitbit Air validation study was found in this review, so results from other Fitbit models cannot establish its accuracy.
 
+Live-device verification remains pending. The connected endpoints currently select “today” from the server's local date, while Google dates daily summaries in the user's timezone; a deployed server in another timezone can therefore select the adjacent device day near midnight.
+
 ## Interpretation supported by research
 
 - **HRV:** Repeated RMSSD readings under comparable conditions are more useful than comparing one person's absolute number with another's. HRV-guided training studies use different recording and decision methods, and do not validate a universal daily readiness percentage. [HRV-guided training methodological review and meta-analysis](https://pmc.ncbi.nlm.nih.gov/articles/PMC8507742/).
@@ -30,12 +32,12 @@ The Health screen therefore shows measured values, their dates, gaps, and a medi
 
 ## Recovery formula decision before changing code
 
-The existing `recovery.py` score weights HRV/RHR/sleep/previous-day strain at 40/25/25/10. Those weights and its 0–100 mapping have not been validated for Fitbit Air. Connected mode now requires today's HRV, RHR and sleep plus at least seven prior HRV and seven prior RHR readings within 14 days. It uses the median of those prior readings as the personal reference and returns `score: null` with `status: calibrating` until the inputs are present. This is a display gate and reference correction, **not validation of the formula**. The formula and its score cutoffs remain experimental; the interface shows HRV/RHR trends separately from historical Recovery scores.
+The existing `recovery.py` score weights HRV/RHR/sleep/previous-day strain at 40/25/25/10. Those weights and its 0–100 mapping have not been validated for Fitbit Air. The connected Recovery view always returns `score: null`. It shows today's HRV and RHR separately, with a prior-only 14-day median after at least seven readings of each. The RHR median uses only readings whose reported calculation method matches today's; absent metadata matches absent metadata, but cannot prove identical measurement conditions. Sleep duration and efficiency appear as separate context. `status: calibrating` means one or both personal comparisons are unavailable; `status: signals` means both are available. The 14-day window and seven-reading minimum are provisional display rules, not validated readiness thresholds. The demo score and its cutoffs remain experimental.
 
-**Proposed calculation for review; not implemented:**
+**Further calculation proposal for review; not implemented:**
 
 1. Keep daily Fitbit RMSSD, deep-sleep RMSSD, and daily RHR distinct. Require comparable dates and a prior-only reference. Use `ln(RMSSD)` for a signal trend because HRV is skewed; present the measured value in ms. The choice of a 14-day window and seven readings is a provisional product rule, not a research-derived optimum. [HRV-guided training methodological review](https://pmc.ncbi.nlm.nih.gov/articles/PMC8507742/).
-2. Display each signal's signed deviation from its prior median: `ΔHRV = ln(today RMSSD) − median(ln(prior RMSSD))` and `ΔRHR = today RHR − median(prior RHR)`. Mark unavailable inputs, measurement dates, and the count behind each reference. Do not equate a median with a clinical normal range. [RHR longitudinal cohort](https://pubmed.ncbi.nlm.nih.gov/32023264/).
+2. Consider log RMSSD for a future longitudinal model. The current interface displays a descriptive percentage difference from the prior RMSSD median and a bpm difference from the prior RHR median, plus the count behind each reference. Neither is a clinical normal range. [RHR longitudinal cohort](https://pubmed.ncbi.nlm.nih.gov/32023264/).
 3. Treat sleep duration and efficiency as separate context; keep the existing sleep-score formula untouched. Add an optional daily self-report of fatigue or perceived recovery before offering training advice: a systematic review found subjective well-being measures more responsive to training load than the studied objective measures. [Saw et al., 2016](https://pmc.ncbi.nlm.nih.gov/articles/PMC4789708/).
 4. Do not assign new weighted points or green/yellow/red thresholds from these studies. First define a measurable target, such as next-day perceived recovery plus completed training quality. Compare candidate features against that target on held-out Fitbit Air data; assess discrimination, calibration, missingness and subgroup/device error. Only then fit and publish a 0–100 mapping. The literature does not establish a WHOOP-equivalent formula or universal cutoffs. [HRV-guided training review](https://pmc.ncbi.nlm.nih.gov/articles/PMC8507742/); [wearable HRV reliability tutorial](https://pmc.ncbi.nlm.nih.gov/articles/PMC10346338/).
 

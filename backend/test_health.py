@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 
 from google_health_client import GoogleHealthClient
 from health_trends import build_health_response, METRICS
-from main import app, _compute_real_recovery
+from main import app, _compute_real_recovery, _compute_real_strain
 from mock_data import get_mock_health
 
 
@@ -40,15 +40,35 @@ class HealthTests(unittest.TestCase):
                     "date": {"year": 2026, "month": 10, "day": 1},
                     "nightlyTemperatureCelsius": 32.6,
                 }}]
+            if data_type == "daily-resting-heart-rate":
+                return [{"dailyRestingHeartRate": {
+                    "date": {"year": 2026, "month": 10, "day": 1},
+                    "beatsPerMinute": "55",
+                    "dailyRestingHeartRateMetadata": {"calculationMethod": "WITH_SLEEP"},
+                }}]
             return []
 
         client._points = points
         result = asyncio.run(client.get_health_history(date(2026, 9, 30), date(2026, 10, 1)))
         self.assertEqual(result["spo2"], [{"date": "2026-10-01", "value": 97.2, "estimated": None, "method": None}])
         self.assertEqual(result["skin_temperature"][0]["value"], 32.6)
+        self.assertEqual(result["rhr"][0]["method"], "WITH_SLEEP")
         self.assertEqual(result["hrv"], [])
         self.assertEqual(len(calls), 6)
         self.assertIn('dailyOxygenSaturation.date >= "2026-09-30"', calls[2][1])
+
+    def test_recovery_history_fetches_only_hrv_and_rhr(self):
+        client = GoogleHealthClient("token")
+        calls = []
+
+        async def points(data_type, _filter_expr):
+            calls.append(data_type)
+            return []
+
+        client._points = points
+        result = asyncio.run(client.get_health_history(date(2026, 9, 17), date(2026, 10, 1), ("hrv", "rhr")))
+        self.assertEqual(set(result), {"hrv", "rhr"})
+        self.assertEqual(calls, ["daily-heart-rate-variability", "daily-resting-heart-rate"])
 
     def test_health_endpoint_aligns_missing_days_and_bins_heart_rate(self):
         today = date.today().isoformat()
@@ -97,32 +117,98 @@ class HealthTests(unittest.TestCase):
 
     def test_connected_recovery_hides_score_without_personal_history(self):
         client = type("Client", (), {
-            "get_daily_hrv": AsyncMock(return_value=44.0),
-            "get_resting_heart_rate": AsyncMock(return_value=55.0),
-            "get_health_history": AsyncMock(return_value={"hrv": [], "rhr": []}),
+            "get_health_history": AsyncMock(return_value={
+                "hrv": [{"date": "2026-10-01", "value": 44.0}],
+                "rhr": [{"date": "2026-10-01", "value": 55.0, "method": "WITH_SLEEP"}],
+            }),
         })()
-        result = asyncio.run(_compute_real_recovery(client, date(2026, 10, 1), 80.0, 10.0))
+        result = asyncio.run(_compute_real_recovery(client, date(2026, 10, 1)))
         self.assertTrue(result.is_calibrating)
         self.assertIsNone(result.score)
         self.assertIsNone(result.hrv_component)
         self.assertEqual(result.status, "calibrating")
+        self.assertEqual(result.hrv_reference_count, 0)
+        self.assertEqual(result.rhr_reference_count, 0)
 
     def test_connected_recovery_uses_prior_device_medians(self):
         history = {
-            "hrv": [{"value": value} for value in [38, 39, 40, 41, 42, 43, 44]],
-            "rhr": [{"value": value} for value in [52, 53, 54, 55, 56, 57, 58]],
+            "hrv": [{"date": f"2026-09-{day}", "value": value} for day, value in zip(range(24, 31), [38, 39, 40, 41, 42, 43, 44])]
+            + [{"date": "2026-10-01", "value": 46.0}],
+            "rhr": [{"date": f"2026-09-{day}", "value": value, "method": "WITH_SLEEP"} for day, value in zip(range(24, 31), [52, 53, 54, 55, 56, 57, 58])]
+            + [{"date": "2026-10-01", "value": 52.0, "method": "WITH_SLEEP"}],
         }
         client = type("Client", (), {
-            "get_daily_hrv": AsyncMock(return_value=46.0),
-            "get_resting_heart_rate": AsyncMock(return_value=52.0),
             "get_health_history": AsyncMock(return_value=history),
         })()
-        result = asyncio.run(_compute_real_recovery(client, date(2026, 10, 1), 80.0, 10.0))
+        result = asyncio.run(_compute_real_recovery(client, date(2026, 10, 1), 7.5, 92.0))
         self.assertFalse(result.is_calibrating)
-        self.assertIsNotNone(result.score)
+        self.assertIsNone(result.score)
+        self.assertEqual(result.status, "signals")
+        self.assertIsNone(result.hrv_component)
         self.assertEqual(result.hrv_baseline, 41.0)
         self.assertEqual(result.rhr_baseline, 55.0)
-        client.get_health_history.assert_awaited_once_with(date(2026, 9, 17), date(2026, 9, 30))
+        self.assertEqual(result.hrv_reference_count, 7)
+        self.assertEqual(result.rhr_reference_count, 7)
+        self.assertEqual(result.rhr_method, "WITH_SLEEP")
+        self.assertEqual(result.sleep_hours, 7.5)
+        self.assertEqual(result.sleep_efficiency_pct, 92.0)
+        client.get_health_history.assert_awaited_once_with(date(2026, 9, 17), date(2026, 10, 1), ("hrv", "rhr"))
+
+    def test_connected_recovery_excludes_different_rhr_methods(self):
+        history = {
+            "hrv": [{"date": "2026-10-01", "value": 46.0}],
+            "rhr": [{"date": "2026-09-30", "value": 52.0, "method": "ONLY_WITH_AWAKE_DATA"},
+                    {"date": "2026-10-01", "value": 55.0, "method": "WITH_SLEEP"}],
+        }
+        client = type("Client", (), {"get_health_history": AsyncMock(return_value=history)})()
+        result = asyncio.run(_compute_real_recovery(client, date(2026, 10, 1)))
+        self.assertEqual(result.rhr_reference_count, 0)
+        self.assertIsNone(result.rhr_baseline)
+        self.assertEqual(result.rhr_method, "WITH_SLEEP")
+
+    def test_connected_recovery_endpoint_returns_sleep_context_without_score(self):
+        today = date.today().isoformat()
+        history = {
+            "hrv": [{"date": today, "value": 44.0}],
+            "rhr": [{"date": today, "value": 55.0, "method": "WITH_SLEEP"}],
+        }
+        client = type("Client", (), {
+            "get_health_history": AsyncMock(return_value=history),
+            "get_sleep_session": AsyncMock(return_value={"total_duration": 27000, "in_bed_duration": 28800}),
+        })()
+        with patch("main._get_token", new=AsyncMock(return_value="token")), patch("main.GoogleHealthClient", return_value=client):
+            response = TestClient(app).get("/api/recovery")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIsNone(data["score"])
+        self.assertEqual(data["sleep_hours"], 7.5)
+        self.assertEqual(data["sleep_efficiency_pct"], 93.8)
+        self.assertEqual(data["rhr_method"], "WITH_SLEEP")
+
+    def test_connected_recovery_uses_client_calendar_day(self):
+        client = type("Client", (), {
+            "get_health_history": AsyncMock(return_value={"hrv": [], "rhr": []}),
+            "get_sleep_session": AsyncMock(return_value=None),
+        })()
+        with patch("main._get_token", new=AsyncMock(return_value="token")), patch("main.GoogleHealthClient", return_value=client):
+            response = TestClient(app).get("/api/recovery", headers={"X-User-Date": "2026-09-30"})
+            invalid = TestClient(app).get("/api/recovery", headers={"X-User-Date": "not-a-date"})
+        self.assertEqual(response.status_code, 200)
+        client.get_sleep_session.assert_awaited_once_with(date(2026, 9, 30))
+        client.get_health_history.assert_awaited_once_with(date(2026, 9, 16), date(2026, 9, 30), ("hrv", "rhr"))
+        self.assertEqual(invalid.status_code, 400)
+
+    def test_connected_strain_uses_supplied_age_for_zone_reference(self):
+        client = type("Client", (), {
+            "get_intraday_heart_rate": AsyncMock(return_value=[]),
+            "get_workout_sessions": AsyncMock(return_value=[]),
+        })()
+        result = asyncio.run(_compute_real_strain(client, date(2026, 10, 1), age=35))
+        self.assertEqual(result.max_hr, 183.5)
+        self.assertEqual(result.age_used, 35)
+        self.assertFalse(result.age_is_default)
+        default = asyncio.run(_compute_real_strain(client, date(2026, 10, 1)))
+        self.assertTrue(default.age_is_default)
 
 
 if __name__ == "__main__":

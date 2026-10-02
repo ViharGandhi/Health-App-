@@ -7,6 +7,22 @@
   padding: 20px;
 }
 .calibrationNote { margin: -2px 2px 16px; color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
+.signalHero, .sleepContext { margin-bottom: 14px; padding: 20px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px; }
+.signalEyebrow { color: #67AEE6; font-size: 10px; font-weight: 800; letter-spacing: .14em; }
+.signalHero h2 { margin: 8px 0; font: 800 25px/1.1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; }
+.signalHero > p, .sleepContext > p { color: var(--text-secondary); font-size: 11px; line-height: 1.5; }
+.signalGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 22px 0 18px; padding-top: 18px; border-top: 1px solid var(--border-subtle); }
+.signalMetric { display: flex; flex-direction: column; min-width: 0; gap: 5px; }
+.signalMetric + .signalMetric { padding-left: 14px; border-left: 1px solid var(--border-subtle); }
+.signalMetric > span, .sleepValues span { color: var(--text-tertiary); font-size: 9px; font-weight: 800; letter-spacing: .1em; }
+.signalValue { font: 800 clamp(42px, 12vw, 58px)/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.signalValue small, .sleepValues small { margin-left: 2px; color: var(--text-secondary); font: 600 12px var(--font-body); }
+.signalMetric strong { color: #67AEE6; font: 700 11px var(--font-body); }
+.signalMetric em { color: var(--text-tertiary); font-size: 10px; font-style: normal; line-height: 1.3; }
+.signalHero .signalFootnote { padding-top: 13px; border-top: 1px solid var(--border-subtle); }
+.sleepValues { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 16px 0 10px; }
+.sleepValues > div { display: flex; flex-direction: column; gap: 4px; }
+.sleepValues strong { font: 800 40px/1 var(--font-display); font-variant-numeric: tabular-nums; }
 
 .sectionNav { display: flex; justify-content: space-between; gap: 8px; margin: 2px 0 20px; color: var(--text-tertiary); font-size: 10px; font-weight: 800; letter-spacing: .08em; }
 .sectionNav a { color: inherit; text-decoration: none; }

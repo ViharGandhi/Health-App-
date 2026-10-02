@@ -16,8 +16,12 @@ export default function ConnectPage() {
   const [loading, setLoading] = useState(true);
   const [disconnecting, setDisconnecting] = useState(false);
   const [error, setError] = useState('');
+  const [age, setAge] = useState('');
+  const [ageSaved, setAgeSaved] = useState(false);
+  const [ageError, setAgeError] = useState('');
 
   useEffect(() => {
+    setAge(window.localStorage.getItem('ojas_age') ?? '');
     const reason = new URLSearchParams(window.location.search).get('error');
     if (reason) {
       setError({
@@ -59,7 +63,7 @@ export default function ConnectPage() {
         /* â”€â”€ Connected state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
         <div className="fade-in">
           <div className={`card ${styles.connectedCard}`}>
-            <div className={styles.connectedIcon}>âœ…</div>
+            <div className={styles.connectedIcon}>✓</div>
             <div className={styles.connectedInfo}>
               <p className={styles.connectedTitle}>Fitbit Connected</p>
               {status.user_name && (
@@ -85,7 +89,7 @@ export default function ConnectPage() {
             onClick={handleDisconnect}
             disabled={disconnecting}
           >
-            {disconnecting ? 'Disconnecting...' : 'âŠ— Disconnect Device'}
+            {disconnecting ? 'Disconnecting...' : 'Disconnect Device'}
           </button>
         </div>
 
@@ -95,7 +99,13 @@ export default function ConnectPage() {
           {/* Hero */}
           <div className={styles.heroSection}>
             <div className={styles.heroGlow} />
-            <div className={styles.heroIcon}>âŒš</div>
+            <div className={styles.heroIcon} aria-hidden="true">
+              <svg width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M22 5h16l3 10H19L22 5ZM19 45h22l-3 10H22l-3-10Z" />
+                <rect x="13" y="14" width="34" height="32" rx="10" />
+                <circle cx="30" cy="30" r="9" />
+              </svg>
+            </div>
             <h2 className={styles.heroTitle}>Connect Your Fitbit</h2>
             <p className={styles.heroSubtitle}>
               Link the Google account used by your Fitbit and Google Health profile
@@ -109,7 +119,7 @@ export default function ConnectPage() {
           <div className={`card ${styles.stepsCard}`}>
             <p className="section-title" style={{ marginBottom: 16 }}>How It Works</p>
             {[
-              { n: '1', title: 'Sign in with Google', desc: 'We use Google OAuth 2.0 â€” same account linked to your Fitbit.' },
+              { n: '1', title: 'Sign in with Google', desc: 'We use Google OAuth 2.0 with the account linked to your Fitbit.' },
               { n: '2', title: 'Grant Health Permissions', desc: 'Allow access to HRV, heart rate, sleep, and activity data.' },
               { n: '3', title: 'View Your Data', desc: 'The dashboard reads available Fitbit measurements from Google Health.' },
             ].map(({ n, title, desc }) => (
@@ -148,7 +158,7 @@ export default function ConnectPage() {
             </p>
             <ol className={styles.setupList}>
               <li>Go to <strong>console.cloud.google.com</strong></li>
-              <li>Create a project â†’ Enable <strong>Google Health API</strong></li>
+              <li>Create a project and enable <strong>Google Health API</strong></li>
               <li>Create OAuth 2.0 credentials (Web Application)</li>
               <li>Set redirect URI: <code className={styles.code}>http://localhost:8000/api/auth/callback</code></li>
               <li>Copy <code className={styles.code}>GOOGLE_CLIENT_ID</code> and <code className={styles.code}>GOOGLE_CLIENT_SECRET</code> to <code className={styles.code}>.env</code></li>
@@ -156,6 +166,25 @@ export default function ConnectPage() {
           </div>
         </div>
       )}
+      <div className={`card ${styles.setupCard}`}>
+        <p className="section-title" style={{ marginBottom: 10 }}>Your age</p>
+        <p className={styles.setupText}>Used to estimate maximum heart rate for connected zone calculations. Fitbit Air does not supply a measured maximum heart rate through the current data fields. Demo scores do not use this setting.</p>
+        <label htmlFor="user-age" className={styles.setupText}>Age in years</label>
+        <input id="user-age" type="number" min="18" max="100" value={age} onChange={(event) => { setAge(event.target.value); setAgeSaved(false); }} style={{ width: '100%', margin: '8px 0 12px', padding: 12, borderRadius: 10, border: '1px solid #454545', background: '#151515', color: '#FFFFFF', fontSize: 16 }} />
+        <button type="button" className="btn btn-primary" onClick={() => {
+          const value = Number(age);
+          if (!Number.isInteger(value) || value < 18 || value > 100) { setAgeError('Enter an age from 18 to 100.'); return; }
+          window.localStorage.setItem('ojas_age', String(value));
+          setAgeError('');
+          setAgeSaved(true);
+        }}>Save age</button>
+        {ageSaved && <p className={styles.setupText} role="status">Saved on this device.</p>}
+        {ageError && <p className={styles.error} role="alert">{ageError}</p>}
+      </div>
+      <div className={`card ${styles.setupCard}`}>
+        <p className="section-title" style={{ marginBottom: 10 }}>Install on iPhone</p>
+        <p className={styles.setupText}>Open the deployed Ojas site in Safari, tap Share, then Add to Home Screen. A secure HTTPS address is required outside local development. Device readings still need Google Health access.</p>
+      </div>
     </div>
   );
 }

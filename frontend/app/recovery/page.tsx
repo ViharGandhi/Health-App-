@@ -2,7 +2,7 @@
 
 /**
  * Recovery Detail Page (/recovery)
- * WHOOP-style deep dive into recovery score — HRV, RHR, component breakdown.
+ * Recovery signals for connected data and a prototype score for demo data.
  */
 
 import { useEffect, useState } from 'react';
@@ -100,8 +100,12 @@ export default function RecoveryPage() {
     );
   }
 
-  const color = RECOVERY_COLOR[data.status] ?? '#8E95A2';
-  const statusLabel = data.is_calibrating ? 'Calibrating' : data.status === 'green' ? 'Recovered' : data.status === 'yellow' ? 'Moderate' : 'Low Recovery';
+  const color = data.is_mock ? RECOVERY_COLOR[data.status] ?? '#8E95A2' : '#67AEE6';
+  const statusLabel = !data.is_mock ? data.is_calibrating ? 'Building reference' : 'Personal signals' : data.status === 'green' ? 'Recovered' : data.status === 'yellow' ? 'Moderate' : 'Low Recovery';
+  const hrvDifference = data.today_hrv !== null && data.hrv_baseline !== null
+    ? (data.today_hrv / data.hrv_baseline - 1) * 100 : null;
+  const rhrDifference = data.today_rhr !== null && data.rhr_baseline !== null
+    ? data.today_rhr - data.rhr_baseline : null;
 
   return (
     <>
@@ -117,8 +121,7 @@ export default function RecoveryPage() {
         <Link href="/">OVERVIEW</Link><Link href="/sleep">SLEEP</Link><span aria-current="page">RECOVERY</span><Link href="/strain">STRAIN</Link>
       </nav>
 
-      {/* Hero score */}
-      <div className={`${styles.heroCard} fade-in`}>
+      {data.is_mock ? <div className={`${styles.heroCard} fade-in`}>
         <div className={styles.heroContent}>
           <CircleDial
             label="Recovery"
@@ -148,9 +151,39 @@ export default function RecoveryPage() {
             </div>
           </div>
         </div>
-      </div>
+      </div> : <section className={`${styles.signalHero} fade-in`}>
+        <span className={styles.signalEyebrow}>FITBIT DAILY SUMMARY</span>
+        <h2>Recovery signals</h2>
+        <p>Today’s measurements compared with your earlier readings. No Recovery score is calculated.</p>
+        <div className={styles.signalGrid}>
+          <div className={styles.signalMetric}>
+            <span>HEART RATE VARIABILITY</span>
+            <div className={styles.signalValue}>{data.today_hrv?.toFixed(0) ?? '—'}<small>{data.today_hrv === null ? '' : 'ms'}</small></div>
+            <strong>{hrvDifference === null ? 'No comparison yet' : `${hrvDifference >= 0 ? '+' : ''}${hrvDifference.toFixed(1)}% vs median`}</strong>
+            <em>{data.hrv_baseline === null ? 'Building reference' : `14-day median ${data.hrv_baseline.toFixed(0)} ms`}</em>
+            <em>{data.hrv_reference_count} prior readings · 7 needed</em>
+          </div>
+          <div className={styles.signalMetric}>
+            <span>RESTING HEART RATE</span>
+            <div className={styles.signalValue}>{data.today_rhr?.toFixed(0) ?? '—'}<small>{data.today_rhr === null ? '' : 'bpm'}</small></div>
+            <strong>{rhrDifference === null ? 'No comparison yet' : `${rhrDifference >= 0 ? '+' : ''}${rhrDifference.toFixed(1)} bpm vs median`}</strong>
+            <em>{data.rhr_baseline === null ? 'Building reference' : `14-day median ${data.rhr_baseline.toFixed(0)} bpm`}</em>
+            <em>{data.rhr_reference_count} same-method readings · 7 needed</em>
+          </div>
+        </div>
+        <p className={styles.signalFootnote}>HRV is Fitbit’s daily RMSSD summary. RHR is a daily estimate ({data.rhr_method === 'WITH_SLEEP' ? 'includes sleep' : data.rhr_method === 'ONLY_WITH_AWAKE_DATA' ? 'awake data only' : 'method unspecified'}). Its reference uses readings with the same reported method. Neither is a live heart-rate sample.</p>
+      </section>}
 
-      {data.is_calibrating && <p className={styles.calibrationNote}>Recovery score is hidden until today’s HRV, resting heart rate, sleep, and seven earlier readings of each vital are available.</p>}
+      {!data.is_mock && <section className={styles.sleepContext}>
+        <div className={styles.trendsHeading}><span>SLEEP CONTEXT</span><span>LAST NIGHT</span></div>
+        <div className={styles.sleepValues}>
+          <div><strong>{data.sleep_hours?.toFixed(1) ?? '—'}<small>h</small></strong><span>TIME ASLEEP</span></div>
+          <div><strong>{data.sleep_efficiency_pct?.toFixed(0) ?? '—'}<small>%</small></strong><span>SLEEP EFFICIENCY</span></div>
+        </div>
+        <p>Shown as context, with no points added to a readiness score.</p>
+      </section>}
+
+      {!data.is_mock && data.is_calibrating && <p className={styles.calibrationNote}>A personal comparison needs today’s HRV and RHR plus seven earlier readings of each within 14 days. Sleep can appear separately when it syncs.</p>}
 
       <section className={styles.trendsCard}>
         <div className={styles.trendsHeading}><span>RECOVERY SIGNALS</span><span>{data.is_mock ? 'SAMPLE' : 'DEVICE'}</span></div>
@@ -159,14 +192,14 @@ export default function RecoveryPage() {
             onClick={() => { setHistory(null); setTimeframe(range); }}>{range === 'W' ? '1W' : range}</button>)}
         </div>
         {history ? <>
-          <div className={styles.trendBlock}><div><strong>HRV</strong><span>Daily RMSSD · ms</span></div><VitalChart points={history.metrics.hrv ?? []} color="#67AEE6" label="HRV" /></div>
+          <div className={styles.trendBlock}><div><strong>HRV</strong><span>{data.is_mock ? 'Daily RMSSD' : 'Fitbit daily RMSSD'} · ms</span></div><VitalChart points={history.metrics.hrv ?? []} color="#67AEE6" label="HRV" /></div>
           <div className={styles.trendBlock}><div><strong>RESTING HR</strong><span>Daily estimate · bpm</span></div><VitalChart points={history.metrics.rhr ?? []} color="#FFFFFF" label="resting heart rate" /></div>
-          <p className={styles.trendNote}>These are measured inputs, not historical Recovery scores. Gaps mean no device reading. Compare repeated readings against your own history.</p>
+          <p className={styles.trendNote}>{data.is_mock ? 'These are sample inputs, not historical Recovery scores.' : 'These are device summaries, not Recovery scores.'} Gaps mean no reading was returned. Comparisons use prior data only.</p>
         </> : <p className={styles.noTrend}>Loading signal history…</p>}
       </section>
 
       {/* Component breakdown */}
-      {!data.is_calibrating && <div className={`${styles.compCard} fade-in fade-in-delay-1`}>
+      {data.is_mock && <div className={`${styles.compCard} fade-in fade-in-delay-1`}>
         <p className="section-title" style={{ marginBottom: 20 }}>Prototype score breakdown</p>
         <ComponentRow
           label="HRV Score"
@@ -201,7 +234,7 @@ export default function RecoveryPage() {
       </div>}
 
       {/* Key metrics grid */}
-      <div className={`${styles.metricsGrid} fade-in fade-in-delay-2`}>
+      {data.is_mock && <div className={`${styles.metricsGrid} fade-in fade-in-delay-2`}>
         <MetricCard
           label="Today's HRV"
           value={data.today_hrv?.toFixed(0) ?? '—'}
@@ -218,13 +251,13 @@ export default function RecoveryPage() {
           accent="#67AEE6"
           icon="❤️"
         />
-      </div>
+      </div>}
 
-      {/* Training recommendation */}
+      {/* Interpretation */}
       <div className={`${styles.recBox} fade-in fade-in-delay-3`} style={{ borderLeft: `3px solid ${color}` }}>
-        <p className={styles.recLabel}>Experimental guidance</p>
-        <p className={styles.recText}>Check your trend before you push.</p>
-        <p className={styles.trendNote}>The 0–100 score formula is experimental and has not been validated for Fitbit Air. Interpret HRV and resting heart-rate trends separately.</p>
+        <p className={styles.recLabel}>{data.is_mock ? 'Experimental guidance' : 'HOW TO READ THIS'}</p>
+        <p className={styles.recText}>{data.is_mock ? 'Check your trend before you push.' : 'Look for patterns over several days and consider how you feel.'}</p>
+        <p className={styles.trendNote}>{data.is_mock ? 'The demo 0–100 score formula is experimental and has not been validated for Fitbit Air.' : 'The percent and bpm differences are descriptive comparisons with a 14-day median, not training targets or medical thresholds.'}</p>
       </div>
     </div>
     </>
