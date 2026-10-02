@@ -1,36 +1,404 @@
-.page { width: min(100%, 480px); margin: 0 auto; padding: 18px 16px 120px; color: var(--text-primary); }
-.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; font-size: 12px; font-weight: 800; letter-spacing: .15em; }
-.header a { color: #fff; text-decoration: none; font-size: 32px; line-height: 1; padding: 0 10px 5px 0; }
-.header div { width: 20px; }
-.metricNav { display: flex; gap: 26px; border-bottom: 1px solid var(--border-default); margin-bottom: 34px; }
-.metricNav a { padding: 0 0 14px; color: var(--text-secondary); text-decoration: none; font-size: 11px; font-weight: 800; letter-spacing: .1em; }
-.metricNav a[aria-current='page'] { color: #fff; border-bottom: 2px solid #fff; }
-.eyebrow { color: var(--text-secondary); font-size: 10px; font-weight: 800; letter-spacing: .16em; }
-.intro h1 { font: 800 clamp(28px, 8vw, 42px)/1.08 var(--font-display); letter-spacing: .04em; margin-top: 8px; }
-.intro p { color: var(--text-secondary); font-size: 13px; margin-top: 9px; }
-.rangeTabs { display: flex; gap: 5px; width: 100%; margin: 28px 0 15px; background: var(--bg-elevated); border-radius: 13px; padding: 4px; }
-.rangeTabs button { flex: 1; min-height: 40px; border: 0; border-radius: 9px; background: transparent; color: var(--text-secondary); font: 800 12px var(--font-body); cursor: pointer; }
-.rangeTabs button[aria-pressed='true'] { color: #fff; background: #414752; }
-.hero, .chartCard, .explain { background: var(--bg-card); border: 1px solid var(--border-default); border-radius: 18px; padding: 18px; }
-.hero { margin-bottom: 12px; }
-.heroNumber { font: 800 clamp(64px, 21vw, 92px)/1 var(--font-display); font-variant-numeric: tabular-nums; letter-spacing: -.04em; margin: 10px 0 7px; }
-.heroNumber small { font: 700 20px var(--font-body); color: #8FB7CA; margin-left: 5px; letter-spacing: 0; }
-.hero p { color: var(--text-secondary); font-size: 11px; }
-.cardHeading, .reading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.cardHeading h2 { font-size: 11px; letter-spacing: .1em; }
-.cardHeading span { color: var(--text-tertiary); font-size: 10px; font-weight: 800; letter-spacing: .1em; }
-.chartWrap { margin-top: 24px; }
-.chartWrap svg { width: 100%; display: block; cursor: crosshair; }
-.axis { display: flex; justify-content: space-between; color: var(--text-tertiary); font-size: 10px; margin-top: 4px; }
-.emptyChart { min-height: 160px; display: grid; place-items: center; color: var(--text-secondary); text-align: center; font-size: 12px; }
-.scrubberLabel { display: block; color: var(--text-secondary); font-size: 11px; margin-top: 19px; }
-.scrubber { width: 100%; margin: 9px 0 14px; accent-color: #8FB7CA; }
-.reading { border-top: 1px solid var(--border-subtle); padding-top: 14px; font-size: 12px; }
-.reading span { color: var(--text-secondary); }
-.reading strong { font: 700 16px var(--font-display); text-align: right; }
-.detail { color: var(--text-secondary); font-size: 11px; margin-top: 9px; }
-.explain { margin-top: 12px; }
-.explain p { color: var(--text-secondary); font-size: 12px; line-height: 1.65; margin-top: 9px; }
-.sources { color: var(--text-tertiary); font-size: 10px; line-height: 1.7; margin: 18px 3px 0; }
-.sources a { color: var(--text-secondary); }
-.loading, .message { color: var(--text-secondary); text-align: center; padding: 42px 0; font-size: 13px; }
+/* ── Viewport & Page Container ────────────────────────────── */
+.viewportContainer {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1E2429 0%, #1A2025 35%, #151A1F 70%, #121417 100%);
+  color: #ffffff;
+}
+
+.page {
+  width: min(100%, 460px);
+  margin: 0 auto;
+  padding: 16px 16px 90px;
+}
+
+/* ── Top Header ───────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding-top: 4px;
+}
+
+.backBtn {
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity 0.15s;
+}
+
+.backBtn:hover {
+  opacity: 1;
+}
+
+.headerTitle {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #dce0e8;
+  text-transform: uppercase;
+}
+
+.headerRight {
+  width: 32px;
+}
+
+/* ── Metric Pill Selector Card ────────────────────────────── */
+.metricPill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: #252B30;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 13px 16px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.metricPill:hover {
+  background: #2B3238;
+}
+
+.metricPillIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.metricPillLabel {
+  flex: 1;
+  text-align: left;
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #f0f2f5;
+  text-transform: uppercase;
+}
+
+.metricPillChevron {
+  display: flex;
+  align-items: center;
+  color: #7B828E;
+  flex-shrink: 0;
+}
+
+/* ── Stats & Controls Section ─────────────────────────────── */
+.statsSection {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.statsTopRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.averageEyebrow {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #7B828E;
+  text-transform: uppercase;
+}
+
+.timeframeTabs {
+  display: inline-flex;
+  gap: 2px;
+  background: #14171B;
+  border-radius: 10px;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tfTab {
+  min-width: 38px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #7B828E;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 12px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.tfActive {
+  background: #383E43;
+  color: #ffffff;
+}
+
+.statsValueRow {
+  margin-bottom: 8px;
+  margin-top: 2px;
+}
+
+.averageValue {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-family: var(--font-body);
+}
+
+.averageUnit {
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0;
+}
+
+.statsBottomRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.deltaPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #252B30;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.deltaDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #7B828E;
+  flex-shrink: 0;
+}
+
+.deltaText {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8a92a0;
+  white-space: nowrap;
+}
+
+.dateNav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.navArrow {
+  background: none;
+  border: none;
+  color: #7B828E;
+  cursor: pointer;
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+}
+
+.navArrow:hover {
+  color: #ffffff;
+}
+
+.dateRange {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #c4cad4;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+  white-space: nowrap;
+}
+
+/* ── Insight Text ─────────────────────────────────────────── */
+.insightText {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #c4cad4;
+  margin: 16px 0 20px;
+  font-weight: 400;
+}
+
+/* ── Chart Area (Seamless, no card container) ─────────────── */
+.chartArea {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.chartWrap {
+  width: 100%;
+}
+
+.chartSvg {
+  width: 100%;
+  display: block;
+  cursor: crosshair;
+  touch-action: pan-y;
+  overflow: visible;
+}
+
+.emptyChart {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  color: var(--text-secondary);
+  text-align: center;
+  font-size: 12px;
+  padding: 24px;
+}
+
+/* ── Sleep Efficiency Breakdown ───────────────────────────── */
+.breakdown {
+  margin-bottom: 28px;
+}
+
+.breakdownHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.breakdownTitle {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #e2e4e9;
+  text-transform: uppercase;
+}
+
+.breakdownSub {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #7B828E;
+  text-transform: uppercase;
+}
+
+.breakdownBar {
+  display: flex;
+  height: 8px;
+  border-radius: 999px;
+  background: #14171B;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+/* Optimal segment: Neon green #00E676 */
+.barOptimal {
+  background: #00E676;
+}
+
+/* Sufficient segment: Slate grey #5A606D */
+.barSufficient {
+  background: #5A606D;
+}
+
+/* Poor segment: Orange/Yellow #F59E0B */
+.barPoor {
+  background: #F59E0B;
+}
+
+.barOptimal:only-child,
+.barSufficient:only-child,
+.barPoor:only-child {
+  border-radius: 999px;
+}
+
+.breakdownLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.legendRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legendDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Exact WHOOP legend indicator colors */
+.dotOptimal {
+  background: #00E676;
+}
+
+.dotSufficient {
+  background: #5A606D;
+}
+
+.dotPoor {
+  background: #F59E0B;
+}
+
+.legendCount {
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  min-width: 28px;
+  font-family: var(--font-display);
+}
+
+.legendLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: #8a92a0;
+}
+
+/* ── Floating Action Button (Whoop 'W') ────────────────────── */
+.floatingActionBtn {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #2a333f 0%, #171d25 100%);
+  border: 1.5px solid rgba(88, 140, 174, 0.45);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 99;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.floatingActionBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+
+/* ── Loading / Error ──────────────────────────────────────── */
+.loading,
+.message {
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 48px 0;
+  font-size: 13px;
+}

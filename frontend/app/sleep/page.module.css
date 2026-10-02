@@ -17,8 +17,6 @@
   flex-direction: column;
 }
 
-.hrvNote { color: var(--text-tertiary); font-size: 11px; line-height: 1.4; margin: -4px 0 15px; }
-
 /* ---- Top Navigation Bar (< TODAY ⓘ) ---- */
 .topNav {
   display: flex;

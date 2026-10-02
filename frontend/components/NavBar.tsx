@@ -6,6 +6,9 @@ import styles from './NavBar.module.css';
 
 export default function NavBar() {
   const pathname = usePathname();
+  if (pathname.includes('/efficiency') || pathname.includes('/consistency')) {
+    return null;
+  }
   const items = [
     { href: '/', label: 'Home', icon: <><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></> },
     { href: '/sleep', label: 'Sleep', icon: <path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5z" /> },

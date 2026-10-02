@@ -11,6 +11,7 @@ from __future__ import annotations
 import sys
 import os
 import math
+import random
 from datetime import datetime, timedelta, date
 
 # Allow importing the algo files from the project root
@@ -332,11 +333,14 @@ def _build_sample_sleep_records(start: date, end: date) -> list[dict]:
         bedtime += timedelta(minutes=round(18 * math.sin(days_ago * 1.9)))
         wake_time += timedelta(minutes=round(20 * math.sin(days_ago * 1.3)))
         period = (wake_time - bedtime).total_seconds() / 60
+        # Random sleep efficiency between 85% and 95%
+        target_eff = round(random.uniform(85.0, 95.0), 1)
+        asleep = round(period * (target_eff / 100.0), 1)
         records.append({
             "date": current,
             "bed_time": bedtime,
             "wake_time": wake_time,
-            "time_asleep_minutes": period - 57 - (days_ago * 3) % 25,
+            "time_asleep_minutes": asleep,
             "time_in_bed_minutes": period,
         })
         current += timedelta(days=1)

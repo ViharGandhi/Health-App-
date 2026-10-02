@@ -427,7 +427,7 @@ async def strain_endpoint(request: Request, response: Response):
 
 @app.get("/api/health", response_model=HealthResponse)
 async def health_endpoint(
-    request: Request, response: Response, timeframe: Literal["W", "6M", "1Y"] = "W"
+    request: Request, response: Response, timeframe: Literal["W", "M", "6M", "1Y"] = "W"
 ):
     token = await _get_token(request, response)
     if not token:
@@ -442,7 +442,7 @@ async def health_endpoint(
 
 @app.get("/api/sleep/consistency", response_model=SleepTrendResponse)
 async def sleep_consistency_endpoint(
-    request: Request, response: Response, timeframe: Literal["W", "6M", "1Y"] = "W"
+    request: Request, response: Response, timeframe: Literal["W", "M", "6M", "1Y"] = "W"
 ):
     token = await _get_token(request, response)
     if not token:
@@ -456,7 +456,7 @@ async def sleep_consistency_endpoint(
 
 @app.get("/api/sleep/efficiency", response_model=SleepTrendResponse)
 async def sleep_efficiency_endpoint(
-    request: Request, response: Response, timeframe: Literal["W", "6M", "1Y"] = "W"
+    request: Request, response: Response, timeframe: Literal["W", "M", "6M", "1Y"] = "W"
 ):
     token = await _get_token(request, response)
     if not token:

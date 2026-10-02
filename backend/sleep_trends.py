@@ -13,6 +13,8 @@ from sleep_efficiency import SleepEfficiencyCalculator
 def range_start(end: date, timeframe: str) -> date:
     if timeframe == "W":
         return end - timedelta(days=6)
+    if timeframe == "M":
+        return end - timedelta(days=29)
     months = 6 if timeframe == "6M" else 12
     month_index = end.year * 12 + end.month - 1 - months
     year, month_zero = divmod(month_index, 12)
