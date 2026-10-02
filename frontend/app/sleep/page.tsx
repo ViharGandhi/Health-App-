@@ -61,8 +61,8 @@ export default function SleepPage() {
   // Key metrics
   const sleepScore = Math.round(data.score);
   const hoursVsNeededPct = Math.min(100, Math.round((data.total_sleep_hours / data.sleep_need_hours) * 100));
-  const consistencyPct = data.consistency_score ?? 80;
-  const efficiencyPct = Math.round(data.efficiency_pct);
+  const consistencyMinutes = data.consistency_minutes;
+  const efficiencyPct = data.efficiency_pct == null ? null : Math.round(data.efficiency_pct);
   const sleepStressPct = 0; // Optimal (0% high stress)
 
   // Circular gauge calculations
@@ -192,14 +192,13 @@ export default function SleepPage() {
                 <span className={styles.metricTitle}>SLEEP CONSISTENCY</span>
                 {data.average_bed_time && data.average_wake_time && (
                   <span className={styles.metricSubtitle}>
-                    4-Day Avg: {data.average_bed_time} – {data.average_wake_time}
+                    7-night avg: {data.average_bed_time} – {data.average_wake_time}
                   </span>
                 )}
               </div>
             </div>
             <div className={styles.metricRight}>
-              <SegmentIndicator value={consistencyPct} />
-              <span className={styles.metricValue}>{consistencyPct}%</span>
+              <span className={styles.metricValue}>{consistencyMinutes == null ? '—' : `${Math.round(consistencyMinutes)} min`}</span>
               <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 1.5L4.5 5L1 8.5" />
               </svg>
@@ -225,8 +224,8 @@ export default function SleepPage() {
               <span className={styles.metricTitle}>SLEEP EFFICIENCY</span>
             </div>
             <div className={styles.metricRight}>
-              <SegmentIndicator value={efficiencyPct} />
-              <span className={styles.metricValue}>{efficiencyPct}%</span>
+              {efficiencyPct !== null && <SegmentIndicator value={efficiencyPct} />}
+              <span className={styles.metricValue}>{efficiencyPct === null ? '—' : `${efficiencyPct}%`}</span>
               <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 1.5L4.5 5L1 8.5" />
               </svg>
@@ -261,6 +260,11 @@ export default function SleepPage() {
 
 
           {/* Range Legend: Poor, Sufficient, Optimal */}
+          <div className={styles.metricRow}>
+            <div className={styles.metricLeft}><span className={styles.metricTitle}>DEEP-SLEEP HRV</span></div>
+            <div className={styles.metricRight}><span className={styles.metricValue}>{data.deep_sleep_hrv == null ? '—' : `${Math.round(data.deep_sleep_hrv)} ms`}</span></div>
+          </div>
+          <p className={styles.hrvNote}>Device-reported deep-sleep RMSSD, when available. Separate from daily average HRV.</p>
           <div className={styles.legendRow}>
             <div className={styles.legendItem}>
               <span className={styles.legendBarPoor} />

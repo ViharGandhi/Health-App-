@@ -13,6 +13,7 @@ export default function NavBar() {
 
   const isHome = pathname === '/';
   const isHealth = pathname === '/recovery' || pathname === '/sleep' || pathname === '/strain';
+  const isBiology = pathname === '/health';
   const isConnect = pathname === '/connect';
 
   return (
@@ -36,6 +37,15 @@ export default function NavBar() {
               <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z" />
               <path d="M12 9v6" strokeWidth="2" />
               <path d="M9 12h6" strokeWidth="2" />
+            </svg>
+          </div>
+          <span className={styles.label}>Recovery</span>
+        </Link>
+
+        <Link href="/health" className={`${styles.item} ${isBiology ? styles.active : ''}`}>
+          <div className={styles.iconBox}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 12h4l2.3-5 4.2 10 2.2-5H21" />
             </svg>
           </div>
           <span className={styles.label}>Health</span>

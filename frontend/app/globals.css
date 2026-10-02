@@ -4,20 +4,20 @@
  * Clean sans-serif typography matching WHOOP's aesthetic.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@600;700;800;900&family=Montserrat:wght@500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Montserrat:wght@500;600;700;800;900&display=swap');
 
 /* Reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* ---- Exact WHOOP Dark Palette & Tokens ---- */
 :root {
-  --bg-primary:     #121417;
-  --bg-surface:     #181B20;
-  --bg-card:        #1A1D23;
-  --bg-elevated:    #22262E;
-  --bg-pill:        #232830;
-  --bg-hover:       #2A2F3A;
-  --bg-nav:         rgba(18, 20, 23, 0.95);
+  --bg-primary:     #0B0B0B;
+  --bg-surface:     #161616;
+  --bg-card:        #1C1C1E;
+  --bg-elevated:    #242427;
+  --bg-pill:        #232326;
+  --bg-hover:       #2A2A2E;
+  --bg-nav:         rgba(11, 11, 11, 0.95);
 
   --border-subtle:   rgba(255, 255, 255, 0.08);
   --border-default:  rgba(255, 255, 255, 0.12);
@@ -27,11 +27,11 @@
   --text-tertiary:   #5C626E;
 
   /* WHOOP Signature Metric Colors */
-  --whoop-green:     #22E600; /* Crisp WHOOP electric lime green matching original */
-  --whoop-yellow:    #F5C518;
-  --whoop-red:       #FF3B3B;
-  --whoop-sleep:     #4EA5B7; /* Whoop sleep cyan/teal */
-  --whoop-strain:    #3078F0; /* Whoop strain blue */
+  --whoop-green:     #16EC06;
+  --whoop-yellow:    #FFDE00;
+  --whoop-red:       #FF0026;
+  --whoop-sleep:     #7BA1BB;
+  --whoop-strain:    #0093E7;
 
   --recovery-green:  var(--whoop-green);
   --recovery-yellow: var(--whoop-yellow);
@@ -40,7 +40,7 @@
   --strain-blue:     var(--whoop-strain);
 
   --accent-primary:  #FFFFFF;
-  --accent-cta:      var(--whoop-green);
+  --accent-cta:      #00F19F;
   --accent-warn:     var(--whoop-yellow);
   --accent-danger:   var(--whoop-red);
 
@@ -50,7 +50,7 @@
 
   /* WHOOP typography: Proxima Nova for UI & text, DINPro for numbers & data */
   --font-body: 'Proxima Nova', 'ProximaNova', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'DIN Pro', 'DINPro', 'DIN Alternate', 'Barlow', 'Montserrat', sans-serif;
+  --font-display: 'DIN Pro', 'DINPro', 'DIN Alternate', 'Barlow Condensed', 'Montserrat', sans-serif;
 
   --shadow-card:     0 2px 8px rgba(0, 0, 0, 0.35);
   --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.5);

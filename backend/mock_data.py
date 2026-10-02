@@ -20,13 +20,13 @@ from strain import StrainCalculator, WorkoutInterval, HeartRateZone
 from recovery import RecoveryCalculator, RecoveryInput
 from sleepscore import SleepCalculator, SleepData
 from sleep_consistency import SleepConsistencyCalculator, SleepNight
-from sleep_efficiency import SleepEfficiencyCalculator, SleepEfficiencyNight
+from sleep_trends import build_sleep_trend, range_start
+from health_trends import build_health_response
 
 from models import (
     StrainResponse, RecoveryResponse, SleepResponse,
     DashboardResponse, ZoneMinutes, WorkoutDetail, SleepStages,
-    SleepConsistencyDay, SleepConsistencyBreakdown, SleepConsistencyTrendResponse,
-    SleepEfficiencyDay, SleepEfficiencyBreakdown, SleepEfficiencyTrendResponse
+    SleepTrendResponse, HealthResponse
 )
 
 
@@ -74,8 +74,8 @@ def _build_mock_sleep_data() -> SleepData:
     total_s = rem_s + deep_s + core_s        # 7h 22m
     in_bed_s = total_s + awake_s + (10 * 60) # in bed ~8h 19m
 
-    sleep_start = datetime(2026, 9, 27, 23, 12, 0)
-    sleep_end   = datetime(2026, 9, 28, 7, 31, 0)
+    sleep_start = datetime.combine(date.today() - timedelta(days=1), datetime.min.time()).replace(hour=23, minute=12)
+    sleep_end = datetime.combine(date.today(), datetime.min.time()).replace(hour=7, minute=31)
 
     return SleepData(
         total_duration=total_s,
@@ -222,31 +222,12 @@ def compute_mock_sleep() -> SleepResponse:
     c_s = min(100.0, (sleep.core_sleep_duration / sn_s / 0.50) * 100)
     stage_score = 0.40 * d_s + 0.40 * r_s + 0.20 * c_s
 
-    # 4-Day Sleep Consistency calculation
+    # Seven sample nights for sleep timing variability.
     today_dt = date.today()
-    mock_4day_nights = [
-        SleepNight(
-            night_date=today_dt - timedelta(days=3),
-            bed_time=datetime.combine(today_dt - timedelta(days=4), datetime.min.time()).replace(hour=23, minute=15),
-            wake_time=datetime.combine(today_dt - timedelta(days=3), datetime.min.time()).replace(hour=7, minute=18),
-        ),
-        SleepNight(
-            night_date=today_dt - timedelta(days=2),
-            bed_time=datetime.combine(today_dt - timedelta(days=3), datetime.min.time()).replace(hour=23, minute=30),
-            wake_time=datetime.combine(today_dt - timedelta(days=2), datetime.min.time()).replace(hour=7, minute=25),
-        ),
-        SleepNight(
-            night_date=today_dt - timedelta(days=1),
-            bed_time=datetime.combine(today_dt - timedelta(days=2), datetime.min.time()).replace(hour=23, minute=10),
-            wake_time=datetime.combine(today_dt - timedelta(days=1), datetime.min.time()).replace(hour=7, minute=12),
-        ),
-        SleepNight(
-            night_date=today_dt,
-            bed_time=sleep.sleep_start_time if sleep.sleep_start_time else datetime.combine(today_dt - timedelta(days=1), datetime.min.time()).replace(hour=23, minute=20),
-            wake_time=sleep.sleep_end_time if sleep.sleep_end_time else datetime.combine(today_dt, datetime.min.time()).replace(hour=7, minute=20),
-        ),
-    ]
-    consistency_res = SleepConsistencyCalculator.calculate(mock_4day_nights)
+    mock_nights = _build_sample_sleep_records(today_dt - timedelta(days=6), today_dt)
+    consistency_res = SleepConsistencyCalculator.calculate([
+        SleepNight(n["date"], n["bed_time"], n["wake_time"]) for n in mock_nights
+    ])
 
     return SleepResponse(
         score=round(score, 1),
@@ -256,11 +237,11 @@ def compute_mock_sleep() -> SleepResponse:
         efficiency_pct=round(efficiency, 1),
         stages=stages,
         sleeping_hrv=sleeping_hrv,
+        deep_sleep_hrv=49.2,
         sleeping_hr=sleeping_hr,
-        consistency_score=round(consistency_res.consistency_score, 1),
+        consistency_minutes=consistency_res.timing_variability_minutes,
         average_bed_time=consistency_res.average_bed_time_str,
         average_wake_time=consistency_res.average_wake_time_str,
-        consistency_status=consistency_res.status,
         sleep_start=sleep.sleep_start_time.strftime("%I:%M %p") if sleep.sleep_start_time else None,
         sleep_end=sleep.sleep_end_time.strftime("%I:%M %p") if sleep.sleep_end_time else None,
         duration_score=round(dur_score, 1),
@@ -337,116 +318,72 @@ def get_mock_dashboard() -> DashboardResponse:
     )
 
 
-def get_mock_sleep_consistency_trend() -> SleepConsistencyTrendResponse:
-    """
-    Returns 7-day sleep consistency trend data matching WHOOP trend view.
-    """
-    days_data = [
-        SleepConsistencyDay(day_name="Thu", day_num=9, date="2026-04-09", score=85.0, status="Optimal"),
-        SleepConsistencyDay(day_name="Fri", day_num=10, date="2026-04-10", score=92.0, status="Optimal"),
-        SleepConsistencyDay(day_name="Sat", day_num=11, date="2026-04-11", score=86.0, status="Optimal"),
-        SleepConsistencyDay(day_name="Sun", day_num=12, date="2026-04-12", score=79.0, status="Sufficient"),
-        SleepConsistencyDay(day_name="Mon", day_num=13, date="2026-04-13", score=82.0, status="Optimal"),
-        SleepConsistencyDay(day_name="Tue", day_num=14, date="2026-04-14", score=88.0, status="Optimal"),
-        SleepConsistencyDay(day_name="Wed", day_num=15, date="2026-04-15", score=80.0, status="Optimal"),
-    ]
-
-    avg_score = round(sum(d.score for d in days_data) / len(days_data), 1)
-
-    return SleepConsistencyTrendResponse(
-        average_score=85.0,
-        prior_week_change=6.0,
-        range_label="APR 9 - APR 15, 26",
-        insight="Your average Sleep Consistency (85%) this week was above your previous 7-day average of 80%. Keep up this trend for positive results!",
-        days=days_data,
-        breakdown=SleepConsistencyBreakdown(
-            optimal_days=6,
-            sufficient_days=1,
-            poor_days=0,
-            total_days=7,
-        ),
-    )
+def _build_sample_sleep_records(start: date, end: date) -> list[dict]:
+    """Deterministic sample history with explicit missing nights."""
+    records = []
+    current = start
+    while current <= end:
+        days_ago = (date.today() - current).days
+        if days_ago > 0 and days_ago % 29 == 0:
+            current += timedelta(days=1)
+            continue
+        bedtime = datetime.combine(current - timedelta(days=1), datetime.min.time()).replace(hour=23, minute=12)
+        wake_time = datetime.combine(current, datetime.min.time()).replace(hour=7, minute=31)
+        bedtime += timedelta(minutes=round(18 * math.sin(days_ago * 1.9)))
+        wake_time += timedelta(minutes=round(20 * math.sin(days_ago * 1.3)))
+        period = (wake_time - bedtime).total_seconds() / 60
+        records.append({
+            "date": current,
+            "bed_time": bedtime,
+            "wake_time": wake_time,
+            "time_asleep_minutes": period - 57 - (days_ago * 3) % 25,
+            "time_in_bed_minutes": period,
+        })
+        current += timedelta(days=1)
+    return records
 
 
-def get_mock_sleep_efficiency_trend(timeframe: str = "M") -> SleepEfficiencyTrendResponse:
-    """
-    Returns sleep efficiency trend data matching WHOOP trend view.
-    Defaults to 30-day Month view as shown in the WHOOP screenshot.
-    """
-    if timeframe.upper() == "W":
-        days_data = [
-            SleepEfficiencyDay(day_name="Thu", day_num=9, date="2026-04-09", score=97.0, status="Optimal", asleep_hours=7.6, in_bed_hours=7.8, awake_minutes=14.0),
-            SleepEfficiencyDay(day_name="Fri", day_num=10, date="2026-04-10", score=96.0, status="Optimal", asleep_hours=7.5, in_bed_hours=7.8, awake_minutes=18.0),
-            SleepEfficiencyDay(day_name="Sat", day_num=11, date="2026-04-11", score=95.0, status="Optimal", asleep_hours=7.4, in_bed_hours=7.8, awake_minutes=24.0),
-            SleepEfficiencyDay(day_name="Sun", day_num=12, date="2026-04-12", score=95.0, status="Optimal", asleep_hours=7.3, in_bed_hours=7.7, awake_minutes=24.0),
-            SleepEfficiencyDay(day_name="Mon", day_num=13, date="2026-04-13", score=94.0, status="Optimal", asleep_hours=7.4, in_bed_hours=7.9, awake_minutes=30.0),
-            SleepEfficiencyDay(day_name="Tue", day_num=14, date="2026-04-14", score=96.0, status="Optimal", asleep_hours=7.7, in_bed_hours=8.0, awake_minutes=20.0),
-            SleepEfficiencyDay(day_name="Wed", day_num=15, date="2026-04-15", score=96.0, status="Optimal", asleep_hours=7.6, in_bed_hours=7.9, awake_minutes=19.0),
-        ]
-        return SleepEfficiencyTrendResponse(
-            average_score=95.0,
-            status="Optimal",
-            average_time_asleep_hours=7.5,
-            average_time_in_bed_hours=7.9,
-            average_awake_minutes=21.0,
-            prior_week_change=1.0,
-            comparison_label="vs. prior week",
-            range_label="APR 9 - APR 15, 26",
-            insight="Your average sleep efficiency (95%) this week was consistent with your previous 7-day average of 94%.",
-            current_day_score=96.0,
-            days=days_data,
-            breakdown=SleepEfficiencyBreakdown(
-                optimal_days=7,
-                sufficient_days=0,
-                poor_days=0,
-                total_days=7,
-            ),
-        )
-
-    # 30-Day Month View (Exact curve from WHOOP reference screenshot)
-    # Mar 17 -> Apr 15, 2026
-    start_date = date(2026, 3, 17)
-    month_scores = [
-        98.0, 96.0, 96.0, 93.0, 92.0, 94.0, 94.0, 94.0, 90.0, 98.0,
-        99.0, 96.0, 94.0, 94.0, 90.0, 95.0, 93.0, 92.0, 96.0, 95.0,
-        96.0, 94.0, 96.0, 97.0, 96.0, 95.0, 95.0, 94.0, 96.0, 96.0
-    ]
-
-    days_data = []
-    for i, sc in enumerate(month_scores):
-        d = start_date + timedelta(days=i)
-        days_data.append(
-            SleepEfficiencyDay(
-                day_name=d.strftime("%a"),
-                day_num=d.day,
-                date=d.strftime("%Y-%m-%d"),
-                score=sc,
-                status="Optimal" if sc >= 90.0 else ("Sufficient" if sc >= 80.0 else "Poor"),
-                asleep_hours=round(7.2 + (sc - 90) * 0.05, 2),
-                in_bed_hours=round(7.8 + (sc - 90) * 0.02, 2),
-                awake_minutes=round((100.0 - sc) * 4.8, 1),
-            )
-        )
-
-    return SleepEfficiencyTrendResponse(
-        average_score=95.0,
-        status="Optimal",
-        average_time_asleep_hours=7.5,
-        average_time_in_bed_hours=7.9,
-        average_awake_minutes=24.0,
-        prior_week_change=0.0,
-        comparison_label="vs. prior month",
-        range_label="MAR 17 - APR 15, 26",
-        insight="Your average sleep efficiency (95%) this month was consistent with your previous 30-day average of 95%.",
-        current_day_score=96.0,
-        days=days_data,
-        breakdown=SleepEfficiencyBreakdown(
-            optimal_days=30,
-            sufficient_days=0,
-            poor_days=0,
-            total_days=30,
-        ),
-    )
+def get_mock_sleep_consistency_trend(timeframe: str = "W") -> SleepTrendResponse:
+    today = date.today()
+    start = range_start(today, timeframe)
+    records = _build_sample_sleep_records(start - timedelta(days=6), today)
+    return build_sleep_trend(records, start, today, timeframe, "consistency", True)
 
 
+def get_mock_sleep_efficiency_trend(timeframe: str = "W") -> SleepTrendResponse:
+    today = date.today()
+    start = range_start(today, timeframe)
+    records = _build_sample_sleep_records(start, today)
+    return build_sleep_trend(records, start, today, timeframe, "efficiency", True)
 
+
+def get_mock_health(timeframe: str = "W") -> HealthResponse:
+    """Illustrative daily vitals, including occasional unmeasured dates."""
+    today = date.today()
+    start = range_start(today, timeframe)
+    history: dict[str, list[dict]] = {key: [] for key in (
+        "hrv", "deep_sleep_hrv", "nrem_hr", "rhr", "spo2",
+        "respiratory_rate", "skin_temperature", "vo2_max",
+    )}
+    values = {
+        "hrv": (44.8, 4.0), "deep_sleep_hrv": (49.2, 5.0),
+        "nrem_hr": (57.0, 2.0), "rhr": (53.0, 2.0),
+        "spo2": (97.2, 0.4), "respiratory_rate": (14.1, 0.4),
+        "skin_temperature": (32.6, 0.3), "vo2_max": (44.5, 0.5),
+    }
+    day = start - timedelta(days=14)
+    while day <= today:
+        age = (today - day).days
+        if age == 0 or age % 29 != 0:
+            for key, (base, amplitude) in values.items():
+                if key == "vo2_max" and age % 5:
+                    continue
+                history[key].append({
+                    "date": day.isoformat(),
+                    "value": round(base + amplitude * math.sin(age * 0.83), 1),
+                    "estimated": True if key == "vo2_max" else None,
+                    "method": "WITH_SLEEP" if key == "rhr" else None,
+                })
+        day += timedelta(days=1)
+    samples, _, _ = _build_mock_hr_samples()
+    return build_health_response(history, samples, start, today, timeframe, True)

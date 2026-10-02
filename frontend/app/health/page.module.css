@@ -1,0 +1,43 @@
+.page { padding-top: 28px; }
+.header { margin: 0 0 30px; }
+.eyebrow { color: var(--text-tertiary); font-size: 10px; font-weight: 800; letter-spacing: 0.16em; }
+.header h1 { margin: 8px 0 2px; font: 800 54px/1 var(--font-display); letter-spacing: 0.07em; }
+.header p { color: var(--text-secondary); font-size: 13px; }
+.period { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 14px; color: var(--text-tertiary); font-size: 9px; font-weight: 800; letter-spacing: 0.12em; }
+.rangeTabs { display: flex; gap: 8px; margin-bottom: 18px; }
+.rangeTabs button { flex: 1; border: 1px solid var(--border-subtle); border-radius: 20px; background: var(--bg-card); color: var(--text-secondary); padding: 8px; font: 800 11px var(--font-body); cursor: pointer; }
+.rangeTabs button[aria-pressed='true'] { color: #fff; border-color: #fff; }
+.hrCard, .detailCard, .interpretation { border: 1px solid var(--border-subtle); border-radius: 18px; background: var(--bg-card); padding: 18px; }
+.hrCard { margin-bottom: 30px; }
+.sectionHeading { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.sectionHeading h2 { margin-top: 5px; font: 700 30px/1.1 var(--font-display); }
+.smallValue { color: var(--text-tertiary); font-size: 10px; white-space: nowrap; }
+.chartWrap { width: 100%; margin-top: 18px; }
+.chartWrap svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chartWrap circle[role='button'] { cursor: pointer; }
+.axis { display: flex; justify-content: space-between; color: var(--text-tertiary); font: 600 10px var(--font-body); padding: 0 3px; }
+.caption { margin-top: 16px; color: var(--text-secondary); font-size: 11px; line-height: 1.6; }
+.scrubberLabel { display: block; margin-top: 8px; color: var(--text-tertiary); font-size: 10px; }
+.scrubber { width: 100%; accent-color: #fff; }
+.emptyChart { display: grid; place-items: center; min-height: 150px; color: var(--text-tertiary); font-size: 12px; }
+.sectionTitle { margin-bottom: 12px; color: var(--text-secondary); font-size: 11px; letter-spacing: 0.14em; }
+.metricGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 20px; }
+.metricCard { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; padding: 16px; border: 1px solid var(--border-subtle); border-radius: 15px; color: var(--text-primary); background: var(--bg-surface); text-align: left; cursor: pointer; transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+.metricCard:hover { transform: translateY(-2px); background: var(--bg-card); }
+.metricCard.selected { border-color: rgba(255, 255, 255, 0.56); background: var(--bg-card); }
+.metricCard > span { color: var(--text-secondary); font-size: 10px; font-weight: 800; letter-spacing: 0.11em; }
+.metricCard strong { font: 800 38px/1 var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.metricCard small { margin-left: 4px; color: var(--text-secondary); font: 600 11px var(--font-body); }
+.metricCard em { color: var(--text-tertiary); font-size: 10px; font-style: normal; line-height: 1.35; }
+.metricCard em:last-child { margin-top: 5px; color: var(--text-secondary); font-size: 9px; letter-spacing: 0.04em; }
+.detailCard { margin-bottom: 16px; }
+.detailCard .sectionHeading h2 { font-size: 24px; }
+.selectedValue { margin-top: 20px; font: 800 64px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.selectedValue small { margin-left: 6px; color: var(--text-secondary); font: 600 14px var(--font-body); }
+.interpretation { margin-bottom: 18px; }
+.interpretation h2 { margin-top: 8px; font-size: 16px; letter-spacing: 0.08em; }
+.interpretation p { margin-top: 9px; color: var(--text-secondary); font-size: 12px; line-height: 1.65; }
+.interpretation .caveat { color: var(--text-tertiary); }
+.sources { margin: 0 2px 24px; color: var(--text-tertiary); font-size: 10px; line-height: 1.7; }
+.sources a { color: var(--text-secondary); }
+@media (max-width: 350px) { .metricCard { padding: 12px; } .metricCard strong { font-size: 32px; } .metricCard small { font-size: 9px; } }

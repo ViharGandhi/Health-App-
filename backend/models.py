@@ -58,18 +58,19 @@ class StrainResponse(BaseModel):
 # ──────────────────────────────────────────────────────────────────────────────
 
 class RecoveryResponse(BaseModel):
-    score: float = Field(description="Recovery score 0–100")
-    status: str = Field(description="'green' (67-100) | 'yellow' (34-66) | 'red' (0-33)")
-    hrv_component: float
-    rhr_component: float
-    sleep_component: float
-    strain_component: float
-    acr_penalty: float
+    score: Optional[float] = Field(description="Experimental recovery score 0–100, absent while calibrating")
+    status: str = Field(description="'green' | 'yellow' | 'red' | 'calibrating'")
+    hrv_component: Optional[float] = None
+    rhr_component: Optional[float] = None
+    sleep_component: Optional[float] = None
+    strain_component: Optional[float] = None
+    acr_penalty: Optional[float] = None
     today_hrv: Optional[float] = None       # ms
     today_rhr: Optional[float] = None       # bpm
     hrv_baseline: Optional[float] = None    # ms
     rhr_baseline: Optional[float] = None    # bpm
     training_recommendation: str
+    is_calibrating: bool = False
     is_mock: bool = True
 
 
@@ -90,14 +91,14 @@ class SleepResponse(BaseModel):
     sleep_need_hours: float
     total_sleep_hours: float
     sleep_debt_hours: float
-    efficiency_pct: float
+    efficiency_pct: Optional[float]
     stages: SleepStages
     sleeping_hrv: Optional[float] = None
+    deep_sleep_hrv: Optional[float] = None
     sleeping_hr: Optional[float] = None
-    consistency_score: Optional[float] = None
+    consistency_minutes: Optional[float] = None
     average_bed_time: Optional[str] = None
     average_wake_time: Optional[str] = None
-    consistency_status: Optional[str] = None
     sleep_start: Optional[str] = None
     sleep_end: Optional[str] = None
     duration_score: float
@@ -107,61 +108,26 @@ class SleepResponse(BaseModel):
     is_mock: bool = True
 
 
-class SleepConsistencyDay(BaseModel):
-    day_name: str
-    day_num: int
+class SleepTrendDay(BaseModel):
     date: str
-    score: float
-    status: str
+    value: Optional[float] = None
+    bed_time: Optional[str] = None
+    wake_time: Optional[str] = None
+    asleep_hours: Optional[float] = None
+    in_bed_hours: Optional[float] = None
+    bed_variability_minutes: Optional[float] = None
+    wake_variability_minutes: Optional[float] = None
 
 
-class SleepConsistencyBreakdown(BaseModel):
-    optimal_days: int
-    sufficient_days: int
-    poor_days: int
-    total_days: int
-
-
-class SleepConsistencyTrendResponse(BaseModel):
-    average_score: float
-    prior_week_change: float
-    range_label: str
-    insight: str
-    days: List[SleepConsistencyDay]
-    breakdown: SleepConsistencyBreakdown
-
-
-class SleepEfficiencyDay(BaseModel):
-    day_name: str
-    day_num: int
-    date: str
-    score: float
-    status: str
-    asleep_hours: float
-    in_bed_hours: float
-    awake_minutes: float
-
-
-class SleepEfficiencyBreakdown(BaseModel):
-    optimal_days: int
-    sufficient_days: int
-    poor_days: int
-    total_days: int
-
-
-class SleepEfficiencyTrendResponse(BaseModel):
-    average_score: float
-    status: str
-    average_time_asleep_hours: float
-    average_time_in_bed_hours: float
-    average_awake_minutes: float
-    prior_week_change: float
-    comparison_label: Optional[str] = "vs. prior week"
-    range_label: str
-    insight: str
-    current_day_score: Optional[float] = None
-    days: List[SleepEfficiencyDay]
-    breakdown: SleepEfficiencyBreakdown
+class SleepTrendResponse(BaseModel):
+    is_mock: bool
+    timeframe: str
+    range_start: str
+    range_end: str
+    average_value: Optional[float] = None
+    recorded_nights: int
+    scored_days: int
+    days: List[SleepTrendDay]
 
 
 
@@ -176,3 +142,26 @@ class DashboardResponse(BaseModel):
     strain: StrainResponse
     date: str
     is_mock: bool = True
+
+
+class HealthPoint(BaseModel):
+    date: str
+    value: Optional[float] = None
+    baseline: Optional[float] = None
+    estimated: Optional[bool] = None
+    method: Optional[str] = None
+
+
+class HeartRatePoint(BaseModel):
+    time: str
+    value: float
+
+
+class HealthResponse(BaseModel):
+    date: str
+    timeframe: str
+    range_start: str
+    range_end: str
+    is_mock: bool
+    metrics: dict[str, List[HealthPoint]]
+    heart_rate: List[HeartRatePoint]

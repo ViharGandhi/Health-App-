@@ -18,6 +18,7 @@ interface CircleDialProps {
   onClick?: () => void;
   showChevron?: boolean;
   isPrimary?: boolean;
+  displayText?: string;
 }
 
 export default function CircleDial({
@@ -30,13 +31,14 @@ export default function CircleDial({
   onClick,
   showChevron = true,
   isPrimary = false,
+  displayText,
 }: CircleDialProps) {
   // Normalize percentage (0 to 1)
   const rawPct = Math.min(1, Math.max(0, value / maxValue));
   // If value > 0 ensure tiny minimum arc is visible like WHOOP's 0.1 strain tick
   const pct = value > 0 ? Math.max(rawPct, 0.016) : 0;
 
-  const strokeWidth = isPrimary ? 6.5 : 5.5;
+  const strokeWidth = size >= 200 ? 10 : isPrimary ? 6.5 : 5.5;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const dashOffset = circumference * (1 - pct);
@@ -86,8 +88,8 @@ export default function CircleDial({
         {/* Center score - PURE WHITE as in WHOOP */}
         <div className={styles.centerContent}>
           <div className={styles.valueRow}>
-            <span className={styles.number}>{displayValue}</span>
-            {unit && <span className={styles.unit}>{unit}</span>}
+            <span className={styles.number} style={size >= 200 ? { fontSize: 62 } : undefined}>{displayText ?? displayValue}</span>
+            {unit && !displayText && <span className={styles.unit} style={size >= 200 ? { fontSize: 26 } : undefined}>{unit}</span>}
           </div>
         </div>
       </div>

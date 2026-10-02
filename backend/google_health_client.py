@@ -63,6 +63,19 @@ class GoogleHealthClient:
                 return float(metric["averageHeartRateVariabilityMilliseconds"])
         return None
 
+    async def get_deep_sleep_hrv(self, target_date: date) -> Optional[float]:
+        points = await self._points(
+            "daily-heart-rate-variability",
+            _day_filter("dailyHeartRateVariability.date", target_date, target_date),
+        )
+        for point in points:
+            value = point.get("dailyHeartRateVariability", {}).get(
+                "deepSleepRootMeanSquareOfSuccessiveDifferencesMilliseconds"
+            )
+            if value is not None:
+                return float(value)
+        return None
+
     async def get_resting_heart_rate(self, target_date: date) -> Optional[float]:
         points = await self._points(
             "daily-resting-heart-rate",
@@ -89,6 +102,39 @@ class GoogleHealthClient:
             if value is not None and float(value) > 0:
                 dated.append((_google_date(metric["date"]), float(value)))
         return [value for _, value in sorted(dated)]
+
+    async def get_health_history(self, start: date, end: date) -> dict[str, list[dict]]:
+        """Fetch dated Fitbit Air summaries; optional API fields stay absent."""
+        specs = {
+            "hrv": ("daily-heart-rate-variability", "dailyHeartRateVariability", "averageHeartRateVariabilityMilliseconds"),
+            "deep_sleep_hrv": ("daily-heart-rate-variability", "dailyHeartRateVariability", "deepSleepRootMeanSquareOfSuccessiveDifferencesMilliseconds"),
+            "nrem_hr": ("daily-heart-rate-variability", "dailyHeartRateVariability", "nonRemHeartRateBeatsPerMinute"),
+            "rhr": ("daily-resting-heart-rate", "dailyRestingHeartRate", "beatsPerMinute"),
+            "spo2": ("daily-oxygen-saturation", "dailyOxygenSaturation", "averagePercentage"),
+            "respiratory_rate": ("daily-respiratory-rate", "dailyRespiratoryRate", "breathsPerMinute"),
+            "skin_temperature": ("daily-sleep-temperature-derivations", "dailySleepTemperatureDerivations", "nightlyTemperatureCelsius"),
+            "vo2_max": ("daily-vo2-max", "dailyVo2Max", "vo2Max"),
+        }
+        history: dict[str, list[dict]] = {}
+        fetched: dict[str, list[dict]] = {}
+        for key, (data_type, field, value_field) in specs.items():
+            if data_type not in fetched:
+                fetched[data_type] = await self._points(data_type, _day_filter(f"{field}.date", start, end))
+            dated = {}
+            for point in fetched[data_type]:
+                metric = point.get(field, {})
+                value = metric.get(value_field)
+                if not metric.get("date") or value is None:
+                    continue
+                day = _google_date(metric["date"])
+                if start <= day <= end:
+                    dated[day.isoformat()] = {
+                        "date": day.isoformat(), "value": float(value),
+                        "estimated": metric.get("estimated") if key == "vo2_max" else None,
+                        "method": metric.get("dailyRestingHeartRateMetadata", {}).get("calculationMethod") if key == "rhr" else None,
+                    }
+            history[key] = [dated[day] for day in sorted(dated)]
+        return history
 
     async def get_intraday_heart_rate(self, target_date: date) -> list[tuple[datetime, float]]:
         points = await self._points(
@@ -178,3 +224,13 @@ class GoogleHealthClient:
             "awake_minutes": r["awake_duration"] / 60,
             "start_time": r["sleep_start_time"], "end_time": r["sleep_end_time"],
         } for r in records]
+
+    async def get_sleep_trend_history(self, start: date, end: date) -> list[dict]:
+        records = await self._sleep_records(start, end)
+        return [{
+            "date": record["date"],
+            "bed_time": record["sleep_start_time"],
+            "wake_time": record["sleep_end_time"],
+            "time_asleep_minutes": record["total_duration"] / 60,
+            "time_in_bed_minutes": record["in_bed_duration"] / 60,
+        } for record in records]

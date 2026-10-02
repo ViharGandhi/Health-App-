@@ -2,10 +2,9 @@
 
 /**
  * Dashboard — Home page (/)
- * Exact WHOOP app dashboard:
+ * Ojas dashboard with a dark fitness overview:
  * - Top header with Avatar, streak, `< TODAY >` pill, and strap battery
- * - "WHOOP" centered wordmark
- * - Three horizontal dials: SLEEP, RECOVERY, STRAIN with exact WHOOP layout, fonts & colors
+ * - Ojas name above three Sleep, Recovery, and Strain dials
  * - Health Monitor & Stress Monitor side-by-side
  * - My Day with "Your Daily Outlook" and "Today's Activities"
  */
@@ -19,9 +18,9 @@ import type { DashboardData } from '@/lib/types';
 import styles from './page.module.css';
 
 const RECOVERY_COLOR: Record<string, string> = {
-  green:  '#22E600', // Crisp WHOOP electric lime green
-  yellow: '#F5C518',
-  red:    '#FF3B3B',
+  green:  '#16EC06',
+  yellow: '#FFDE00',
+  red:    '#FF0026',
 };
 
 function formatTime(dateStr: string | null): string {
@@ -73,9 +72,9 @@ export default function DashboardPage() {
   }
 
   const { recovery, sleep, strain } = data;
-  const recoveryColor = RECOVERY_COLOR[recovery.status] ?? '#00F076';
-  const sleepColor = '#4EA5B7'; // Whoop sleep teal/cyan
-  const strainColor = '#3078F0'; // Whoop strain blue
+  const recoveryColor = RECOVERY_COLOR[recovery.status] ?? '#8E95A2';
+  const sleepColor = '#7BA1BB';
+  const strainColor = '#0093E7';
 
   const now = new Date();
   const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
@@ -97,34 +96,20 @@ export default function DashboardPage() {
                 <circle cx="12" cy="7" r="4" />
               </svg>
             </div>
-            <div className={styles.streakBadge}>
-              <span className={styles.flame}>🔥</span>
-              <span className={styles.streakNum}>6</span>
-            </div>
           </div>
 
           <div className={styles.datePill}>
-            <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ transform: 'rotate(180deg)' }}>
-              <path d="M1 1.5L4.5 5L1 8.5" />
-            </svg>
             <span className={styles.pillText}>TODAY</span>
-            <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M1 1.5L4.5 5L1 8.5" />
-            </svg>
           </div>
 
           <div className={styles.headerRight}>
-            <span className={styles.batteryPct}>94%</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22E600" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={styles.batteryIcon}>
-              <rect x="2" y="7" width="16" height="10" rx="2" ry="2" />
-              <line x1="20" y1="11" x2="20" y2="13" />
-            </svg>
+            <span className={styles.batteryPct}>{data.is_mock ? 'DEMO' : 'FITBIT'}</span>
           </div>
         </header>
 
-        {/* -- WHOOP Wordmark -------------------------------- */}
+        {/* -- Ojas name -------------------------------- */}
         <div className={styles.brandBar}>
-          <span className={styles.whoopLogo}>WHOOP</span>
+          <span className={styles.whoopLogo}>OJAS</span>
         </div>
 
         {/* -- Three Dials: SLEEP | RECOVERY | STRAIN --------- */}
@@ -147,7 +132,7 @@ export default function DashboardPage() {
           <div className={styles.dialColCenter}>
             <CircleDial
               label="RECOVERY"
-              value={recovery.score}
+              value={recovery.score ?? 0}
               maxValue={100}
               color={recoveryColor}
               unit="%"
@@ -155,6 +140,7 @@ export default function DashboardPage() {
               onClick={() => router.push('/recovery')}
               showChevron
               isPrimary
+              displayText={recovery.is_calibrating ? '—' : undefined}
             />
           </div>
 
@@ -175,7 +161,7 @@ export default function DashboardPage() {
         {/* -- Health Monitor & Stress Monitor (2 Columns) --- */}
         <div className={styles.monitorsGrid}>
           {/* HEALTH MONITOR */}
-          <div className={styles.monitorCard} onClick={() => router.push('/recovery')} role="button" tabIndex={0}>
+          <div className={styles.monitorCard} onClick={() => router.push('/health')} onKeyDown={(event) => { if (event.key === 'Enter') router.push('/health'); }} role="button" tabIndex={0}>
             <div className={styles.cardHeaderRow}>
               <span className={styles.cardTitle}>HEALTH MONITOR</span>
               <svg className={styles.cardChevronSvg} width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -183,35 +169,25 @@ export default function DashboardPage() {
               </svg>
             </div>
             <div className={styles.monitorBody}>
-              <div className={styles.checkIconBox}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2BD67E" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
               <div className={styles.monitorTextStack}>
-                <span className={styles.monitorHighlight} style={{ color: '#2BD67E' }}>
-                  WITHIN RANGE
-                </span>
-                <span className={styles.monitorSubtext}>5/5 Metrics</span>
+                <span className={styles.monitorHighlight}>EXPLORE VITALS</span>
+                <span className={styles.monitorSubtext}>Your measured trends</span>
               </div>
             </div>
           </div>
 
-          {/* STRESS MONITOR */}
-          <div className={styles.monitorCard} onClick={() => router.push('/strain')} role="button" tabIndex={0}>
+          {/* RECOVERY SIGNALS */}
+          <div className={styles.monitorCard} onClick={() => router.push('/recovery')} onKeyDown={(event) => { if (event.key === 'Enter') router.push('/recovery'); }} role="button" tabIndex={0}>
             <div className={styles.cardHeaderRow}>
-              <span className={styles.cardTitle}>STRESS MONITOR</span>
+              <span className={styles.cardTitle}>RECOVERY SIGNALS</span>
               <svg className={styles.cardChevronSvg} width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 1.5L4.5 5L1 8.5" />
               </svg>
             </div>
             <div className={styles.monitorBody}>
-              <div className={styles.stressScoreBadge}>0.4</div>
               <div className={styles.monitorTextStack}>
-                <span className={styles.monitorHighlight} style={{ color: '#2BD67E' }}>
-                  LOW
-                </span>
-                <span className={styles.monitorSubtext}>7:30 AM</span>
+                <span className={styles.monitorHighlight}>{recovery.today_hrv == null ? 'NO READING' : `${Math.round(recovery.today_hrv)} ms`}</span>
+                <span className={styles.monitorSubtext}>Today’s HRV</span>
               </div>
             </div>
           </div>
@@ -224,7 +200,7 @@ export default function DashboardPage() {
           {/* Daily Outlook Banner */}
           <div className={styles.outlookBanner}>
             <div className={styles.outlookLeft}>
-              <div className={styles.whoopIconPill}>W</div>
+              <div className={styles.whoopIconPill}>O</div>
               <div className={styles.outlookContent}>
                 <span className={styles.sunIcon}>☼</span>
                 <span className={styles.outlookLabel}>Your Daily Outlook</span>
@@ -257,8 +233,8 @@ export default function DashboardPage() {
 
               <div className={styles.activityTimeline}>
                 <div className={styles.timeStack}>
-                  <span className={styles.timeVal}>{sleep.sleep_start ? formatTime(sleep.sleep_start) : '12:35 AM'}</span>
-                  <span className={styles.timeVal}>{sleep.sleep_end ? formatTime(sleep.sleep_end) : '7:26 AM'}</span>
+                  <span className={styles.timeVal}>{formatTime(sleep.sleep_start)}</span>
+                  <span className={styles.timeVal}>{formatTime(sleep.sleep_end)}</span>
                 </div>
                 <div className={styles.timelineBar} />
               </div>

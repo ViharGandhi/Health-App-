@@ -31,18 +31,19 @@ export interface StrainData {
 }
 
 export interface RecoveryData {
-  score: number;
-  status: 'green' | 'yellow' | 'red';
-  hrv_component: number;
-  rhr_component: number;
-  sleep_component: number;
-  strain_component: number;
-  acr_penalty: number;
+  score: number | null;
+  status: 'green' | 'yellow' | 'red' | 'calibrating';
+  hrv_component: number | null;
+  rhr_component: number | null;
+  sleep_component: number | null;
+  strain_component: number | null;
+  acr_penalty: number | null;
   today_hrv: number | null;
   today_rhr: number | null;
   hrv_baseline: number | null;
   rhr_baseline: number | null;
   training_recommendation: string;
+  is_calibrating: boolean;
   is_mock: boolean;
 }
 
@@ -59,14 +60,14 @@ export interface SleepData {
   sleep_need_hours: number;
   total_sleep_hours: number;
   sleep_debt_hours: number;
-  efficiency_pct: number;
+  efficiency_pct: number | null;
   stages: SleepStages;
   sleeping_hrv: number | null;
+  deep_sleep_hrv: number | null;
   sleeping_hr: number | null;
-  consistency_score: number | null;
+  consistency_minutes: number | null;
   average_bed_time?: string | null;
   average_wake_time?: string | null;
-  consistency_status?: string | null;
   sleep_start: string | null;
   sleep_end: string | null;
   duration_score: number;
@@ -84,61 +85,49 @@ export interface DashboardData {
   is_mock: boolean;
 }
 
-export interface SleepConsistencyDay {
-  day_name: string;
-  day_num: number;
+export interface SleepTrendDay {
   date: string;
-  score: number;
-  status: string;
+  value: number | null;
+  bed_time: string | null;
+  wake_time: string | null;
+  asleep_hours: number | null;
+  in_bed_hours: number | null;
+  bed_variability_minutes: number | null;
+  wake_variability_minutes: number | null;
 }
 
-export interface SleepConsistencyBreakdown {
-  optimal_days: number;
-  sufficient_days: number;
-  poor_days: number;
-  total_days: number;
+export interface SleepTrend {
+  is_mock: boolean;
+  timeframe: 'W' | '6M' | '1Y';
+  range_start: string;
+  range_end: string;
+  average_value: number | null;
+  recorded_nights: number;
+  scored_days: number;
+  days: SleepTrendDay[];
 }
 
-export interface SleepConsistencyTrend {
-  average_score: number;
-  prior_week_change: number;
-  range_label: string;
-  insight: string;
-  days: SleepConsistencyDay[];
-  breakdown: SleepConsistencyBreakdown;
-}
-
-export interface SleepEfficiencyDay {
-  day_name: string;
-  day_num: number;
+export interface HealthPoint {
   date: string;
-  score: number;
-  status: string;
-  asleep_hours: number;
-  in_bed_hours: number;
-  awake_minutes: number;
+  value: number | null;
+  baseline: number | null;
+  estimated: boolean | null;
+  method: string | null;
 }
 
-export interface SleepEfficiencyBreakdown {
-  optimal_days: number;
-  sufficient_days: number;
-  poor_days: number;
-  total_days: number;
+export interface HeartRatePoint {
+  time: string;
+  value: number;
 }
 
-export interface SleepEfficiencyTrend {
-  average_score: number;
-  status: string;
-  average_time_asleep_hours: number;
-  average_time_in_bed_hours: number;
-  average_awake_minutes: number;
-  prior_week_change: number;
-  comparison_label?: string;
-  range_label: string;
-  insight: string;
-  current_day_score?: number;
-  days: SleepEfficiencyDay[];
-  breakdown: SleepEfficiencyBreakdown;
+export interface HealthData {
+  date: string;
+  timeframe: 'W' | '6M' | '1Y';
+  range_start: string;
+  range_end: string;
+  is_mock: boolean;
+  metrics: Record<string, HealthPoint[]>;
+  heart_rate: HeartRatePoint[];
 }
 
 
