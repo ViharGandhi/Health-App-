@@ -126,6 +126,18 @@ class SleepStressTests(unittest.TestCase):
         self.assertEqual(floors["LIGHT"].ln_hrv_spread, 0.02)
         self.assertEqual(floors["LIGHT"].hr_spread, 0.5)
 
+    def test_baseline_does_not_replace_poor_night_with_older_history(self):
+        current = make_night(DAY, [(20, 80, 5)] * 4)
+        recent = [make_night(DAY - timedelta(days=index), [(40, 60, 5)] * 5)
+                  for index in range(1, 15)]
+        recent[4] = replace(recent[4], coverage=0.0)
+        older = make_night(DAY - timedelta(days=15), [(15, 90, 5)] * 5)
+        short_baseline, short_count, _ = build_baseline(current, recent)
+        long_baseline, long_count, _ = build_baseline(current, recent + [older])
+        self.assertEqual(short_count, 13)
+        self.assertEqual(long_count, 13)
+        self.assertEqual(short_baseline, long_baseline)
+
     def test_insufficient_baseline_and_classic_confidence_cap(self):
         current = make_night(DAY, [(20, 80, 5)] * 4)
         self.assertEqual(score_night(current, baseline_history()[:6])["status"], "insufficient_baseline")
@@ -221,6 +233,15 @@ class SleepStressTests(unittest.TestCase):
         self.assertEqual(data["range_end"], DAY.isoformat())
         self.assertEqual(len(data["nights"]), 183)
         self.assertGreaterEqual(len(set(item["stressed_minutes"] for item in data["nights"])), 5)
+        week = TestClient(app).get("/api/sleep/stress?timeframe=W",
+                                   headers={"X-User-Date": DAY.isoformat()}).json()
+        month = TestClient(app).get("/api/sleep/stress?timeframe=M",
+                                    headers={"X-User-Date": DAY.isoformat()}).json()
+        for shorter in (week, month):
+            september_29 = next(item for item in shorter["nights"] if item["night_date"] == "2026-09-29")
+            long_range = next(item for item in data["nights"] if item["night_date"] == "2026-09-29")
+            self.assertEqual(september_29["stressed_minutes"], long_range["stressed_minutes"])
+            self.assertEqual(september_29["nights_available"], long_range["nights_available"])
 
     def test_connected_pipeline_with_google_shaped_mock_points(self):
         sleep_points, hrv_points, hr_points = [], [], []

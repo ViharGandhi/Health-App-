@@ -15,7 +15,9 @@ cd backend
 ```
 
 The score requires **both** log-RMSSD below and median HR above stage-specific
-personal baselines for two adjacent windows. It reports summed stressed minutes,
+personal baselines for two adjacent windows. Its baseline uses only the previous
+14 local wake dates, so requesting a longer chart cannot change a night’s score.
+It reports summed stressed minutes,
 hours, percentage of valid sleep windows, episode details, and coverage/confidence.
 The 1.0 spread thresholds are starting settings, not published clinical cutoffs.
 Only sleep stage, sample RMSSD, and sample HR enter this calculation.

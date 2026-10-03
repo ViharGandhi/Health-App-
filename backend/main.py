@@ -52,6 +52,10 @@ from sleep_stress_store import SleepStressStore
 from sleep_stress_pipeline import compute_connected_sleep_stress
 from sleep_stress import summarize_nights
 from mock_sleep_stress import mock_sleep_stress_history
+from mock_sleep_stage_ranges import mock_stage_ranges, mock_stage_points
+from sleep_heart_rate import select_sleep, build_sleep_heart_rate, mock_sleep_heart_rate_points
+from sleep_stage_pipeline import sync_stage_ranges
+from sleep_stage_webhooks import router as sleep_stage_webhook_router, stage_store
 from health_trends import build_health_response
 from mock_data import (
     get_mock_dashboard, compute_mock_strain, compute_mock_sleep,
@@ -87,6 +91,7 @@ app.add_middleware(
 
 # Mount auth router
 app.include_router(auth_router)
+app.include_router(sleep_stage_webhook_router)
 
 USER_AGE = int(os.getenv("USER_AGE", "22"))
 
@@ -418,6 +423,60 @@ async def sleep_endpoint(request: Request, response: Response):
     yesterday = today - timedelta(days=1)
     yest_strain = await _compute_real_strain(client, yesterday, age)
     return await _compute_real_sleep(client, today, yest_strain.score_21, age)
+
+
+@app.get("/api/sleep/heart-rate")
+async def sleep_heart_rate_endpoint(
+    request: Request, response: Response, night_date: date | None = None, sleep_id: str | None = None,
+):
+    today = _client_day(request)
+    end = night_date or today
+    start = end if night_date else end - timedelta(days=9)
+    session = get_session(request)
+    token = await _get_token(request, response)
+    if not token:
+        if session:
+            raise HTTPException(401, "Reconnect Google Health to refresh sleep data")
+        points = mock_stage_points(end, (end - start).days + 1)
+        point = select_sleep(points, today, sleep_id)
+        return build_sleep_heart_rate(point, mock_sleep_heart_rate_points(point) if point else [], True)
+    client = GoogleHealthClient(token)
+    try:
+        point = select_sleep(await client.get_sleep_stage_points(start, end), today, sleep_id)
+        if point is None:
+            return build_sleep_heart_rate(None, [], False)
+        interval = point["sleep"]["interval"]
+        readings = await client.get_sleep_heart_rate_points(
+            datetime.fromisoformat(interval["startTime"].replace("Z", "+00:00")),
+            datetime.fromisoformat(interval["endTime"].replace("Z", "+00:00")),
+        )
+        return build_sleep_heart_rate(point, readings, False)
+    except httpx.HTTPStatusError as error:
+        if error.response.status_code == 401:
+            raise HTTPException(401, "Reconnect Google Health to refresh sleep data") from error
+        raise
+
+
+@app.get("/api/sleep/stages/typical-ranges")
+async def sleep_stage_ranges_endpoint(request: Request, response: Response, days: int = 10):
+    if not 1 <= days <= 366:
+        raise HTTPException(400, "days must be between 1 and 366")
+    today = _client_day(request)
+    session = get_session(request)
+    token = await _get_token(request, response)
+    if not token:
+        if session:
+            raise HTTPException(401, "Reconnect Google Health to refresh sleep data")
+        return {"is_mock": True, "nights": mock_stage_ranges(today, days)}
+    client = GoogleHealthClient(token)
+    try:
+        user_id = await client.get_health_user_id()
+        nights = await sync_stage_ranges(client, user_id, stage_store(), today - timedelta(days=days - 1), today)
+    except httpx.HTTPStatusError as error:
+        if error.response.status_code == 401:
+            raise HTTPException(401, "Reconnect Google Health to refresh sleep data") from error
+        raise
+    return {"is_mock": False, "nights": nights}
 
 
 @app.get("/api/sleep/stress", response_model=SleepStressHistoryResponse)

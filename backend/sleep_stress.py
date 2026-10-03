@@ -28,7 +28,7 @@ class StressConfig:
 
 
 DEFAULT_CONFIG = StressConfig()
-ALGO_VERSION = "sleep-stress-1"
+ALGO_VERSION = "sleep-stress-2"
 
 
 @dataclass(frozen=True)
@@ -251,8 +251,9 @@ def _stage_baseline(windows: list[ValidWindow], config: StressConfig, fallback: 
 
 def build_baseline(current: NightWindows, history: list[NightWindows],
                    config: StressConfig = DEFAULT_CONFIG) -> tuple[dict[str, StageBaseline], int, bool]:
+    first_date = current.night.night_date - timedelta(days=config.baseline_nights_target)
     previous = sorted((item for item in history
-                       if item.night.night_date < current.night.night_date
+                       if first_date <= item.night.night_date < current.night.night_date
                        and item.night.sleep_id != current.night.sleep_id
                        and item.night.main_sleep
                        and item.coverage >= config.min_night_coverage and item.windows),

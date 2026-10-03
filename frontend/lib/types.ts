@@ -163,6 +163,44 @@ export interface SleepStressHistory {
   nights: SleepStressNight[];
 }
 
+export interface SleepStageRangeMetric {
+  minutes: number;
+  pct: number | null;
+  range: { low: number; high: number; center: number; spread: number; n: number } | null;
+  range_minutes: { low: number; high: number } | null;
+  status: 'below' | 'within' | 'above' | null;
+  delta_vs_center_pct: number | null;
+  source: 'personal' | 'population' | null;
+}
+
+export interface SleepStageRangeNight {
+  sleep_id: string;
+  night_date: string;
+  status: string;
+  total_minutes?: number;
+  nights_used?: number;
+  nights_available?: number;
+  config_snapshot?: { min_nights: number };
+  stages: Partial<Record<'awake' | 'light' | 'deep' | 'rem' | 'restorative', SleepStageRangeMetric>>;
+}
+
+export interface SleepStageRangeHistory {
+  is_mock: boolean;
+  nights: SleepStageRangeNight[];
+}
+
+export interface SleepHeartRate {
+  is_mock: boolean;
+  status: 'ok' | 'no_sleep' | 'no_readings';
+  sleep_id?: string;
+  night_date?: string;
+  start?: string;
+  end?: string;
+  start_local?: string;
+  end_local?: string;
+  samples: { timestamp: string; local_time: string; bpm: number }[];
+}
+
 export interface HealthPoint {
   date: string;
   value: number | null;

@@ -37,10 +37,12 @@ class GoogleHealthClient:
             "Accept": "application/json",
         }
 
-    async def _points(self, data_type: str, filter_expr: str) -> list[dict]:
-        """Fetch every page of reconciled wearable data; propagate API errors."""
-        url = f"{BASE_URL}/{data_type}/dataPoints:reconcile"
-        params = {"filter": filter_expr, "dataSourceFamily": WEARABLES}
+    async def _points(self, data_type: str, filter_expr: str, *, reconcile: bool = True) -> list[dict]:
+        """Fetch every page; reconcile wearable data by default, or list raw sessions."""
+        url = f"{BASE_URL}/{data_type}/dataPoints" + (":reconcile" if reconcile else "")
+        params = {"filter": filter_expr}
+        if reconcile:
+            params["dataSourceFamily"] = WEARABLES
         points: list[dict] = []
         async with httpx.AsyncClient(timeout=20.0) as client:
             while True:
@@ -58,6 +60,30 @@ class GoogleHealthClient:
                 if not token:
                     return points
                 params["pageToken"] = token
+
+    async def get_sleep_stage_points(self, start: date | None, end: date) -> list[dict]:
+        """List identifiable sleep sessions, preserving IDs for upserts and webhook jobs."""
+        field = "sleep.interval.civil_end_time"
+        expr = (_day_filter(field, start, end) if start else
+                f'{field} < "{(end + timedelta(days=1)).isoformat()}"')
+        return await self._points("sleep", expr, reconcile=False)
+
+    async def get_health_user_id(self) -> str:
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            response = await client.get("https://health.googleapis.com/v4/users/me/identity", headers=self.headers)
+            response.raise_for_status()
+            return response.json()["healthUserId"]
+
+    async def get_sleep_heart_rate_points(self, start: datetime, end: datetime) -> list[dict]:
+        """Raw timestamped BPM for one sleep, including sleeps spanning midnight/DST."""
+        if start.tzinfo is None or end.tzinfo is None or end <= start:
+            raise ValueError("Require an ordered, timezone-aware sleep interval")
+        start_text = start.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+        end_text = end.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+        return await self._points("heart-rate", (
+            f'heart_rate.sample_time.physical_time >= "{start_text}" AND '
+            f'heart_rate.sample_time.physical_time < "{end_text}"'
+        ))
 
     async def get_daily_hrv(self, target_date: date) -> Optional[float]:
         points = await self._points(

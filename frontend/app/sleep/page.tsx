@@ -19,8 +19,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import type { SleepConsistencyScore, SleepData, SleepStressHistory } from '@/lib/types';
+import type { SleepConsistencyScore, SleepData, SleepStressHistory, SleepStageRangeHistory, SleepStageRangeMetric } from '@/lib/types';
 import styles from './page.module.css';
+import SleepHeartRateChart from './SleepHeartRateChart';
 
 // Segment bar helper: 3 pills (Poor, Sufficient, Optimal)
 function SegmentIndicator({ value, isInverse = false, isConsistency = false }: { value: number; isInverse?: boolean; isConsistency?: boolean }) {
@@ -38,11 +39,33 @@ function SegmentIndicator({ value, isInverse = false, isConsistency = false }: {
   );
 }
 
+function stageDuration(minutes: number | undefined): string {
+  if (minutes == null) return '—';
+  const rounded = Math.round(minutes);
+  return `${Math.floor(rounded / 60)}:${String(rounded % 60).padStart(2, '0')}`;
+}
+
+function rangeDescription(metric: SleepStageRangeMetric | undefined): string | undefined {
+  if (!metric?.range) return undefined;
+  const { low, high, n } = metric.range;
+  const duration = metric.range_minutes;
+  return `Your usual range: ${low.toFixed(1)}–${high.toFixed(1)}%${duration ? ` (${stageDuration(duration.low)}–${stageDuration(duration.high)})` : ''}. ${metric.status} your usual. Based on ${n} nights; provisional.`;
+}
+
+function TypicalRangeMarker({ metric }: { metric: SleepStageRangeMetric | undefined }) {
+  if (!metric?.range) return null;
+  return <div className={styles.typicalRangeBox} role="img" aria-label={rangeDescription(metric)}
+    style={{ left: `${metric.range.low}%`, width: `${metric.range.high - metric.range.low}%` }} />;
+}
+
 export default function SleepPage() {
   const router = useRouter();
   const [data, setData] = useState<SleepData | null>(null);
   const [consistency, setConsistency] = useState<SleepConsistencyScore | null>(null);
   const [stress, setStress] = useState<SleepStressHistory | null>(null);
+  const [stageHistory, setStageHistory] = useState<SleepStageRangeHistory | null>(null);
+  const [stageRangesLoading, setStageRangesLoading] = useState(true);
+  const [stageRangesError, setStageRangesError] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -51,6 +74,8 @@ export default function SleepPage() {
       .finally(() => setLoading(false));
     api.getSleepConsistencyScore().then(setConsistency).catch(() => setConsistency(null));
     api.getSleepStress('W').then(setStress).catch(() => setStress(null));
+    api.getSleepStageRanges().then(setStageHistory)
+      .catch(() => setStageRangesError(true)).finally(() => setStageRangesLoading(false));
   }, []);
 
   if (loading || !data) {
@@ -80,13 +105,18 @@ export default function SleepPage() {
   const dashOffset = circumference * (1 - pct);
   const center = dialSize / 2;
 
-  // Stages breakdown in hours/mins
-  const { stages } = data;
-  const formatMins = (mins: number) => {
-    const h = Math.floor(mins / 60);
-    const m = Math.round(mins % 60);
-    return h > 0 ? `${h}h ${m}m` : `${m}m`;
-  };
+  // Use the latest record, including unavailable/pending nights, rather than an older scored night.
+  const stageNight = stageHistory?.nights.slice().sort((a, b) => a.night_date.localeCompare(b.night_date)).slice(-1)[0];
+  const stageReadings = stageNight?.stages;
+  const stageRangeNote = stageRangesLoading ? 'Loading typical range…'
+    : stageRangesError ? 'Typical range unavailable'
+    : !stageNight ? 'No recent sleep-stage data'
+    : stageNight.status === 'building_baseline'
+      ? `Building baseline · ${stageNight.nights_available} of ${stageNight.config_snapshot?.min_nights ?? 4} nights`
+    : stageNight.status === 'stages_pending' ? 'Sleep stages are still processing'
+    : stageNight.status !== 'ok' ? 'Stage breakdown not available for this night'
+    : `Based on ${stageNight.nights_used} nights · Provisional`;
+  const restorative = stageReadings?.restorative;
 
   return (
     <div className={styles.pageWrapper}>
@@ -320,50 +350,7 @@ export default function SleepPage() {
             </div>
 
             {/* Intraday Sleep Heart Rate Graph */}
-            <div className={styles.hrChartContainer}>
-              <div className={styles.hrYAxis}>
-                <span>110</span>
-                <span>90</span>
-                <span>70</span>
-                <span>50</span>
-                <span>30</span>
-              </div>
-
-              <div className={styles.hrGraphBody}>
-                <div className={styles.hrGridlines}>
-                  <div className={styles.hrGridline} />
-                  <div className={styles.hrGridline} />
-                  <div className={styles.hrGridline} />
-                  <div className={styles.hrGridline} />
-                  <div className={styles.hrGridline} />
-                </div>
-
-                <svg className={styles.hrSvg} viewBox="0 0 320 100" preserveAspectRatio="none">
-                  {/* Sleep start dashed boundary line at x=28 (00:14) */}
-                  <line x1="28" y1="0" x2="28" y2="82" stroke="rgba(255,255,255,0.4)" strokeWidth="1" strokeDasharray="3 3" />
-                  <circle cx="28" cy="82" r="2.2" fill="#FFFFFF" />
-
-                  {/* Sleep end dashed boundary line at x=286 (09:44) */}
-                  <line x1="286" y1="0" x2="286" y2="82" stroke="rgba(255,255,255,0.4)" strokeWidth="1" strokeDasharray="3 3" />
-                  <circle cx="286" cy="82" r="2.2" fill="#FFFFFF" />
-
-                  {/* High-frequency Heart Rate waveform */}
-                  <path
-                    d="M 0,38 L 4,32 L 8,42 L 12,28 L 16,36 L 20,30 L 24,35 L 28,64 L 32,70 L 36,68 L 40,74 L 45,62 L 48,70 L 52,75 L 56,76 L 60,74 L 64,75 L 68,76 L 72,72 L 76,58 L 80,72 L 85,66 L 90,68 L 95,62 L 100,74 L 105,75 L 110,72 L 115,65 L 120,56 L 125,68 L 130,74 L 135,76 L 140,72 L 145,75 L 150,68 L 155,62 L 160,68 L 165,74 L 170,76 L 175,78 L 180,76 L 185,74 L 190,70 L 195,60 L 200,72 L 205,68 L 210,64 L 215,66 L 220,62 L 225,58 L 230,65 L 235,70 L 240,72 L 245,68 L 250,70 L 255,65 L 260,62 L 265,68 L 270,70 L 275,66 L 280,64 L 286,40 L 290,24 L 295,38 L 300,18 L 305,44 L 310,28 L 315,36 L 320,46"
-                    fill="none"
-                    stroke="#62A4B7"
-                    strokeWidth="1.4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-
-                <div className={styles.hrTimestamps}>
-                  <span className={styles.hrTimeStart} style={{ left: '8.75%' }}>00:14</span>
-                  <span className={styles.hrTimeEnd} style={{ left: '89.375%' }}>09:44</span>
-                </div>
-              </div>
-            </div>
+            <SleepHeartRateChart night={stageNight} waiting={stageRangesLoading} />
 
             {/* Typical Range & Duration Header */}
             <div className={styles.typicalRangeHeader}>
@@ -373,85 +360,88 @@ export default function SleepPage() {
                   <line x1="13" y1="8" x2="16" y2="8" stroke="#8E95A2" strokeWidth="1.5" />
                   <rect x="3" y="2" width="10" height="12" rx="2" stroke="rgba(255, 255, 255, 0.75)" strokeWidth="1.2" strokeDasharray="2 2" fill="none" />
                 </svg>
-                <span>TYPICAL RANGE</span>
+                <span>TYPICAL RANGE{stageHistory?.is_mock ? ' · DEMO' : ''}</span>
               </div>
               <div className={styles.durationBlock}>
                 <span className={styles.durationLabel}>DURATION</span>
-                <span className={styles.durationValue}>9:30</span>
+                <span className={styles.durationValue}>{stageDuration(stageNight?.total_minutes)}</span>
               </div>
             </div>
+            <div className={styles.stageRangeNote}>
+              {stageNight && <span>{stageNight.night_date} · </span>}{stageRangeNote}
+            </div>
 
-            {/* The 4 Stage Rows with Protruding Transparent Optimal Range Square */}
+            {/* Stage percentages and dashed personal ranges share the same backend denominator. */}
             <div className={styles.stagesList}>
-              {/* AWAKE 4% -> 0:24 */}
+              {/* AWAKE */}
               <div className={styles.stageItem}>
                 <div className={styles.stageTopRow}>
                   <div className={styles.stageNameGroup}>
                     <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
                     <span className={styles.stageName}>AWAKE</span>
-                    <span className={styles.stagePctMuted}>4%</span>
+                    <span className={styles.stagePctMuted}>{stageReadings?.awake?.pct == null ? '—' : `${Math.round(stageReadings.awake.pct)}%`}</span>
                   </div>
-                  <span className={styles.stageDurationVal}>0:24</span>
+                  <span className={styles.stageDurationVal}>{stageDuration(stageReadings?.awake?.minutes)}</span>
                 </div>
-                <div className={styles.stageTrackWrapper}>
+                <div className={styles.stageTrackWrapper} title={rangeDescription(stageReadings?.awake)}>
                   <div className={styles.stageTrackBar}>
-                    <div className={styles.stageFill} style={{ width: '4%', background: '#E2E6EE' }} />
+                    <div className={styles.stageFill} style={{ width: `${stageReadings?.awake?.pct ?? 0}%`, background: '#E2E6EE' }} />
                   </div>
-                  <div className={styles.typicalRangeBox} style={{ left: '4.5%' }} />
+                  <TypicalRangeMarker metric={stageReadings?.awake} />
                 </div>
               </div>
 
-              {/* LIGHT 52% -> 4:51 */}
+              {/* LIGHT */}
               <div className={styles.stageItem}>
                 <div className={styles.stageTopRow}>
                   <div className={styles.stageNameGroup}>
                     <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
                     <span className={styles.stageName}>LIGHT</span>
-                    <span className={styles.stagePctLavender}>52%</span>
+                    <span className={styles.stagePctLavender}>{stageReadings?.light?.pct == null ? '—' : `${Math.round(stageReadings.light.pct)}%`}</span>
                   </div>
-                  <span className={styles.stageDurationVal}>4:51</span>
+                  <span className={styles.stageDurationVal}>{stageDuration(stageReadings?.light?.minutes)}</span>
                 </div>
-                <div className={styles.stageTrackWrapper}>
+                <div className={styles.stageTrackWrapper} title={rangeDescription(stageReadings?.light)}>
                   <div className={styles.stageTrackBar}>
-                    <div className={styles.stageFill} style={{ width: '52%', background: '#9B8AFB' }} />
+                    <div className={styles.stageFill} style={{ width: `${stageReadings?.light?.pct ?? 0}%`, background: '#9B8AFB' }} />
                   </div>
-                  <div className={styles.typicalRangeBox} style={{ left: '52.5%' }} />
+                  <TypicalRangeMarker metric={stageReadings?.light} />
                 </div>
               </div>
 
-              {/* SWS (DEEP) 18% -> 1:43 */}
+              {/* SWS (DEEP) */}
               <div className={styles.stageItem}>
                 <div className={styles.stageTopRow}>
                   <div className={styles.stageNameGroup}>
                     <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
                     <span className={styles.stageName}>SWS (DEEP)</span>
-                    <span className={styles.stagePctPink}>18%</span>
+                    <span className={styles.stagePctPink}>{stageReadings?.deep?.pct == null ? '—' : `${Math.round(stageReadings.deep.pct)}%`}</span>
                   </div>
-                  <span className={styles.stageDurationVal}>1:43</span>
+                  <span className={styles.stageDurationVal}>{stageDuration(stageReadings?.deep?.minutes)}</span>
                 </div>
-                <div className={styles.stageTrackWrapper}>
+                <div className={styles.stageTrackWrapper} title={rangeDescription(stageReadings?.deep)}>
                   <div className={styles.stageTrackBar}>
-                    <div className={styles.stageFill} style={{ width: '18%', background: '#FF5CD1' }} />
+                    <div className={styles.stageFill} style={{ width: `${stageReadings?.deep?.pct ?? 0}%`, background: '#FF5CD1' }} />
                   </div>
-                  <div className={styles.typicalRangeBox} style={{ left: '14.5%' }} />
+                  <TypicalRangeMarker metric={stageReadings?.deep} />
                 </div>
               </div>
 
-              {/* REM 26% -> 2:32 */}
+              {/* REM */}
               <div className={styles.stageItem}>
                 <div className={styles.stageTopRow}>
                   <div className={styles.stageNameGroup}>
                     <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
                     <span className={styles.stageName}>REM</span>
-                    <span className={styles.stagePctPurple}>26%</span>
+                    <span className={styles.stagePctPurple}>{stageReadings?.rem?.pct == null ? '—' : `${Math.round(stageReadings.rem.pct)}%`}</span>
                   </div>
-                  <span className={styles.stageDurationVal}>2:32</span>
+                  <span className={styles.stageDurationVal}>{stageDuration(stageReadings?.rem?.minutes)}</span>
                 </div>
-                <div className={styles.stageTrackWrapper}>
+                <div className={styles.stageTrackWrapper} title={rangeDescription(stageReadings?.rem)}>
                   <div className={styles.stageTrackBar}>
-                    <div className={styles.stageFill} style={{ width: '26%', background: '#B040FF' }} />
+                    <div className={styles.stageFill} style={{ width: `${stageReadings?.rem?.pct ?? 0}%`, background: '#B040FF' }} />
                   </div>
-                  <div className={styles.typicalRangeBox} style={{ left: '11%' }} />
+                  <TypicalRangeMarker metric={stageReadings?.rem} />
                 </div>
               </div>
             </div>
@@ -463,12 +453,14 @@ export default function SleepPage() {
                 <span className={styles.restorativeDualSquare} />
                 <span className={styles.restorativeLabel}>RESTORATIVE SLEEP</span>
               </div>
-              <div className={styles.restorativeRight}>
+              <div className={styles.restorativeRight} title={rangeDescription(restorative)}>
                 <div className={styles.restorativeValGroup}>
-                  <span className={styles.restorativeValue}>4:15</span>
-                  <span className={styles.restorativeDelta}>▲</span>
+                  <span className={styles.restorativeValue}>{stageDuration(restorative?.minutes)}</span>
+                  {restorative?.status && restorative.status !== 'within' &&
+                    <span className={styles.restorativeDelta} style={{ color: '#8E95A2' }}>{restorative.status === 'above' ? '▲' : '▼'}</span>}
                 </div>
-                <span className={styles.restorativeBaseline}>3:02</span>
+                <span className={styles.restorativeBaseline}>{restorative?.range_minutes
+                  ? `${stageDuration(restorative.range_minutes.low)}–${stageDuration(restorative.range_minutes.high)}` : '—'}</span>
               </div>
             </div>
           </div>
