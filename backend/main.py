@@ -438,7 +438,9 @@ async def sleep_heart_rate_endpoint(
         if session:
             raise HTTPException(401, "Reconnect Google Health to refresh sleep data")
         points = mock_stage_points(end, (end - start).days + 1)
-        point = select_sleep(points, today, sleep_id)
+        # Demo nights represent completed sleeps even when viewed before their synthetic wake time.
+        demo_now = datetime.fromisoformat(f"{today.isoformat()}T23:59:59+00:00")
+        point = select_sleep(points, today, sleep_id, now=demo_now)
         return build_sleep_heart_rate(point, mock_sleep_heart_rate_points(point) if point else [], True)
     client = GoogleHealthClient(token)
     try:

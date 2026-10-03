@@ -189,6 +189,8 @@ export interface SleepStageRangeHistory {
   nights: SleepStageRangeNight[];
 }
 
+export type SleepStage = 'awake' | 'light' | 'deep' | 'rem';
+
 export interface SleepHeartRate {
   is_mock: boolean;
   status: 'ok' | 'no_sleep' | 'no_readings';
@@ -199,6 +201,7 @@ export interface SleepHeartRate {
   start_local?: string;
   end_local?: string;
   samples: { timestamp: string; local_time: string; bpm: number }[];
+  stage_intervals: { stage: SleepStage; start: string; end: string }[];
 }
 
 export interface HealthPoint {

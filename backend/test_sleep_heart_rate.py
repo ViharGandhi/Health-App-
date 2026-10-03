@@ -30,6 +30,33 @@ def reading(time="2026-09-30T00:00:00Z", bpm="57", offset="7200s"):
 
 
 class SleepHeartRateTests(unittest.TestCase):
+    def test_demo_has_today_completed_sleep_even_before_synthetic_wake_time(self):
+        early = datetime.fromisoformat("2026-09-30T00:00:00+00:00")
+        with patch("sleep_heart_rate.datetime") as clock:
+            clock.now.return_value = early
+            self.assertIsNone(select_sleep([point()], DAY))
+            response = TestClient(app).get("/api/sleep/heart-rate", headers={"X-User-Date": DAY.isoformat()})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["night_date"], DAY.isoformat())
+        self.assertGreater(len(response.json()["stage_intervals"]), 0)
+
+    def test_stage_intervals_are_from_the_same_sleep_and_pending_stages_stay_absent(self):
+        raw = mock_stage_points(DAY, 1)[0]
+        data = build_sleep_heart_rate(raw, [], True)
+        expected = raw["sleep"]["stages"]
+        self.assertEqual(len(data["stage_intervals"]), len(expected))
+        for actual, source in zip(data["stage_intervals"], expected):
+            self.assertEqual(actual, {"stage": source["type"].lower(), "start": source["startTime"], "end": source["endTime"]})
+        for state in ("pending", "classic", "invalid"):
+            changed = deepcopy(raw)
+            if state == "pending":
+                changed["sleep"]["metadata"]["processed"] = False
+            elif state == "classic":
+                changed["sleep"]["type"] = "CLASSIC"
+            else:
+                changed["sleep"]["stages"][0]["endTime"] = changed["sleep"]["interval"]["endTime"]
+            self.assertEqual(build_sleep_heart_rate(changed, [], True)["stage_intervals"], [])
+
     def test_interval_edges_numeric_strings_sorting_and_deduplication(self):
         raw = [reading(), reading(), reading("2026-09-29T21:00:00Z", "64"),
                reading("2026-09-29T20:59:59Z"), reading("2026-09-30T05:00:00Z"),

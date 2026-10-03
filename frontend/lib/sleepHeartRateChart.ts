@@ -5,6 +5,15 @@ export const RIGHT = 286;
 
 export interface ChartReading { time: number; bpm: number }
 
+export function stageWindows(intervals: { start: string; end: string }[], start: number, end: number) {
+  return intervals.flatMap(interval => {
+    const left = Math.max(start, Date.parse(interval.start)), right = Math.min(end, Date.parse(interval.end));
+    if (!Number.isFinite(left) || !Number.isFinite(right) || right <= left || end <= start) return [];
+    return [{ x: LEFT + (left - start) / (end - start) * (RIGHT - LEFT),
+              width: (right - left) / (end - start) * (RIGHT - LEFT) }];
+  });
+}
+
 export function nearestReading(samples: ChartReading[], time: number): number | null {
   if (!samples.length) return null;
   let lo = 0, hi = samples.length;

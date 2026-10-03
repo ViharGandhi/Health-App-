@@ -656,6 +656,21 @@
   gap: 7px;
 }
 
+.stageItem[aria-disabled="false"] {
+  cursor: pointer;
+}
+
+.stageItem:focus-visible {
+  outline: 1px solid #8E95A2;
+  outline-offset: 5px;
+  border-radius: 3px;
+}
+
+.stageItem[aria-pressed="true"] .stageCircleIcon {
+  background: #FFFFFF;
+  box-shadow: inset 0 0 0 3px #15181F;
+}
+
 .stageTopRow {
   display: flex;
   align-items: center;

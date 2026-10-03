@@ -19,7 +19,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import type { SleepConsistencyScore, SleepData, SleepStressHistory, SleepStageRangeHistory, SleepStageRangeMetric } from '@/lib/types';
+import type { SleepConsistencyScore, SleepData, SleepStressHistory, SleepStageRangeHistory, SleepStageRangeMetric, SleepStage } from '@/lib/types';
 import styles from './page.module.css';
 import SleepHeartRateChart from './SleepHeartRateChart';
 
@@ -66,6 +66,7 @@ export default function SleepPage() {
   const [stageHistory, setStageHistory] = useState<SleepStageRangeHistory | null>(null);
   const [stageRangesLoading, setStageRangesLoading] = useState(true);
   const [stageRangesError, setStageRangesError] = useState(false);
+  const [selectedStage, setSelectedStage] = useState<SleepStage | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -117,6 +118,15 @@ export default function SleepPage() {
     : stageNight.status !== 'ok' ? 'Stage breakdown not available for this night'
     : `Based on ${stageNight.nights_used} nights · Provisional`;
   const restorative = stageReadings?.restorative;
+  const stageSelection = (stage: SleepStage) => {
+    const available = stageReadings?.[stage]?.pct != null;
+    const toggle = () => { if (available) setSelectedStage(current => current === stage ? null : stage); };
+    return { role: 'button', tabIndex: available ? 0 : -1, 'aria-disabled': !available,
+      'aria-pressed': selectedStage === stage, 'aria-controls': 'sleep-heart-rate-chart',
+      onClick: toggle, onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggle(); }
+      } };
+  };
 
   return (
     <div className={styles.pageWrapper}>
@@ -350,7 +360,7 @@ export default function SleepPage() {
             </div>
 
             {/* Intraday Sleep Heart Rate Graph */}
-            <SleepHeartRateChart night={stageNight} waiting={stageRangesLoading} />
+            <SleepHeartRateChart night={stageNight} waiting={stageRangesLoading} selectedStage={selectedStage} />
 
             {/* Typical Range & Duration Header */}
             <div className={styles.typicalRangeHeader}>
@@ -374,7 +384,7 @@ export default function SleepPage() {
             {/* Stage percentages and dashed personal ranges share the same backend denominator. */}
             <div className={styles.stagesList}>
               {/* AWAKE */}
-              <div className={styles.stageItem}>
+              <div className={styles.stageItem} {...stageSelection('awake')}>
                 <div className={styles.stageTopRow}>
                   <div className={styles.stageNameGroup}>
                     <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
@@ -392,7 +402,7 @@ export default function SleepPage() {
               </div>
 
               {/* LIGHT */}
-              <div className={styles.stageItem}>
+              <div className={styles.stageItem} {...stageSelection('light')}>
                 <div className={styles.stageTopRow}>
                   <div className={styles.stageNameGroup}>
                     <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
@@ -410,7 +420,7 @@ export default function SleepPage() {
               </div>
 
               {/* SWS (DEEP) */}
-              <div className={styles.stageItem}>
+              <div className={styles.stageItem} {...stageSelection('deep')}>
                 <div className={styles.stageTopRow}>
                   <div className={styles.stageNameGroup}>
                     <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
@@ -428,7 +438,7 @@ export default function SleepPage() {
               </div>
 
               {/* REM */}
-              <div className={styles.stageItem}>
+              <div className={styles.stageItem} {...stageSelection('rem')}>
                 <div className={styles.stageTopRow}>
                   <div className={styles.stageNameGroup}>
                     <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />

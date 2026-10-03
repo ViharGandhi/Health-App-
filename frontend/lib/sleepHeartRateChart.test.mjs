@@ -1,6 +1,17 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { chartPosition, heartRatePaths, nearestReading } from './sleepHeartRateChart.ts';
+import { chartPosition, heartRatePaths, nearestReading, stageWindows } from './sleepHeartRateChart.ts';
+
+test('stage highlights use actual UTC intervals, clip to the sleep, and preserve separate bouts', () => {
+  const start = Date.parse('2026-10-25T00:00:00Z'), end = Date.parse('2026-10-25T03:00:00Z');
+  const windows = stageWindows([
+    { start: '2026-10-25T01:30:00+02:00', end: '2026-10-25T02:30:00+02:00' },
+    { start: '2026-10-25T02:30:00+01:00', end: '2026-10-25T03:00:00+01:00' },
+    { start: '2026-10-25T05:00:00Z', end: '2026-10-25T06:00:00Z' },
+  ], start, end);
+  assert.deepEqual(windows, [{ x: 28, width: 43 }, { x: 157, width: 43 }]);
+  assert.deepEqual(stageWindows([], start, end), []);
+});
 
 test('hover chooses the actual nearest reading and leaves missing intervals blank', () => {
   const samples = [{ time: 0, bpm: 51 }, { time: 60_000, bpm: 63 }, { time: 900_000, bpm: 58 }];

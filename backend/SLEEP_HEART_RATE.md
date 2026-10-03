@@ -36,6 +36,11 @@ only one particular paired device; multi-device attribution needs live checking.
 ## Presentation and demo
 
 - Hover/tap selects an actual sample, displaying BPM, local date/time and UTC offset.
+- Selecting Awake, Light, Deep or REM highlights that stage's recorded UTC
+  intervals on the same curve. Selecting it again clears the highlight. Stage
+  intervals come from the same identified sleep and are omitted for pending,
+  CLASSIC or invalid stage partitions; duration totals are never used to invent
+  stage timing.
 - Keyboard arrows, Home, End and Escape inspect/dismiss the same samples.
 - Gaps greater than five minutes remain disconnected. This is a display rule,
   not a physiological or API sampling rule. No values are interpolated for gaps.
