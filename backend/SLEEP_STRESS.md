@@ -1,7 +1,8 @@
 # Sleep Stress backend
 
-`GET /api/sleep/stress?days=14` returns one record per sleep session ending in the last
-1–31 days. `nights` holds each scored sleep session and `totals` combines sessions
+`GET /api/sleep/stress?timeframe=W|M|6M` returns one record per sleep session
+ending in the selected rolling range (7 days, 30 days, or six months).
+`days=1..31` remains available. `nights` holds each scored sleep session and `totals` combines sessions
 with the same local wake date, identifying the main sleep. Without a connected
 Google account it uses date-seeded sample data. The
 sample includes ordinary nights, elevated-stress episodes, awakenings, sensor spikes,

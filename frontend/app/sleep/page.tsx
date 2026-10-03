@@ -19,7 +19,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import type { SleepConsistencyScore, SleepData } from '@/lib/types';
+import type { SleepConsistencyScore, SleepData, SleepStressHistory } from '@/lib/types';
 import styles from './page.module.css';
 
 // Segment bar helper: 3 pills (Poor, Sufficient, Optimal)
@@ -42,6 +42,7 @@ export default function SleepPage() {
   const router = useRouter();
   const [data, setData] = useState<SleepData | null>(null);
   const [consistency, setConsistency] = useState<SleepConsistencyScore | null>(null);
+  const [stress, setStress] = useState<SleepStressHistory | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -49,6 +50,7 @@ export default function SleepPage() {
       .then(setData)
       .finally(() => setLoading(false));
     api.getSleepConsistencyScore().then(setConsistency).catch(() => setConsistency(null));
+    api.getSleepStress('W').then(setStress).catch(() => setStress(null));
   }, []);
 
   if (loading || !data) {
@@ -65,7 +67,9 @@ export default function SleepPage() {
   const hoursVsNeededPct = Math.min(100, Math.round((data.total_sleep_hours / data.sleep_need_hours) * 100));
   const consistencyPct = consistency?.latest_score;
   const efficiencyPct = data.efficiency_pct == null ? null : Math.round(data.efficiency_pct);
-  const sleepStressPct = 0; // Optimal (0% high stress)
+  const latestStress = stress?.nights.filter((night) => night.main_sleep && night.status === 'ok')
+    .sort((left, right) => left.night_date.localeCompare(right.night_date)).slice(-1)[0];
+  const sleepStressPct = latestStress?.stress_pct == null ? null : Math.round(latestStress.stress_pct);
 
   // Circular gauge calculations
   const dialSize = 220;
@@ -250,8 +254,8 @@ export default function SleepPage() {
               <span className={styles.metricTitle}>HIGH SLEEP STRESS</span>
             </div>
             <div className={styles.metricRight}>
-              <SegmentIndicator value={sleepStressPct} isInverse />
-              <span className={styles.metricValue}>{sleepStressPct}%</span>
+              {sleepStressPct !== null && <SegmentIndicator value={sleepStressPct} isInverse />}
+              <span className={styles.metricValue}>{sleepStressPct === null ? '—' : `${sleepStressPct}%`}</span>
               <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 1.5L4.5 5L1 8.5" />
               </svg>

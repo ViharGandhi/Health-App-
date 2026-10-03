@@ -145,6 +145,24 @@ export interface SleepConsistencyScore {
   points: SleepConsistencyScorePoint[];
 }
 
+export interface SleepStressNight {
+  sleep_id: string;
+  night_date: string;
+  main_sleep: boolean;
+  stressed_minutes: number | null;
+  stress_pct: number | null;
+  valid_minutes: number;
+  confidence: 'high' | 'medium' | 'low';
+  status: string;
+}
+
+export interface SleepStressHistory {
+  is_mock: boolean;
+  range_start: string;
+  range_end: string;
+  nights: SleepStressNight[];
+}
+
 export interface HealthPoint {
   date: string;
   value: number | null;

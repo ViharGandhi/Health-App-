@@ -274,14 +274,7 @@
   background: #FFAE00;
 }
 
-.legendBoxMedium {
-  width: 8px;
-  height: 8px;
-  border-radius: 1.5px;
-  background: #00E5A3;
-}
-
-.legendBoxLow {
+.legendBoxNoHigh {
   width: 8px;
   height: 8px;
   border-radius: 1.5px;
@@ -395,13 +388,7 @@
   transition: height 0.3s ease;
 }
 
-.segMedium {
-  width: 100%;
-  background: #00E5A3;
-  transition: height 0.3s ease;
-}
-
-.segLow {
+.segNoHigh {
   width: 100%;
   background: #5B9ECC;
   transition: height 0.3s ease;
@@ -453,14 +440,7 @@
   background: #FFAE00;
 }
 
-.tooltipDotMed {
-  width: 6px;
-  height: 6px;
-  border-radius: 1px;
-  background: #00E5A3;
-}
-
-.tooltipDotLow {
+.tooltipDotNoHigh {
   width: 6px;
   height: 6px;
   border-radius: 1px;

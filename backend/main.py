@@ -421,17 +421,21 @@ async def sleep_endpoint(request: Request, response: Response):
 
 
 @app.get("/api/sleep/stress", response_model=SleepStressHistoryResponse)
-async def sleep_stress_endpoint(request: Request, response: Response, days: int = 7):
+async def sleep_stress_endpoint(
+    request: Request, response: Response, days: int = 7,
+    timeframe: Literal["W", "M", "6M"] | None = None,
+):
     if not 1 <= days <= 31:
         raise HTTPException(status_code=400, detail="days must be between 1 and 31")
     today = _client_day(request)
-    start = today - timedelta(days=days - 1)
+    start = range_start(today, timeframe) if timeframe else today - timedelta(days=days - 1)
+    requested_days = (today - start).days + 1
     had_session = get_session(request) is not None
     token = await _get_token(request, response)
     if not token:
         if had_session:
             raise HTTPException(status_code=401, detail="Reconnect Google Health to refresh sleep data")
-        nights = mock_sleep_stress_history(today, days)
+        nights = mock_sleep_stress_history(today, requested_days)
         return {"is_mock": True, "range_start": start.isoformat(),
                 "range_end": today.isoformat(),
                 "nights": nights, "totals": summarize_nights(nights)}

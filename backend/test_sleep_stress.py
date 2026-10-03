@@ -212,6 +212,16 @@ class SleepStressTests(unittest.TestCase):
             expired = client.get("/api/sleep/stress")
         self.assertEqual(expired.status_code, 401)
 
+    def test_six_month_range_returns_mixed_daily_history(self):
+        response = TestClient(app).get("/api/sleep/stress?timeframe=6M",
+                                       headers={"X-User-Date": DAY.isoformat()})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["range_start"], "2026-04-04")
+        self.assertEqual(data["range_end"], DAY.isoformat())
+        self.assertEqual(len(data["nights"]), 183)
+        self.assertGreaterEqual(len(set(item["stressed_minutes"] for item in data["nights"])), 5)
+
     def test_connected_pipeline_with_google_shaped_mock_points(self):
         sleep_points, hrv_points, hr_points = [], [], []
         for offset in range(14, -1, -1):
