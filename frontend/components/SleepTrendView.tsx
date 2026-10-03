@@ -589,7 +589,7 @@ function ConsistencyBreakdown({ trend }: { trend: TrendData }) {
   if (!counts) return null;
   const bands = [
     { label: 'Optimal', range: '90–100%', color: '#00E676' },
-    { label: 'Good', range: '75–89%', color: '#70B797' },
+    { label: 'Good', range: '75–89%', color: '#5A606D' },
     { label: 'Fair', range: '50–74%', color: '#F59E0B' },
     { label: 'Poor', range: '<50%', color: '#FF0026' },
   ] as const;
@@ -634,7 +634,7 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
 
     const load = metric === 'efficiency'
       ? api.getSleepEfficiencyTrend(timeframe)
-      : api.getSleepConsistencyScore(timeframe as 'W' | 'M' | 'Y').then(consistencyTrend);
+      : api.getSleepConsistencyScore(timeframe).then(consistencyTrend);
 
     load
       .then((result) => {
@@ -668,9 +668,9 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
   const periodLabel = timeframe === 'W' ? '7-day' : timeframe === 'M' ? '30-day' : timeframe === '6M' ? '6-month' : 'year';
   const timeLabel = timeframe === 'W' ? 'week' : timeframe === 'M' ? 'month' : '6 months';
   const vsLabel = timeframe === 'W' ? 'prior week' : timeframe === 'M' ? 'prior month' : timeframe === '6M' ? 'prior 6M' : 'prior year';
-  const timeframes: Timeframe[] = metric === 'consistency' ? ['W', 'M', 'Y'] : ['W', 'M', '6M'];
-  const consistencyPeriod = timeframe === 'W' ? 'this week' : timeframe === 'M' ? 'this month' : 'over the past year';
-  const previousPeriod = timeframe === 'W' ? "last week's" : timeframe === 'M' ? "last month's" : "last year's";
+  const timeframes: Timeframe[] = ['W', 'M', '6M'];
+  const consistencyPeriod = timeframe === 'W' ? 'this week' : timeframe === 'M' ? 'this month' : 'over the past six months';
+  const previousPeriod = timeframe === 'W' ? "last week's" : timeframe === 'M' ? "last month's" : 'the previous six months’';
 
   return (
     <div className={styles.viewportContainer}>

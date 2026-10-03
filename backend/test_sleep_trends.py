@@ -225,10 +225,10 @@ class SleepTrendTests(unittest.TestCase):
         self.assertIn("days", legacy.json())
         self.assertNotIn("points", legacy.json())
 
-    def test_score_endpoint_uses_week_month_year_ranges(self):
+    def test_score_endpoint_uses_week_month_six_month_and_year_ranges(self):
         today = date(2026, 10, 2)
         client = TestClient(app)
-        for timeframe, points, days in (("W", 7, 7), ("M", 30, 30), ("Y", 12, 365)):
+        for timeframe, points, days in (("W", 7, 7), ("M", 30, 30), ("6M", 27, 183), ("Y", 12, 365)):
             response = client.get(f"/api/sleep/consistency/score?timeframe={timeframe}",
                                   headers={"X-User-Date": today.isoformat()})
             self.assertEqual(response.status_code, 200)
@@ -236,6 +236,30 @@ class SleepTrendTests(unittest.TestCase):
             self.assertEqual(data["timeframe"], timeframe)
             self.assertEqual(len(data["points"]), points)
             self.assertEqual(data["total_days"], days)
+
+    def test_six_month_score_uses_contiguous_weekly_buckets_and_daily_weighted_average(self):
+        end = date(2026, 10, 2)
+        start = range_start(end, "6M")
+        records = [sleep_record(end - timedelta(days=offset),
+                                bedtime_minutes=100 if offset % 5 == 0 else 0,
+                                wake_minutes=100 if offset % 5 == 0 else 0)
+                   for offset in range(380) if offset % 11 != 0]
+        result = build_consistency_scores(records, end, "6M", False)
+        self.assertEqual(result.points[0].start_date, start.isoformat())
+        self.assertEqual(result.points[-1].end_date, end.isoformat())
+        self.assertEqual(sum(point.scored_days for point in result.points), result.scored_days)
+        self.assertEqual(sum(result.band_counts.values()), result.scored_days)
+        for point in result.points:
+            self.assertLessEqual((date.fromisoformat(point.end_date) - date.fromisoformat(point.start_date)).days, 6)
+        for previous, following in zip(result.points, result.points[1:]):
+            self.assertEqual(date.fromisoformat(previous.end_date) + timedelta(days=1), date.fromisoformat(following.start_date))
+        by_date = {r['date']: SleepNight(r['date'], r['bed_time'], r['wake_time']) for r in records}
+        daily = [score_main_sleep(night, by_date).score for day, night in by_date.items() if start <= day <= end]
+        scored = [value for value in daily if value is not None]
+        self.assertEqual(result.average_score, round(sum(scored) / len(scored), 1))
+        empty = build_consistency_scores([], end, "6M", False)
+        self.assertTrue(all(point.score is None for point in empty.points))
+        self.assertIsNone(empty.average_score)
 
 
 if __name__ == "__main__":

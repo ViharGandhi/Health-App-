@@ -558,7 +558,7 @@ async def sleep_consistency_endpoint(
 
 @app.get("/api/sleep/consistency/score", response_model=SleepConsistencyScoreResponse)
 async def sleep_consistency_score_endpoint(
-    request: Request, response: Response, timeframe: Literal["W", "M", "Y"] = "W"
+    request: Request, response: Response, timeframe: Literal["W", "M", "6M", "Y"] = "W"
 ):
     today = _client_day(request)
     token = await _get_token(request, response)

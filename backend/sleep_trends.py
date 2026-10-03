@@ -108,6 +108,13 @@ def build_consistency_scores(
     if timeframe in ("W", "M"):
         periods = [(start + timedelta(days=index), start + timedelta(days=index))
                    for index in range((end - start).days + 1)]
+    elif timeframe == "6M":
+        last = end
+        while last >= start:
+            first = max(start, last - timedelta(days=6))
+            periods.append((first, last))
+            last = first - timedelta(days=1)
+        periods.reverse()
     else:
         def month_back(count: int) -> date:
             year, month_zero = divmod(end.year * 12 + end.month - 1 - count, 12)
