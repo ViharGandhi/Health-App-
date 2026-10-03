@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import type { SleepTrend, SleepConsistencyScore } from '@/lib/types';
 import styles from './SleepTrendView.module.css';
 
-type Timeframe = 'W' | 'M' | '6M' | '1Y';
+type Timeframe = 'W' | 'M' | '6M' | 'Y';
 type Metric = 'efficiency' | 'consistency';
 
 type TrendPoint = { date: string; value: number | null; start_date?: string; end_date?: string; label?: string | null; drift_minutes?: number | null; scored_days?: number };
@@ -86,7 +86,7 @@ function getXTicks(days: { date: string }[], timeframe: Timeframe): XTick[] {
 
   if (timeframe === 'M') {
     // Exactly 5 ticks across 30 days like reference UI (e.g. Mar 18, Mar 25, Apr 1, Apr 8, Apr 15)
-    const tickIndices = [0, 7, 14, 21, days.length - 1];
+    const tickIndices = [...new Set([0, 7, 14, 21, days.length - 1].map((i) => Math.min(i, days.length - 1)))];
     return tickIndices.map((i) => {
       const idx = Math.min(i, days.length - 1);
       const dt = new Date(`${days[idx].date}T12:00:00`);
@@ -634,7 +634,7 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
 
     const load = metric === 'efficiency'
       ? api.getSleepEfficiencyTrend(timeframe)
-      : api.getSleepConsistencyScore(timeframe as 'W' | '6M' | '1Y').then(consistencyTrend);
+      : api.getSleepConsistencyScore(timeframe as 'W' | 'M' | 'Y').then(consistencyTrend);
 
     load
       .then((result) => {
@@ -668,9 +668,9 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
   const periodLabel = timeframe === 'W' ? '7-day' : timeframe === 'M' ? '30-day' : timeframe === '6M' ? '6-month' : 'year';
   const timeLabel = timeframe === 'W' ? 'week' : timeframe === 'M' ? 'month' : '6 months';
   const vsLabel = timeframe === 'W' ? 'prior week' : timeframe === 'M' ? 'prior month' : timeframe === '6M' ? 'prior 6M' : 'prior year';
-  const timeframes: Timeframe[] = metric === 'consistency' ? ['W', '6M', '1Y'] : ['W', 'M', '6M'];
-  const consistencyPeriod = timeframe === 'W' ? 'this week' : timeframe === '6M' ? 'over 6 months' : 'over the past year';
-  const previousPeriod = timeframe === 'W' ? "last week's" : timeframe === '6M' ? "the prior 6 months'" : "last year's";
+  const timeframes: Timeframe[] = metric === 'consistency' ? ['W', 'M', 'Y'] : ['W', 'M', '6M'];
+  const consistencyPeriod = timeframe === 'W' ? 'this week' : timeframe === 'M' ? 'this month' : 'over the past year';
+  const previousPeriod = timeframe === 'W' ? "last week's" : timeframe === 'M' ? "last month's" : "last year's";
 
   return (
     <div className={styles.viewportContainer}>
@@ -725,7 +725,7 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
                   onClick={() => setTimeframe(tf)}
                   aria-pressed={timeframe === tf}
                 >
-                  {metric === 'consistency' && tf === 'W' ? '1W' : tf}
+                  {tf}
                 </button>
               ))}
             </div>
@@ -810,7 +810,7 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
             <strong>{formatPointDateRange(hoveredDay.start_date ?? hoveredDay.date, hoveredDay.end_date ?? hoveredDay.date)}</strong>
             <span style={{ color: bandColor(hoveredDay.value!) }}>{Math.round(hoveredDay.value!)}% · {hoveredDay.label}</span>
             {timeframe === 'W' && hoveredDay.drift_minutes != null && <span>{hoveredDay.drift_minutes.toFixed(1)} min weighted timing drift</span>}
-            {timeframe !== 'W' && <span>{hoveredDay.scored_days} scored days</span>}
+            {timeframe !== 'W' && <span>{hoveredDay.scored_days} scored day{hoveredDay.scored_days === 1 ? '' : 's'}</span>}
           </div>
         )}
 

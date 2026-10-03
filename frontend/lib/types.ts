@@ -125,7 +125,7 @@ export interface SleepConsistencyScorePoint {
 
 export interface SleepConsistencyScore {
   is_mock: boolean;
-  timeframe: 'W' | '6M' | '1Y';
+  timeframe: 'W' | 'M' | 'Y';
   range_start: string;
   range_end: string;
   latest_sleep_date: string | null;

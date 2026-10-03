@@ -67,16 +67,14 @@ def _build_mock_hr_samples() -> list[tuple[datetime, float]]:
 
 
 def _build_mock_sleep_data() -> SleepData:
-    """Last night's realistic sleep: 7h 22m total with good stages."""
-    rem_s   = int((1 * 3600) + (38 * 60))   # 1h 38m
-    deep_s  = int((1 * 3600) + (12 * 60))   # 1h 12m
-    core_s  = int((4 * 3600) + (32 * 60))   # 4h 32m
-    awake_s = int((47 * 60))                  # 47 min
-    total_s = rem_s + deep_s + core_s        # 7h 22m
-    in_bed_s = total_s + awake_s + (10 * 60) # in bed ~8h 19m
-
-    sleep_start = datetime.combine(date.today() - timedelta(days=1), datetime.min.time()).replace(hour=23, minute=12)
-    sleep_end = datetime.combine(date.today(), datetime.min.time()).replace(hour=7, minute=31)
+    """Use the same latest sample night as the sleep trend endpoints."""
+    night = _build_sample_sleep_records(date.today(), date.today())[0]
+    total_s = round(night["time_asleep_minutes"] * 60)
+    in_bed_s = round(night["time_in_bed_minutes"] * 60)
+    deep_s = round(total_s * 0.17)
+    rem_s = round(total_s * 0.22)
+    core_s = total_s - deep_s - rem_s
+    awake_s = in_bed_s - total_s
 
     return SleepData(
         total_duration=total_s,
@@ -85,8 +83,8 @@ def _build_mock_sleep_data() -> SleepData:
         core_sleep_duration=core_s,
         awake_duration=awake_s,
         in_bed_duration=in_bed_s,
-        sleep_start_time=sleep_start,
-        sleep_end_time=sleep_end,
+        sleep_start_time=night["bed_time"],
+        sleep_end_time=night["wake_time"],
         interruption_count=3,
         nap_duration_seconds=0.0,
         sleep_latency_seconds=12 * 60,  # 12 minutes
@@ -320,21 +318,24 @@ def get_mock_dashboard() -> DashboardResponse:
 
 
 def _build_sample_sleep_records(start: date, end: date) -> list[dict]:
-    """Deterministic sample history with explicit missing nights."""
+    """Date-seeded sample nights with routine, weekend shifts, and occasional gaps."""
     records = []
     current = start
     while current <= end:
-        days_ago = (date.today() - current).days
-        if days_ago > 0 and days_ago % 29 == 0:
+        rng = random.Random(current.toordinal() + 9173)
+        if current != end and rng.random() < 0.025:
             current += timedelta(days=1)
             continue
+        weekend = current.weekday() in (5, 6)
+        bed_shift = rng.gauss(0, 16) + (rng.uniform(30, 70) if weekend else 0)
+        if rng.random() < 0.18:
+            bed_shift += rng.choice((-1, 1)) * rng.uniform(45, 95)
         bedtime = datetime.combine(current - timedelta(days=1), datetime.min.time()).replace(hour=23, minute=12)
-        wake_time = datetime.combine(current, datetime.min.time()).replace(hour=7, minute=31)
-        bedtime += timedelta(minutes=round(18 * math.sin(days_ago * 1.9)))
-        wake_time += timedelta(minutes=round(20 * math.sin(days_ago * 1.3)))
+        bedtime += timedelta(minutes=round(bed_shift))
+        period_minutes = max(390, min(600, round(rng.gauss(495, 28) + (10 if weekend else 0))))
+        wake_time = bedtime + timedelta(minutes=period_minutes)
         period = (wake_time - bedtime).total_seconds() / 60
-        # Random sleep efficiency between 85% and 95%
-        target_eff = round(random.uniform(85.0, 95.0), 1)
+        target_eff = round(max(77.0, min(96.0, rng.gauss(88.0, 5.0))), 1)
         asleep = round(period * (target_eff / 100.0), 1)
         records.append({
             "date": current,

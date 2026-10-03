@@ -5,6 +5,7 @@ from unittest.mock import AsyncMock, patch
 from fastapi.testclient import TestClient
 
 from main import app
+from mock_data import _build_mock_sleep_data, _build_sample_sleep_records
 from sleep_consistency import (
     SleepConsistencyCalculator, SleepNight, _drift_score, consistency_label, score_main_sleep,
 )
@@ -25,6 +26,32 @@ def sleep_record(day, bedtime_minutes=0, wake_minutes=0, asleep=440, period=500)
 
 
 class SleepTrendTests(unittest.TestCase):
+    def test_sample_sleep_history_is_stable_and_varied(self):
+        end = date(2026, 10, 3)
+        start = end - timedelta(days=40)
+        records = _build_sample_sleep_records(start, end)
+        self.assertEqual(records, _build_sample_sleep_records(start, end))
+        self.assertEqual([row for row in records if row["date"] >= end - timedelta(days=6)],
+                         _build_sample_sleep_records(end - timedelta(days=6), end))
+        self.assertTrue(all(row["bed_time"] < row["wake_time"]
+                            and 390 <= row["time_in_bed_minutes"] <= 600
+                            and row["time_asleep_minutes"] < row["time_in_bed_minutes"]
+                            for row in records))
+        week = build_consistency_scores(records, end, "W", True)
+        scores = [point.score for point in week.points if point.score is not None]
+        self.assertGreater(max(scores) - min(scores), 20)
+        for label, count in week.band_counts.items():
+            self.assertEqual(count, sum(point.label == label for point in week.points))
+
+    def test_latest_sample_sleep_matches_history(self):
+        today = date.today()
+        night = _build_sample_sleep_records(today, today)[0]
+        sleep = _build_mock_sleep_data()
+        self.assertEqual(sleep.sleep_start_time, night["bed_time"])
+        self.assertEqual(sleep.sleep_end_time, night["wake_time"])
+        self.assertAlmostEqual(sleep.total_duration / 60, night["time_asleep_minutes"], places=1)
+        self.assertEqual(sleep.in_bed_duration / 60, night["time_in_bed_minutes"])
+
     def test_new_consistency_curve_and_labels(self):
         reference = {0: 100.0, 15: 97.5, 30: 92.6, 45: 83.7, 60: 69.5,
                      75: 51.2, 90: 32.8, 120: 9.7, 180: 0.5, 240: 0.0}
@@ -57,7 +84,7 @@ class SleepTrendTests(unittest.TestCase):
 
     def test_new_consistency_history_has_gaps_and_rolling_buckets(self):
         end = date(2026, 10, 2)
-        start = range_start(end, "1Y")
+        start = range_start(end, "Y")
         records = [sleep_record(end - timedelta(days=offset), bedtime_minutes=offset % 35)
                    for offset in range(375) if offset not in (0, 3, 40)]
         weekly = build_consistency_scores(records, end, "W", False)
@@ -67,11 +94,13 @@ class SleepTrendTests(unittest.TestCase):
         self.assertEqual(weekly.scored_days, 5)
         self.assertIsNotNone(weekly.points[-2].drift_minutes)
         self.assertIsNotNone(weekly.change_percentage_points)
-        six_months = build_consistency_scores(records, end, "6M", False)
-        self.assertEqual(six_months.points[-1].end_date, end.isoformat())
-        self.assertEqual(six_months.points[0].start_date, six_months.range_start)
-        self.assertTrue(25 <= len(six_months.points) <= 27)
-        year = build_consistency_scores(records, end, "1Y", False)
+        month = build_consistency_scores(records, end, "M", False)
+        self.assertEqual(len(month.points), 30)
+        self.assertEqual(month.points[0].start_date, month.range_start)
+        self.assertEqual(month.points[-1].end_date, end.isoformat())
+        self.assertTrue(all(point.start_date == point.end_date for point in month.points))
+        self.assertEqual(sum(point.scored_days for point in month.points), month.scored_days)
+        year = build_consistency_scores(records, end, "Y", False)
         self.assertEqual(len(year.points), 12)
         self.assertEqual(year.points[0].start_date, start.isoformat())
         self.assertEqual(year.points[-1].end_date, end.isoformat())
@@ -85,7 +114,7 @@ class SleepTrendTests(unittest.TestCase):
     def test_empty_buckets_remain_gaps_and_missing_comparison_is_null(self):
         end = date(2026, 10, 2)
         records = [sleep_record(end - timedelta(days=offset)) for offset in range(5)]
-        result = build_consistency_scores(records, end, "1Y", False)
+        result = build_consistency_scores(records, end, "Y", False)
         self.assertTrue(all(point.score is None for point in result.points[:-1]))
         self.assertIsNone(result.previous_average_score)
         self.assertIsNone(result.change_percentage_points)
@@ -104,7 +133,7 @@ class SleepTrendTests(unittest.TestCase):
 
     def test_rolling_month_buckets_cover_leap_and_month_end_dates(self):
         for end in (date(2024, 2, 29), date(2026, 3, 31)):
-            result = build_consistency_scores([], end, "1Y", False)
+            result = build_consistency_scores([], end, "Y", False)
             self.assertEqual(len(result.points), 12)
             self.assertEqual(result.points[0].start_date, result.range_start)
             self.assertEqual(result.points[-1].end_date, result.range_end)
@@ -146,6 +175,8 @@ class SleepTrendTests(unittest.TestCase):
 
     def test_range_uses_calendar_months(self):
         self.assertEqual(range_start(date(2026, 10, 1), "W"), date(2026, 9, 25))
+        self.assertEqual(range_start(date(2026, 10, 1), "M"), date(2026, 9, 2))
+        self.assertEqual(range_start(date(2026, 10, 1), "Y"), date(2025, 10, 2))
         self.assertEqual(range_start(date(2026, 10, 1), "6M"), date(2026, 4, 2))
         self.assertEqual(range_start(date(2026, 10, 1), "1Y"), date(2025, 10, 2))
 
@@ -163,7 +194,7 @@ class SleepTrendTests(unittest.TestCase):
                 self.assertIsNone(data["average_value"])
                 self.assertEqual(data["recorded_nights"], 0)
                 self.assertTrue(all(day["value"] is None for day in data["days"]))
-            response = TestClient(app).get("/api/sleep/consistency/score?timeframe=1Y")
+            response = TestClient(app).get("/api/sleep/consistency/score?timeframe=Y")
             data = response.json()
             self.assertFalse(data["is_mock"])
             self.assertIsNone(data["latest_score"])
@@ -193,6 +224,18 @@ class SleepTrendTests(unittest.TestCase):
         self.assertEqual(legacy.status_code, 200)
         self.assertIn("days", legacy.json())
         self.assertNotIn("points", legacy.json())
+
+    def test_score_endpoint_uses_week_month_year_ranges(self):
+        today = date(2026, 10, 2)
+        client = TestClient(app)
+        for timeframe, points, days in (("W", 7, 7), ("M", 30, 30), ("Y", 12, 365)):
+            response = client.get(f"/api/sleep/consistency/score?timeframe={timeframe}",
+                                  headers={"X-User-Date": today.isoformat()})
+            self.assertEqual(response.status_code, 200)
+            data = response.json()
+            self.assertEqual(data["timeframe"], timeframe)
+            self.assertEqual(len(data["points"]), points)
+            self.assertEqual(data["total_days"], days)
 
 
 if __name__ == "__main__":

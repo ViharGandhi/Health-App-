@@ -105,15 +105,9 @@ def build_consistency_scores(
         return round(sum(values) / len(values), 1) if values else None
 
     periods: list[tuple[date, date]] = []
-    if timeframe == "W":
-        periods = [(start + timedelta(days=index), start + timedelta(days=index)) for index in range(7)]
-    elif timeframe == "6M":
-        bucket_end = end
-        while bucket_end >= start:
-            bucket_start = max(start, bucket_end - timedelta(days=6))
-            periods.append((bucket_start, bucket_end))
-            bucket_end = bucket_start - timedelta(days=1)
-        periods.reverse()
+    if timeframe in ("W", "M"):
+        periods = [(start + timedelta(days=index), start + timedelta(days=index))
+                   for index in range((end - start).days + 1)]
     else:
         def month_back(count: int) -> date:
             year, month_zero = divmod(end.year * 12 + end.month - 1 - count, 12)
@@ -138,7 +132,7 @@ def build_consistency_scores(
     current_values = values_between(start, end)
     band_counts = {label: 0 for label in ("Optimal", "Good", "Fair", "Poor")}
     for value in current_values:
-        band_counts[consistency_label(value)] += 1
+        band_counts[consistency_label(round(value, 1))] += 1
     previous_values = values_between(previous_start, previous_end)
     average = mean_score(current_values)
     previous_average = mean_score(previous_values)
