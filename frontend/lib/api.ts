@@ -39,6 +39,9 @@ export const api = {
   getSleep: (): Promise<SleepData> =>
     apiFetch<SleepData>('/api/sleep'),
 
+  getSleepAnalytics: (timeframe: 'W' | 'M' | '6M' = 'W'): Promise<import('./types').SleepAnalytics> =>
+    apiFetch<import('./types').SleepAnalytics>(`/api/sleep/analytics?timeframe=${timeframe}`),
+
   getSleepStress: (timeframe: 'W' | 'M' | '6M' = 'W'): Promise<SleepStressHistory> =>
     apiFetch<SleepStressHistory>(`/api/sleep/stress?timeframe=${timeframe}`),
 

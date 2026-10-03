@@ -743,9 +743,9 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
               {metric === 'consistency' && trend?.change_percentage_points != null && trend.change_percentage_points !== 0
                 ? <span aria-hidden="true">{trend.change_percentage_points > 0 ? '▲' : '▼'}</span>
                 : <span className={styles.deltaDot} />}
-              <span className={styles.deltaText}>
+              <span className={styles.deltaText} title={metric === 'consistency' ? 'Absolute score difference in percentage points.' : undefined}>
                 {metric === 'consistency'
-                  ? trend?.change_percentage_points == null ? `— vs. ${vsLabel}` : `${trend.change_percentage_points > 0 ? '+' : trend.change_percentage_points < 0 ? '−' : ''}${Math.abs(trend.change_percentage_points).toFixed(1)} pp vs. ${vsLabel}`
+                  ? trend?.change_percentage_points == null ? `— vs. ${vsLabel}` : `${trend.change_percentage_points > 0 ? '+' : trend.change_percentage_points < 0 ? '−' : ''}${Math.abs(trend.change_percentage_points).toFixed(1)} vs. ${vsLabel}`
                   : isHoveringAvg
                   ? `Average: ${Math.round(trend?.average_value ?? 0)}${unit}`
                   : showingHover && hoveredDay

@@ -2,7 +2,7 @@
 
 .pageWrapper {
   min-height: 100dvh;
-  background: var(--bg-primary);
+  background: linear-gradient(180deg, #252F37 0%, #171B20 650px, #101316 1300px);
   color: var(--text-primary);
   display: flex;
   flex-direction: column;
@@ -19,6 +19,10 @@
 
 /* ---- Top Navigation Bar (< TODAY ⓘ) ---- */
 .topNav {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #252F37;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -108,7 +112,7 @@
 
 .scoreNumber {
   font-family: var(--font-display);
-  font-size: 52px;
+  font-size: 68px;
   font-weight: 800;
   color: #FFFFFF;
   line-height: 1;
@@ -156,8 +160,8 @@
 
 /* ---- Main Breakdown Card ---- */
 .breakdownCard {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: linear-gradient(150deg, #2B3036, #202328);
+  border: 1px solid transparent;
   border-radius: 18px;
   padding: 16px 18px;
   display: flex;
@@ -246,15 +250,12 @@
 }
 
 .segmentSufficient {
-  background: #4EA5B7;
+  background: #73777C;
 }
 
 .segmentOptimal {
-  background: #22E600;
+  background: #00DCA0;
 }
-
-.consistencyPoor { background: var(--whoop-red); }
-.consistencyFair { background: var(--whoop-yellow); }
 
 .metricValue {
   font-family: var(--font-display);
@@ -291,14 +292,14 @@
 .legendBarSufficient {
   width: 12px;
   height: 3.5px;
-  background: #3A404E;
+  background: #73777C;
   border-radius: 2px;
 }
 
 .legendBarOptimal {
   width: 12px;
   height: 3.5px;
-  background: #22E600;
+  background: #00DCA0;
   border-radius: 2px;
 }
 
@@ -377,8 +378,8 @@
 
 /* Main Card */
 .nightCard {
-  background: #14171E;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(150deg, #2B3036, #202328);
+  border: 1px solid transparent;
   border-radius: 14px;
   padding: 16px 16px 18px;
   display: flex;

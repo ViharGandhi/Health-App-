@@ -54,6 +54,7 @@ from sleep_stress import summarize_nights
 from mock_sleep_stress import mock_sleep_stress_history
 from mock_sleep_stage_ranges import mock_stage_ranges, mock_stage_points
 from sleep_heart_rate import select_sleep, build_sleep_heart_rate, mock_sleep_heart_rate_points
+from sleep_analytics import sleep_observations, build_sleep_analytics, timing_records
 from sleep_stage_pipeline import sync_stage_ranges
 from sleep_stage_webhooks import router as sleep_stage_webhook_router, stage_store
 from health_trends import build_health_response
@@ -425,6 +426,33 @@ async def sleep_endpoint(request: Request, response: Response):
     return await _compute_real_sleep(client, today, yest_strain.score_21, age)
 
 
+@app.get("/api/sleep/analytics")
+async def sleep_analytics_endpoint(request: Request, response: Response, timeframe: Literal["W", "M", "6M"] = "W"):
+    today = _client_day(request)
+    start = range_start(today, timeframe)
+    history_start = min(range_start(start - timedelta(days=1), timeframe) - timedelta(days=4), today - timedelta(days=34))
+    session = get_session(request)
+    token = await _get_token(request, response)
+    if not token and session:
+        raise HTTPException(401, "Reconnect Google Health to refresh sleep data")
+    if not token:
+        points = mock_stage_points(today, (today - history_start).days + 1)
+    else:
+        client = GoogleHealthClient(token)
+        points = await client.get_sleep_stage_points(history_start, today)
+    nights = sleep_observations(points, today, is_mock=not token)
+    if token and nights and nights[-1]["date"] == today.isoformat() and nights[-1]["status"] == "ok":
+        strain = await _compute_real_strain(client, today - timedelta(days=1), _client_age(request))
+        current = await _compute_real_sleep(client, today, strain.score_21, _client_age(request))
+        # Only attach the current algorithm result when its period matches this identified sleep.
+        if (current.sleep_start == datetime.fromisoformat(nights[-1]["bed_time"]).strftime("%I:%M %p")
+                and current.sleep_end == datetime.fromisoformat(nights[-1]["wake_time"]).strftime("%I:%M %p")
+                and abs(current.stages.total_minutes - nights[-1]["asleep_minutes"]) < 1):
+            nights[-1].update(performance=current.score, need_minutes=current.sleep_need_hours * 60,
+                             need_components={"baseline": 450, "strain": (current.sleep_need_hours - 7.5) * 60, "debt": 0})
+    return build_sleep_analytics(nights, today, timeframe, not token)
+
+
 @app.get("/api/sleep/heart-rate")
 async def sleep_heart_rate_endpoint(
     request: Request, response: Response, night_date: date | None = None, sleep_id: str | None = None,
@@ -563,7 +591,11 @@ async def sleep_consistency_score_endpoint(
     today = _client_day(request)
     token = await _get_token(request, response)
     if not token:
-        return get_mock_sleep_consistency_score(timeframe, today)
+        start = range_start(today, timeframe)
+        previous_start = range_start(start - timedelta(days=1), timeframe)
+        points = mock_stage_points(today, (today - previous_start).days + 5)
+        records = timing_records(sleep_observations(points, today, is_mock=True))
+        return build_consistency_scores(records, today, timeframe, True)
     start = range_start(today, timeframe)
     previous_start = range_start(start - timedelta(days=1), timeframe)
     client = GoogleHealthClient(token)
@@ -577,7 +609,11 @@ async def sleep_efficiency_endpoint(
 ):
     token = await _get_token(request, response)
     if not token:
-        return get_mock_sleep_efficiency_trend(timeframe)
+        today = _client_day(request)
+        start = range_start(today, timeframe)
+        points = mock_stage_points(today, (today - start).days + 1)
+        records = [r for r in timing_records(sleep_observations(points, today, is_mock=True)) if r["time_asleep_minutes"] is not None]
+        return build_sleep_trend(records, start, today, timeframe, "efficiency", True)
     today = _client_day(request)
     start = range_start(today, timeframe)
     client = GoogleHealthClient(token)

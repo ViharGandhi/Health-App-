@@ -19,21 +19,24 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import type { SleepConsistencyScore, SleepData, SleepStressHistory, SleepStageRangeHistory, SleepStageRangeMetric, SleepStage } from '@/lib/types';
+import type { SleepAnalytics, SleepConsistencyScore, SleepData, SleepStressHistory, SleepStageRangeHistory, SleepStageRangeMetric, SleepStage } from '@/lib/types';
 import styles from './page.module.css';
 import SleepHeartRateChart from './SleepHeartRateChart';
+import SleepAnalyticsCards from '@/components/SleepAnalyticsCards';
 
 // Segment bar helper: 3 pills (Poor, Sufficient, Optimal)
 function SegmentIndicator({ value, isInverse = false, isConsistency = false }: { value: number; isInverse?: boolean; isConsistency?: boolean }) {
+  if (isConsistency) return <div className={styles.segmentTrack}>{['#FF0026', '#F59E0B', '#5A606D', '#00DCA0'].map((color, index) =>
+    <span key={color} className={styles.segment} style={{ background: index === (value >= 90 ? 3 : value >= 75 ? 2 : value >= 50 ? 1 : 0) ? color : '#2A2F3A' }} />)}</div>;
   // For stress: 0% is optimal (green). For performance: >= 85% is optimal (green).
-  const isOptimal = isConsistency ? value >= 75 : isInverse ? value <= 15 : value >= 85;
-  const isSufficient = isConsistency ? value >= 50 && value < 75 : isInverse ? value > 15 && value <= 35 : value >= 70 && value < 85;
-  const isPoor = isConsistency ? value < 50 : isInverse ? value > 35 : value < 70;
+  const isOptimal = isInverse ? value <= 15 : value >= 85;
+  const isSufficient = isInverse ? value > 15 && value <= 35 : value >= 70 && value < 85;
+  const isPoor = isInverse ? value > 35 : value < 70;
 
   return (
     <div className={styles.segmentTrack}>
-      <span className={`${styles.segment} ${isPoor ? (isConsistency ? styles.consistencyPoor : styles.segmentPoor) : styles.segmentInactive}`} />
-      <span className={`${styles.segment} ${isSufficient ? (isConsistency ? styles.consistencyFair : styles.segmentSufficient) : styles.segmentInactive}`} />
+      <span className={`${styles.segment} ${isPoor ? styles.segmentPoor : styles.segmentInactive}`} />
+      <span className={`${styles.segment} ${isSufficient ? styles.segmentSufficient : styles.segmentInactive}`} />
       <span className={`${styles.segment} ${isOptimal ? styles.segmentOptimal : styles.segmentInactive}`} />
     </div>
   );
@@ -61,6 +64,8 @@ function TypicalRangeMarker({ metric }: { metric: SleepStageRangeMetric | undefi
 export default function SleepPage() {
   const router = useRouter();
   const [data, setData] = useState<SleepData | null>(null);
+  const [analytics, setAnalytics] = useState<SleepAnalytics | null>(null);
+  const [analyticsError, setAnalyticsError] = useState(false);
   const [consistency, setConsistency] = useState<SleepConsistencyScore | null>(null);
   const [stress, setStress] = useState<SleepStressHistory | null>(null);
   const [stageHistory, setStageHistory] = useState<SleepStageRangeHistory | null>(null);
@@ -74,6 +79,7 @@ export default function SleepPage() {
       .then(setData)
       .finally(() => setLoading(false));
     api.getSleepConsistencyScore().then(setConsistency).catch(() => setConsistency(null));
+    api.getSleepAnalytics().then(setAnalytics).catch(() => setAnalyticsError(true));
     api.getSleepStress('W').then(setStress).catch(() => setStress(null));
     api.getSleepStageRanges().then(setStageHistory)
       .catch(() => setStageRangesError(true)).finally(() => setStageRangesLoading(false));
@@ -89,20 +95,24 @@ export default function SleepPage() {
   }
 
   // Key metrics
-  const sleepScore = Math.round(data.score);
-  const hoursVsNeededPct = Math.min(100, Math.round((data.total_sleep_hours / data.sleep_need_hours) * 100));
-  const consistencyPct = consistency?.latest_score;
-  const efficiencyPct = data.efficiency_pct == null ? null : Math.round(data.efficiency_pct);
-  const latestStress = stress?.nights.filter((night) => night.main_sleep && night.status === 'ok')
+  const latestNight = analytics?.days.filter(night => night.sleep_id).at(-1);
+  const sleepScore = latestNight ? latestNight.performance == null ? null : Math.round(latestNight.performance) : Math.round(data.score);
+  const hoursVsNeededPct = latestNight ? latestNight.hours_percentage == null ? null : Math.round(latestNight.hours_percentage)
+    : Math.min(100, Math.round((data.total_sleep_hours / data.sleep_need_hours) * 100));
+  const consistencyPct = latestNight ? latestNight.consistency : consistency?.latest_score;
+  const efficiencyPct = latestNight ? latestNight.efficiency == null ? null : Math.round(latestNight.efficiency)
+    : data.efficiency_pct == null ? null : Math.round(data.efficiency_pct);
+  const latestStress = stress?.nights.filter((night) => night.main_sleep && (!latestNight || night.night_date === latestNight.date)
+    && (!analytics || analytics.is_mock || night.sleep_id === latestNight?.sleep_id))
     .sort((left, right) => left.night_date.localeCompare(right.night_date)).slice(-1)[0];
   const sleepStressPct = latestStress?.stress_pct == null ? null : Math.round(latestStress.stress_pct);
 
   // Circular gauge calculations
-  const dialSize = 220;
-  const strokeWidth = 11;
+  const dialSize = 260;
+  const strokeWidth = 15;
   const radius = (dialSize - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const pct = Math.min(1, Math.max(0, sleepScore / 100));
+  const pct = Math.min(1, Math.max(0, (sleepScore ?? 0) / 100));
   const dashOffset = circumference * (1 - pct);
   const center = dialSize / 2;
 
@@ -169,7 +179,7 @@ export default function SleepPage() {
                 cy={center}
                 r={radius}
                 fill="none"
-                stroke="#5B9BB0"
+                stroke="#7BA1BB"
                 strokeWidth={strokeWidth}
                 strokeLinecap="round"
                 strokeDasharray={circumference}
@@ -184,7 +194,7 @@ export default function SleepPage() {
             {/* Inner Content: Score, SLEEP PERFORMANCE, and segment bar */}
             <div className={styles.dialInner}>
               <div className={styles.scoreRow}>
-                <span className={styles.scoreNumber}>{sleepScore}</span>
+                <span className={styles.scoreNumber}>{sleepScore ?? '—'}</span>
                 <span className={styles.scoreUnit}>%</span>
               </div>
               <div className={styles.scoreLabel}>
@@ -192,7 +202,7 @@ export default function SleepPage() {
                 <span>PERFORMANCE</span>
               </div>
               <div className={styles.dialSegments}>
-                <SegmentIndicator value={sleepScore} />
+                {sleepScore != null && <SegmentIndicator value={sleepScore} />}
               </div>
             </div>
           </div>
@@ -204,7 +214,7 @@ export default function SleepPage() {
         {/* -- Main Breakdown Card -- */}
         <section className={styles.breakdownCard}>
           {/* Row 1: HOURS VS. NEEDED */}
-          <div className={styles.metricRow}>
+          <div className={styles.metricRow} role="button" tabIndex={0} onClick={() => router.push('/sleep/hours-needed')} onKeyDown={event => { if (event.key === 'Enter') router.push('/sleep/hours-needed'); }} style={{ cursor: 'pointer' }}>
             <div className={styles.metricLeft}>
               <div className={styles.iconCircle}>
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -214,8 +224,8 @@ export default function SleepPage() {
               <span className={styles.metricTitle}>HOURS VS. NEEDED</span>
             </div>
             <div className={styles.metricRight}>
-              <SegmentIndicator value={hoursVsNeededPct} />
-              <span className={styles.metricValue}>{hoursVsNeededPct}%</span>
+              {hoursVsNeededPct != null && <SegmentIndicator value={hoursVsNeededPct} />}
+              <span className={styles.metricValue}>{hoursVsNeededPct == null ? '—' : `${hoursVsNeededPct}%`}</span>
             </div>
           </div>
 
@@ -353,10 +363,9 @@ export default function SleepPage() {
 
             <div className={styles.hoursScoreBlock}>
               <div className={styles.hoursScoreMain}>
-                <span className={styles.hoursScoreValue}>9:06</span>
-                <span className={styles.hoursScoreDelta}>▲</span>
+                <span className={styles.hoursScoreValue}>{stageDuration(latestNight?.asleep_minutes ?? (stageReadings?.light && stageReadings?.deep && stageReadings?.rem ? stageReadings.light.minutes + stageReadings.deep.minutes + stageReadings.rem.minutes : undefined))}</span>
               </div>
-              <span className={styles.hoursScoreBaseline}>7:36</span>
+              <span className={styles.hoursScoreBaseline}>{stageDuration(analytics?.prior_30_averages.asleep_minutes ?? undefined)}</span>
             </div>
 
             {/* Intraday Sleep Heart Rate Graph */}
@@ -476,6 +485,8 @@ export default function SleepPage() {
           </div>
         </section>
 
+        {analytics && <SleepAnalyticsCards analytics={analytics} stress={latestStress} />}
+        {analyticsError && <p role="alert" className={styles.stageRangeNote}>Additional sleep analytics unavailable. Reload to retry.</p>}
       </div>
     </div>
   );

@@ -103,6 +103,43 @@ export interface SleepTrendDay {
   wake_variability_minutes: number | null;
 }
 
+export type SleepAnalyticsMetric = 'performance' | 'hours_percentage' | 'asleep_minutes' | 'need_minutes' | 'restorative' | 'consistency' | 'period_minutes' | 'efficiency';
+export interface SleepAnalyticsDay {
+  date: string;
+  bucket_start?: string;
+  status: string;
+  sleep_id?: string;
+  bed_time?: string;
+  wake_time?: string;
+  onset_time?: string;
+  sleep_wake_time?: string;
+  period_minutes?: number | null;
+  asleep_minutes?: number | null;
+  awake_minutes?: number | null;
+  deep_minutes?: number | null;
+  rem_minutes?: number | null;
+  restorative?: number | null;
+  consistency?: number | null;
+  efficiency?: number | null;
+  performance?: number | null;
+  need_minutes?: number | null;
+  hours_percentage?: number | null;
+  wake_events?: number | null;
+  need_components?: { baseline: number; strain: number; debt: number } | null;
+  segments?: { stage: SleepStage; start: string; end: string }[];
+}
+export interface SleepAnalytics {
+  is_mock: boolean;
+  timeframe: 'W' | 'M' | '6M';
+  range_start: string;
+  range_end: string;
+  days: SleepAnalyticsDay[];
+  averages: Record<SleepAnalyticsMetric, number | null>;
+  previous_averages: Record<SleepAnalyticsMetric, number | null>;
+  prior_30_averages: Record<SleepAnalyticsMetric, number | null>;
+  notes: { period: string; need: string; timing: string };
+}
+
 export interface SleepTrend {
   is_mock: boolean;
   timeframe: 'W' | '6M' | '1Y';

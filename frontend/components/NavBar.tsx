@@ -6,7 +6,7 @@ import styles from './NavBar.module.css';
 
 export default function NavBar() {
   const pathname = usePathname();
-  if (pathname.includes('/efficiency') || pathname.includes('/consistency')) {
+  if (pathname.startsWith('/sleep/') && pathname !== '/sleep/stress') {
     return null;
   }
   const items = [
