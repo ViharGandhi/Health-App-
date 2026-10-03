@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from datetime import date, datetime, timedelta, timezone
 from typing import Optional
 
@@ -43,7 +44,13 @@ class GoogleHealthClient:
         points: list[dict] = []
         async with httpx.AsyncClient(timeout=20.0) as client:
             while True:
-                response = await client.get(url, headers=self.headers, params=params)
+                for attempt in range(4):
+                    response = await client.get(url, headers=self.headers, params=params)
+                    if response.status_code not in (429, 503) or attempt == 3:
+                        break
+                    retry_after = response.headers.get("Retry-After", "")
+                    delay = float(retry_after) if retry_after.replace(".", "", 1).isdigit() else 2 ** attempt
+                    await asyncio.sleep(min(delay, 30))
                 response.raise_for_status()
                 payload = response.json()
                 points.extend(payload.get("dataPoints", []))
@@ -153,6 +160,19 @@ class GoogleHealthClient:
                     float(metric["beatsPerMinute"]),
                 ))
         return sorted(samples)
+
+    async def get_sleep_stress_points(self, start: date, end: date) -> tuple[list[dict], list[dict], list[dict]]:
+        """Fetch paginated sleep, sample RMSSD, and sample HR for overnight scoring."""
+        sample_start = f"{(start - timedelta(days=1)).isoformat()}T00:00:00Z"
+        sample_end = f"{(end + timedelta(days=2)).isoformat()}T00:00:00Z"
+        def sample_filter(field: str) -> str:
+            return f'{field} >= "{sample_start}" AND {field} < "{sample_end}"'
+
+        sleep = await self._points("sleep", _day_filter("sleep.interval.civil_end_time", start, end))
+        hrv = await self._points("heart-rate-variability", sample_filter(
+            "heart_rate_variability.sample_time.physical_time"))
+        hr = await self._points("heart-rate", sample_filter("heart_rate.sample_time.physical_time"))
+        return sleep, hrv, hr
 
     async def get_workout_sessions(self, target_date: date) -> list[dict]:
         points = await self._points(

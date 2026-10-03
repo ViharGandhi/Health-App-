@@ -168,6 +168,38 @@ class SleepConsistencyScoreResponse(BaseModel):
     points: List[SleepConsistencyScorePoint]
 
 
+class SleepStressNightResponse(BaseModel):
+    sleep_id: str
+    night_date: str
+    main_sleep: bool
+    computed_at: str
+    algo_version: str
+    stressed_minutes: Optional[float] = None
+    stressed_hours: Optional[float] = None
+    stress_pct: Optional[float] = None
+    valid_minutes: float
+    asleep_minutes: float
+    coverage: float
+    confidence: str
+    status: str
+    nights_available: int
+    baseline: dict
+    peak_level: Optional[float] = None
+    mean_level: Optional[float] = None
+    hrv_only_minutes: Optional[float] = None
+    episodes: list[dict]
+    type_fallback: bool
+    config_snapshot: dict
+
+
+class SleepStressHistoryResponse(BaseModel):
+    is_mock: bool
+    range_start: str
+    range_end: str
+    nights: List[SleepStressNightResponse]
+    totals: List[dict]
+
+
 
 
 # ──────────────────────────────────────────────────────────────────────────────

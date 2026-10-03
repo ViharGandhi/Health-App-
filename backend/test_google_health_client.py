@@ -1,7 +1,7 @@
 import asyncio
 import unittest
 from datetime import date, datetime
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import httpx
 
@@ -9,6 +9,17 @@ from google_health_client import GoogleHealthClient
 
 
 class GoogleHealthClientTests(unittest.TestCase):
+    def test_sleep_stress_fetches_three_paginated_data_types(self):
+        client = GoogleHealthClient("token")
+        client._points = unittest.mock.AsyncMock(side_effect=[["sleep"], ["hrv"], ["hr"]])
+        result = asyncio.run(client.get_sleep_stress_points(date(2026, 10, 1), date(2026, 10, 3)))
+        self.assertEqual(result, (["sleep"], ["hrv"], ["hr"]))
+        calls = client._points.call_args_list
+        self.assertEqual([call.args[0] for call in calls], ["sleep", "heart-rate-variability", "heart-rate"])
+        self.assertIn("heart_rate_variability.sample_time.physical_time", calls[1].args[1])
+        self.assertIn("2026-09-30T00:00:00Z", calls[1].args[1])
+        self.assertIn("2026-10-05T00:00:00Z", calls[1].args[1])
+
     def test_main_sleep_timing_uses_fitbit_flag_and_onset_latency(self):
         client = GoogleHealthClient("token")
         client._points = lambda *args: asyncio.sleep(0, result=[
@@ -63,6 +74,24 @@ class GoogleHealthClientTests(unittest.TestCase):
         with patch("google_health_client.httpx.AsyncClient", return_value=mock_client):
             with self.assertRaises(httpx.HTTPStatusError):
                 asyncio.run(GoogleHealthClient("token").get_resting_heart_rate(date(2026, 9, 30)))
+
+    def test_rate_limit_retries_then_returns_points(self):
+        calls = 0
+
+        def respond(request):
+            nonlocal calls
+            calls += 1
+            return (httpx.Response(429, headers={"Retry-After": "0"}) if calls == 1
+                    else httpx.Response(200, json={"dataPoints": [{"dailyRestingHeartRate": {
+                        "beatsPerMinute": "56"}}]}))
+
+        mock_client = httpx.AsyncClient(transport=httpx.MockTransport(respond))
+        with patch("google_health_client.httpx.AsyncClient", return_value=mock_client), \
+             patch("google_health_client.asyncio.sleep", new=AsyncMock()) as wait:
+            result = asyncio.run(GoogleHealthClient("token").get_resting_heart_rate(date(2026, 9, 30)))
+        self.assertEqual(result, 56)
+        self.assertEqual(calls, 2)
+        wait.assert_awaited_once_with(0)
 
     def test_sleep_summary_uses_wake_date_and_ignores_naps(self):
         client = GoogleHealthClient("token")

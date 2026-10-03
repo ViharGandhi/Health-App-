@@ -31,6 +31,7 @@ from typing import Optional, Literal
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from fastapi import FastAPI, Request, Response, HTTPException
+import httpx
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -47,6 +48,10 @@ from sleep_efficiency import SleepEfficiencyCalculator
 from auth import router as auth_router, get_session, get_valid_access_token, set_session
 from google_health_client import GoogleHealthClient
 from sleep_trends import build_consistency_scores, build_sleep_trend, range_start
+from sleep_stress_store import SleepStressStore
+from sleep_stress_pipeline import compute_connected_sleep_stress
+from sleep_stress import summarize_nights
+from mock_sleep_stress import mock_sleep_stress_history
 from health_trends import build_health_response
 from mock_data import (
     get_mock_dashboard, compute_mock_strain, compute_mock_sleep,
@@ -55,7 +60,8 @@ from mock_data import (
 )
 from models import (
     DashboardResponse, RecoveryResponse, SleepResponse, StrainResponse,
-    ZoneMinutes, WorkoutDetail, SleepStages, SleepTrendResponse, SleepConsistencyScoreResponse, HealthResponse
+    ZoneMinutes, WorkoutDetail, SleepStages, SleepTrendResponse, SleepConsistencyScoreResponse,
+    SleepStressHistoryResponse, HealthResponse
 )
 
 
@@ -412,6 +418,37 @@ async def sleep_endpoint(request: Request, response: Response):
     yesterday = today - timedelta(days=1)
     yest_strain = await _compute_real_strain(client, yesterday, age)
     return await _compute_real_sleep(client, today, yest_strain.score_21, age)
+
+
+@app.get("/api/sleep/stress", response_model=SleepStressHistoryResponse)
+async def sleep_stress_endpoint(request: Request, response: Response, days: int = 7):
+    if not 1 <= days <= 31:
+        raise HTTPException(status_code=400, detail="days must be between 1 and 31")
+    today = _client_day(request)
+    start = today - timedelta(days=days - 1)
+    had_session = get_session(request) is not None
+    token = await _get_token(request, response)
+    if not token:
+        if had_session:
+            raise HTTPException(status_code=401, detail="Reconnect Google Health to refresh sleep data")
+        nights = mock_sleep_stress_history(today, days)
+        return {"is_mock": True, "range_start": start.isoformat(),
+                "range_end": today.isoformat(),
+                "nights": nights, "totals": summarize_nights(nights)}
+    anchor = os.getenv("SLEEP_STRESS_HRV_ANCHOR")
+    if anchor not in ("start", "end"):
+        raise HTTPException(status_code=503, detail="HRV sample-time alignment needs device validation")
+    store = SleepStressStore(os.getenv("SLEEP_STRESS_DB_PATH", os.path.join(
+        os.path.dirname(__file__), "data", "sleep_stress.sqlite3")))
+    try:
+        nights = await compute_connected_sleep_stress(GoogleHealthClient(token), start, today, anchor, store)
+    except httpx.HTTPStatusError as error:
+        if error.response.status_code == 401:
+            raise HTTPException(status_code=401, detail="Reconnect Google Health to refresh sleep data") from error
+        raise
+    return {"is_mock": False, "range_start": start.isoformat(),
+            "range_end": today.isoformat(), "nights": nights,
+            "totals": summarize_nights(nights)}
 
 
 @app.get("/api/strain", response_model=StrainResponse)
