@@ -10,6 +10,7 @@ from fastapi.testclient import TestClient
 from main import app
 from mock_sleep_stage_ranges import mock_stage_points
 from sleep_analytics import sleep_observations, build_sleep_analytics
+from sleep_need_inputs import SleepNeedInputs
 
 
 DAY = date(2026, 10, 4)
@@ -29,7 +30,7 @@ class SleepAnalyticsTests(unittest.TestCase):
         self.assertEqual(night['period_minutes'], stages['total_minutes'])
         self.assertAlmostEqual(night['consistency'], consistency['latest_score'], places=1)
         self.assertAlmostEqual(night['efficiency'], efficiency['days'][-1]['value'], places=1)
-        self.assertEqual(night['need_components']['debt'], 0)
+        self.assertGreater(night['need_components']['debt'], 0)
         self.assertAlmostEqual(sum(night['need_components'].values()), night['need_minutes'])
 
     def test_unavailable_stages_are_not_zero_readings(self):
@@ -108,14 +109,16 @@ class SleepAnalyticsTests(unittest.TestCase):
                                   sleep_start=datetime.fromisoformat(night['bed_time']).strftime('%I:%M %p'),
                                   sleep_end=datetime.fromisoformat(night['wake_time']).strftime('%I:%M %p'),
                                   stages=SimpleNamespace(total_minutes=night['asleep_minutes']))
+        inputs = SleepNeedInputs({day - timedelta(days=1): 350},
+                                 {day - timedelta(days=1): 0, day - timedelta(days=2): 0}, {})
         with patch('main._get_token', AsyncMock(return_value='connected')), \
              patch('main.GoogleHealthClient.get_sleep_stage_points', AsyncMock(return_value=points)), \
-             patch('main._compute_real_strain', AsyncMock(return_value=SimpleNamespace(score_21=12))), \
+             patch('main._load_sleep_need_inputs', AsyncMock(return_value=inputs)), \
              patch('main._compute_real_sleep', AsyncMock(return_value=current)):
             client = TestClient(app)
             result = client.get('/api/sleep/analytics', headers={'X-User-Date': day.isoformat()}).json()
             self.assertEqual(result['days'][-1]['performance'], 81)
-            self.assertEqual(result['days'][-1]['need_minutes'], 468)
+            self.assertEqual(result['days'][-1]['need_minutes'], 484)
             self.assertIsNone(result['days'][-2].get('performance'))
             current.sleep_end = '11:59 PM'
             mismatch = client.get('/api/sleep/analytics', headers={'X-User-Date': day.isoformat()}).json()

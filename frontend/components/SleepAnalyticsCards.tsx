@@ -51,7 +51,7 @@ export default function SleepAnalyticsCards({ analytics, stress }: { analytics: 
       {night.need_components && <div className={styles.components}>{(['baseline', 'strain', 'debt'] as const).map((key, i) => <div className={styles.component} key={key}>
         <span className={styles.swatch} style={{ background: ['#55585E', '#0093E7', '#D2D3D6'][i] }} />{['Baseline sleep', 'Recent strain', 'Sleep debt added'][i]}<strong>{key !== 'baseline' ? '+' : ''}{duration(night.need_components![key])}</strong>
       </div>)}</div>}
-      <p className={styles.note}>{need == null ? 'Sleep-need estimate unavailable for this night.' : 'App estimate · Current formula adds no historical sleep debt.'}</p>
+      <p className={styles.note}>{need == null ? 'Sleep-need estimate unavailable for this night.' : 'App estimate · Includes weighted sleep debt and nap credit.'}</p>
     </Link>
     <Link href="/sleep/consistency" className={`${styles.card} ${styles.cardLink}`}>
       <div className={styles.heading}>SLEEP CONSISTENCY<span className={styles.info} title="Timing score compared with the four preceding nights; not a clinical measure.">i</span></div>

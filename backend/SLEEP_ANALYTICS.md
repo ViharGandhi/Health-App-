@@ -19,10 +19,11 @@
 - Daily dashed timing guides describe the prior four displayed nights, not an optimal
   sleep schedule or a clinical reference range.
 
-The sleep score and sleep-need formulas are unchanged. Synthetic historical scores
-call the existing calculator with date-seeded synthetic inputs. The sleep-need
-component display reflects the current 7.5-hour baseline plus strain adjustment;
-no historical debt is added by the current callers.
+The sleep score formula is unchanged; its sleep-need input now uses the requested
+Sleep Need module (`sleep_need.py`). Synthetic historical scores call the existing
+score calculator with date-seeded inputs. The existing component fields now carry
+the baseline, logistic strain addition and weighted debt repayment; nap credit is
+subtracted from the total. See `SLEEP_NEED.md` for the calculation and date joins.
 
 For a connected device, the current score/need is attached only when its local
 endpoints and asleep duration match the identified sleep. Earlier connected app

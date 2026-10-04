@@ -12,6 +12,7 @@ import sys
 import os
 import math
 import random
+from dataclasses import asdict
 from datetime import datetime, timedelta, date
 
 # Allow importing the algo files from the project root
@@ -164,14 +165,13 @@ def compute_mock_strain() -> StrainResponse:
 
 def compute_mock_sleep() -> SleepResponse:
     sleep = _build_mock_sleep_data()
-
-    # Mock yesterday's strain (0-21 scale)
-    yesterday_strain_21 = 12.8
-
-    sleep_need = SleepCalculator.calculate_sleep_need(
-        baseline_sleep=7.5,
-        yesterday_strain=yesterday_strain_21,
-    )
+    from mock_sleep_stage_ranges import mock_stage_points
+    from sleep_analytics import sleep_observations, demo_sleep_need_inputs
+    today = date.today()
+    nights = sleep_observations(mock_stage_points(today, 9), today, is_mock=True)
+    inputs = demo_sleep_need_inputs(nights, today, compute_mock_strain().score_100)
+    need = inputs.for_tonight(today - timedelta(days=1))
+    sleep_need = need.total_need_min / 60
 
     sleeping_hrv = 47.2   # ms (above baseline — good)
     sleeping_hr  = 58.0   # bpm
@@ -209,7 +209,7 @@ def compute_mock_sleep() -> SleepResponse:
         total_minutes=round(sleep.total_duration / 60, 1),
     )
 
-    sleep_debt = SleepCalculator.compute_sleep_debt([(sleep_need, total_h)])
+    sleep_debt = need.sleep_debt_min / 60
     restfulness = SleepCalculator.compute_restfulness_score(sleep)
     hr_dip = SleepCalculator.compute_hr_dip_score(sleeping_hr, waking_hr)
 
@@ -230,9 +230,11 @@ def compute_mock_sleep() -> SleepResponse:
 
     return SleepResponse(
         score=round(score, 1),
-        sleep_need_hours=round(sleep_need, 2),
+        sleep_need_hours=sleep_need,
+        sleep_need=asdict(need),
+        tonight_sleep_need=asdict(inputs.for_tonight(today)),
         total_sleep_hours=round(total_h, 2),
-        sleep_debt_hours=round(max(0.0, sleep_debt), 2),
+        sleep_debt_hours=sleep_debt,
         efficiency_pct=round(efficiency, 1),
         stages=stages,
         sleeping_hrv=sleeping_hrv,

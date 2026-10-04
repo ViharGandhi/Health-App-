@@ -94,10 +94,12 @@ class SleepStages(BaseModel):
 
 
 class SleepResponse(BaseModel):
-    score: float = Field(description="Sleep score 0–100")
-    sleep_need_hours: float
+    score: Optional[float] = Field(description="Sleep score 0–100; absent without a sleep-need estimate")
+    sleep_need_hours: Optional[float]
+    sleep_need: Optional[Dict[str, float]] = None
+    tonight_sleep_need: Optional[Dict[str, float]] = None
     total_sleep_hours: float
-    sleep_debt_hours: float
+    sleep_debt_hours: Optional[float]
     efficiency_pct: Optional[float]
     stages: SleepStages
     sleeping_hrv: Optional[float] = None
@@ -108,8 +110,8 @@ class SleepResponse(BaseModel):
     average_wake_time: Optional[str] = None
     sleep_start: Optional[str] = None
     sleep_end: Optional[str] = None
-    duration_score: float
-    stage_score: float
+    duration_score: Optional[float]
+    stage_score: Optional[float]
     restfulness_score: float
     hr_dip_score: float
     is_mock: bool = True

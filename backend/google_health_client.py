@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import math
 from datetime import date, datetime, timedelta, timezone
 from typing import Optional
 
@@ -237,11 +238,19 @@ class GoogleHealthClient:
                 continue
             stage_totals = {s["type"]: float(s["minutes"]) * 60 for s in summary.get("stagesSummary", [])}
             awake_count = sum(int(s.get("count", 0)) for s in summary.get("stagesSummary", []) if s.get("type") == "AWAKE")
+            asleep_minutes = float(summary.get("minutesAsleep") or 0)
+            physical_start = datetime.fromisoformat(interval["startTime"].replace("Z", "+00:00"))
+            physical_end = datetime.fromisoformat(interval["endTime"].replace("Z", "+00:00"))
+            duration_available = (summary.get("minutesAsleep") is not None and metadata.get("processed") is not False
+                                  and physical_start.tzinfo is not None and physical_end.tzinfo is not None
+                                  and physical_end <= datetime.now(timezone.utc) and math.isfinite(asleep_minutes)
+                                  and 0 <= asleep_minutes <= (physical_end - physical_start).total_seconds() / 60)
             records.append({
                 "date": end_dt.date(), "sleep_start_time": start_dt, "sleep_end_time": end_dt,
                 "sleep_onset_time": onset, "wake_up_time": wake,
                 "main_sleep": metadata.get("mainSleep"),
-                "total_duration": float(summary.get("minutesAsleep", 0)) * 60,
+                "total_duration": asleep_minutes * 60,
+                "sleep_duration_available": duration_available,
                 "deep_sleep_duration": stage_totals.get("DEEP", 0.0),
                 "rem_sleep_duration": stage_totals.get("REM", 0.0),
                 "core_sleep_duration": stage_totals.get("LIGHT", 0.0),
@@ -265,6 +274,36 @@ class GoogleHealthClient:
                 continue
             selected.append(max(main or sessions, key=lambda record: record["total_duration"]))
         return selected
+
+    async def get_sleep_need_history(self, start: date, end: date) -> dict[date, float | None]:
+        records = await self._sleep_records(start, end)
+        return {record["date"]: record["total_duration"] / 60 if record["sleep_duration_available"] else None
+                for record in records if start <= record["date"] <= end}
+
+    async def get_nap_minutes_history(self, start: date, end: date) -> dict[date, float]:
+        points = await self._points("sleep", _day_filter("sleep.interval.civil_end_time", start, end))
+        naps = {}
+        now = datetime.now(timezone.utc)
+        for point in points:
+            sleep = point.get("sleep", {})
+            metadata, summary = sleep.get("metadata", {}), sleep.get("summary", {})
+            interval = sleep.get("interval", {})
+            if not metadata.get("nap") or metadata.get("processed") is False or summary.get("minutesAsleep") is None:
+                continue
+            if not interval.get("startTime") or not interval.get("endTime"):
+                continue
+            left = datetime.fromisoformat(interval["startTime"].replace("Z", "+00:00"))
+            right = datetime.fromisoformat(interval["endTime"].replace("Z", "+00:00"))
+            minutes = float(summary["minutesAsleep"])
+            if left.tzinfo is None or right.tzinfo is None or right > now or not 0 <= minutes <= (right - left).total_seconds() / 60 or not math.isfinite(minutes):
+                continue
+            day = _local_datetime(interval["endTime"], interval.get("endUtcOffset", "0s")).date()
+            if start <= day <= end:
+                naps[point.get("name") or (interval["startTime"], interval["endTime"])] = (day, minutes)
+        totals = {}
+        for day, minutes in naps.values():
+            totals[day] = totals.get(day, 0.0) + minutes
+        return totals
 
     async def get_sleep_session(self, target_date: date) -> Optional[dict]:
         records = await self._sleep_records(target_date, target_date)

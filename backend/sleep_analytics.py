@@ -8,6 +8,17 @@ from sleep_stage_ranges import adapt_google_sleep, stage_stats, instant
 from sleep_trends import range_start
 from sleep_consistency import SleepNight, score_main_sleep
 from sleepscore import SleepCalculator, SleepData
+from sleep_need_inputs import SleepNeedInputs, need_components
+
+
+def demo_sleep_need_inputs(observations: list[dict], today: date, today_strain_pct: float | None = None) -> SleepNeedInputs:
+    sleep = {date.fromisoformat(n["date"]): n["asleep_minutes"] for n in observations}
+    start = min(sleep, default=today) - timedelta(days=1)
+    strain = {start + timedelta(days=i): random.Random((start + timedelta(days=i + 1)).toordinal() + 821).uniform(3, 19) / 0.21
+              for i in range((today - start).days + 1)}
+    if today_strain_pct is not None:
+        strain[today] = today_strain_pct
+    return SleepNeedInputs(sleep, strain, {})
 
 
 def sleep_observations(points: list[dict], today: date, *, is_mock: bool = False) -> list[dict]:
@@ -66,18 +77,23 @@ def sleep_observations(points: list[dict], today: date, *, is_mock: bool = False
                 "efficiency": 100 * asleep / period if asleep is not None else None,
                 "wake_events": len(merged) if stats else None, "segments": segments,
                 "performance": None, "need_minutes": None, "need_components": None}
-        if is_mock and stats:
-            rng = random.Random(date.fromisoformat(day).toordinal() + 821)
-            strain = rng.uniform(3, 19)
-            need = SleepCalculator.calculate_sleep_need(baseline_sleep=7.5, yesterday_strain=strain)
-            data = SleepData(asleep * 60, stats.minutes["deep"] * 60, stats.minutes["rem"] * 60,
-                             stats.minutes["light"] * 60, awake * 60, period * 60,
-                             night.start_utc, night.end_utc, len(merged))
-            item.update(performance=SleepCalculator.calculate_score(data, need,
+        observations.append(item)
+    if is_mock:
+        inputs = demo_sleep_need_inputs(observations, today)
+        for item in observations:
+            if item["status"] != "ok":
+                continue
+            need = inputs.for_tonight(date.fromisoformat(item["date"]) - timedelta(days=1))
+            rng = random.Random(date.fromisoformat(item["date"]).toordinal() + 821)
+            rng.uniform(3, 19)  # Retain the existing demo's HRV and HR readings.
+            data = SleepData(item["asleep_minutes"] * 60, item["deep_minutes"] * 60, item["rem_minutes"] * 60,
+                             (item["asleep_minutes"] - item["deep_minutes"] - item["rem_minutes"]) * 60,
+                             item["awake_minutes"] * 60, item["period_minutes"] * 60,
+                             datetime.fromisoformat(item["bed_time"]), datetime.fromisoformat(item["wake_time"]), item["wake_events"])
+            item.update(performance=SleepCalculator.calculate_score(data, need.total_need_min / 60,
                         sleeping_hrv=rng.uniform(30, 65), sleeping_hr=rng.uniform(50, 65),
                         waking_hr=72, hrv_baseline=45, sleeping_hr_baseline=58),
-                        need_minutes=need * 60, need_components={"baseline": 450, "strain": (need - 7.5) * 60, "debt": 0})
-        observations.append(item)
+                        need_minutes=need.total_need_min, need_components=need_components(need))
     return observations
 
 
