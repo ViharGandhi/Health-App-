@@ -172,10 +172,10 @@ class GoogleHealthClient:
             history[key] = [dated[day] for day in sorted(dated)]
         return history
 
-    async def get_intraday_heart_rate(self, target_date: date) -> list[tuple[datetime, float]]:
+    async def get_intraday_heart_rate(self, target_date: date, end_date: date | None = None) -> list[tuple[datetime, float]]:
         points = await self._points(
             "heart-rate",
-            _day_filter("heartRate.sample_time.civil_time", target_date, target_date),
+            _day_filter("heartRate.sample_time.civil_time", target_date, end_date or target_date),
         )
         samples = []
         for point in points:
@@ -201,10 +201,10 @@ class GoogleHealthClient:
         hr = await self._points("heart-rate", sample_filter("heart_rate.sample_time.physical_time"))
         return sleep, hrv, hr
 
-    async def get_workout_sessions(self, target_date: date) -> list[dict]:
+    async def get_workout_sessions(self, target_date: date, end_date: date | None = None) -> list[dict]:
         points = await self._points(
             "exercise",
-            _day_filter("exercise.interval.civil_start_time", target_date, target_date),
+            _day_filter("exercise.interval.civil_start_time", target_date, end_date or target_date),
         )
         sessions = []
         for point in points:

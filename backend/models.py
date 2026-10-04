@@ -60,8 +60,20 @@ class StrainResponse(BaseModel):
 # ──────────────────────────────────────────────────────────────────────────────
 
 class RecoveryResponse(BaseModel):
-    score: Optional[float] = Field(description="Demo-only recovery score 0–100; absent for connected data")
-    status: str = Field(description="'green' | 'yellow' | 'red' (demo) | 'signals' | 'calibrating' (connected)")
+    score: Optional[float] = Field(description="Demo score or connected estimated percent; null when confidence is low or reference is insufficient")
+    status: str = Field(description="Demo: green/yellow/red; dashboard comparisons: signals/calibrating; connected Recovery: building_reference/ok")
+    z: Optional[float] = None
+    percent: Optional[int] = None
+    zone: Optional[str] = None
+    confidence: Optional[str] = None
+    estimated: Optional[bool] = None
+    components: Optional[Dict[str, Optional[float]]] = None
+    sleep_context: Optional[Dict[str, Optional[float]]] = None
+    baseline_days: Optional[int] = None
+    recent_nights: Optional[int] = None
+    rhr_baseline_days: Optional[int] = None
+    illness_flag: Optional[bool] = None
+    status_reason: Optional[str] = None
     hrv_component: Optional[float] = None
     rhr_component: Optional[float] = None
     sleep_component: Optional[float] = None

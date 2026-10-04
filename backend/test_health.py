@@ -174,13 +174,15 @@ class HealthTests(unittest.TestCase):
         }
         client = type("Client", (), {
             "get_health_history": AsyncMock(return_value=history),
-            "get_sleep_session": AsyncMock(return_value={"total_duration": 27000, "in_bed_duration": 28800}),
+            "get_sleep_session": AsyncMock(return_value={"total_duration": 27000, "in_bed_duration": 28800, "sleep_duration_available": True}),
         })()
-        with patch("main._get_token", new=AsyncMock(return_value="token")), patch("main.GoogleHealthClient", return_value=client):
+        with patch("main._get_token", new=AsyncMock(return_value="token")), patch("main.GoogleHealthClient", return_value=client), \
+             patch("main._recovery_sleep_need", new=AsyncMock(return_value=None)):
             response = TestClient(app).get("/api/recovery")
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertIsNone(data["score"])
+        self.assertEqual(data["status"], "building_reference")
         self.assertEqual(data["sleep_hours"], 7.5)
         self.assertEqual(data["sleep_efficiency_pct"], 93.8)
         self.assertEqual(data["rhr_method"], "WITH_SLEEP")
@@ -190,12 +192,13 @@ class HealthTests(unittest.TestCase):
             "get_health_history": AsyncMock(return_value={"hrv": [], "rhr": []}),
             "get_sleep_session": AsyncMock(return_value=None),
         })()
-        with patch("main._get_token", new=AsyncMock(return_value="token")), patch("main.GoogleHealthClient", return_value=client):
+        with patch("main._get_token", new=AsyncMock(return_value="token")), patch("main.GoogleHealthClient", return_value=client), \
+             patch("main._recovery_sleep_need", new=AsyncMock(return_value=None)):
             response = TestClient(app).get("/api/recovery", headers={"X-User-Date": "2026-09-30"})
             invalid = TestClient(app).get("/api/recovery", headers={"X-User-Date": "not-a-date"})
         self.assertEqual(response.status_code, 200)
         client.get_sleep_session.assert_awaited_once_with(date(2026, 9, 30))
-        client.get_health_history.assert_awaited_once_with(date(2026, 9, 16), date(2026, 9, 30), ("hrv", "rhr"))
+        client.get_health_history.assert_awaited_once_with(date(2026, 7, 25), date(2026, 9, 30), ("hrv", "rhr", "respiratory_rate", "skin_temperature"))
         self.assertEqual(invalid.status_code, 400)
 
     def test_connected_strain_uses_supplied_age_for_zone_reference(self):
