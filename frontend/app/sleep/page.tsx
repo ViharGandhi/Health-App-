@@ -226,6 +226,9 @@ export default function SleepPage() {
             <div className={styles.metricRight}>
               {hoursVsNeededPct != null && <SegmentIndicator value={hoursVsNeededPct} />}
               <span className={styles.metricValue}>{hoursVsNeededPct == null ? '—' : `${hoursVsNeededPct}%`}</span>
+              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 1.5L4.5 5L1 8.5" />
+              </svg>
             </div>
           </div>
 
