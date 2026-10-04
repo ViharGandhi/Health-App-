@@ -21,6 +21,17 @@
   padding: 0 12px;
 }
 
+.homeNav {
+  bottom: 12px;
+  left: 16px;
+  right: 16px;
+  max-width: 408px;
+  margin: auto;
+  border-radius: 20px;
+  background: #20272EF2;
+  border: 1px solid #FFFFFF0A;
+}
+
 .item {
   display: flex;
   flex-direction: column;

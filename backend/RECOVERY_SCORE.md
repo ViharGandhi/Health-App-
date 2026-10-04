@@ -73,9 +73,11 @@ Connected `/api/recovery` adds `z`, `percent`, `zone`, `confidence`, `estimated`
   remain descriptive comparison fields. They are distinct from the 60-day
   scoring reference and its new counts.
 
-No frontend changes are included. The disconnected demo algorithm and dashboard
-comparison path remain unchanged. An expired connected session gets a reconnect
-response instead of silently falling back to demo data.
+Home and Recovery now preview this calculator through `/api/recovery/analytics`.
+The old disconnected demo remains available with `demo=legacy`; the default
+`/api/recovery` response keeps that legacy demo for existing consumers. Connected
+requests always use device readings. An expired connected session gets a
+reconnect response instead of silently falling back to demo data.
 
 The connected endpoint makes nine range fetches before pagination/retries: four
 daily vital types, current main sleep, historical main sleeps, naps, and one
@@ -83,6 +85,41 @@ range each for HR samples and exercises. Eight daily strain calculations reuse
 those fetched activity records. Historical need matches the existing daily
 calculation, with no new derived storage or stale cache. API errors propagate;
 unavailable optional fields/empty collections remain missing.
+
+## UI trends
+
+`GET /api/recovery/analytics?timeframe=W|M|6M&end_date=YYYY-MM-DD&demo=estimate|legacy`
+honors `X-User-Date`, rejects future dates, and returns daily readings, current
+Recovery, personal typical ranges, previous-period averages, six monthly buckets,
+prior-30-day comparisons, available sleep context and Health Monitor coverage.
+W is seven days, M is 30 days, and 6M is six calendar months. Previous/next arrows
+move by these same periods. Missing readings remain gaps and are excluded from
+averages. RHR trends and comparisons include only the current reading's known
+calculation method. Typical bands use the scoring reference's median ± robust SD
+(HRV in log space), with the existing HRV/RHR spread floors; other flat or
+insufficient bands are unassessed. These are descriptive personal ranges.
+
+Historical Recovery recalculates the documented HRV/RHR-only fallback separately
+for each date, since historical sleep need is not stored. Its confidence cannot
+be high. Each plotted day exposes this missing sleep context. Current Recovery
+uses the same sleep/need path as `/api/recovery`; historical connected composite
+sleep performance remains unavailable without historical need. No score or sleep
+algorithm is changed for the UI. Six-month vital plots overlay monthly averages
+on a faint daily trace; percentage plots retain bars.
+
+Disconnected UI fixtures provide date-seeded varied vitals, outliers and gaps,
+using the existing sleep mock fixtures and calculation. The footer labels all
+demo values synthetic and lets users switch to the older prototype score. That
+prototype has no stored historical scores, so its earlier bars remain blank.
+Stress Monitor and Behavior Insights retain their layouts with unavailable
+states, rather than inventing daytime stress or causal claims. Activity times,
+device battery and streak are unavailable when the data layer does not supply
+them; workout badges show recorded heart-rate-zone minutes, not a fabricated
+workout strain score.
+
+The connected analytics endpoint makes ten range fetches before pagination and
+retries: five daily vital types, main sleep history and the four existing
+sleep-need inputs. The returned `current` fields match `/api/recovery`.
 
 ## Demo and tests
 

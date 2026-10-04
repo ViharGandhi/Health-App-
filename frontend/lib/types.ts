@@ -34,7 +34,19 @@ export interface StrainData {
 
 export interface RecoveryData {
   score: number | null;
-  status: 'green' | 'yellow' | 'red' | 'signals' | 'calibrating';
+  status: 'green' | 'yellow' | 'red' | 'signals' | 'calibrating' | 'building_reference' | 'ok';
+  z: number | null;
+  percent: number | null;
+  zone: 'below_normal' | 'normal' | 'above_normal' | null;
+  confidence: 'low' | 'medium' | 'high' | null;
+  estimated: boolean | null;
+  components: { z_hrv: number | null; z_rhr: number | null; sleep_adj: number } | null;
+  sleep_context: { sleep_min: number | null; need_min: number | null; performance: number | null } | null;
+  baseline_days: number | null;
+  recent_nights: number | null;
+  rhr_baseline_days: number | null;
+  illness_flag: boolean | null;
+  status_reason: string | null;
   hrv_component: number | null;
   rhr_component: number | null;
   sleep_component: number | null;
@@ -101,6 +113,39 @@ export interface SleepTrendDay {
   in_bed_hours: number | null;
   bed_variability_minutes: number | null;
   wake_variability_minutes: number | null;
+}
+
+export type RecoveryMetric = 'recovery' | 'hrv' | 'rhr' | 'respiratory_rate' | 'sleep_performance';
+export type RecoveryRange = 'W' | 'M' | '6M';
+export type RecoveryDemo = 'estimate' | 'legacy';
+export interface RecoveryDay {
+  date: string;
+  recovery: number | null;
+  zone: RecoveryData['zone'];
+  confidence: RecoveryData['confidence'];
+  sleep_context_missing: boolean;
+  hrv: number | null;
+  rhr: number | null;
+  respiratory_rate: number | null;
+  sleep_performance: number | null;
+}
+export interface RecoveryAnalytics {
+  is_mock: boolean;
+  demo_mode: RecoveryDemo | null;
+  timeframe: RecoveryRange;
+  range_start: string;
+  range_end: string;
+  previous_range_end: string;
+  days: RecoveryDay[];
+  averages: Record<RecoveryMetric, number | null>;
+  previous_averages: Record<RecoveryMetric, number | null>;
+  prior_30_day_averages: Record<Exclude<RecoveryMetric, 'recovery'>, number | null>;
+  typical_ranges: Record<string, { low: number; high: number; days: number } | null>;
+  monthly_buckets: { start_date: string; end_date: string; averages: Record<RecoveryMetric, number | null>; counts: Record<RecoveryMetric, number> }[];
+  current: RecoveryData;
+  sleep: { date: string; performance: number | null; asleep_minutes: number | null; bed_time: string; wake_time: string } | null;
+  health_monitor: { within: number; assessed: number; expected: number };
+  notes: string;
 }
 
 export type SleepAnalyticsMetric = 'performance' | 'hours_percentage' | 'asleep_minutes' | 'need_minutes' | 'restorative' | 'consistency' | 'period_minutes' | 'efficiency';

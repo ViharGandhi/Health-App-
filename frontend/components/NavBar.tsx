@@ -6,7 +6,7 @@ import styles from './NavBar.module.css';
 
 export default function NavBar() {
   const pathname = usePathname();
-  if (pathname.startsWith('/sleep/')) {
+  if (pathname.startsWith('/sleep/') || pathname.startsWith('/recovery')) {
     return null;
   }
   const items = [
@@ -17,7 +17,7 @@ export default function NavBar() {
     { href: '/health', label: 'Health', icon: <path d="M3 12h4l2.3-5 4.2 10 2.2-5H21" /> },
   ];
 
-  return <nav className={styles.nav} aria-label="Main navigation"><div className={styles.inner}>
+  return <nav className={`${styles.nav} ${pathname === '/' ? styles.homeNav : ''}`} aria-label="Main navigation"><div className={styles.inner}>
     {items.map((item) => {
       const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
       return <Link key={item.href} href={item.href} className={`${styles.item} ${active ? styles.active : ''}`} aria-current={active ? 'page' : undefined}>

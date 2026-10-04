@@ -60,6 +60,7 @@ from sleep_analytics import sleep_observations, build_sleep_analytics, timing_re
 from sleep_need import SleepNeedResult, format_sleep_minutes
 from sleep_need_inputs import SleepNeedInputs, need_components
 from recovery_score import recovery_from_history, baseline_bounds, MIN_BASELINE_DAYS, MIN_RECENT_NIGHTS
+from recovery_analytics import build_recovery_analytics, mock_recovery_history, VITALS
 from sleep_stage_pipeline import sync_stage_ranges
 from sleep_stage_webhooks import router as sleep_stage_webhook_router, stage_store
 from health_trends import build_health_response
@@ -422,6 +423,11 @@ async def _compute_connected_recovery(client: GoogleHealthClient, today: date,
         client.get_sleep_session(today),
         _recovery_sleep_need(client, today, age),
     )
+    return await _recovery_response(client, today, history, sleep, need)
+
+
+async def _recovery_response(client, today: date, history: dict, sleep: dict | None,
+                             need: SleepNeedResult | None) -> RecoveryResponse:
     sleep_min = (sleep["total_duration"] / 60
                  if sleep and sleep.get("sleep_duration_available") else None)
     estimate = recovery_from_history(history, today, sleep_min, need.total_need_min if need else None)
@@ -441,6 +447,22 @@ async def _compute_connected_recovery(client: GoogleHealthClient, today: date,
                                        "status_reason": reason,
                                        "training_recommendation": reason,
                                        "is_calibrating": estimate.status == "building_reference"})
+
+
+async def _demo_recovery_analytics(end: date, timeframe: str, demo: str) -> dict:
+    previous_start = range_start(range_start(end, timeframe) - timedelta(days=1), timeframe)
+    start, _ = baseline_bounds(previous_start)
+    history = mock_recovery_history(start, end)
+    sleep_start = min(previous_start, end - timedelta(days=30)) - timedelta(days=8)
+    sleeps = sleep_observations(mock_stage_points(end, (end - sleep_start).days + 1), end, is_mock=True)
+    night = next((s for s in sleeps if s["date"] == end.isoformat()), None)
+    raw = ({"total_duration": (night["asleep_minutes"] or 0) * 60,
+            "in_bed_duration": night["period_minutes"] * 60,
+            "sleep_duration_available": night["asleep_minutes"] is not None} if night else None)
+    need = demo_sleep_need_inputs(sleeps, end).for_tonight(end - timedelta(days=1))
+    current = (get_mock_dashboard().recovery if demo == "legacy"
+               else (await _recovery_response(None, end, history, raw, need)).model_copy(update={"is_mock": True}))
+    return build_recovery_analytics(history, sleeps, end, timeframe, current.model_dump(), is_mock=True, demo_mode=demo)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -485,17 +507,62 @@ async def dashboard(request: Request, response: Response):
 
 
 @app.get("/api/recovery", response_model=RecoveryResponse)
-async def recovery_endpoint(request: Request, response: Response):
+async def recovery_endpoint(request: Request, response: Response, demo: Literal["legacy", "estimate"] = "legacy"):
     token = await _get_token(request, response)
     if not token:
         if get_session(request):
             raise HTTPException(401, "Reconnect Google Health to refresh recovery data")
+        if demo == "estimate":
+            return (await _demo_recovery_analytics(_client_day(request), "W", demo))["current"]
         mock = get_mock_dashboard()
         return mock.recovery
 
     client = GoogleHealthClient(token)
     today = _client_day(request)
     return await _compute_connected_recovery(client, today, _client_age(request))
+
+
+@app.get("/api/recovery/analytics")
+async def recovery_analytics_endpoint(request: Request, response: Response,
+                                      timeframe: Literal["W", "M", "6M"] = "W",
+                                      end_date: date | None = None,
+                                      demo: Literal["legacy", "estimate"] = "estimate"):
+    today = _client_day(request)
+    end = end_date or today
+    if end > today:
+        raise HTTPException(400, "Recovery history cannot end in the future")
+    token = await _get_token(request, response)
+    if not token:
+        if get_session(request):
+            raise HTTPException(401, "Reconnect Google Health to refresh recovery data")
+        return await _demo_recovery_analytics(end, timeframe, demo)
+    previous_start = range_start(range_start(end, timeframe) - timedelta(days=1), timeframe)
+    start, _ = baseline_bounds(previous_start)
+    client = GoogleHealthClient(token)
+    age = _client_age(request)
+    sleep_start = min(previous_start, end - timedelta(days=30))
+    history, records, need = await asyncio.gather(
+        client.get_health_history(start, end, VITALS),
+        client._sleep_records(sleep_start, end),
+        _recovery_sleep_need(client, end, age),
+    )
+    night = next((record for record in records if record["date"] == end), None)
+    current = await _recovery_response(client, end, history, night, need)
+    sleeps = []
+    for record in records:
+        performance = None
+        if record is night and need and record["sleep_duration_available"]:
+            data = SleepData(record["total_duration"], record["deep_sleep_duration"], record["rem_sleep_duration"],
+                             record["core_sleep_duration"], record["awake_duration"], record["in_bed_duration"],
+                             record["sleep_start_time"], record["sleep_end_time"], record["interruption_count"],
+                             sleep_latency_seconds=record.get("sleep_latency_seconds"))
+            performance = round(SleepCalculator.calculate_score(data, need.total_need_min / 60,
+                           hrv_baseline=_HRV_BASELINE, sleeping_hr_baseline=_RHR_BASELINE + 4,
+                           age=age if age is not None else USER_AGE), 1)
+        sleeps.append({"date": record["date"].isoformat(), "performance": performance,
+                       "asleep_minutes": record["total_duration"] / 60 if record["sleep_duration_available"] else None,
+                       "bed_time": record["sleep_start_time"].isoformat(), "wake_time": record["sleep_end_time"].isoformat()})
+    return build_recovery_analytics(history, sleeps, end, timeframe, current.model_dump(), is_mock=False)
 
 
 @app.get("/api/sleep", response_model=SleepResponse)

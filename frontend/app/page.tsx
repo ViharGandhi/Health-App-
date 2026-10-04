@@ -1,292 +1,82 @@
 'use client';
 
-/**
- * Dashboard — Home page (/)
- * Exact WHOOP app dashboard:
- * - Top header with Avatar, streak, `< TODAY >` pill, and strap battery
- * - "WHOOP" centered wordmark
- * - Three horizontal dials: SLEEP, RECOVERY, STRAIN with exact WHOOP layout, fonts & colors
- * - Health Monitor & Stress Monitor side-by-side
- * - My Day with "Your Daily Outlook" and "Today's Activities"
- */
-
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import CircleDial from '@/components/CircleDial';
-import MockBanner from '@/components/MockBanner';
+import RecoveryDemoSwitch from '@/components/RecoveryDemoSwitch';
 import { api } from '@/lib/api';
-import type { DashboardData } from '@/lib/types';
+import { useRecoveryAnalytics } from '@/lib/useRecoveryAnalytics';
+import { BLUE, dateLabel, localDay, recoveryColor, shiftDay } from '@/lib/recovery';
+import type { StrainData } from '@/lib/types';
 import styles from './page.module.css';
 
-const RECOVERY_COLOR: Record<string, string> = {
-  green:  '#22E600', // Crisp WHOOP electric lime green
-  yellow: '#F5C518',
-  red:    '#FF3B3B',
-};
-
-function formatTime(dateStr: string | null): string {
-  if (!dateStr) return '—';
-  if (dateStr.includes('AM') || dateStr.includes('PM')) {
-    return dateStr;
-  }
-  const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return dateStr;
-  const h = d.getHours();
-  const m = d.getMinutes().toString().padStart(2, '0');
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  const h12 = h % 12 || 12;
-  return `${h12}:${m} ${ampm}`;
+function formatTime(value?: string | null): string {
+  if (!value) return '—';
+  return new Date(value).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: false });
+}
+function duration(minutes: number | null): string {
+  if (minutes == null) return '—';
+  const rounded = Math.round(minutes);
+  return `${Math.floor(rounded / 60)}:${String(rounded % 60).padStart(2, '0')}`;
+}
+function UnavailableDialog({ message, onClose }: { message: string; onClose: () => void }) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  useEffect(() => { dialog.current?.showModal(); }, []);
+  return <dialog ref={dialog} className={styles.dialog} onCancel={onClose}><h2>Not available yet</h2><p>{message}</p><button onClick={onClose}>Close</button></dialog>;
+}
+function Chevron({ reverse = false }: { reverse?: boolean }) {
+  return <svg width="7" height="12" viewBox="0 0 7 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={reverse ? { transform: 'rotate(180deg)' } : undefined}><path d="m2 2 4 4-4 4" /></svg>;
 }
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [error, setError] = useState(false);
-
+  const [day, setDay] = useState<string>();
+  const [strain, setStrain] = useState<StrainData | null>(null);
+  const [strainError, setStrainError] = useState(false);
+  const [unavailable, setUnavailable] = useState<string | null>(null);
+  const { data, error, demo, changeDemo } = useRecoveryAnalytics('W', day);
   useEffect(() => {
-    api.getDashboard()
-      .then(setData)
-      .catch(() => setError(true));
-  }, []);
-
-  if (error) {
-    return (
-      <div className={styles.errorState}>
-        <p>Could not connect to backend.</p>
-        <p className="text-secondary" style={{ fontSize: 13, marginTop: 8 }}>
-          Make sure the FastAPI server is running on port 8000.
-        </p>
-      </div>
-    );
-  }
-
-  if (!data) {
-    return (
-      <div className={styles.loading}>
-        <div className={styles.loadingDials}>
-          <div className="skeleton" style={{ width: 94, height: 94, borderRadius: '50%' }} />
-          <div className="skeleton" style={{ width: 116, height: 116, borderRadius: '50%' }} />
-          <div className="skeleton" style={{ width: 94, height: 94, borderRadius: '50%' }} />
-        </div>
-      </div>
-    );
-  }
-
-  const { recovery, sleep, strain } = data;
-  const recoveryColor = RECOVERY_COLOR[recovery.status] ?? '#00F076';
-  const sleepColor = '#4EA5B7'; // Whoop sleep teal/cyan
-  const strainColor = '#3078F0'; // Whoop strain blue
-
-  const now = new Date();
-  const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-
-  const sleepHours = Math.floor(sleep.total_sleep_hours);
-  const sleepMinutes = Math.round((sleep.total_sleep_hours % 1) * 60).toString().padStart(2, '0');
-
-  return (
-    <div className={styles.pageWrapper}>
-      <MockBanner isMock={data.is_mock} />
-
-      <div className={styles.container}>
-        {/* -- Status Header (WHOOP top bar) ---------------- */}
-        <header className={styles.topHeader}>
-          <div className={styles.headerLeft}>
-            <div className={styles.avatarCircle}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </div>
-            <div className={styles.streakBadge}>
-              <span className={styles.flame}>🔥</span>
-              <span className={styles.streakNum}>6</span>
-            </div>
-          </div>
-
-          <div className={styles.datePill}>
-            <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ transform: 'rotate(180deg)' }}>
-              <path d="M1 1.5L4.5 5L1 8.5" />
-            </svg>
-            <span className={styles.pillText}>TODAY</span>
-            <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M1 1.5L4.5 5L1 8.5" />
-            </svg>
-          </div>
-
-          <div className={styles.headerRight}>
-            <span className={styles.batteryPct}>94%</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22E600" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={styles.batteryIcon}>
-              <rect x="2" y="7" width="16" height="10" rx="2" ry="2" />
-              <line x1="20" y1="11" x2="20" y2="13" />
-            </svg>
-          </div>
-        </header>
-
-        {/* -- WHOOP Wordmark -------------------------------- */}
-        <div className={styles.brandBar}>
-          <span className={styles.whoopLogo}>WHOOP</span>
-        </div>
-
-        {/* -- Three Dials: SLEEP | RECOVERY | STRAIN --------- */}
-        <section className={styles.dialsSection} aria-label="Fitness Dials">
-          {/* SLEEP DIAL (Left) */}
-          <div className={styles.dialCol}>
-            <CircleDial
-              label="SLEEP"
-              value={sleep.score}
-              maxValue={100}
-              color={sleepColor}
-              unit="%"
-              size={94}
-              onClick={() => router.push('/sleep')}
-              showChevron
-            />
-          </div>
-
-          {/* RECOVERY DIAL (Center — Primary & Larger) */}
-          <div className={styles.dialColCenter}>
-            <CircleDial
-              label="RECOVERY"
-              value={recovery.score ?? 0}
-              maxValue={100}
-              color={recoveryColor}
-              unit="%"
-              displayText={recovery.score == null ? '—' : undefined}
-              size={116}
-              onClick={() => router.push('/recovery')}
-              showChevron
-              isPrimary
-            />
-          </div>
-
-          {/* STRAIN DIAL (Right) */}
-          <div className={styles.dialCol}>
-            <CircleDial
-              label="STRAIN"
-              value={strain.score_21}
-              maxValue={21}
-              color={strainColor}
-              size={94}
-              onClick={() => router.push('/strain')}
-              showChevron
-            />
-          </div>
-        </section>
-
-        {/* -- Health Monitor & Stress Monitor (2 Columns) --- */}
-        <div className={styles.monitorsGrid}>
-          {/* HEALTH MONITOR */}
-          <div className={styles.monitorCard} onClick={() => router.push('/recovery')} role="button" tabIndex={0}>
-            <div className={styles.cardHeaderRow}>
-              <span className={styles.cardTitle}>HEALTH MONITOR</span>
-              <svg className={styles.cardChevronSvg} width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M1 1.5L4.5 5L1 8.5" />
-              </svg>
-            </div>
-            <div className={styles.monitorBody}>
-              <div className={styles.checkIconBox}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2BD67E" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
-              <div className={styles.monitorTextStack}>
-                <span className={styles.monitorHighlight} style={{ color: '#2BD67E' }}>
-                  WITHIN RANGE
-                </span>
-                <span className={styles.monitorSubtext}>5/5 Metrics</span>
-              </div>
-            </div>
-          </div>
-
-          {/* STRESS MONITOR */}
-          <div className={styles.monitorCard} onClick={() => router.push('/strain')} role="button" tabIndex={0}>
-            <div className={styles.cardHeaderRow}>
-              <span className={styles.cardTitle}>STRESS MONITOR</span>
-              <svg className={styles.cardChevronSvg} width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M1 1.5L4.5 5L1 8.5" />
-              </svg>
-            </div>
-            <div className={styles.monitorBody}>
-              <div className={styles.stressScoreBadge}>0.4</div>
-              <div className={styles.monitorTextStack}>
-                <span className={styles.monitorHighlight} style={{ color: '#2BD67E' }}>
-                  LOW
-                </span>
-                <span className={styles.monitorSubtext}>7:30 AM</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* -- My Day Section -------------------------------- */}
-        <section className={styles.myDaySection}>
-          <h2 className={styles.myDayTitle}>My Day</h2>
-
-          {/* Daily Outlook Banner */}
-          <div className={styles.outlookBanner}>
-            <div className={styles.outlookLeft}>
-              <div className={styles.whoopIconPill}>W</div>
-              <div className={styles.outlookContent}>
-                <span className={styles.sunIcon}>☼</span>
-                <span className={styles.outlookLabel}>Your Daily Outlook</span>
-              </div>
-            </div>
-            <span className={styles.outlookChevron}>›</span>
-          </div>
-
-          {/* Today's Activities */}
-          <div className={styles.activitiesContainer}>
-            <div className={styles.activitiesHeaderRow}>
-              <span className={styles.activitiesSectionTitle}>TODAY&apos;S ACTIVITIES</span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8E95A2" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="15 3 21 3 21 9" />
-                <polyline points="9 21 3 21 3 15" />
-                <line x1="21" y1="3" x2="14" y2="10" />
-                <line x1="3" y1="21" x2="10" y2="14" />
-              </svg>
-            </div>
-
-            {/* Sleep Row */}
-            <div className={styles.activityItem}>
-              <div className={styles.activityLeftPart}>
-                <div className={styles.sleepBadge}>
-                  <span className={styles.moonIcon}>☽</span>
-                  <span className={styles.sleepTimeText}>{sleepHours}:{sleepMinutes}</span>
-                </div>
-                <span className={styles.activityName}>SLEEP</span>
-              </div>
-
-              <div className={styles.activityTimeline}>
-                <div className={styles.timeStack}>
-                  <span className={styles.timeVal}>{sleep.sleep_start ? formatTime(sleep.sleep_start) : '12:35 AM'}</span>
-                  <span className={styles.timeVal}>{sleep.sleep_end ? formatTime(sleep.sleep_end) : '7:26 AM'}</span>
-                </div>
-                <div className={styles.timelineBar} />
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className={styles.actionButtonsRow}>
-              <button className={styles.whoopBtn}>
-                <span className={styles.plusSign}>+</span>
-                <span>ADD ACTIVITY</span>
-              </button>
-              <button className={styles.whoopBtn}>
-                <span className={styles.timerIcon}>⏱</span>
-                <span>START ACTIVITY</span>
-              </button>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      {/* Floating WHOOP Action Button */}
-      <div className={styles.floatingActionBtn}>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#121417" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19" />
-          <line x1="5" y1="12" x2="19" y2="12" />
-        </svg>
-      </div>
+    let active = true;
+    setStrain(null); setStrainError(false);
+    api.getStrain(day).then(value => { if (active) setStrain(value); }).catch(() => { if (active) setStrainError(true); });
+    return () => { active = false; };
+  }, [day]);
+  const activityMessage = 'Activity logging and live workout recording are not connected yet. Recorded device activities are listed here when available.';
+  if (error || strainError) return <div className={styles.errorState} role="alert">Could not load your overview. Please try again.</div>;
+  if (!data || !strain) return <div className={styles.pageWrapper}><div className={styles.loading} role="status">Loading your overview…</div></div>;
+  const current = data.current;
+  const sleep = data.sleep;
+  const monitor = data.health_monitor;
+  const allWithin = monitor.assessed === monitor.expected && monitor.within === monitor.assessed;
+  const monitorColor = allWithin ? '#00DCA0' : '#AEB8C1';
+  const recoveryHref = `/recovery${day ? `?date=${day}` : ''}`;
+  return <div className={styles.pageWrapper}><div className={styles.container}>
+    <header className={styles.topHeader}>
+      <div className={styles.headerLeft}><Link className={styles.avatarCircle} href="/health" aria-label="Your health"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></Link><span className={styles.streakBadge} title="Activity streak unavailable">🔥 <span>—</span></span></div>
+      <div className={styles.datePill}><button aria-label="Previous day" onClick={() => setDay(shiftDay(data.range_end, -1))}><Chevron reverse /></button><span>{data.range_end === localDay() ? 'TODAY' : dateLabel(data.range_end)}</span><button aria-label="Next day" disabled={data.range_end >= localDay()} onClick={() => setDay(shiftDay(data.range_end, 1))}><Chevron /></button></div>
+      <div className={styles.headerRight} title="Device battery unavailable"><span>—</span><svg width="18" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="7" y="3" width="10" height="18" rx="3" /><path d="M10 0h4m-4 24h4" /></svg></div>
+    </header>
+    <div className={styles.brandBar}>OJAS</div>
+    <section className={styles.dialsSection} aria-label="Daily scores">
+      <CircleDial label="SLEEP" value={sleep?.performance ?? 0} displayText={sleep?.performance == null ? '—' : undefined} maxValue={100} color={BLUE} unit="%" size={94} onClick={() => router.push('/sleep')} />
+      <CircleDial label="RECOVERY" value={current.score ?? 0} displayText={current.score == null ? '—' : undefined} maxValue={100} color={recoveryColor(current.zone, current.status)} unit="%" size={94} onClick={() => router.push(recoveryHref)} />
+      <CircleDial label="STRAIN" value={strain.score_21} displayText={strain.avg_hr == null ? '—' : undefined} maxValue={21} color="#009FE8" size={94} onClick={() => router.push('/strain')} />
+    </section>
+    <div className={styles.monitorsGrid}>
+      <Link className={styles.monitorCard} href="/health"><div className={styles.cardHeaderRow}><span>HEALTH MONITOR</span><Chevron /></div><div className={styles.monitorBody}><span className={styles.checkIconBox} style={{ color: monitorColor }}>{allWithin ? '✓' : '—'}</span><span className={styles.monitorTextStack}><strong style={{ color: monitorColor }}>{allWithin ? 'WITHIN RANGE' : monitor.assessed < monitor.expected ? 'BUILDING RANGE' : 'OUTSIDE RANGE'}</strong><small>{monitor.assessed < monitor.expected ? `${monitor.assessed}/${monitor.expected} Metrics assessed` : `${monitor.within}/${monitor.expected} Metrics${allWithin ? '' : ' within'}`}</small></span></div></Link>
+      <button className={styles.monitorCard} onClick={() => setUnavailable('Daytime Stress Monitor has no calculation or data source connected. Sleep Stress is available in the Sleep section.')}><div className={styles.cardHeaderRow}><span>STRESS MONITOR</span><Chevron /></div><div className={styles.monitorBody}><span className={styles.stressScoreBadge}>—</span><span className={styles.monitorTextStack}><strong>UNAVAILABLE</strong><small>No daytime data</small></span></div></button>
     </div>
-  );
+    <section className={styles.myDaySection}><div className={styles.myDayHeader}><h2>My Day</h2><button className={styles.addButton} aria-label="Add activity" onClick={() => setUnavailable(activityMessage)}>+</button></div>
+      <Link className={styles.outlookBanner} href={recoveryHref}><span><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="5" /><path d="M12 0v3m0 18v3M0 12h3m18 0h3M3 3l2 2m14 14 2 2M3 21l2-2M19 5l2-2" /></svg>Your Daily Outlook</span><Chevron /></Link>
+      <div className={styles.activitiesContainer}><div className={styles.activitiesHeaderRow}><span>{data.range_end === localDay() ? "TODAY'S ACTIVITIES" : 'ACTIVITIES'}</span><Link href="/strain" aria-label="View activity details">↗</Link></div>
+        <Link href="/sleep" className={styles.activityItem}><div className={styles.activityLeftPart}><div className={styles.sleepBadge}><svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5z" /></svg><strong>{duration(sleep?.asleep_minutes ?? null)}</strong></div><span className={styles.activityName}>SLEEP</span></div><div className={styles.activityTimeline}><div className={styles.timeStack}><span>{formatTime(sleep?.bed_time)}</span><span>{formatTime(sleep?.wake_time)}</span></div><i /></div></Link>
+        {strain.workouts.map((workout, index) => <Link href="/strain" className={styles.activityItem} key={`${workout.activity_name}-${index}`}><div className={styles.activityLeftPart}><div className={`${styles.sleepBadge} ${styles.workoutBadge}`} title="Duration recorded in heart-rate zones"><svg width="20" height="25" viewBox="0 0 24 30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="13" cy="4" r="2" /><path d="m11 8-3 7 5 4-2 9M11 8l5 5h4M8 15l-4 4m9 0 5 8" /></svg><strong>{Math.round(Object.values(workout.zone_minutes).reduce((sum, minutes) => sum + minutes, 0))}<small>min</small></strong></div><span className={styles.activityName}>{workout.activity_name}</span></div><div className={`${styles.activityTimeline} ${styles.workoutTimeline}`} title="Activity start and end times are not supplied"><div className={styles.timeStack}><span>—</span><span>—</span></div><i /></div></Link>)}
+        <div className={styles.actionButtonsRow}><button onClick={() => setUnavailable(activityMessage)}><span>＋</span>ADD ACTIVITY</button><button onClick={() => setUnavailable(activityMessage)}><span>◷</span>START ACTIVITY</button></div>
+      </div>
+    </section>
+    <p className={styles.estimateNote}>{current.estimated ? `Estimated Recovery · ${current.confidence ?? 'building reference'}${current.confidence ? ' confidence' : ''}` : 'Prototype Recovery estimate'}{data.is_mock ? ' · Synthetic sample vitals and sleep; activity uses the existing demo fixture.' : ''}</p>
+    {data.is_mock && <RecoveryDemoSwitch value={demo} onChange={changeDemo} />}
+    {unavailable && <UnavailableDialog message={unavailable} onClose={() => setUnavailable(null)} />}
+  </div></div>;
 }
