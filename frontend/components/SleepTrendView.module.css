@@ -266,6 +266,8 @@
   overflow: visible;
 }
 
+.chartValueLabel { paint-order: stroke; stroke: #1A2025; stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+
 .emptyChart {
   min-height: 180px;
   display: grid;

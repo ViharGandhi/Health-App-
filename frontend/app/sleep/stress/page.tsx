@@ -4,10 +4,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import MockBanner from '@/components/MockBanner';
 import { api } from '@/lib/api';
 import type { SleepStressHistory } from '@/lib/types';
 import styles from './page.module.css';
+import theme from '@/components/SleepAnalytics.module.css';
 
 type Timeframe = 'W' | 'M' | '6M';
 
@@ -125,16 +125,15 @@ export default function SleepStressTrendPage() {
     : [...new Set(Array.from({ length: timeframe === 'M' ? 5 : 6 }, (_, i) =>
       Math.round(i * (days.length - 1) / (timeframe === 'M' ? 4 : 5))))];
 
-  if (!history && !error) return <div className="page"><div className="skeleton" style={{ height: 240, borderRadius: 18, marginTop: 24 }} /></div>;
-  if (error) return <div className="page" style={{ paddingTop: 24 }}><button className="btn" onClick={() => router.push('/sleep')}>← SLEEP</button><div className="card" style={{ marginTop: 24, padding: 24 }}><h1>Sleep stress unavailable</h1><p className="text-secondary" style={{ marginTop: 12 }}>The backend could not provide sleep stress data. Connected scoring also requires verified HRV window timing.</p></div></div>;
+  if (!history && !error) return <div className={theme.detail}><div className={theme.detailInner}><div className="skeleton" style={{ height: 240, borderRadius: 18, marginTop: 24 }} /></div></div>;
+  if (error) return <div className={theme.detail}><div className={theme.detailInner}><button className="btn" onClick={() => router.push('/sleep')}>← SLEEP</button><div className="card" style={{ marginTop: 24, padding: 24 }}><h1>Sleep stress unavailable</h1><p className="text-secondary" style={{ marginTop: 12 }}>The backend could not provide sleep stress data. Connected scoring also requires verified HRV window timing.</p></div></div></div>;
 
   return (
     <>
-    <MockBanner isMock={history?.is_mock ?? false} />
-    <div className={styles.pageWrapper}>
-      <div className={styles.container}>
+    <div className={theme.detail}>
+      <div className={theme.detailInner}>
         {/* -- Top Navigation Bar -- */}
-        <header className={styles.topNav}>
+        <header className={theme.detailHeader}>
           <button className={styles.navBackBtn} onClick={() => router.push('/sleep')} aria-label="Back">
             <svg width="10" height="16" viewBox="0 0 10 16" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
               <path d="M8.5 1.5L2 8L8.5 14.5" />
@@ -191,6 +190,7 @@ export default function SleepStressTrendPage() {
               {(['W', 'M', '6M'] as const).map((t) => (
                 <button
                   key={t}
+                  aria-pressed={timeframe === t}
                   className={`${styles.toggleBtn} ${timeframe === t ? styles.toggleActive : ''}`}
                   onClick={() => {
                     if (t !== timeframe) { setHistory(null); setHoveredIndex(null); setTimeframe(t); }
@@ -277,7 +277,7 @@ export default function SleepStressTrendPage() {
               <div
                 className={styles.hoverTooltip}
                 style={{
-                  left: `${((hoveredIndex + 0.5) / days.length) * 100}%`,
+                  left: `clamp(min(120px, 50%), ${((hoveredIndex + 0.5) / days.length) * 100}%, max(50%, calc(100% - 120px)))`,
                 }}
               >
                 <div className={styles.tooltipHeader}>
@@ -328,7 +328,7 @@ export default function SleepStressTrendPage() {
           <span>Average uses scored nights through {dateAtNoon(history!.range_end).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}.</span>
         </div>
 
-        {history?.is_mock && <p className={styles.insightText}>Illustrative sample readings; no device data is connected.</p>}
+        {history?.is_mock && <p className={theme.demo}>DEMO · SYNTHETIC HISTORY</p>}
       </div>
     </div>
     </>

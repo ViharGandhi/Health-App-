@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import type { SleepTrend, SleepConsistencyScore } from '@/lib/types';
 import styles from './SleepTrendView.module.css';
+import { lineLabelPositions } from '@/lib/sleepChartLabels';
 
 type Timeframe = 'W' | 'M' | '6M' | 'Y';
 type Metric = 'efficiency' | 'consistency';
@@ -161,7 +162,7 @@ function TrendChart({
   const GUTTER_LEFT = 42;  // where AVG badge ends and grid lines start
   const PLOT_LEFT = 54;    // where data points begin (leaving clear gap from AVG badge)
   const PLOT_RIGHT = 348;  // where data points end
-  const TOP = 16;
+  const TOP = 20;
   const BOTTOM = 32;
   const cH = H - TOP - BOTTOM;
   const cW = PLOT_RIGHT - PLOT_LEFT;
@@ -188,6 +189,7 @@ function TrendChart({
   const lastReal = lastRealIdx >= 0 ? trend.days[lastRealIdx] : null;
   const lastRealX = lastRealIdx >= 0 ? toX(lastRealIdx) : null;
   const lastRealY = lastReal?.value != null ? toY(lastReal.value) : null;
+  const valueLabels = lineLabelPositions(days.map((day, i) => day.value == null ? null : { x: toX(i), y: toY(day.value) }), days.map(() => null));
 
   const tooltipX = hx != null ? Math.min(Math.max(hx, PLOT_LEFT + 20), PLOT_RIGHT - 20) : null;
 
@@ -350,7 +352,8 @@ function TrendChart({
             />
             <text
               x={lastRealX}
-              y={lastRealY - 7}
+              y={valueLabels[lastRealIdx].first!}
+              className={styles.chartValueLabel}
               fill="#8fb7ca"
               fontSize="10.5"
               fontWeight="700"
@@ -511,11 +514,6 @@ function ConsistencyBarChart({
               onFocus={() => onHover(index)}
               onClick={() => onHover(index)}
             />
-            {timeframe === 'W' && (
-              <text x={toX(index)} y={toY(day.value) - 8} fill="#91B4CE" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="var(--font-display)">
-                {Math.round(day.value)}%
-              </text>
-            )}
           </g>
         ))}
 
@@ -526,6 +524,12 @@ function ConsistencyBarChart({
             <text x="22.5" y={toY(average) + 3.5} fill="#121417" fontSize="8.5" fontWeight="800" textAnchor="middle" fontFamily="var(--font-display)">AVG.</text>
           </g>
         )}
+
+        {timeframe === 'W' && days.map((day, index) => day.value == null ? null : (
+          <text key={day.date} className={styles.chartValueLabel} x={toX(index)} y={toY(day.value) - 8} fill="#91B4CE" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="var(--font-display)">
+            {Math.round(day.value)}%
+          </text>
+        ))}
 
         {getXTicks(days, timeframe).map(({ index, top: topLabel, bottom }) => (
           <g key={index} transform={`translate(${toX(index)}, 0)`}>

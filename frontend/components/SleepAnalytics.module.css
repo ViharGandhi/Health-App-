@@ -21,6 +21,7 @@
 .guide { text-align: right; font-size: 9px; color: #B7BDC4; font-weight: 700; letter-spacing: .08em; margin: 0 0 3px; }
 .guide::before { content: '–––'; margin-right: 8px; }
 .chart { display: block; width: 100%; height: auto; overflow: visible; font-family: var(--font-display); font-weight: 600; }
+.chartLabel { paint-order: stroke; stroke: #20262B; stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
 .weeklyHeading { font-size: 22px; font-weight: 600; margin-top: 17px; }
 .legend { display: flex; justify-content: flex-end; gap: 14px; font-size: 8px; font-weight: 700; letter-spacing: .07em; margin-bottom: 6px; }
 .legend span { display: flex; align-items: center; gap: 5px; }
