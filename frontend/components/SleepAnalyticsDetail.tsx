@@ -35,11 +35,11 @@ export default function SleepAnalyticsDetail({ slug }: { slug: string }) {
   const router = useRouter();
   const [range, setRange] = useState<'W' | 'M' | '6M'>('W');
   const [data, setData] = useState<SleepAnalytics | null>(null);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     let active = true;
-    setData(null); setError(false);
-    api.getSleepAnalytics(range).then(value => { if (active) setData(value); }).catch(() => { if (active) setError(true); });
+    setData(null); setError(null);
+    api.getSleepAnalytics(range).then(value => { if (active) setData(value); }).catch(reason => { if (active) setError(reason instanceof Error ? reason.message : 'Sleep analytics unavailable.'); });
     return () => { active = false; };
   }, [range]);
   const average = data?.averages[item.metric];
@@ -61,7 +61,7 @@ export default function SleepAnalyticsDetail({ slug }: { slug: string }) {
     <div className={styles.period}><span className={styles.change} style={delta != null && delta < 0 ? { color: '#F59E0B', background: '#F59E0B15' } : undefined} title={item.unit === '%' ? 'Absolute difference in percentage points.' : 'Difference in average duration.'}>
       {delta == null ? '—' : `${delta >= 0 ? '+' : '−'}${item.unit === 'hr' ? duration(Math.abs(delta)) : Math.abs(delta).toFixed(1)}`} vs. prior {period}</span>
       <span>{data ? `${dates(data.range_start)} – ${dates(data.range_end)}, ${data.range_end.slice(2, 4)}` : 'Loading…'}</span></div>
-    {error ? <p role="alert">Sleep analytics unavailable. Try again later.</p> : !data ? <p className={styles.description}>Loading sleep history…</p> : <>
+    {error ? <div role="alert"><p>{error}</p><button className="btn" onClick={() => window.location.reload()}>Retry</button></div> : !data ? <p className={styles.description}>Loading sleep history…</p> : <>
       <p className={styles.description}>{item.metric === 'period_minutes' ? 'Your recorded sleep period runs from the start to the end of the Fitbit sleep session. It includes recorded awake time.'
         : item.metric === 'restorative' ? 'Restorative sleep combines device-estimated deep and REM sleep. Stage estimates describe patterns and are not a diagnosis.'
         : item.kind === 'hours' || item.metric === 'hours_percentage' ? 'Hours asleep compared with the app’s sleep-need estimate. Missing estimates are left blank.' : 'Your app-calculated sleep performance across recorded main sleeps.'}</p>

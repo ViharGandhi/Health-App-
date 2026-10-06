@@ -149,8 +149,28 @@ class RecoveryIntegrationTests(unittest.TestCase):
 
     def test_expired_connected_session_requires_reconnect_instead_of_demo(self):
         with patch("main._get_token", new=AsyncMock(return_value=None)), patch("main.get_session", return_value={"access_token": "expired"}):
-            response = TestClient(app).get("/api/recovery")
-        self.assertEqual(response.status_code, 401)
+            for path in ("/api/recovery", "/api/recovery/analytics", "/api/dashboard"):
+                with self.subTest(path=path):
+                    response = TestClient(app).get(path)
+                    self.assertEqual(response.status_code, 401)
+
+    def test_next_day_all_connected_endpoints_use_our_calculator_even_with_legacy_demo_selected(self):
+        tomorrow = date(2026, 10, 7)
+        for scenario in ("normal", "building_reference"):
+            client = MockRecoveryClient(tomorrow, scenario)
+            client.points["daily-oxygen-saturation"] = []
+            expected = asyncio.run(_compute_connected_recovery(client, tomorrow, 22)).model_dump()
+            headers = {"X-User-Date": tomorrow.isoformat(), "X-User-Age": "22"}
+            with patch("main._get_token", new=AsyncMock(return_value="token")), patch("main.GoogleHealthClient", return_value=client):
+                for path, key in (("/api/recovery?demo=legacy", None),
+                                  ("/api/recovery/analytics?demo=legacy", "current"),
+                                  ("/api/dashboard", "recovery")):
+                    with self.subTest(scenario=scenario, path=path):
+                        response = TestClient(app).get(path, headers=headers)
+                        self.assertEqual(response.status_code, 200)
+                        result = response.json()[key] if key else response.json()
+                        self.assertEqual(result, expected)
+                        self.assertFalse(result["is_mock"])
 
 
 if __name__ == "__main__":

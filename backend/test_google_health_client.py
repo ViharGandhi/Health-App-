@@ -65,8 +65,54 @@ class GoogleHealthClientTests(unittest.TestCase):
         self.assertEqual(len(requests), 2)
         self.assertEqual(requests[0].url.path, "/v4/users/me/dataTypes/daily-heart-rate-variability/dataPoints:reconcile")
         self.assertEqual(requests[0].url.params["dataSourceFamily"], "users/me/dataSourceFamilies/google-wearables")
-        self.assertEqual(requests[0].url.params["filter"], 'dailyHeartRateVariability.date >= "2026-09-30" AND dailyHeartRateVariability.date < "2026-10-01"')
+        self.assertEqual(requests[0].url.params["pageSize"], "10000")
+        self.assertEqual(requests[0].url.params["filter"], 'daily_heart_rate_variability.date >= "2026-09-30" AND daily_heart_rate_variability.date < "2026-10-01"')
         self.assertEqual(requests[1].url.params["pageToken"], "next")
+        self.assertEqual(requests[1].url.params["pageSize"], "10000")
+
+    def test_sleep_and_exercise_keep_the_api_session_page_limit(self):
+        for data_type, reconcile in (("sleep", True), ("sleep", False), ("exercise", True)):
+            requests = []
+            def respond(request):
+                requests.append(request)
+                return httpx.Response(200, json={"dataPoints": []})
+            mock_client = httpx.AsyncClient(transport=httpx.MockTransport(respond))
+            with self.subTest(data_type=data_type, reconcile=reconcile), \
+                 patch("google_health_client.httpx.AsyncClient", return_value=mock_client):
+                asyncio.run(GoogleHealthClient("token")._points(data_type, "", reconcile=reconcile))
+            self.assertEqual(requests[0].url.params["pageSize"], "25")
+
+    def test_daily_metric_filters_use_proto_names_not_json_names(self):
+        client = GoogleHealthClient("token")
+        client._points = AsyncMock(return_value=[])
+        day = date(2026, 9, 30)
+        asyncio.run(client.get_deep_sleep_hrv(day))
+        asyncio.run(client.get_hrv_history())
+        asyncio.run(client.get_resting_heart_rate(day))
+        self.assertTrue(client._points.call_args_list[0].args[1].startswith("daily_heart_rate_variability.date "))
+        self.assertTrue(client._points.call_args_list[1].args[1].startswith("daily_heart_rate_variability.date "))
+        self.assertTrue(client._points.call_args_list[2].args[1].startswith("daily_resting_heart_rate.date "))
+
+    def test_health_history_filters_keep_json_response_fields_separate(self):
+        client = GoogleHealthClient("token")
+        client._points = AsyncMock(return_value=[{"dailyRestingHeartRate": {
+            "date": {"year": 2026, "month": 9, "day": 30}, "beatsPerMinute": "56",
+        }}])
+        result = asyncio.run(client.get_health_history(date(2026, 9, 30), date(2026, 9, 30)))
+        for call in client._points.call_args_list:
+            data_type, filter_expr = call.args
+            field = data_type.replace("-", "_")
+            self.assertEqual(filter_expr, f'{field}.date >= "2026-09-30" AND {field}.date < "2026-10-01"')
+        self.assertEqual(result["rhr"][0]["value"], 56)
+
+    def test_intraday_heart_rate_filter_uses_proto_name(self):
+        client = GoogleHealthClient("token")
+        client._points = AsyncMock(return_value=[])
+        asyncio.run(client.get_intraday_heart_rate(date(2026, 9, 30), date(2026, 10, 1)))
+        client._points.assert_awaited_once_with("heart-rate", (
+            'heart_rate.sample_time.civil_time >= "2026-09-30" AND '
+            'heart_rate.sample_time.civil_time < "2026-10-02"'
+        ))
 
     def test_api_errors_are_not_treated_as_missing_data(self):
         transport = httpx.MockTransport(lambda request: httpx.Response(403, json={"error": "forbidden"}))

@@ -49,7 +49,7 @@ export default function RecoveryTrendDetail({ slug }: { slug: string }) {
       {config.metric === 'sleep_performance' && !data.is_mock && <p className={styles.note}>Historical sleep performance is unavailable without historical sleep need. Available values use the existing sleep calculation.</p>}
       <RecoveryLearnMore onOpen={() => setInfo(true)} />
       {data.is_mock && <RecoveryDemoSwitch value={demo} onChange={value => { setSelection(null); changeDemo(value); }} />}
-    </> : <p className={styles.loading} role={error ? 'alert' : 'status'}>{error ? 'Recovery history unavailable. Please try again.' : 'Loading history…'}</p>}
+    </> : <div className={styles.loading} role={error ? 'alert' : 'status'}>{error ?? 'Loading history…'}{error && <p><button onClick={() => window.location.reload()}>Retry</button></p>}</div>}
     <button className={styles.floating} aria-label="Open Recovery guide" onClick={() => setInfo(true)}><span>O</span></button>
     {info && <RecoveryInfo data={data?.current} onClose={closeInfo} />}
   </div></div>;

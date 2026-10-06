@@ -75,10 +75,10 @@ export interface SleepStages {
 }
 
 export interface SleepData {
-  score: number;
-  sleep_need_hours: number;
+  score: number | null;
+  sleep_need_hours: number | null;
   total_sleep_hours: number;
-  sleep_debt_hours: number;
+  sleep_debt_hours: number | null;
   efficiency_pct: number | null;
   stages: SleepStages;
   sleeping_hrv: number | null;
@@ -89,8 +89,8 @@ export interface SleepData {
   average_wake_time?: string | null;
   sleep_start: string | null;
   sleep_end: string | null;
-  duration_score: number;
-  stage_score: number;
+  duration_score: number | null;
+  stage_score: number | null;
   restfulness_score: number;
   hr_dip_score: number;
   is_mock: boolean;
@@ -170,7 +170,7 @@ export interface SleepAnalyticsDay {
   need_minutes?: number | null;
   hours_percentage?: number | null;
   wake_events?: number | null;
-  need_components?: { baseline: number; strain: number; debt: number } | null;
+  need_components?: { baseline: number; strain: number; debt: number; nap_credit: number } | null;
   segments?: { stage: SleepStage; start: string; end: string }[];
 }
 export interface SleepAnalytics {
@@ -299,14 +299,31 @@ export interface HeartRatePoint {
   value: number;
 }
 
+export interface LatestHeartRate {
+  sample_time: string;
+  value: number;
+}
+
+export interface HealthHeartRateData {
+  date: string;
+  is_mock: boolean;
+  heart_rate: HeartRatePoint[];
+  latest_heart_rate: LatestHeartRate | null;
+}
+
 export interface HealthData {
   date: string;
-  timeframe: 'W' | '6M' | '1Y';
+  timeframe: 'W' | 'M' | '6M' | '1Y';
   range_start: string;
   range_end: string;
+  previous_range_start: string;
+  previous_range_end: string;
+  averages: Record<string, number | null>;
+  previous_averages: Record<string, number | null>;
   is_mock: boolean;
   metrics: Record<string, HealthPoint[]>;
   heart_rate: HeartRatePoint[];
+  latest_heart_rate: LatestHeartRate | null;
 }
 
 

@@ -6,7 +6,7 @@ import type { RecoveryAnalytics, RecoveryDemo, RecoveryRange } from './types';
 
 export function useRecoveryAnalytics(range: RecoveryRange = 'W', endDate?: string) {
   const [data, setData] = useState<RecoveryAnalytics | null>(null);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [demo, setDemo] = useState<RecoveryDemo>('estimate');
   useEffect(() => {
     if (window.localStorage.getItem('ojas_recovery_demo') === 'legacy') setDemo('legacy');
@@ -14,9 +14,9 @@ export function useRecoveryAnalytics(range: RecoveryRange = 'W', endDate?: strin
   useEffect(() => {
     let active = true;
     setData(null);
-    setError(false);
+    setError(null);
     api.getRecoveryAnalytics(range, endDate, demo).then(value => { if (active) setData(value); })
-      .catch(() => { if (active) setError(true); });
+      .catch(reason => { if (active) setError(reason instanceof Error ? reason.message : 'Recovery unavailable. Please retry.'); });
     return () => { active = false; };
   }, [range, endDate, demo]);
   const changeDemo = (value: RecoveryDemo) => {

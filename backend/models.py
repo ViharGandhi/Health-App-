@@ -241,11 +241,28 @@ class HeartRatePoint(BaseModel):
     value: float
 
 
+class LatestHeartRate(BaseModel):
+    sample_time: str
+    value: float
+
+
+class HealthHeartRateResponse(BaseModel):
+    date: str
+    is_mock: bool
+    heart_rate: List[HeartRatePoint]
+    latest_heart_rate: Optional[LatestHeartRate] = None
+
+
 class HealthResponse(BaseModel):
     date: str
     timeframe: str
     range_start: str
     range_end: str
+    previous_range_start: str
+    previous_range_end: str
+    averages: dict[str, Optional[float]]
+    previous_averages: dict[str, Optional[float]]
     is_mock: bool
     metrics: dict[str, List[HealthPoint]]
     heart_rate: List[HeartRatePoint]
+    latest_heart_rate: Optional[LatestHeartRate] = None

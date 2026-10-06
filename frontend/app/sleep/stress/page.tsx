@@ -88,14 +88,15 @@ export default function SleepStressTrendPage() {
   const [timeframe, setTimeframe] = useState<Timeframe>('M');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [history, setHistory] = useState<SleepStressHistory | null>(null);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     let active = true;
+    setHistory(null); setError('');
     api.getSleepStress(timeframe).then((result) => {
-      if (active) { setHistory(result); setError(false); setHoveredIndex(null); }
-    }).catch(() => {
-      if (active) { setHistory(null); setError(true); }
+      if (active) { setHistory(result); setError(''); setHoveredIndex(null); }
+    }).catch(reason => {
+      if (active) { setHistory(null); setError(reason instanceof Error ? reason.message : 'Sleep stress unavailable.'); }
     });
     return () => { active = false; };
   }, [timeframe]);
@@ -126,7 +127,7 @@ export default function SleepStressTrendPage() {
       Math.round(i * (days.length - 1) / (timeframe === 'M' ? 4 : 5))))];
 
   if (!history && !error) return <div className={theme.detail}><div className={theme.detailInner}><div className="skeleton" style={{ height: 240, borderRadius: 18, marginTop: 24 }} /></div></div>;
-  if (error) return <div className={theme.detail}><div className={theme.detailInner}><button className="btn" onClick={() => router.push('/sleep')}>← SLEEP</button><div className="card" style={{ marginTop: 24, padding: 24 }}><h1>Sleep stress unavailable</h1><p className="text-secondary" style={{ marginTop: 12 }}>The backend could not provide sleep stress data. Connected scoring also requires verified HRV window timing.</p></div></div></div>;
+  if (error) return <div className={theme.detail}><div className={theme.detailInner}><button className="btn" onClick={() => router.push('/sleep')}>← SLEEP</button><div className="card" role="alert" style={{ marginTop: 24, padding: 24 }}><h1>Sleep stress unavailable</h1><p className="text-secondary" style={{ marginTop: 12 }}>{error}</p></div></div></div>;
 
   return (
     <>

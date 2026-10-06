@@ -16,9 +16,11 @@ async function apiFetch<T>(path: string, day?: string): Promise<T> {
     credentials: 'include', // send session cookie
     headers: { 'Content-Type': 'application/json', 'X-User-Date': day ?? localDate, ...(age ? { 'X-User-Age': age } : {}) },
     cache: 'no-store',
+    signal: AbortSignal.timeout(120000),
   });
   if (!res.ok) {
-    throw new Error(`API error ${res.status}: ${path}`);
+    const body = await res.json().catch(() => null);
+    throw new Error(typeof body?.detail === 'string' ? body.detail : `API error ${res.status}: ${path}`);
   }
   return res.json() as Promise<T>;
 }
@@ -37,8 +39,11 @@ export const api = {
     return apiFetch<RecoveryAnalytics>(`/api/recovery/analytics?${params}`);
   },
 
-  getHealth: (timeframe: 'W' | '6M' | '1Y' = 'W'): Promise<HealthData> =>
+  getHealth: (timeframe: 'W' | 'M' | '6M' | '1Y' = 'W'): Promise<HealthData> =>
     apiFetch<HealthData>(`/api/health?timeframe=${timeframe}`),
+
+  getHealthHeartRate: (): Promise<import('./types').HealthHeartRateData> =>
+    apiFetch<import('./types').HealthHeartRateData>('/api/health/heart-rate'),
 
   /** Sleep score + stages */
   getSleep: (): Promise<SleepData> =>
