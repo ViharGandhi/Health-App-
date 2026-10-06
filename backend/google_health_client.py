@@ -175,7 +175,7 @@ class GoogleHealthClient:
     async def get_intraday_heart_rate(self, target_date: date, end_date: date | None = None) -> list[tuple[datetime, float]]:
         points = await self._points(
             "heart-rate",
-            _day_filter("heartRate.sample_time.civil_time", target_date, end_date or target_date),
+            _day_filter("heart_rate.sample_time.civil_time", target_date, end_date or target_date),
         )
         samples = []
         for point in points:
