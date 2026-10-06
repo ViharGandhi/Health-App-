@@ -385,7 +385,7 @@ def get_mock_health(timeframe: str = "W") -> HealthResponse:
         "spo2": (97.2, 0.4), "respiratory_rate": (14.1, 0.4),
         "skin_temperature": (32.6, 0.3), "vo2_max": (44.5, 0.5),
     }
-    day = start - timedelta(days=14)
+    day = range_start(start - timedelta(days=1), timeframe) - timedelta(days=14)
     while day <= today:
         age = (today - day).days
         if age == 0 or age % 29 != 0:
@@ -400,4 +400,6 @@ def get_mock_health(timeframe: str = "W") -> HealthResponse:
                 })
         day += timedelta(days=1)
     samples, _, _ = _build_mock_hr_samples()
+    samples = [(timestamp.replace(year=today.year, month=today.month, day=today.day), value)
+               for timestamp, value in samples]
     return build_health_response(history, samples, start, today, timeframe, True)

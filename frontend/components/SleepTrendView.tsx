@@ -625,14 +625,14 @@ function ConsistencyBreakdown({ trend }: { trend: TrendData }) {
 export default function SleepTrendView({ metric }: { metric: Metric }) {
   const [timeframe, setTimeframe] = useState<Timeframe>(metric === 'consistency' ? 'W' : 'M');
   const [trend, setTrend] = useState<TrendData | null>(null);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isHoveringAvg, setIsHoveringAvg] = useState(false);
 
   useEffect(() => {
     let active = true;
     setTrend(null);
-    setError(false);
+    setError(null);
     setHoveredIndex(null);
     setIsHoveringAvg(false);
 
@@ -644,12 +644,12 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
       .then((result) => {
         if (active) {
           setTrend(result);
-          setError(false);
+          setError(null);
         }
       })
-      .catch(() => {
+      .catch(reason => {
         if (active) {
-          setError(true);
+          setError(reason instanceof Error ? reason.message : 'Sleep history unavailable.');
           setTrend(null);
         }
       });
@@ -798,7 +798,7 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
 
         {/* Trend Chart (rendered directly on background) */}
         {error ? (
-          <div className={styles.message}>Could not load sleep history.</div>
+          <div className={styles.message} role="alert"><p>{error}</p><button className="btn" onClick={() => window.location.reload()}>Retry</button></div>
         ) : !trend ? (
           <div className={styles.loading}>Loading sleep history…</div>
         ) : (

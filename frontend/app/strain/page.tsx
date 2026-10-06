@@ -26,16 +26,21 @@ function strainLabel(score: number): string {
 export default function StrainPage() {
   const [data, setData] = useState<StrainData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     api.getStrain()
       .then(setData)
+      .catch(reason => setError(reason instanceof Error ? reason.message : 'Strain data unavailable.'))
       .finally(() => setLoading(false));
   }, []);
 
+  if (error) return <div className="page" role="alert" style={{ paddingTop: 24 }}><p>{error}</p><button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button></div>;
+
   if (loading || !data) {
     return (
-      <div className="page" style={{ paddingTop: 24 }}>
+      <div className="page" role="status" aria-live="polite" style={{ paddingTop: 24 }}>
+        <p>Loading your strain data…</p>
         <div className="skeleton" style={{ height: 200, borderRadius: 24, marginBottom: 24 }} />
         <div className="skeleton" style={{ height: 120, borderRadius: 20 }} />
       </div>

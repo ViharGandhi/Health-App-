@@ -68,26 +68,32 @@ export default function SleepPage() {
   const [analyticsError, setAnalyticsError] = useState(false);
   const [consistency, setConsistency] = useState<SleepConsistencyScore | null>(null);
   const [stress, setStress] = useState<SleepStressHistory | null>(null);
+  const [stressError, setStressError] = useState('');
   const [stageHistory, setStageHistory] = useState<SleepStageRangeHistory | null>(null);
   const [stageRangesLoading, setStageRangesLoading] = useState(true);
   const [stageRangesError, setStageRangesError] = useState(false);
   const [selectedStage, setSelectedStage] = useState<SleepStage | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     api.getSleep()
       .then(setData)
+      .catch(reason => setError(reason instanceof Error ? reason.message : 'Sleep data unavailable.'))
       .finally(() => setLoading(false));
     api.getSleepConsistencyScore().then(setConsistency).catch(() => setConsistency(null));
     api.getSleepAnalytics().then(setAnalytics).catch(() => setAnalyticsError(true));
-    api.getSleepStress('W').then(setStress).catch(() => setStress(null));
+    api.getSleepStress('W').then(setStress).catch(reason => { setStress(null); setStressError(reason instanceof Error ? reason.message : 'Sleep stress unavailable.'); });
     api.getSleepStageRanges().then(setStageHistory)
       .catch(() => setStageRangesError(true)).finally(() => setStageRangesLoading(false));
   }, []);
 
+  if (error) return <div className={styles.loadingPage} role="alert"><p>{error}</p><button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button></div>;
+
   if (loading || !data) {
     return (
-      <div className={styles.loadingPage}>
+      <div className={styles.loadingPage} role="status" aria-live="polite">
+        <p>Loading your sleep data…</p>
         <div className="skeleton" style={{ width: 210, height: 210, borderRadius: '50%', marginBottom: 24 }} />
         <div className="skeleton" style={{ width: '100%', maxWidth: 440, height: 260, borderRadius: 18 }} />
       </div>
@@ -96,9 +102,9 @@ export default function SleepPage() {
 
   // Key metrics
   const latestNight = analytics?.days.filter(night => night.sleep_id).at(-1);
-  const sleepScore = latestNight ? latestNight.performance == null ? null : Math.round(latestNight.performance) : Math.round(data.score);
+  const sleepScore = latestNight ? latestNight.performance == null ? null : Math.round(latestNight.performance) : data.score == null ? null : Math.round(data.score);
   const hoursVsNeededPct = latestNight ? latestNight.hours_percentage == null ? null : Math.round(latestNight.hours_percentage)
-    : Math.min(100, Math.round((data.total_sleep_hours / data.sleep_need_hours) * 100));
+    : data.sleep_need_hours == null || data.sleep_need_hours <= 0 ? null : Math.min(100, Math.round((data.total_sleep_hours / data.sleep_need_hours) * 100));
   const consistencyPct = latestNight ? latestNight.consistency : consistency?.latest_score;
   const efficiencyPct = latestNight ? latestNight.efficiency == null ? null : Math.round(latestNight.efficiency)
     : data.efficiency_pct == null ? null : Math.round(data.efficiency_pct);
@@ -488,7 +494,7 @@ export default function SleepPage() {
           </div>
         </section>
 
-        {analytics && <SleepAnalyticsCards analytics={analytics} stress={latestStress} />}
+        {analytics && <SleepAnalyticsCards analytics={analytics} stress={latestStress} stressError={stressError} />}
         {analyticsError && <p role="alert" className={styles.stageRangeNote}>Additional sleep analytics unavailable. Reload to retry.</p>}
       </div>
     </div>

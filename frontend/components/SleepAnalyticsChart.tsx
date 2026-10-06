@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import type { SleepAnalyticsDay, SleepAnalyticsMetric } from '@/lib/types';
 import { lineLabelPositions, timingLabelPositions } from '@/lib/sleepChartLabels';
 import styles from './SleepAnalytics.module.css';
@@ -12,6 +13,7 @@ export type SleepChartKind = 'bars' | 'hours' | 'restorative' | 'timing';
 export default function SleepAnalyticsChart({ days, kind = 'bars', metric = 'performance', guides = false, daily = false }: {
   days: SleepAnalyticsDay[]; kind?: SleepChartKind; metric?: SleepAnalyticsMetric; guides?: boolean; daily?: boolean;
 }) {
+  const [selected, setSelected] = useState<number | null>(null);
   const timing = kind === 'timing';
   const percent = kind === 'bars';
   const step = 310 / Math.max(1, days.length);
@@ -38,7 +40,26 @@ export default function SleepAnalyticsChart({ days, kind = 'bars', metric = 'per
   const guideValues = timingValues.slice(0, -1).filter(v => v != null);
   const guide = (key: 'bed' | 'wake') => guideValues.reduce((sum, v) => sum + v[key], 0) / guideValues.length;
   const grid = timing ? [1260, 1500, 1740, 1980, 2220] : percent ? [0, 25, 50, 75, 100] : [0, maxValue / 3, maxValue * 2 / 3, maxValue];
-  return <svg viewBox="0 0 360 255" className={styles.chart} role="img" aria-label={`${timing ? 'Bed and wake times' : kind === 'hours' ? 'Hours asleep and needed' : kind === 'restorative' ? 'Deep and REM sleep' : metric} history`}>
+  const reading = (day: SleepAnalyticsDay) => timing ? `${(daily ? day.onset_time : day.bed_time)?.slice(11, 16) ?? '—'}–${(daily ? day.sleep_wake_time : day.wake_time)?.slice(11, 16) ?? '—'}`
+    : percent ? day[metric] == null ? 'No reading' : `${Math.round(day[metric]!)}%`
+    : kind === 'hours' ? `${duration(day.asleep_minutes)} asleep / ${duration(day.need_minutes)} needed`
+    : `${duration(day.deep_minutes)} deep / ${duration(day.rem_minutes)} REM`;
+  const fromPointer = (event: React.PointerEvent<SVGSVGElement>) => {
+    if (!days.length) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const position = (event.clientX - bounds.left) / bounds.width * 360;
+    setSelected(Math.max(0, Math.min(days.length - 1, Math.floor((position - 38) / step))));
+  };
+  return <><svg viewBox="0 0 360 255" className={styles.chart} role="group" tabIndex={0} aria-label={`${timing ? 'Bed and wake times' : kind === 'hours' ? 'Hours asleep and needed' : kind === 'restorative' ? 'Deep and REM sleep' : metric} history. Hover, tap, or use arrow keys.`}
+    onPointerMove={fromPointer} onPointerDown={fromPointer} onPointerLeave={event => { if (event.pointerType !== 'touch') setSelected(null); }}
+    onKeyDown={event => {
+      if (!days.length) return;
+      if (event.key === 'Escape') setSelected(null);
+      else if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+        event.preventDefault();
+        setSelected(event.key === 'Home' ? 0 : event.key === 'End' ? days.length - 1 : Math.max(0, Math.min(days.length - 1, (selected ?? days.length - 1) + (event.key === 'ArrowRight' ? 1 : -1))));
+      }
+    }}>
     {grid.map(v => <g key={v}><line x1="38" x2="352" y1={y(v)} y2={y(v)} stroke="white" opacity=".09" />
       {(timing || percent) && <text x="30" y={y(v) + 3} textAnchor="end" fill="#92979D" fontSize="9">{timing ? clock(v) : `${Math.round(v)}%`}</text>}</g>)}
     {guides && guideValues.length > 1 && ['bed', 'wake'].map(key => <line key={key} x1="38" x2="352" y1={y(guide(key as 'bed' | 'wake'))} y2={y(guide(key as 'bed' | 'wake'))} stroke="#B5BCC3" strokeDasharray="3 3" />)}
@@ -46,7 +67,7 @@ export default function SleepAnalyticsChart({ days, kind = 'bars', metric = 'per
     {days.map((day, i) => {
       const value = day[metric];
       const time = timingValues[i];
-      const display = timing ? `${(daily ? day.onset_time : day.bed_time)?.slice(11, 16) ?? '—'}–${(daily ? day.sleep_wake_time : day.wake_time)?.slice(11, 16) ?? '—'}` : percent ? value == null ? 'No reading' : `${Math.round(value)}%` : kind === 'hours' ? `${duration(day.asleep_minutes)} asleep / ${duration(day.need_minutes)} needed` : duration(day.restorative);
+      const display = reading(day);
       const label = `${day.bucket_start ? `${day.bucket_start} – ` : ''}${day.date}: ${display}`;
       return <g key={day.date} tabIndex={0} aria-label={label}><title>{label}</title>
         {timing && time && <rect x={x(i) - width / 2} y={y(time.bed)} width={width} height={Math.max(1, y(time.wake) - y(time.bed))} rx="1.5" fill={daily && i < days.length - 1 ? '#73777C' : '#7BA1BB'} />}
@@ -56,6 +77,7 @@ export default function SleepAnalyticsChart({ days, kind = 'bars', metric = 'per
         {(days.length <= 7 || i % Math.ceil(days.length / 7) === 0) && <text x={x(i)} y="230" textAnchor="middle" fill="#A0A5AA" fontSize="9"><tspan>{new Date(`${day.date}T12:00:00`).toLocaleDateString('en', { weekday: 'short' })}</tspan><tspan x={x(i)} dy="12">{Number(day.date.slice(8))}</tspan></text>}
       </g>;
     })}
+    {selected != null && days[selected] && <line x1={x(selected)} x2={x(selected)} y1="24" y2="207" stroke="#ADB6C0" strokeDasharray="3 3" />}
     {kind === 'hours' && (['asleep_minutes', 'need_minutes'] as const).map(key => {
       const color = key === 'asleep_minutes' ? '#7BA1BB' : '#00DCA0';
       return <g key={key}>{days.slice(1).map((day, i) => day[key] != null && days[i][key] != null && <line key={i} x1={x(i)} x2={x(i + 1)} y1={y(days[i][key]!)} y2={y(day[key]!)} stroke={color} strokeWidth="1.5" />)}
@@ -78,5 +100,5 @@ export default function SleepAnalyticsChart({ days, kind = 'bars', metric = 'per
         </>}
       </g>)}
     </g>
-  </svg>;
+  </svg>{selected != null && days[selected] && <div className={styles.chartReadout} aria-live="polite">{days[selected].bucket_start ? `${days[selected].bucket_start} – ` : ''}{days[selected].date} · {reading(days[selected])}</div>}</>;
 }

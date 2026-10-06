@@ -12,6 +12,42 @@ from mock_data import get_mock_health
 
 
 class HealthTests(unittest.TestCase):
+    def test_month_and_previous_periods_skip_missing_readings(self):
+        result = build_health_response({"hrv": [
+            {"date": "2026-08-15", "value": 900},
+            {"date": "2026-08-31", "value": 0},
+            {"date": "2026-09-06", "value": 40},
+            {"date": "2026-09-07", "value": 50},
+            {"date": "2026-10-06", "value": 60},
+        ]}, [], date(2026, 9, 7), date(2026, 10, 6), "M", False)
+        self.assertEqual(len(result.metrics["hrv"]), 30)
+        self.assertEqual(result.previous_range_start, "2026-08-08")
+        self.assertEqual(result.previous_range_end, "2026-09-06")
+        self.assertEqual(result.averages["hrv"], 55)
+        self.assertAlmostEqual(result.previous_averages["hrv"], 940 / 3)
+        self.assertIsNone(result.averages["spo2"])
+        self.assertIsNone(result.previous_averages["spo2"])
+
+    def test_demo_has_distinct_prior_period_averages(self):
+        for timeframe in ("W", "M", "6M"):
+            result = get_mock_health(timeframe)
+            self.assertLess(result.previous_range_end, result.range_start)
+            self.assertIsNotNone(result.previous_averages["hrv"])
+            self.assertIsNotNone(result.averages["hrv"])
+        self.assertEqual(len(get_mock_health("M").metrics["hrv"]), 30)
+
+    def test_month_endpoint_fetches_prior_comparison_and_reference_history(self):
+        client = type("Client", (), {
+            "get_health_history": AsyncMock(return_value={}),
+            "get_intraday_heart_rate": AsyncMock(return_value=[]),
+        })()
+        with patch("main._get_token", new=AsyncMock(return_value="token")), patch("main.GoogleHealthClient", return_value=client):
+            response = TestClient(app).get("/api/health?timeframe=M", headers={"X-User-Date": "2026-10-06"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()["metrics"]["hrv"]), 30)
+        self.assertIsNone(response.json()["averages"]["hrv"])
+        client.get_health_history.assert_awaited_once_with(date(2026, 7, 25), date(2026, 10, 6))
+
     def test_demo_series_are_aligned_and_labeled(self):
         result = get_mock_health()
         self.assertTrue(result.is_mock)
@@ -55,7 +91,7 @@ class HealthTests(unittest.TestCase):
         self.assertEqual(result["rhr"][0]["method"], "WITH_SLEEP")
         self.assertEqual(result["hrv"], [])
         self.assertEqual(len(calls), 6)
-        self.assertIn('dailyOxygenSaturation.date >= "2026-09-30"', calls[2][1])
+        self.assertIn('daily_oxygen_saturation.date >= "2026-09-30"', calls[2][1])
 
     def test_recovery_history_fetches_only_hrv_and_rhr(self):
         client = GoogleHealthClient("token")
@@ -174,13 +210,15 @@ class HealthTests(unittest.TestCase):
         }
         client = type("Client", (), {
             "get_health_history": AsyncMock(return_value=history),
-            "get_sleep_session": AsyncMock(return_value={"total_duration": 27000, "in_bed_duration": 28800}),
+            "get_sleep_session": AsyncMock(return_value={"total_duration": 27000, "in_bed_duration": 28800, "sleep_duration_available": True}),
         })()
-        with patch("main._get_token", new=AsyncMock(return_value="token")), patch("main.GoogleHealthClient", return_value=client):
+        with patch("main._get_token", new=AsyncMock(return_value="token")), patch("main.GoogleHealthClient", return_value=client), \
+             patch("main._recovery_sleep_need", new=AsyncMock(return_value=None)):
             response = TestClient(app).get("/api/recovery")
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertIsNone(data["score"])
+        self.assertEqual(data["status"], "building_reference")
         self.assertEqual(data["sleep_hours"], 7.5)
         self.assertEqual(data["sleep_efficiency_pct"], 93.8)
         self.assertEqual(data["rhr_method"], "WITH_SLEEP")
@@ -190,12 +228,13 @@ class HealthTests(unittest.TestCase):
             "get_health_history": AsyncMock(return_value={"hrv": [], "rhr": []}),
             "get_sleep_session": AsyncMock(return_value=None),
         })()
-        with patch("main._get_token", new=AsyncMock(return_value="token")), patch("main.GoogleHealthClient", return_value=client):
+        with patch("main._get_token", new=AsyncMock(return_value="token")), patch("main.GoogleHealthClient", return_value=client), \
+             patch("main._recovery_sleep_need", new=AsyncMock(return_value=None)):
             response = TestClient(app).get("/api/recovery", headers={"X-User-Date": "2026-09-30"})
             invalid = TestClient(app).get("/api/recovery", headers={"X-User-Date": "not-a-date"})
         self.assertEqual(response.status_code, 200)
         client.get_sleep_session.assert_awaited_once_with(date(2026, 9, 30))
-        client.get_health_history.assert_awaited_once_with(date(2026, 9, 16), date(2026, 9, 30), ("hrv", "rhr"))
+        client.get_health_history.assert_awaited_once_with(date(2026, 7, 25), date(2026, 9, 30), ("hrv", "rhr", "respiratory_rate", "skin_temperature"))
         self.assertEqual(invalid.status_code, 400)
 
     def test_connected_strain_uses_supplied_age_for_zone_reference(self):
@@ -207,8 +246,13 @@ class HealthTests(unittest.TestCase):
         self.assertEqual(result.max_hr, 183.5)
         self.assertEqual(result.age_used, 35)
         self.assertFalse(result.age_is_default)
-        default = asyncio.run(_compute_real_strain(client, date(2026, 10, 1)))
+        with patch.dict('os.environ', {}, clear=True):
+            default = asyncio.run(_compute_real_strain(client, date(2026, 10, 1)))
         self.assertTrue(default.age_is_default)
+        with patch.dict('os.environ', {'USER_AGE': '22'}):
+            configured = asyncio.run(_compute_real_strain(client, date(2026, 10, 1)))
+        self.assertFalse(configured.age_is_default)
+        self.assertTrue(configured.is_calibrating)
 
 
 if __name__ == "__main__":

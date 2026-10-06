@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import math
+import time
+from collections import OrderedDict
 from datetime import date, datetime, timedelta, timezone
 from typing import Optional
 
@@ -13,6 +16,11 @@ import httpx
 BASE_URL = "https://health.googleapis.com/v4/users/me/dataTypes"
 WEARABLES = "users/me/dataSourceFamilies/google-wearables"
 
+# Short-lived, process-local reads; never share results between access tokens.
+_point_cache: OrderedDict = OrderedDict()
+_point_requests: dict = {}
+_request_lanes: OrderedDict = OrderedDict()
+
 
 def _day_filter(field: str, start: date, end: date) -> str:
     """Build an inclusive local-date range with an exclusive upper bound."""
@@ -20,11 +28,12 @@ def _day_filter(field: str, start: date, end: date) -> str:
             f'{field} < "{(end + timedelta(days=1)).isoformat()}"')
 
 
-def _local_datetime(value: str, offset: str) -> datetime:
-    """Return a naive wall-clock time in the offset supplied by Google."""
+def _local_datetime(value: str, offset: str, *, preserve_offset: bool = False) -> datetime:
+    """Return wall-clock time in the offset supplied by Google."""
     instant = datetime.fromisoformat(value.replace("Z", "+00:00"))
     seconds = float(offset.removesuffix("s")) if offset else 0.0
-    return instant.astimezone(timezone(timedelta(seconds=seconds))).replace(tzinfo=None)
+    local = instant.astimezone(timezone(timedelta(seconds=seconds)))
+    return local if preserve_offset else local.replace(tzinfo=None)
 
 
 def _google_date(value: dict) -> date:
@@ -32,22 +41,63 @@ def _google_date(value: dict) -> date:
 
 
 class GoogleHealthClient:
-    def __init__(self, access_token: str):
+    def __init__(self, access_token: str, *, cache: bool = False):
+        self.cache = cache
+        self.account_key = hashlib.sha256(access_token.encode()).hexdigest()
         self.headers = {
             "Authorization": f"Bearer {access_token}",
             "Accept": "application/json",
         }
 
     async def _points(self, data_type: str, filter_expr: str, *, reconcile: bool = True) -> list[dict]:
+        if not self.cache:
+            return await self._fetch_points(data_type, filter_expr, reconcile=reconcile)
+        key = (self.account_key, data_type, filter_expr, reconcile)
+        cached = _point_cache.get(key)
+        if cached and cached[0] > time.monotonic():
+            _point_cache.move_to_end(key)
+            return cached[1]
+        if key not in _point_requests:
+            _point_requests[key] = asyncio.create_task(self._cache_points(key, data_type, filter_expr, reconcile))
+        return await asyncio.shield(_point_requests[key])
+
+    async def _cache_points(self, key: tuple, data_type: str, filter_expr: str, reconcile: bool) -> list[dict]:
+        try:
+            points = await self._fetch_points(data_type, filter_expr, reconcile=reconcile)
+            _point_cache[key] = (time.monotonic() + 60, points)
+            _point_cache.move_to_end(key)
+            while len(_point_cache) > 64:
+                _point_cache.popitem(last=False)
+            return points
+        finally:
+            _point_requests.pop(key, None)
+
+    async def _pace_request(self) -> None:
+        if not self.cache:
+            return
+        if self.account_key not in _request_lanes:
+            _request_lanes[self.account_key] = [asyncio.Lock(), 0.0]
+        lane = _request_lanes[self.account_key]
+        _request_lanes.move_to_end(self.account_key)
+        while len(_request_lanes) > 64:
+            _request_lanes.popitem(last=False)
+        async with lane[0]:
+            delay = lane[1] - time.monotonic()
+            if delay > 0:
+                await asyncio.sleep(delay)
+            lane[1] = time.monotonic() + 0.5
+
+    async def _fetch_points(self, data_type: str, filter_expr: str, *, reconcile: bool = True) -> list[dict]:
         """Fetch every page; reconcile wearable data by default, or list raw sessions."""
         url = f"{BASE_URL}/{data_type}/dataPoints" + (":reconcile" if reconcile else "")
-        params = {"filter": filter_expr}
+        params = {"filter": filter_expr, "pageSize": 25 if data_type in ("sleep", "exercise") else 10000}
         if reconcile:
             params["dataSourceFamily"] = WEARABLES
         points: list[dict] = []
         async with httpx.AsyncClient(timeout=20.0) as client:
             while True:
                 for attempt in range(4):
+                    await self._pace_request()
                     response = await client.get(url, headers=self.headers, params=params)
                     if response.status_code not in (429, 503) or attempt == 3:
                         break
@@ -89,7 +139,7 @@ class GoogleHealthClient:
     async def get_daily_hrv(self, target_date: date) -> Optional[float]:
         points = await self._points(
             "daily-heart-rate-variability",
-            _day_filter("dailyHeartRateVariability.date", target_date, target_date),
+            _day_filter("daily_heart_rate_variability.date", target_date, target_date),
         )
         for point in points:
             metric = point.get("dailyHeartRateVariability", {})
@@ -100,7 +150,7 @@ class GoogleHealthClient:
     async def get_deep_sleep_hrv(self, target_date: date) -> Optional[float]:
         points = await self._points(
             "daily-heart-rate-variability",
-            _day_filter("dailyHeartRateVariability.date", target_date, target_date),
+            _day_filter("daily_heart_rate_variability.date", target_date, target_date),
         )
         for point in points:
             value = point.get("dailyHeartRateVariability", {}).get(
@@ -113,7 +163,7 @@ class GoogleHealthClient:
     async def get_resting_heart_rate(self, target_date: date) -> Optional[float]:
         points = await self._points(
             "daily-resting-heart-rate",
-            _day_filter("dailyRestingHeartRate.date", target_date, target_date),
+            _day_filter("daily_resting_heart_rate.date", target_date, target_date),
         )
         for point in points:
             metric = point.get("dailyRestingHeartRate", {})
@@ -127,7 +177,7 @@ class GoogleHealthClient:
         start = end - timedelta(days=days - 1)
         points = await self._points(
             "daily-heart-rate-variability",
-            _day_filter("dailyHeartRateVariability.date", start, end),
+            _day_filter("daily_heart_rate_variability.date", start, end),
         )
         dated = []
         for point in points:
@@ -155,7 +205,7 @@ class GoogleHealthClient:
             if metrics is not None and key not in metrics:
                 continue
             if data_type not in fetched:
-                fetched[data_type] = await self._points(data_type, _day_filter(f"{field}.date", start, end))
+                fetched[data_type] = await self._points(data_type, _day_filter(f"{data_type.replace('-', '_')}.date", start, end))
             dated = {}
             for point in fetched[data_type]:
                 metric = point.get(field, {})
@@ -172,10 +222,10 @@ class GoogleHealthClient:
             history[key] = [dated[day] for day in sorted(dated)]
         return history
 
-    async def get_intraday_heart_rate(self, target_date: date) -> list[tuple[datetime, float]]:
+    async def get_intraday_heart_rate(self, target_date: date, end_date: date | None = None, *, preserve_offset: bool = False) -> list[tuple[datetime, float]]:
         points = await self._points(
             "heart-rate",
-            _day_filter("heartRate.sample_time.civil_time", target_date, target_date),
+            _day_filter("heart_rate.sample_time.civil_time", target_date, end_date or target_date),
         )
         samples = []
         for point in points:
@@ -183,7 +233,7 @@ class GoogleHealthClient:
             clock = metric.get("sampleTime", {})
             if clock.get("physicalTime") and metric.get("beatsPerMinute") is not None:
                 samples.append((
-                    _local_datetime(clock["physicalTime"], clock.get("utcOffset", "0s")),
+                    _local_datetime(clock["physicalTime"], clock.get("utcOffset", "0s"), preserve_offset=preserve_offset),
                     float(metric["beatsPerMinute"]),
                 ))
         return sorted(samples)
@@ -201,10 +251,10 @@ class GoogleHealthClient:
         hr = await self._points("heart-rate", sample_filter("heart_rate.sample_time.physical_time"))
         return sleep, hrv, hr
 
-    async def get_workout_sessions(self, target_date: date) -> list[dict]:
+    async def get_workout_sessions(self, target_date: date, end_date: date | None = None) -> list[dict]:
         points = await self._points(
             "exercise",
-            _day_filter("exercise.interval.civil_start_time", target_date, target_date),
+            _day_filter("exercise.interval.civil_start_time", target_date, end_date or target_date),
         )
         sessions = []
         for point in points:

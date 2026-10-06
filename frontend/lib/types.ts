@@ -34,7 +34,19 @@ export interface StrainData {
 
 export interface RecoveryData {
   score: number | null;
-  status: 'green' | 'yellow' | 'red' | 'signals' | 'calibrating';
+  status: 'green' | 'yellow' | 'red' | 'signals' | 'calibrating' | 'building_reference' | 'ok';
+  z: number | null;
+  percent: number | null;
+  zone: 'below_normal' | 'normal' | 'above_normal' | null;
+  confidence: 'low' | 'medium' | 'high' | null;
+  estimated: boolean | null;
+  components: { z_hrv: number | null; z_rhr: number | null; sleep_adj: number } | null;
+  sleep_context: { sleep_min: number | null; need_min: number | null; performance: number | null } | null;
+  baseline_days: number | null;
+  recent_nights: number | null;
+  rhr_baseline_days: number | null;
+  illness_flag: boolean | null;
+  status_reason: string | null;
   hrv_component: number | null;
   rhr_component: number | null;
   sleep_component: number | null;
@@ -63,10 +75,10 @@ export interface SleepStages {
 }
 
 export interface SleepData {
-  score: number;
-  sleep_need_hours: number;
+  score: number | null;
+  sleep_need_hours: number | null;
   total_sleep_hours: number;
-  sleep_debt_hours: number;
+  sleep_debt_hours: number | null;
   efficiency_pct: number | null;
   stages: SleepStages;
   sleeping_hrv: number | null;
@@ -77,8 +89,8 @@ export interface SleepData {
   average_wake_time?: string | null;
   sleep_start: string | null;
   sleep_end: string | null;
-  duration_score: number;
-  stage_score: number;
+  duration_score: number | null;
+  stage_score: number | null;
   restfulness_score: number;
   hr_dip_score: number;
   is_mock: boolean;
@@ -103,6 +115,39 @@ export interface SleepTrendDay {
   wake_variability_minutes: number | null;
 }
 
+export type RecoveryMetric = 'recovery' | 'hrv' | 'rhr' | 'respiratory_rate' | 'sleep_performance';
+export type RecoveryRange = 'W' | 'M' | '6M';
+export type RecoveryDemo = 'estimate' | 'legacy';
+export interface RecoveryDay {
+  date: string;
+  recovery: number | null;
+  zone: RecoveryData['zone'];
+  confidence: RecoveryData['confidence'];
+  sleep_context_missing: boolean;
+  hrv: number | null;
+  rhr: number | null;
+  respiratory_rate: number | null;
+  sleep_performance: number | null;
+}
+export interface RecoveryAnalytics {
+  is_mock: boolean;
+  demo_mode: RecoveryDemo | null;
+  timeframe: RecoveryRange;
+  range_start: string;
+  range_end: string;
+  previous_range_end: string;
+  days: RecoveryDay[];
+  averages: Record<RecoveryMetric, number | null>;
+  previous_averages: Record<RecoveryMetric, number | null>;
+  prior_30_day_averages: Record<Exclude<RecoveryMetric, 'recovery'>, number | null>;
+  typical_ranges: Record<string, { low: number; high: number; days: number } | null>;
+  monthly_buckets: { start_date: string; end_date: string; averages: Record<RecoveryMetric, number | null>; counts: Record<RecoveryMetric, number> }[];
+  current: RecoveryData;
+  sleep: { date: string; performance: number | null; asleep_minutes: number | null; bed_time: string; wake_time: string } | null;
+  health_monitor: { within: number; assessed: number; expected: number };
+  notes: string;
+}
+
 export type SleepAnalyticsMetric = 'performance' | 'hours_percentage' | 'asleep_minutes' | 'need_minutes' | 'restorative' | 'consistency' | 'period_minutes' | 'efficiency';
 export interface SleepAnalyticsDay {
   date: string;
@@ -125,7 +170,7 @@ export interface SleepAnalyticsDay {
   need_minutes?: number | null;
   hours_percentage?: number | null;
   wake_events?: number | null;
-  need_components?: { baseline: number; strain: number; debt: number } | null;
+  need_components?: { baseline: number; strain: number; debt: number; nap_credit: number } | null;
   segments?: { stage: SleepStage; start: string; end: string }[];
 }
 export interface SleepAnalytics {
@@ -254,14 +299,31 @@ export interface HeartRatePoint {
   value: number;
 }
 
+export interface LatestHeartRate {
+  sample_time: string;
+  value: number;
+}
+
+export interface HealthHeartRateData {
+  date: string;
+  is_mock: boolean;
+  heart_rate: HeartRatePoint[];
+  latest_heart_rate: LatestHeartRate | null;
+}
+
 export interface HealthData {
   date: string;
-  timeframe: 'W' | '6M' | '1Y';
+  timeframe: 'W' | 'M' | '6M' | '1Y';
   range_start: string;
   range_end: string;
+  previous_range_start: string;
+  previous_range_end: string;
+  averages: Record<string, number | null>;
+  previous_averages: Record<string, number | null>;
   is_mock: boolean;
   metrics: Record<string, HealthPoint[]>;
   heart_rate: HeartRatePoint[];
+  latest_heart_rate: LatestHeartRate | null;
 }
 
 

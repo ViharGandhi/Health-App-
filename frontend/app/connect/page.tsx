@@ -33,6 +33,7 @@ export default function ConnectPage() {
     }
     api.getAuthStatus()
       .then(setStatus)
+      .catch(reason => setError(reason instanceof Error ? reason.message : 'Connection status unavailable.'))
       .finally(() => setLoading(false));
   }, []);
 

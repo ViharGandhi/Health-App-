@@ -4,21 +4,23 @@
  * Automatically uses mock data when no device is connected (handled server-side).
  */
 
-import type { DashboardData, RecoveryData, SleepData, StrainData, AuthStatus, HealthData, SleepConsistencyScore, SleepStressHistory, SleepStageRangeHistory, SleepHeartRate } from './types';
+import type { DashboardData, RecoveryData, RecoveryAnalytics, RecoveryDemo, RecoveryRange, SleepData, StrainData, AuthStatus, HealthData, SleepConsistencyScore, SleepStressHistory, SleepStageRangeHistory, SleepHeartRate } from './types';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
-async function apiFetch<T>(path: string): Promise<T> {
+async function apiFetch<T>(path: string, day?: string): Promise<T> {
   const today = new Date();
   const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   const age = window.localStorage.getItem('ojas_age');
   const res = await fetch(`${BACKEND_URL}${path}`, {
     credentials: 'include', // send session cookie
-    headers: { 'Content-Type': 'application/json', 'X-User-Date': localDate, ...(age ? { 'X-User-Age': age } : {}) },
+    headers: { 'Content-Type': 'application/json', 'X-User-Date': day ?? localDate, ...(age ? { 'X-User-Age': age } : {}) },
     cache: 'no-store',
+    signal: AbortSignal.timeout(120000),
   });
   if (!res.ok) {
-    throw new Error(`API error ${res.status}: ${path}`);
+    const body = await res.json().catch(() => null);
+    throw new Error(typeof body?.detail === 'string' ? body.detail : `API error ${res.status}: ${path}`);
   }
   return res.json() as Promise<T>;
 }
@@ -28,12 +30,20 @@ export const api = {
   getDashboard: (): Promise<DashboardData> =>
     apiFetch<DashboardData>('/api/dashboard'),
 
-  /** Recovery signals, with a prototype score in demo mode */
-  getRecovery: (): Promise<RecoveryData> =>
-    apiFetch<RecoveryData>('/api/recovery'),
+  getRecovery: (demo: RecoveryDemo = 'estimate'): Promise<RecoveryData> =>
+    apiFetch<RecoveryData>(`/api/recovery?demo=${demo}`),
 
-  getHealth: (timeframe: 'W' | '6M' | '1Y' = 'W'): Promise<HealthData> =>
+  getRecoveryAnalytics: (timeframe: RecoveryRange = 'W', endDate?: string, demo: RecoveryDemo = 'estimate'): Promise<RecoveryAnalytics> => {
+    const params = new URLSearchParams({ timeframe, demo });
+    if (endDate) params.set('end_date', endDate);
+    return apiFetch<RecoveryAnalytics>(`/api/recovery/analytics?${params}`);
+  },
+
+  getHealth: (timeframe: 'W' | 'M' | '6M' | '1Y' = 'W'): Promise<HealthData> =>
     apiFetch<HealthData>(`/api/health?timeframe=${timeframe}`),
+
+  getHealthHeartRate: (): Promise<import('./types').HealthHeartRateData> =>
+    apiFetch<import('./types').HealthHeartRateData>('/api/health/heart-rate'),
 
   /** Sleep score + stages */
   getSleep: (): Promise<SleepData> =>
@@ -69,8 +79,8 @@ export const api = {
 
 
   /** Strain score + zones */
-  getStrain: (): Promise<StrainData> =>
-    apiFetch<StrainData>('/api/strain'),
+  getStrain: (day?: string): Promise<StrainData> =>
+    apiFetch<StrainData>('/api/strain', day),
 
   /** Auth: is the user connected to their Fitbit? */
   getAuthStatus: (): Promise<AuthStatus> =>
