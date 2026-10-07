@@ -17,7 +17,7 @@ export default function HealthReport({ data, onClose }: { data: HealthData; onCl
         const point = data.metrics[metric.key]?.find(item => item.date === data.date);
         const reading = monitorReading(metric, point);
         const value = metric.key === 'skin_temperature' ? reading.formatted : point?.value?.toFixed(metric.digits) ?? '—';
-        return <tr key={metric.key}><td>{metric.key === 'skin_temperature' ? 'Skin temperature change' : metric.title.toLowerCase()}</td><td>{value}{value === '—' ? '' : ` ${reading.unit}`}
+        return <tr key={metric.key}><td>{metric.key === 'skin_temperature' ? reading.hasBaseline ? 'Skin temperature change' : 'Skin temperature' : metric.title.toLowerCase()}</td><td>{value}{value === '—' ? '' : ` ${reading.unit}`}
           {metric.key === 'skin_temperature' && point?.value != null && <small className={styles.recordedTemperature}>Recorded {point.value.toFixed(1)} °C</small>}</td><td>{point?.baseline != null ? `Median ${point.baseline.toFixed(metric.digits)} ${metric.unit}` : reading.comparison}</td></tr>;
       })}
     </tbody></table>

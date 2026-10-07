@@ -23,15 +23,17 @@ export type HealthMetric = (typeof healthMetrics)[number];
 
 export function monitorReading(metric: HealthMetric, point?: HealthPoint) {
   const temperature = metric.key === 'skin_temperature';
-  const unit = temperature ? '°F' : metric.unit;
-  const value = point?.value == null ? null : temperature
-    ? point.baseline == null ? null : (point.value - point.baseline) * 1.8
+  const hasBaseline = point?.value != null && point.baseline != null;
+  const temperatureChange = temperature && hasBaseline;
+  const unit = temperatureChange ? '°F' : metric.unit;
+  const value = point?.value == null ? null : temperatureChange
+    ? (point.value - point.baseline!) * 1.8
     : point.value;
   const digits = metric.key === 'spo2' ? 0 : metric.digits;
-  const formatted = value == null ? '—' : `${temperature && Number(value.toFixed(digits)) > 0 ? '+' : ''}${Number(value.toFixed(digits)).toFixed(digits)}`;
+  const formatted = value == null ? '—' : `${temperatureChange && Number(value.toFixed(digits)) > 0 ? '+' : ''}${Number(value.toFixed(digits)).toFixed(digits)}`;
   const comparison = point?.value == null ? 'No reading' : point.baseline == null ? 'Building baseline'
     : temperature ? 'vs. personal median' : `${healthChange(point.value, point.baseline, metric)!.replace('percentage points', 'pts')} vs. median`;
-  return { formatted, unit, comparison, hasBaseline: point?.value != null && point.baseline != null };
+  return { formatted, unit, comparison, hasBaseline };
 }
 
 export function healthDate(day: string, options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' }) {

@@ -9,6 +9,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 <!-- END:nextjs-agent-rules -->
 
 ## Project Learnings
+- Home activity timelines must use recorded local workout start/end times, matching Strain; skin-temperature tiles show measured °C while the personal baseline is building, then switch to the labeled baseline difference.
 - Health Monitor overview follows the supplied compact five-tile grid, centered BPM circle over a blue trace, and report tile; detailed trends remain on metric pages.
 - Sleep Consistency trend updates must retain the supplied reference's vertical bars and breakdown layout while changing only the requested data and ranges.
 - Sleep Stress has only a high-stress detector; its chart must not label other valid windows as medium or low stress.
