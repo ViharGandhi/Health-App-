@@ -2,13 +2,17 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { healthBounds, healthChange, healthMetrics, healthMonths, healthSegments, monitorReading } from './health.ts';
 
-test('Monitor temperature is a Fahrenheit difference, with no offset or fabricated baseline', () => {
+test('Monitor temperature uses measured Celsius until a baseline supports a Fahrenheit difference', () => {
   const metric = healthMetrics.find(metric => metric.key === 'skin_temperature');
   assert.equal(monitorReading(metric, { value: 33, baseline: 33.5 }).formatted, '-0.9');
   assert.equal(monitorReading(metric, { value: 34, baseline: 33 }).formatted, '+1.8');
   assert.equal(monitorReading(metric, { value: 33.01, baseline: 33 }).formatted, '0.0');
-  assert.equal(monitorReading(metric, { value: 33, baseline: null }).formatted, '—');
+  assert.equal(monitorReading(metric, { value: 33, baseline: 33.5 }).unit, '°F');
+  assert.equal(monitorReading(metric, { value: 33, baseline: null }).formatted, '33.0');
+  assert.equal(monitorReading(metric, { value: 33, baseline: null }).unit, '°C');
   assert.equal(monitorReading(metric, { value: 33, baseline: null }).comparison, 'Building baseline');
+  assert.equal(monitorReading(metric, { value: null, baseline: 33 }).formatted, '—');
+  assert.equal(monitorReading(metric, { value: 0, baseline: null }).formatted, '0.0');
 });
 test('Monitor badges describe medians without assigning normality or treating missing readings as zero', () => {
   assert.equal(monitorReading(healthMetrics[0], { value: 40, baseline: 45 }).comparison, '−5 ms vs. median');

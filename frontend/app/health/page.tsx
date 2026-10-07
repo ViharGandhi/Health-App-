@@ -41,7 +41,7 @@ export default function HealthPage() {
               const point = data.metrics[tile.key]?.find(item => item.date === data.date);
               const reading = monitorReading(metric, point);
               return <Link key={tile.key} href={`/health/${metric.slug}`} className={styles.monitorTile}>
-                <div className={styles.tileTitle}><HealthMetricIcon metric={tile.key} size={24} /><span>{tile.title}</span></div>
+                <div className={styles.tileTitle}><HealthMetricIcon metric={tile.key} size={24} /><span>{tile.key === 'skin_temperature' && !reading.hasBaseline ? 'SKIN TEMPERATURE' : tile.title}</span></div>
                 <div className={styles.tileValue}>{reading.formatted}<small>{reading.formatted === '—' ? '' : reading.unit}</small></div>
                 <span className={`${styles.baselineBadge} ${reading.hasBaseline ? styles.readyBadge : ''}`}>{reading.hasBaseline && <span aria-hidden="true">≈ </span>}{reading.comparison}</span>
               </Link>;
