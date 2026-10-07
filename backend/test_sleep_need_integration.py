@@ -85,19 +85,15 @@ class SleepNeedIntegrationTests(unittest.TestCase):
         client = GoogleHealthClient('token')
         client.get_sleep_need_history = AsyncMock(return_value={DAY: 350})
         client.get_nap_minutes_history = AsyncMock(return_value={DAY: 20})
-        client.get_intraday_heart_rate = AsyncMock(return_value=[])
-        client.get_workout_sessions = AsyncMock(return_value=[])
-        async def strain(_, day, age, **kwargs):
-            return SimpleNamespace(score_100=0, avg_hr=60 if day == DAY else None)
-        with patch('main._compute_real_strain', side_effect=strain) as fetch:
+        from datetime import datetime, timezone
+        base = datetime.combine(DAY, datetime.min.time(), tzinfo=timezone.utc)
+        raw = ([(base, 60), (base + timedelta(minutes=1), 60)], [], [], {})
+        with patch('main.fetch_strain_inputs', AsyncMock(return_value=raw)) as fetch:
             inputs = asyncio.run(_load_sleep_need_inputs(client, DAY, 30))
-        self.assertEqual(fetch.call_count, 9)
-        self.assertEqual(inputs.for_tonight(DAY).sleep_debt_min, 0)
+        fetch.assert_awaited_once_with(client, DAY - timedelta(days=8), DAY)
         self.assertEqual(inputs.for_tonight(DAY).total_need_min, 430)
         self.assertIsNone(inputs.for_tonight(DAY - timedelta(days=1)))
         client.get_sleep_need_history.assert_awaited_once_with(DAY - timedelta(days=7), DAY)
-        client.get_intraday_heart_rate.assert_awaited_once_with(DAY - timedelta(days=8), DAY)
-        client.get_workout_sessions.assert_awaited_once_with(DAY - timedelta(days=8), DAY)
 
     def test_connected_endpoint_recomputes_when_inputs_change(self):
         sleep, strain, naps = {DAY: 350}, {DAY: 0, DAY - timedelta(days=1): 0}, {}

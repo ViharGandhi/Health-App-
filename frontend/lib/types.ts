@@ -13,18 +13,39 @@ export interface ZoneMinutes {
 
 export interface WorkoutDetail {
   activity_name: string;
+  name: string;
+  exercise_type: string | null;
+  start: string;
+  end: string;
+  duration_min: number;
   strain: number;
+  load: number;
+  avg_hr: number | null;
+  max_hr: number | null;
   zone_minutes: ZoneMinutes;
 }
 
 export interface StrainData {
-  score_21: number;
-  score_100: number;
-  workout_strain: number;
-  incidental_strain: number;
-  zone_minutes: ZoneMinutes;
+  date: string;
+  mode: 'demo' | 'connected';
+  day_window: { start: string; end: string; source: 'sleep' | 'midnight_fallback' };
+  strain: number | null;
+  label: 'Light' | 'Moderate' | 'High' | 'All Out' | null;
+  load: number | null;
+  coverage: number;
+  low_coverage: boolean;
+  calibrating: boolean;
+  age_missing: boolean;
+  params: { hr_max: number | null; hr_rest: number; hr_rest_source: 'recovery' | 'default'; strain_l: number; sex: 'm' | 'f'; sex_source: 'profile' | 'default' };
+  analytics: { avg_strain_7d: number | null; avg_strain_28d: number | null; acute_chronic_ratio: number | null; strain_target: { low: number; high: number; status: 'under' | 'on' | 'over' } | null };
+  suggested_workouts: { start: string; end: string; avg_hr: number }[];
+  score_21: number | null;
+  score_100: number | null;
+  workout_strain: number | null;
+  incidental_strain: number | null;
+  zone_minutes: ZoneMinutes | null;
   workouts: WorkoutDetail[];
-  max_hr: number;
+  max_hr: number | null;
   avg_hr: number | null;
   age_used: number | null;
   age_is_default: boolean;
@@ -64,6 +85,35 @@ export interface RecoveryData {
   training_recommendation: string;
   is_calibrating: boolean;
   is_mock: boolean;
+}
+
+export type StrainMetric = 'strain' | 'zones_1_3' | 'zones_4_5' | 'strength' | 'steps';
+export type StrainRange = 'W' | 'M' | '6M';
+export interface StrainDay {
+  date: string;
+  score: number | null;
+  load: number | null;
+  coverage: number;
+  low_coverage: boolean;
+  zones: ZoneMinutes | null;
+  strength_minutes: number;
+  strength_activities: Record<string, number>;
+  steps: number | null;
+  activities: { name: string; start: string; end: string; minutes: number; strain: number | null }[];
+}
+export interface StrainAnalytics {
+  date: string;
+  today: string;
+  timeframe: StrainRange;
+  range_start: string;
+  range_end: string;
+  previous_range_start: string;
+  previous_range_end: string;
+  is_mock: boolean;
+  current: StrainData;
+  days: StrainDay[];
+  previous_days: StrainDay[];
+  prior_30_day_averages: Record<StrainMetric, number | null>;
 }
 
 export interface SleepStages {

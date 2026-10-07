@@ -11,3 +11,4 @@ python-jose[cryptography]==3.3.0
 itsdangerous==2.2.0
 starlette==0.38.6
 tink==1.16.1
+tzdata>=2025.2

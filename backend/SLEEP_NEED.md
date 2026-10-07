@@ -27,9 +27,11 @@ physical UTC endpoints determine elapsed duration, including DST changes.
 Processed naps use their actual asleep minutes, not elapsed session duration,
 and are summed by local completion date. Reconciled duplicate nap IDs count once.
 
-Activity-day strain is the existing app-calculated `score_100`, derived from
-Google heart-rate and exercise records. Google does not provide this strain
-score. An absent HR stream yields missing strain, rather than a zero-strain day.
+Activity-day strain uses the absolute HRR/TRIMP cardio score described in
+[STRAIN_MODEL.md](STRAIN_MODEL.md). The service passes the unrounded 0–21 value
+as `strain / 21 * 100` through the existing percent-shaped contract; its 0.21
+adapter restores the same score without capacity normalization. Google does not
+provide this score. Missing age or an absent HR stream yields missing strain.
 
 For a sleep ending on D, its pre-sleep estimate uses activity D−1, main sleeps
 ending D−1 through D−7, and their respective preceding activity days. The sleep

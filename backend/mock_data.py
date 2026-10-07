@@ -13,12 +13,12 @@ import os
 import math
 import random
 from dataclasses import asdict
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, timezone
 
 # Allow importing the algo files from the project root
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from strain import StrainCalculator, WorkoutInterval, HeartRateZone
+from strain_service import demo_inputs, calculate_days, strain_response
 from recovery import RecoveryCalculator, RecoveryInput
 from sleepscore import SleepCalculator, SleepData
 from sleep_consistency import SleepConsistencyCalculator, SleepNight
@@ -27,7 +27,7 @@ from health_trends import build_health_response
 
 from models import (
     StrainResponse, RecoveryResponse, SleepResponse,
-    DashboardResponse, ZoneMinutes, WorkoutDetail, SleepStages,
+    DashboardResponse, SleepStages,
     SleepTrendResponse, HealthResponse
 )
 
@@ -97,70 +97,20 @@ def _build_mock_sleep_data() -> SleepData:
 # ──────────────────────────────────────────────────────────────────────────────
 
 USER_AGE = 22
-MAX_HR   = StrainCalculator.estimated_max_hr(USER_AGE)  # 192.6
 
 # HRV history (last 14 days, oldest → newest)
 HRV_HISTORY = [38.0, 41.0, 36.5, 40.2, 43.1, 39.8, 42.5, 44.0, 37.9, 41.3, 40.8, 43.6, 42.1, 44.8]
 RHR_BASELINE = 56.0  # bpm
 HRV_BASELINE = 41.2  # ms
 
-# 14-day strain load history for capacity
-STRAIN_LOAD_HISTORY = [310.0, 340.0, 295.0, 360.0, 320.0, 345.0, 330.0, 315.0, 355.0, 325.0, 340.0, 350.0, 320.0, 335.0]
-
-
 def compute_mock_strain() -> StrainResponse:
-    samples, workout_start, workout_end = _build_mock_hr_samples()
-    intervals = [WorkoutInterval(start=workout_start, end=workout_end, activity_name="Outdoor Run")]
-
-    result = StrainCalculator.calculate_workout_aware(intervals, samples, MAX_HR)
-    capacity = StrainCalculator.capacity(STRAIN_LOAD_HISTORY)
-    calibrating = StrainCalculator.is_calibrating(STRAIN_LOAD_HISTORY)
-    score_100 = StrainCalculator.score(result.total, capacity)
-    score_21 = StrainCalculator.score_to_whoop_scale(score_100)
-
-    # Aggregate zone minutes across all samples
-    _, all_zone_mins = StrainCalculator.calculate(samples, MAX_HR)
-
-    # Build workouts list
-    workouts = []
-    for detail in result.details:
-        zm = ZoneMinutes(
-            zone1=detail.zone_minutes.get(HeartRateZone.ZONE1, 0.0),
-            zone2=detail.zone_minutes.get(HeartRateZone.ZONE2, 0.0),
-            zone3=detail.zone_minutes.get(HeartRateZone.ZONE3, 0.0),
-            zone4=detail.zone_minutes.get(HeartRateZone.ZONE4, 0.0),
-            zone5=detail.zone_minutes.get(HeartRateZone.ZONE5, 0.0),
-        )
-        workouts.append(WorkoutDetail(
-            activity_name=detail.activity_name,
-            strain=detail.strain,
-            zone_minutes=zm,
-        ))
-
-    total_zone_mins = ZoneMinutes(
-        zone1=all_zone_mins.get(HeartRateZone.ZONE1, 0.0),
-        zone2=all_zone_mins.get(HeartRateZone.ZONE2, 0.0),
-        zone3=all_zone_mins.get(HeartRateZone.ZONE3, 0.0),
-        zone4=all_zone_mins.get(HeartRateZone.ZONE4, 0.0),
-        zone5=all_zone_mins.get(HeartRateZone.ZONE5, 0.0),
-    )
-
-    # Compute avg HR from samples
-    hr_values = [hr for _, hr in samples]
-    avg_hr = sum(hr_values) / len(hr_values) if hr_values else None
-
-    return StrainResponse(
-        score_21=round(score_21, 1),
-        score_100=round(score_100, 1),
-        workout_strain=round(result.workout_strain, 1),
-        incidental_strain=round(result.incidental_strain, 1),
-        zone_minutes=total_zone_mins,
-        workouts=workouts,
-        max_hr=round(MAX_HR, 1),
-        avg_hr=round(avg_hr, 1) if avg_hr else None,
-        is_calibrating=calibrating,
-        is_mock=True,
-    )
+    # Explicit sample profile: age 30, male, RHR 56 bpm.
+    today = date.today()
+    start = today - timedelta(days=27)
+    inputs, _ = demo_inputs(start, today, timezone.utc)
+    now = datetime.combine(today, datetime.min.time(), tzinfo=timezone.utc) + timedelta(hours=22)
+    values = calculate_days(start, today, now, timezone.utc, 30, "m", False, inputs)
+    return strain_response(values[today], values, "demo", 30, 72)
 
 
 def compute_mock_sleep() -> SleepResponse:

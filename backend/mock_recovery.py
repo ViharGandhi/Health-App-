@@ -89,6 +89,8 @@ class MockRecoveryClient(GoogleHealthClient):
     """Exercise real API normalization and batching, replacing only network I/O."""
     def __init__(self, day: date, scenario: str = "normal"):
         super().__init__("demo-not-a-token")
+        from uuid import uuid4
+        self.account_key = f"fixture-{uuid4()}"  # Independent fixture accounts must not share daily Strain caches.
         self.points = mock_recovery_points(day, scenario)
         self.calls = []
 

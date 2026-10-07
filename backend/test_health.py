@@ -241,9 +241,12 @@ class HealthTests(unittest.TestCase):
         client = type("Client", (), {
             "get_intraday_heart_rate": AsyncMock(return_value=[]),
             "get_workout_sessions": AsyncMock(return_value=[]),
+            "get_sleep_stage_points": AsyncMock(return_value=[]),
+            "get_health_history": AsyncMock(return_value={}),
         })()
         result = asyncio.run(_compute_real_strain(client, date(2026, 10, 1), age=35))
-        self.assertEqual(result.max_hr, 183.5)
+        self.assertEqual(result.params["hr_max"], 183.5)
+        self.assertIsNone(result.max_hr)
         self.assertEqual(result.age_used, 35)
         self.assertFalse(result.age_is_default)
         with patch.dict('os.environ', {}, clear=True):
@@ -251,7 +254,7 @@ class HealthTests(unittest.TestCase):
         self.assertTrue(default.age_is_default)
         with patch.dict('os.environ', {'USER_AGE': '22'}):
             configured = asyncio.run(_compute_real_strain(client, date(2026, 10, 1)))
-        self.assertFalse(configured.age_is_default)
+        self.assertTrue(configured.age_missing)  # USER_AGE is not a silent Strain default.
         self.assertTrue(configured.is_calibrating)
 
 

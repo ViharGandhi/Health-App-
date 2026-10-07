@@ -61,7 +61,7 @@ export default function DashboardPage() {
     <section className={styles.dialsSection} aria-label="Daily scores">
       <CircleDial label="SLEEP" value={sleep?.performance ?? 0} displayText={sleep?.performance == null ? '—' : undefined} maxValue={100} color={BLUE} unit="%" size={94} onClick={() => router.push('/sleep')} />
       <CircleDial label="RECOVERY" value={current.score ?? 0} displayText={current.score == null ? '—' : undefined} maxValue={100} color={recoveryColor(current.zone, current.status)} unit="%" size={94} onClick={() => router.push(recoveryHref)} />
-      <CircleDial label="STRAIN" value={strain?.score_21 ?? 0} displayText={strain?.avg_hr == null ? '—' : undefined} maxValue={21} color="#009FE8" size={94} onClick={() => router.push('/strain')} />
+      <CircleDial label="STRAIN" value={strain?.score_21 ?? 0} displayText={strain?.age_missing || strain?.avg_hr == null ? '—' : undefined} maxValue={21} color="#009FE8" size={94} onClick={() => router.push('/strain')} />
     </section>
     <div className={styles.monitorsGrid}>
       <Link className={styles.monitorCard} href="/health"><div className={styles.cardHeaderRow}><span>HEALTH MONITOR</span><Chevron /></div><div className={styles.monitorBody}><span className={styles.checkIconBox} style={{ color: monitorColor }}>{allWithin ? '✓' : '—'}</span><span className={styles.monitorTextStack}><strong style={{ color: monitorColor }}>{allWithin ? 'WITHIN RANGE' : monitor.assessed < monitor.expected ? 'BUILDING RANGE' : 'OUTSIDE RANGE'}</strong><small>{monitor.assessed < monitor.expected ? `${monitor.assessed}/${monitor.expected} Metrics assessed` : `${monitor.within}/${monitor.expected} Metrics${allWithin ? '' : ' within'}`}</small></span></div></Link>
