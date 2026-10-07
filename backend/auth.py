@@ -228,6 +228,7 @@ async def callback(request: Request, code: str = "", error: str = "", state: str
     user_info = user_resp.json() if user_resp.status_code == 200 else {}
 
     session_data = {
+        "health_user_id": identity_resp.json().get("healthUserId"),
         "access_token":  tokens["access_token"],
         "refresh_token": tokens.get("refresh_token", ""),
         "expires_at":    time.time() + tokens.get("expires_in", 3600),

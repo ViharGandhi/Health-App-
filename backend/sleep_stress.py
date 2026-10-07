@@ -198,7 +198,9 @@ def infer_hr_interval_seconds(samples: list[HrSample]) -> float | None:
     ordered = sorted(sample.time_utc for sample in samples)
     deltas = sorted((later - earlier).total_seconds() for earlier, later in zip(ordered, ordered[1:])
                     if 0 < (later - earlier).total_seconds() <= 60)
-    return deltas[max(0, len(deltas) // 10)] if deltas else None
+    # Fitbit's reconciled stream varies between one and several seconds. A
+    # short burst must not make every other window fail the coverage check.
+    return median(deltas) if deltas else None
 
 
 def prepare_night(

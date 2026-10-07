@@ -36,10 +36,19 @@ RMSSD is in milliseconds. The existing Google client follows pagination tokens.
 The public schema does **not** identify whether an HRV `sampleTime` marks the
 start or end of the RMSSD analysis window, or supply its duration. The adapter
 infers typical cadence from neighboring samples and leaves long gaps blank.
-The mock explicitly places timestamps at window starts. Connected scoring returns
-HTTP 503 until `SLEEP_STRESS_HRV_ANCHOR` is set to `start` or `end` **after** a
-real Fitbit Air night has been inspected. No real payload was available to log or
-validate in this project.
+The mock explicitly places timestamps at window starts. Without a verified
+`SLEEP_STRESS_HRV_ANCHOR` (`start` or `end`), connected requests inspect both
+alignments and return baseline progress with all stress scores withheld. Unverified
+results are not stored as scored records. Once there is enough baseline history,
+the status is `timing_unverified` until measurement timing is independently verified.
+Do not infer start/end semantics just from equally spaced sample timestamps.
+
+A connected Fitbit night ending 2026-10-07 supplied 71 HRV observations and 9,065
+heart-rate observations. Both alignments produced usable windows after correcting
+HR cadence inference to use the median interval instead of the fastest decile.
+Only three sleep sessions were available in the preceding 14-day query, below
+the seven-previous-night baseline minimum. This inspection did not verify HRV
+start/end semantics. HR coverage still rejects gaps and invalid BPM readings.
 
 Connected results are upserted by sleep ID into the local SQLite database at
 `backend/data/sleep_stress.sqlite3`; valid windows are stored alongside each

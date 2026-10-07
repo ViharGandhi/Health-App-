@@ -5,24 +5,34 @@
  */
 
 import type { DashboardData, RecoveryData, RecoveryAnalytics, RecoveryDemo, RecoveryRange, SleepData, StrainData, AuthStatus, HealthData, SleepConsistencyScore, SleepStressHistory, SleepStageRangeHistory, SleepHeartRate } from './types';
+import { RequestCache } from './requestCache';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+const responses = new RequestCache();
+let accountFingerprint: string | undefined;
 
 async function apiFetch<T>(path: string, day?: string): Promise<T> {
   const today = new Date();
   const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   const age = window.localStorage.getItem('ojas_age');
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const headers = { 'Content-Type': 'application/json', 'X-User-Date': day ?? localDate, 'X-User-Timezone': timezone, ...(age ? { 'X-User-Age': age } : {}) };
+  const fetchData = async () => {
   const res = await fetch(`${BACKEND_URL}${path}`, {
     credentials: 'include', // send session cookie
-    headers: { 'Content-Type': 'application/json', 'X-User-Date': day ?? localDate, 'X-User-Timezone': Intl.DateTimeFormat().resolvedOptions().timeZone, ...(age ? { 'X-User-Age': age } : {}) },
+    headers,
     cache: 'no-store',
     signal: AbortSignal.timeout(120000),
   });
   if (!res.ok) {
+    if (res.status === 401 || res.status === 403) responses.clear();
     const body = await res.json().catch(() => null);
     throw new Error(typeof body?.detail === 'string' ? body.detail : `API error ${res.status}: ${path}`);
   }
   return res.json() as Promise<T>;
+  };
+  if (path.startsWith('/api/auth/') || path.startsWith('/api/data/')) return fetchData();
+  return responses.get(JSON.stringify([BACKEND_URL, path, headers]), fetchData);
 }
 
 export const api = {
@@ -92,19 +102,36 @@ export const api = {
   },
 
   /** Auth: is the user connected to their Fitbit? */
-  getAuthStatus: (): Promise<AuthStatus> =>
-    apiFetch<AuthStatus>('/api/auth/status'),
+  getAuthStatus: async (): Promise<AuthStatus> => {
+    const status = await apiFetch<AuthStatus>('/api/auth/status');
+    const fingerprint = JSON.stringify([status.connected, status.user_email]);
+    if (accountFingerprint !== fingerprint) responses.clear();
+    accountFingerprint = fingerprint;
+    return status;
+  },
+
+  getDataStatus: () => apiFetch<{ last_synced_at: string | null; stored_ranges: number }>('/api/data/status'),
+
+  syncNow: async () => {
+    const response = await fetch(`${BACKEND_URL}/api/data/refresh`, { method: 'POST', credentials: 'include' });
+    if (!response.ok) throw new Error('Could not refresh data. Check your connection and retry.');
+    responses.clear();
+  },
 
   /** Start Google OAuth flow (redirects browser to Google) */
   startLogin: () => {
+    responses.clear();
     window.location.href = `${BACKEND_URL}/api/auth/login`;
   },
 
   /** Disconnect â€” clear session, return to mock mode */
   disconnect: async (): Promise<void> => {
-    await fetch(`${BACKEND_URL}/api/auth/disconnect`, {
+    const response = await fetch(`${BACKEND_URL}/api/auth/disconnect`, {
       method: 'POST',
       credentials: 'include',
     });
+    if (!response.ok) throw new Error('Could not disconnect. Please retry.');
+    responses.clear();
+    accountFingerprint = undefined;
   },
 };

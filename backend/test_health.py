@@ -106,7 +106,7 @@ class HealthTests(unittest.TestCase):
         self.assertEqual(set(result), {"hrv", "rhr"})
         self.assertEqual(calls, ["daily-heart-rate-variability", "daily-resting-heart-rate"])
 
-    def test_health_endpoint_aligns_missing_days_and_bins_heart_rate(self):
+    def test_health_endpoint_aligns_missing_days_without_fetching_intraday_heart_rate(self):
         today = date.today().isoformat()
         history = {key: [] for key in METRICS}
         history["hrv"] = [{"date": today, "value": 45.0, "estimated": None}]
@@ -124,7 +124,9 @@ class HealthTests(unittest.TestCase):
         self.assertFalse(data["is_mock"])
         self.assertEqual(data["metrics"]["hrv"][-1]["value"], 45.0)
         self.assertIsNone(data["metrics"]["rhr"][-1]["value"])
-        self.assertEqual(data["heart_rate"], [{"time": "08:00", "value": 70.0}])
+        self.assertEqual(data["heart_rate"], [])
+        self.assertIsNone(data["latest_heart_rate"])
+        client.get_intraday_heart_rate.assert_not_awaited()
         self.assertEqual(len(data["metrics"]["hrv"]), 7)
 
     def test_baseline_uses_only_previous_days_and_leaves_gaps(self):

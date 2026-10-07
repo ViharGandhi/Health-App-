@@ -15,10 +15,16 @@ export default function ConnectPage() {
   const [status, setStatus] = useState<AuthStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [disconnecting, setDisconnecting] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [lastSynced, setLastSynced] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [age, setAge] = useState('');
   const [ageSaved, setAgeSaved] = useState(false);
   const [ageError, setAgeError] = useState('');
+
+  useEffect(() => {
+    if (status?.connected) api.getDataStatus().then(data => setLastSynced(data.last_synced_at)).catch(() => {});
+  }, [status?.connected]);
 
   useEffect(() => {
     setAge(window.localStorage.getItem('ojas_age') ?? '');
@@ -92,6 +98,16 @@ export default function ConnectPage() {
           >
             {disconnecting ? 'Disconnecting...' : 'Disconnect Device'}
           </button>
+          <p className={styles.setupText} style={{ marginTop: 16 }}>
+            {lastSynced ? `Last fetched: ${new Date(lastSynced).toLocaleString()}` : 'No readings stored yet.'}
+            {' '}Pages reuse recent data. Sync now checks for new readings and recent corrections.
+          </p>
+          <button className="btn btn-primary btn-full" disabled={syncing || disconnecting} style={{ marginTop: 12 }} onClick={async () => {
+            setSyncing(true); setError('');
+            try { await api.syncNow(); window.location.href = '/'; }
+            catch (reason) { setError(reason instanceof Error ? reason.message : 'Sync could not start.'); setSyncing(false); }
+          }}>{syncing ? 'Starting sync…' : 'Sync now'}</button>
+          {error && <p className={styles.error} role="alert">{error}</p>}
         </div>
 
       ) : (

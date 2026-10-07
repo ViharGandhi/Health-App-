@@ -5,6 +5,8 @@ from collections import OrderedDict
 from datetime import date, datetime, timedelta, timezone
 import math
 import time
+import hashlib
+import json
 
 from google_health_client import _local_datetime
 from models import StrainResponse
@@ -12,6 +14,66 @@ from strain import StrainConfig, calculate_strain, day_window, strain_analytics
 
 
 _daily_cache = OrderedDict()
+_calculation_locks = {}
+
+
+def _encode_day(value):
+    if isinstance(value, datetime):
+        return {'_datetime': value.isoformat()}
+    if isinstance(value, date):
+        return {'_date': value.isoformat()}
+    raise TypeError(type(value).__name__)
+
+
+def _decode_day(value):
+    if set(value) == {'_datetime'}:
+        return datetime.fromisoformat(value['_datetime'])
+    if set(value) == {'_date'}:
+        return date.fromisoformat(value['_date'])
+    return value
+
+
+async def load_strain_days(client, start, end, now, age, config=StrainConfig()):
+    """Reuse durable daily results before loading any raw heart-rate history."""
+    tz = getattr(client, 'strain_timezone', timezone.utc)
+    sex = getattr(client, 'strain_sex', 'm')
+    defaulted = getattr(client, 'strain_sex_defaulted', True)
+    store = getattr(client, 'store', None)
+    if store is None:
+        inputs = await fetch_strain_inputs(client, start, end)
+        values = calculate_days(start, end, now, tz, age, sex, defaulted, inputs, config,
+                                getattr(client, 'account_key', None))
+        return values, inputs[1]
+    account = client.account_key
+    profile = hashlib.sha256(repr(('strain-v1', str(tz), age, sex, defaulted, config)).encode()).hexdigest()
+    days = [start + timedelta(days=i) for i in range((end - start).days + 1)]
+    keys = {day: f'{profile}:{day}' for day in days}
+    lock = _calculation_locks.setdefault((asyncio.get_running_loop(), account, profile), asyncio.Lock())
+    async with lock:
+        cached = await asyncio.to_thread(store.days_read, account, list(keys.values()))
+        values = {day: json.loads(cached[key], object_hook=_decode_day) for day, key in keys.items() if key in cached}
+        missing = [day for day in days if day not in values]
+        if missing:
+            # Only expired/missing days need raw inputs, rather than the whole month.
+            lower, upper = min(missing), max(missing)
+            inputs = await fetch_strain_inputs(client, lower, upper)
+            version = await asyncio.to_thread(store.calculation_version, account)
+            calculated = await asyncio.to_thread(calculate_days, lower, upper, now, tz,
+                                                 age, sex, defaulted, inputs, config)
+            entries = []
+            today = now.astimezone(tz).date()
+            for day, value in calculated.items():
+                window = value['day_window']
+                value['_sessions'] = [s for s in inputs[1] if s['end'] >= window['start'] and s['start'] <= window['end']]
+                ttl = 60 if day == today else 900 if day >= today - timedelta(days=3) else 86400
+                entries.append((keys[day], time.time() + ttl, json.dumps(value, default=_encode_day)))
+            await asyncio.to_thread(store.days_write, account, entries, version)
+            values.update(calculated)
+        sessions = {}
+        for value in values.values():
+            for session in value.get('_sessions', []):
+                sessions[(session['start'], session['end'], session['activity_name'])] = session
+        return {day: values[day] for day in days}, list(sessions.values())
 
 
 def sleep_windows(points: list[dict]) -> list[dict]:
@@ -46,8 +108,7 @@ async def fetch_strain_inputs(client, start: date, end: date):
 def calculate_days(start: date, end: date, now: datetime, tz, age, sex, sex_defaulted,
                    inputs, config=StrainConfig(), account=None):
     samples, sessions, sleeps, rhrs = inputs
-    samples = sorted(samples, key=lambda item: item[0].astimezone(timezone.utc))
-    timestamps = [stamp.astimezone(timezone.utc) for stamp, _ in samples]
+    timestamps = None
     results = {}
     day = start
     while day <= end:
@@ -57,6 +118,9 @@ def calculate_days(start: date, end: date, now: datetime, tz, age, sex, sex_defa
             results[day] = cached[1]
             _daily_cache.move_to_end(key)
         else:
+            if timestamps is None:
+                samples = sorted(samples, key=lambda item: item[0].astimezone(timezone.utc))
+                timestamps = [stamp.astimezone(timezone.utc) for stamp, _ in samples]
             window = day_window(day, now, sleeps, tz, config)
             rest = [rhrs[day - timedelta(days=i)] for i in range(6, -1, -1) if day - timedelta(days=i) in rhrs]
             left = bisect_left(timestamps, window['start'].astimezone(timezone.utc))

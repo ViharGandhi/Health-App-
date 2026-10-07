@@ -113,6 +113,17 @@ class SleepStressTests(unittest.TestCase):
         self.assertEqual(prepare_night(night, [HrvWindow(start, start + timedelta(minutes=5), 40)],
                                        hr, StressConfig(min_sleep_hours=0)).windows, ())
 
+    def test_variable_fitbit_cadence_keeps_usable_windows(self):
+        start = datetime(2026, 10, 2, 23, tzinfo=UTC)
+        night = SleepNight("variable", DAY, start, start + timedelta(minutes=5), "STAGES",
+                           (StageSegment(start, start + timedelta(minutes=5), "LIGHT"),))
+        times = list(range(20)) + list(range(20, 300, 3))
+        hr = [HrSample(start + timedelta(seconds=i), 60) for i in times]
+        result = prepare_night(night, [HrvWindow(start, start + timedelta(minutes=5), 40)],
+                               hr, StressConfig(min_sleep_hours=0))
+        self.assertEqual(len(result.windows), 1)
+        self.assertEqual(result.coverage, 1)
+
     def test_stage_fallback_spread_floor_and_excludes_current(self):
         current = make_night(DAY, [(20, 80, 5)] * 4)
         history = baseline_history()
@@ -208,7 +219,7 @@ class SleepStressTests(unittest.TestCase):
         self.assertGreaterEqual(max(stressed), 30)
         self.assertTrue(all(result["status"] == "ok" for result in results))
 
-    def test_api_mock_and_connected_alignment_gate(self):
+    def test_api_mock_and_connected_unverified_readings(self):
         client = TestClient(app)
         response = client.get("/api/sleep/stress?days=14", headers={"X-User-Date": DAY.isoformat()})
         self.assertEqual(response.status_code, 200)
@@ -216,9 +227,11 @@ class SleepStressTests(unittest.TestCase):
         self.assertEqual(len(response.json()["nights"]), 14)
         self.assertEqual(len(response.json()["totals"]), 14)
         with patch("main._get_token", new=AsyncMock(return_value="connected")), \
+             patch("main.compute_connected_sleep_stress", new=AsyncMock(return_value=[])) as compute, \
              patch.dict("main.os.environ", {"SLEEP_STRESS_HRV_ANCHOR": ""}):
             connected = client.get("/api/sleep/stress")
-        self.assertEqual(connected.status_code, 503)
+        self.assertEqual(connected.status_code, 200)
+        self.assertIsNone(compute.call_args.args[3])
         with patch("main.get_session", return_value={"access_token": "expired"}), \
              patch("main._get_token", new=AsyncMock(return_value=None)):
             expired = client.get("/api/sleep/stress")
@@ -267,6 +280,29 @@ class SleepStressTests(unittest.TestCase):
             self.assertEqual(len(data["nights"]), 1)
             self.assertEqual(data["nights"][0]["status"], "ok")
             self.assertEqual(SleepStressStore(path).get(data["nights"][0]["sleep_id"]), data["nights"][0])
+
+
+    def test_unverified_timing_withholds_scores_even_with_full_baseline(self):
+        import asyncio
+        from sleep_stress_pipeline import compute_connected_sleep_stress
+        sleep, hrv, hr = [], [], []
+        for offset in range(14, -1, -1):
+            night, variability, heart = _raw_night(DAY - timedelta(days=offset))
+            sleep.append(night)
+            hrv.extend(variability)
+            hr.extend(heart)
+        source = type("Source", (), {"get_sleep_stress_points": AsyncMock(return_value=(sleep, hrv, hr))})()
+        with tempfile.TemporaryDirectory() as directory:
+            store = SleepStressStore(Path(directory) / 'stress.sqlite3')
+            results = asyncio.run(compute_connected_sleep_stress(source, DAY, DAY, None, store))
+            self.assertEqual(len(results), 1)
+            result = results[0]
+            self.assertEqual(result['status'], 'timing_unverified')
+            self.assertFalse(result['alignment_verified'])
+            self.assertGreaterEqual(result['nights_available'], 7)
+            self.assertIsNone(result['stress_pct'])
+            self.assertEqual(result['episodes'], [])
+            self.assertIsNone(store.get(result['sleep_id']))
 
 
 if __name__ == "__main__":

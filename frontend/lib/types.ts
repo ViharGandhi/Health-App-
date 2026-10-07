@@ -278,6 +278,9 @@ export interface SleepConsistencyScore {
 }
 
 export interface SleepStressNight {
+  alignment_verified?: boolean;
+  nights_available?: number;
+  config_snapshot?: { baseline_nights_min: number };
   sleep_id: string;
   night_date: string;
   main_sleep: boolean;

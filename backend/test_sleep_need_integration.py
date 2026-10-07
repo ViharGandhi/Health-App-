@@ -88,7 +88,7 @@ class SleepNeedIntegrationTests(unittest.TestCase):
         from datetime import datetime, timezone
         base = datetime.combine(DAY, datetime.min.time(), tzinfo=timezone.utc)
         raw = ([(base, 60), (base + timedelta(minutes=1), 60)], [], [], {})
-        with patch('main.fetch_strain_inputs', AsyncMock(return_value=raw)) as fetch:
+        with patch('strain_service.fetch_strain_inputs', AsyncMock(return_value=raw)) as fetch:
             inputs = asyncio.run(_load_sleep_need_inputs(client, DAY, 30))
         fetch.assert_awaited_once_with(client, DAY - timedelta(days=8), DAY)
         self.assertEqual(inputs.for_tonight(DAY).total_need_min, 430)

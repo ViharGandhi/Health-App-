@@ -32,3 +32,10 @@ Thumbs.db
 .idea/
 .vscode/
 .pytest_cache/
+
+# Private wearable data and SQLite journals
+backend/data/*.sqlite3
+backend/data/*.sqlite3-*
+backend/data/*.sqlite
+backend/data/*.sqlite-*
+validation/*.log

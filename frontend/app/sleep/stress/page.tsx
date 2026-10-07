@@ -1,4 +1,5 @@
 'use client';
+import { sleepStressStatus } from '@/lib/sleepStressStatus';
 
 /** Sleep Stress trend view using scored sleep sessions from the backend. */
 
@@ -107,10 +108,10 @@ export default function SleepStressTrendPage() {
   const avgHighStress = scoredDays ? formatMinutes(totalHigh / scoredDays) : '—';
   const rangeLabel = history ? formatRange(history.range_start, history.range_end) : '';
   const rangeDayCount = history ? Math.round((dateAtNoon(history.range_end).getTime() - dateAtNoon(history.range_start).getTime()) / 86400000) + 1 : 0;
-  const deltaText = `${scoredDays} of ${rangeDayCount} nights recorded`;
+  const deltaText = `${scoredDays} of ${rangeDayCount} nights scored`;
   const insightText = scoredDays
     ? `Across ${scoredDays} scored night${scoredDays === 1 ? '' : 's'}, you spent an average of ${avgHighStress} hours in high sleep stress. High stress requires both lower HRV and higher heart rate than your personal baseline.`
-    : 'No scored sleep stress data is available in this range.';
+    : sleepStressStatus(history?.nights.filter(n => n.main_sleep).sort((a, b) => a.night_date.localeCompare(b.night_date)).at(-1));
   const hoveredDay = hoveredIndex !== null ? days[hoveredIndex] : null;
   let displayValue = avgHighStress;
   let displayLabel = 'AVG. HIGH STRESS';

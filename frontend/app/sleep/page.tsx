@@ -23,6 +23,7 @@ import type { SleepAnalytics, SleepConsistencyScore, SleepData, SleepStressHisto
 import styles from './page.module.css';
 import SleepHeartRateChart from './SleepHeartRateChart';
 import SleepAnalyticsCards from '@/components/SleepAnalyticsCards';
+import { sleepStressStatus } from '@/lib/sleepStressStatus';
 
 // Segment bar helper: 3 pills (Poor, Sufficient, Optimal)
 function SegmentIndicator({ value, isInverse = false, isConsistency = false }: { value: number; isInverse?: boolean; isConsistency?: boolean }) {
@@ -310,7 +311,9 @@ export default function SleepPage() {
                   <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                 </svg>
               </div>
-              <span className={styles.metricTitle}>HIGH SLEEP STRESS</span>
+              <div className={styles.metricTextGroup}><span className={styles.metricTitle}>HIGH SLEEP STRESS</span>
+                {latestStress && sleepStressPct === null && <span className={styles.metricSubtitle}>{latestStress.status === 'insufficient_baseline' ? `Building baseline · ${latestStress.nights_available ?? 0}/${latestStress.config_snapshot?.baseline_nights_min ?? 7} nights` : 'Awaiting measurement validation'}</span>}
+              </div>
             </div>
             <div className={styles.metricRight}>
               {sleepStressPct !== null && <SegmentIndicator value={sleepStressPct} isInverse />}
@@ -494,6 +497,7 @@ export default function SleepPage() {
           </div>
         </section>
 
+        {latestStress && sleepStressPct === null && <p className={styles.stageRangeNote}>{sleepStressStatus(latestStress)}</p>}
         {analytics && <SleepAnalyticsCards analytics={analytics} stress={latestStress} stressError={stressError} />}
         {analyticsError && <p role="alert" className={styles.stageRangeNote}>Additional sleep analytics unavailable. Reload to retry.</p>}
       </div>

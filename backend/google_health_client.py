@@ -5,12 +5,17 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import math
+import os
 import time
+from functools import lru_cache
+from pathlib import Path
 from collections import OrderedDict
 from datetime import date, datetime, timedelta, timezone
 from typing import Optional
 
 import httpx
+from health_read_store import HealthReadStore, ReadRange, read_range, exact_key, CacheInvalidated
+from read_metrics import count
 
 
 BASE_URL = "https://health.googleapis.com/v4/users/me/dataTypes"
@@ -20,6 +25,12 @@ WEARABLES = "users/me/dataSourceFamilies/google-wearables"
 _point_cache: OrderedDict = OrderedDict()
 _point_requests: dict = {}
 _request_lanes: OrderedDict = OrderedDict()
+_range_locks: dict = {}
+
+
+@lru_cache(maxsize=4)
+def read_store(path: str) -> HealthReadStore:
+    return HealthReadStore(path)
 
 
 def _day_filter(field: str, start: date, end: date) -> str:
@@ -41,9 +52,11 @@ def _google_date(value: dict) -> date:
 
 
 class GoogleHealthClient:
-    def __init__(self, access_token: str, *, cache: bool = False):
+    def __init__(self, access_token: str, *, cache: bool = False, account_id: str | None = None,
+                 store: HealthReadStore | None = None):
         self.cache = cache
-        self.account_key = hashlib.sha256(access_token.encode()).hexdigest()
+        self.account_key = hashlib.sha256((f'account:{account_id}' if account_id else access_token).encode()).hexdigest()
+        self.store = (store or read_store(os.getenv('HEALTH_DATA_DB_PATH', str(Path(__file__).parent / 'data' / 'health_cache.sqlite3')))) if cache and account_id else None
         self.headers = {
             "Authorization": f"Bearer {access_token}",
             "Accept": "application/json",
@@ -53,32 +66,87 @@ class GoogleHealthClient:
         if not self.cache:
             return await self._fetch_points(data_type, filter_expr, reconcile=reconcile)
         key = (self.account_key, data_type, filter_expr, reconcile)
+        if self.store:
+            key += (await asyncio.to_thread(self.store.epoch, self.account_key),)
         cached = _point_cache.get(key)
         if cached and cached[0] > time.monotonic():
+            count('memory_hits')
             _point_cache.move_to_end(key)
             return cached[1]
-        if key not in _point_requests:
-            _point_requests[key] = asyncio.create_task(self._cache_points(key, data_type, filter_expr, reconcile))
-        return await asyncio.shield(_point_requests[key])
+        request_key = (asyncio.get_running_loop(),) + key
+        if request_key not in _point_requests:
+            _point_requests[request_key] = asyncio.create_task(self._cache_points(key, data_type, filter_expr, reconcile, request_key))
+        return await asyncio.shield(_point_requests[request_key])
 
-    async def _cache_points(self, key: tuple, data_type: str, filter_expr: str, reconcile: bool) -> list[dict]:
+    async def _cache_points(self, key: tuple, data_type: str, filter_expr: str, reconcile: bool, request_key=None) -> list[dict]:
         try:
-            points = await self._fetch_points(data_type, filter_expr, reconcile=reconcile)
+            points = await self._stored_points(data_type, filter_expr, reconcile) if self.store else await self._fetch_points(data_type, filter_expr, reconcile=reconcile)
             _point_cache[key] = (time.monotonic() + 60, points)
             _point_cache.move_to_end(key)
             while len(_point_cache) > 64:
                 _point_cache.popitem(last=False)
             return points
         finally:
-            _point_requests.pop(key, None)
+            _point_requests.pop(request_key or key, None)
+
+    async def _stored_points(self, kind: str, expression: str, reconciled: bool) -> list[dict]:
+        for attempt in range(3):
+            try:
+                return await self._read_stored_points(kind, expression, reconciled)
+            except CacheInvalidated:
+                if attempt == 2:
+                    raise
+
+    async def _read_stored_points(self, kind: str, expression: str, reconciled: bool) -> list[dict]:
+        key = exact_key(kind, expression, reconciled)
+        query = read_range(expression)
+        # Serialize overlapping reads of the same stream, not unrelated metrics.
+        lane_key = (asyncio.get_running_loop(), self.account_key, kind, query.field if query else key, reconciled)
+        lock = _range_locks.setdefault(lane_key, asyncio.Lock())
+        async with lock:
+            epoch = await asyncio.to_thread(self.store.epoch, self.account_key)
+            exact = await asyncio.to_thread(self.store.exact_read, self.account_key, key)
+            if exact is not None:
+                count('database_hits')
+                return exact
+            if query:
+                points, missing = await asyncio.to_thread(self.store.range_read, self.account_key, kind, query, reconciled)
+                if not missing:
+                    count('database_hits')
+                    return points
+                for lower, upper in missing:
+                    points = await self._fetch_points(kind, query.expression(lower, upper), reconcile=reconciled)
+                    stored = await asyncio.to_thread(self.store.range_write, self.account_key, kind,
+                                                     ReadRange(query.field, lower, upper), reconciled, points, epoch=epoch)
+                    if not stored:
+                        # Unknown point schemas retain the original exact response.
+                        full = points if missing == [(query.start, query.end)] else await self._fetch_points(kind, expression, reconcile=reconciled)
+                        await asyncio.to_thread(self.store.exact_write, self.account_key, key, full, epoch=epoch)
+                        return full
+                    self._invalidate_calculations()
+                points, missing = await asyncio.to_thread(self.store.range_read, self.account_key, kind, query, reconciled)
+                if not missing:
+                    return points
+            points = await self._fetch_points(kind, expression, reconcile=reconciled)
+            await asyncio.to_thread(self.store.exact_write, self.account_key, key, points, epoch=epoch)
+            return points
+
+    def _invalidate_calculations(self):
+        # Daily Strain also feeds Sleep Need and Recovery. A corrected stored
+        # reading must not leave a six-hour-old historical calculation alive.
+        from strain_service import _daily_cache
+        for key in list(_daily_cache):
+            if key[0] == self.account_key:
+                _daily_cache.pop(key, None)
 
     async def _pace_request(self) -> None:
         if not self.cache:
             return
-        if self.account_key not in _request_lanes:
-            _request_lanes[self.account_key] = [asyncio.Lock(), 0.0]
-        lane = _request_lanes[self.account_key]
-        _request_lanes.move_to_end(self.account_key)
+        key = (asyncio.get_running_loop(), self.account_key)
+        if key not in _request_lanes:
+            _request_lanes[key] = [asyncio.Lock(), 0.0]
+        lane = _request_lanes[key]
+        _request_lanes.move_to_end(key)
         while len(_request_lanes) > 64:
             _request_lanes.popitem(last=False)
         async with lane[0]:
@@ -98,7 +166,10 @@ class GoogleHealthClient:
             while True:
                 for attempt in range(4):
                     await self._pace_request()
+                    started = time.monotonic()
                     response = await client.get(url, headers=self.headers, params=params)
+                    count('google_requests')
+                    count('google_ms', (time.monotonic() - started) * 1000)
                     if response.status_code not in (429, 503) or attempt == 3:
                         break
                     retry_after = response.headers.get("Retry-After", "")
@@ -245,7 +316,7 @@ class GoogleHealthClient:
         def sample_filter(field: str) -> str:
             return f'{field} >= "{sample_start}" AND {field} < "{sample_end}"'
 
-        sleep = await self._points("sleep", _day_filter("sleep.interval.civil_end_time", start, end))
+        sleep = await self.get_sleep_stage_points(start, end)
         hrv = await self._points("heart-rate-variability", sample_filter(
             "heart_rate_variability.sample_time.physical_time"))
         hr = await self._points("heart-rate", sample_filter("heart_rate.sample_time.physical_time"))
@@ -273,6 +344,25 @@ class GoogleHealthClient:
         return sessions
 
     async def get_daily_steps(self, start: date, end: date) -> dict[date, int]:
+        if not self.store:
+            return await self._fetch_daily_steps(start, end)
+        key = exact_key('steps-rollup', f'{start}/{end}', True)
+        lane_key = (asyncio.get_running_loop(), self.account_key, key)
+        async with _range_locks.setdefault(lane_key, asyncio.Lock()):
+            epoch = await asyncio.to_thread(self.store.epoch, self.account_key)
+            cached = await asyncio.to_thread(self.store.exact_read, self.account_key, key)
+            if cached is not None:
+                return {date.fromisoformat(day): count for day, count in cached.items()}
+            values = await self._fetch_daily_steps(start, end)
+            try:
+                await asyncio.to_thread(self.store.exact_write, self.account_key, key,
+                                        {day.isoformat(): count for day, count in values.items()}, epoch=epoch)
+            except CacheInvalidated:
+                # The next read re-fetches; never repopulate storage after refresh.
+                pass
+            return values
+
+    async def _fetch_daily_steps(self, start: date, end: date) -> dict[date, int]:
         """Wearable daily rollups preserve absent readings separately from true zeros."""
         values = {}
         lower = start

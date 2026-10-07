@@ -207,6 +207,7 @@ class SleepConsistencyScoreResponse(BaseModel):
 
 
 class SleepStressNightResponse(BaseModel):
+    alignment_verified: bool = True
     sleep_id: str
     night_date: str
     main_sleep: bool
