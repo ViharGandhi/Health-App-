@@ -1,5 +1,7 @@
 # Strain calculation review — proposal, not implemented
 
+This is the historical review of the replaced calculator. The implemented HRR/TRIMP model, current API contract and verification results are documented in [backend/STRAIN_MODEL.md](backend/STRAIN_MODEL.md).
+
 The connected 0–21 Strain score is currently an experimental app estimate. It is not WHOOP's proprietary Strain calculation and has not been validated for Fitbit Air. No formula change is included in this pass.
 
 ## Current inputs and limits

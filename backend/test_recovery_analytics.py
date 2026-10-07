@@ -117,7 +117,7 @@ class RecoveryAnalyticsTests(unittest.TestCase):
         self.assertEqual(data['current'], expected.model_dump())
         self.assertEqual(data['days'][-1]['recovery'], expected.score)
         self.assertIsNotNone(data['days'][-1]['sleep_performance'])
-        self.assertEqual(len(client.calls), 10)
+        self.assertEqual(len(client.calls), 12)
         need = asyncio.run(_recovery_sleep_need(client, DAY, 30))
         existing_sleep = asyncio.run(_compute_real_sleep(client, DAY, need, 30))
         self.assertEqual(data['days'][-1]['sleep_performance'], existing_sleep.score)

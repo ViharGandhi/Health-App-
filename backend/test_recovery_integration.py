@@ -39,11 +39,11 @@ class RecoveryIntegrationTests(unittest.TestCase):
         self.assertIsNone(data["strain_component"])
         self.assertIsNone(data["sleep_component"])
         self.assertIn("Estimated", data["status_reason"])
-        self.assertEqual(len(client.calls), 9)
+        self.assertEqual(len(client.calls), 11)
         hr_calls = [expr for kind, expr in client.calls if kind == "heart-rate"]
         self.assertEqual(len(hr_calls), 1)
-        self.assertIn('>= "2026-09-22"', hr_calls[0])
-        self.assertIn('< "2026-09-30"', hr_calls[0])
+        self.assertIn('>= "2026-09-20"', hr_calls[0])  # Padding for physiological windows across midnight.
+        self.assertIn('< "2026-10-01"', hr_calls[0])  # Fetch next sleep's day; the calculator still excludes sleep time.
         hrv_calls = [expr for kind, expr in client.calls if kind == "daily-heart-rate-variability"]
         self.assertEqual(len(hrv_calls), 1)
         self.assertIn('>= "2026-07-25"', hrv_calls[0])
@@ -65,7 +65,7 @@ class RecoveryIntegrationTests(unittest.TestCase):
             with self.subTest(scenario=scenario):
                 data, client = self.request(scenario)
                 results[scenario] = data
-                self.assertEqual(len(client.calls), 9)
+                self.assertEqual(len(client.calls), 11)
         self.assertEqual(results["above_normal"]["zone"], "above_normal")
         self.assertEqual(results["below_normal"]["zone"], "below_normal")
         for scenario in ("building_reference", "sparse_recent"):
@@ -92,16 +92,16 @@ class RecoveryIntegrationTests(unittest.TestCase):
         async def check():
             client = MockRecoveryClient(DAY)
             batch = await _recovery_sleep_need(client, DAY, 30)
-            self.assertEqual(len(client.calls), 4)
+            self.assertEqual(len(client.calls), 6)
             sleep = await client.get_sleep_need_history(DAY - timedelta(days=7), DAY - timedelta(days=1))
             naps = await client.get_nap_minutes_history(DAY - timedelta(days=1), DAY - timedelta(days=1))
             strain = {}
             for offset in range(1, 9):
                 day = DAY - timedelta(days=offset)
                 result = await _compute_real_strain(client, day, 30)
-                strain[day] = result.score_100 if result.avg_hr is not None else None
+                strain[day] = result.strain / 21 * 100 if result.strain is not None and result.coverage > 0 else None
             daily = SleepNeedInputs(sleep, strain, naps).for_tonight(DAY - timedelta(days=1))
-            self.assertEqual(batch, daily)
+            self.assertAlmostEqual(batch.total_need_min, daily.total_need_min, delta=.1)  # API scores round to 0.1; internal inputs do not.
         asyncio.run(check())
 
     def test_current_sleep_does_not_change_its_own_need(self):

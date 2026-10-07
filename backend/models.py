@@ -7,7 +7,7 @@ Shared between main.py, google_health_client.py, and mock_data.py.
 
 from __future__ import annotations
 from pydantic import BaseModel, Field
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Literal
 from datetime import datetime
 
 
@@ -31,23 +31,47 @@ class ZoneMinutes(BaseModel):
     zone2: float = Field(0.0, description="Minutes in Zone 2 (60-70% MaxHR)")
     zone3: float = Field(0.0, description="Minutes in Zone 3 (70-80% MaxHR)")
     zone4: float = Field(0.0, description="Minutes in Zone 4 (80-90% MaxHR)")
-    zone5: float = Field(0.0, description="Minutes in Zone 5 (90-100% MaxHR)")
+    zone5: float = Field(0.0, description="Minutes in Zone 5 (at least 90% MaxHR)")
 
 
 class WorkoutDetail(BaseModel):
     activity_name: str
-    strain: float = Field(description="Strain load units for this workout")
+    name: str
+    exercise_type: Optional[str] = None
+    start: datetime
+    end: datetime
+    duration_min: float
+    strain: float = Field(description="Cardio strain on the 0–21 scale")
+    load: float
+    avg_hr: Optional[float] = None
+    max_hr: Optional[float] = None
     zone_minutes: ZoneMinutes
 
 
 class StrainResponse(BaseModel):
-    score_21: float = Field(description="Strain score on WHOOP 0–21 scale")
-    score_100: float = Field(description="Strain score on 0–100 scale")
-    workout_strain: float
-    incidental_strain: float
-    zone_minutes: ZoneMinutes
+    date: str
+    mode: Literal["connected", "demo"]
+    day_window: dict
+    strain: Optional[float]
+    label: Optional[str]
+    load: Optional[float]
+    coverage: float
+    low_coverage: bool
+    calibrating: bool
+    age_missing: bool
+    params: dict
+    analytics: dict
+    suggested_workouts: List[dict] = []
+    activity_zone_minutes: Optional[ZoneMinutes] = None
+    sample_count: int = 0
+    counted_minutes: float = 0
+    score_21: Optional[float] = Field(description="Deprecated alias for strain")
+    score_100: Optional[float] = Field(description="Deprecated: new absolute strain / 21 × 100; not capacity normalized")
+    workout_strain: Optional[float] = Field(description="Deprecated name for summed workout TRIMP load, not additive scores")
+    incidental_strain: Optional[float] = Field(description="Deprecated name for non-workout TRIMP load")
+    zone_minutes: Optional[ZoneMinutes]
     workouts: List[WorkoutDetail] = []
-    max_hr: float
+    max_hr: Optional[float] = Field(description="Observed maximum cleaned HR; physiological HRmax is params.hr_max")
     avg_hr: Optional[float] = None
     age_used: Optional[int] = None
     age_is_default: bool = False

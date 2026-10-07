@@ -14,7 +14,7 @@ async function apiFetch<T>(path: string, day?: string): Promise<T> {
   const age = window.localStorage.getItem('ojas_age');
   const res = await fetch(`${BACKEND_URL}${path}`, {
     credentials: 'include', // send session cookie
-    headers: { 'Content-Type': 'application/json', 'X-User-Date': day ?? localDate, ...(age ? { 'X-User-Age': age } : {}) },
+    headers: { 'Content-Type': 'application/json', 'X-User-Date': day ?? localDate, 'X-User-Timezone': Intl.DateTimeFormat().resolvedOptions().timeZone, ...(age ? { 'X-User-Age': age } : {}) },
     cache: 'no-store',
     signal: AbortSignal.timeout(120000),
   });
@@ -79,8 +79,17 @@ export const api = {
 
 
   /** Strain score + zones */
-  getStrain: (day?: string): Promise<StrainData> =>
-    apiFetch<StrainData>('/api/strain', day),
+  getStrain: (day?: string, demo = false): Promise<StrainData> => {
+    const params = new URLSearchParams({ demo: String(demo) });
+    if (day) params.set('date', day);
+    return apiFetch<StrainData>(`/api/strain?${params}`);
+  },
+
+  getStrainAnalytics: (timeframe: import('./types').StrainRange = 'W', metric: import('./types').StrainMetric = 'strain', endDate?: string, demo = false): Promise<import('./types').StrainAnalytics> => {
+    const params = new URLSearchParams({ timeframe, metric, demo: String(demo) });
+    if (endDate) params.set('end_date', endDate);
+    return apiFetch<import('./types').StrainAnalytics>(`/api/strain/analytics?${params}`);
+  },
 
   /** Auth: is the user connected to their Fitbit? */
   getAuthStatus: (): Promise<AuthStatus> =>

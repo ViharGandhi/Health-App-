@@ -6,7 +6,7 @@ import styles from './NavBar.module.css';
 
 export default function NavBar() {
   const pathname = usePathname();
-  if (pathname.startsWith('/sleep/') || pathname.startsWith('/recovery') || pathname === '/health' || pathname.startsWith('/health/')) {
+  if (pathname.startsWith('/sleep/') || pathname.startsWith('/recovery') || pathname.startsWith('/strain') || pathname === '/health' || pathname.startsWith('/health/')) {
     return null;
   }
   const items = [

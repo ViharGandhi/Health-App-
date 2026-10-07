@@ -251,7 +251,7 @@ class GoogleHealthClient:
         hr = await self._points("heart-rate", sample_filter("heart_rate.sample_time.physical_time"))
         return sleep, hrv, hr
 
-    async def get_workout_sessions(self, target_date: date, end_date: date | None = None) -> list[dict]:
+    async def get_workout_sessions(self, target_date: date, end_date: date | None = None, *, preserve_offset: bool = False) -> list[dict]:
         points = await self._points(
             "exercise",
             _day_filter("exercise.interval.civil_start_time", target_date, end_date or target_date),
@@ -262,11 +262,48 @@ class GoogleHealthClient:
             interval = exercise.get("interval", {})
             if interval.get("startTime") and interval.get("endTime"):
                 sessions.append({
-                    "start": _local_datetime(interval["startTime"], interval.get("startUtcOffset", "0s")),
-                    "end": _local_datetime(interval["endTime"], interval.get("endUtcOffset", "0s")),
+                    "start": _local_datetime(interval["startTime"], interval.get("startUtcOffset", "0s"), preserve_offset=preserve_offset),
+                    "end": _local_datetime(interval["endTime"], interval.get("endUtcOffset", "0s"), preserve_offset=preserve_offset),
                     "activity_name": exercise.get("displayName") or exercise.get("exerciseType", "Workout"),
+                    "exercise_type": exercise.get("exerciseType"),
+                    "active_minutes": float(exercise["activeDuration"].removesuffix("s")) / 60 if exercise.get("activeDuration") else
+                        (datetime.fromisoformat(interval["endTime"].replace("Z", "+00:00")) -
+                         datetime.fromisoformat(interval["startTime"].replace("Z", "+00:00"))).total_seconds() / 60,
                 })
         return sessions
+
+    async def get_daily_steps(self, start: date, end: date) -> dict[date, int]:
+        """Wearable daily rollups preserve absent readings separately from true zeros."""
+        values = {}
+        lower = start
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            while lower <= end:
+                upper = min(end + timedelta(days=1), lower + timedelta(days=90))
+                body = {"range": {"start": {"date": {"year": lower.year, "month": lower.month, "day": lower.day}},
+                                  "end": {"date": {"year": upper.year, "month": upper.month, "day": upper.day}}},
+                        "windowSizeDays": 1, "pageSize": 10000, "dataSourceFamily": WEARABLES}
+                while True:
+                    for attempt in range(4):
+                        await self._pace_request()
+                        response = await client.post(f"{BASE_URL}/steps/dataPoints:dailyRollUp", headers=self.headers, json=body)
+                        if response.status_code not in (429, 503) or attempt == 3:
+                            break
+                        retry_after = response.headers.get("Retry-After", "")
+                        delay = float(retry_after) if retry_after.replace(".", "", 1).isdigit() else 2 ** attempt
+                        await asyncio.sleep(min(delay, 30))
+                    response.raise_for_status()
+                    payload = response.json()
+                    for point in payload.get("rollupDataPoints", []):
+                        count = point.get("steps", {}).get("countSum")
+                        if count is not None:
+                            day = _google_date(point["civilStartTime"]["date"])
+                            if start <= day <= end:
+                                values[day] = int(count)
+                    if not payload.get("nextPageToken"):
+                        break
+                    body["pageToken"] = payload["nextPageToken"]
+                lower = upper
+        return values
 
     async def _sleep_records(self, start: date, end: date) -> list[dict]:
         points = await self._points(
