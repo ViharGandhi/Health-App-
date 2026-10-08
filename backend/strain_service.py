@@ -45,7 +45,7 @@ async def load_strain_days(client, start, end, now, age, config=StrainConfig()):
                                 getattr(client, 'account_key', None))
         return values, inputs[1]
     account = client.account_key
-    profile = hashlib.sha256(repr(('strain-v1', str(tz), age, sex, defaulted, config)).encode()).hexdigest()
+    profile = hashlib.sha256(repr(('strain-v2', str(tz), age, sex, defaulted, config)).encode()).hexdigest()
     days = [start + timedelta(days=i) for i in range((end - start).days + 1)]
     keys = {day: f'{profile}:{day}' for day in days}
     lock = _calculation_locks.setdefault((asyncio.get_running_loop(), account, profile), asyncio.Lock())
