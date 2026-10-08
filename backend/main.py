@@ -252,6 +252,12 @@ def _cached_data_page(function):
     return wrapped
 
 
+def _demo_dashboard(request: Request):
+    client = _google_client('demo', request)
+    return get_mock_dashboard(_client_day(request), _client_age(request),
+                              client.strain_timezone, client.strain_sex, STRAIN_CONFIG)
+
+
 @app.get("/api/data/status")
 async def data_status(request: Request, response: Response):
     token = await _get_token(request, response)
@@ -506,7 +512,7 @@ async def _demo_recovery_analytics(end: date, timeframe: str, demo: str) -> dict
             "in_bed_duration": night["period_minutes"] * 60,
             "sleep_duration_available": night["asleep_minutes"] is not None} if night else None)
     need = demo_sleep_need_inputs(sleeps, end).for_tonight(end - timedelta(days=1))
-    current = (get_mock_dashboard().recovery if demo == "legacy"
+    current = (get_mock_dashboard(end).recovery if demo == "legacy"
                else (await _recovery_response(None, end, history, raw, need)).model_copy(update={"is_mock": True}))
     return build_recovery_analytics(history, sleeps, end, timeframe, current.model_dump(), is_mock=True, demo_mode=demo)
 
@@ -531,7 +537,7 @@ async def dashboard(request: Request, response: Response):
     if not token:
         if get_session(request):
             raise HTTPException(401, "Reconnect Google Health to refresh dashboard data")
-        return get_mock_dashboard()
+        return _demo_dashboard(request)
 
     client = _google_client(token, request)
     today = _client_day(request)
@@ -564,7 +570,7 @@ async def recovery_endpoint(request: Request, response: Response, demo: Literal[
             raise HTTPException(401, "Reconnect Google Health to refresh recovery data")
         if demo == "estimate":
             return (await _demo_recovery_analytics(_client_day(request), "W", demo))["current"]
-        mock = get_mock_dashboard()
+        mock = _demo_dashboard(request)
         return mock.recovery
 
     client = _google_client(token, request)
@@ -621,7 +627,7 @@ async def recovery_analytics_endpoint(request: Request, response: Response,
 async def sleep_endpoint(request: Request, response: Response):
     token = await _get_token(request, response)
     if not token:
-        mock = get_mock_dashboard()
+        mock = _demo_dashboard(request)
         return mock.sleep
 
     client = _google_client(token, request)
@@ -646,7 +652,7 @@ async def sleep_need_endpoint(request: Request, response: Response):
         inputs = await _load_sleep_need_inputs(_google_client(token, request), today, _client_age(request))
     else:
         nights = sleep_observations(mock_stage_points(today, 9), today, is_mock=True)
-        inputs = demo_sleep_need_inputs(nights, today, compute_mock_strain().score_100)
+        inputs = demo_sleep_need_inputs(nights, today, _demo_dashboard(request).strain.score_100)
     tonight = inputs.for_tonight(today)
     last_night = inputs.for_tonight(today - timedelta(days=1))
     return {"date": today.isoformat(), "is_mock": not token,
@@ -673,7 +679,7 @@ async def sleep_analytics_endpoint(request: Request, response: Response, timefra
         points = await client.get_sleep_stage_points(history_start, today)
     nights = sleep_observations(points, today, is_mock=not token)
     inputs = (await _load_sleep_need_inputs(client, today, _client_age(request)) if token
-              else demo_sleep_need_inputs(nights, today, compute_mock_strain().score_100))
+              else demo_sleep_need_inputs(nights, today, _demo_dashboard(request).strain.score_100))
     need = inputs.for_tonight(today - timedelta(days=1))
     if token and need and nights and nights[-1]["date"] == today.isoformat() and nights[-1]["status"] == "ok":
         current = await _compute_real_sleep(client, today, need, _client_age(request))
@@ -849,7 +855,7 @@ async def strain_endpoint(request: Request, response: Response, date: Optional[d
 async def health_heart_rate_endpoint(request: Request, response: Response):
     token = await _get_token(request, response)
     if not token:
-        mock = get_mock_health()
+        mock = get_mock_health(today=_client_day(request))
         return HealthHeartRateResponse(
             date=mock.date, is_mock=True, heart_rate=mock.heart_rate,
             latest_heart_rate=mock.latest_heart_rate,
@@ -867,7 +873,7 @@ async def health_endpoint(
 ):
     token = await _get_token(request, response)
     if not token:
-        return get_mock_health(timeframe)
+        return get_mock_health(timeframe, _client_day(request))
     today = _client_day(request)
     start = range_start(today, timeframe)
     client = _google_client(token, request)
@@ -883,7 +889,7 @@ async def sleep_consistency_endpoint(
 ):
     token = await _get_token(request, response)
     if not token:
-        return get_mock_sleep_consistency_trend(timeframe)
+        return get_mock_sleep_consistency_trend(timeframe, _client_day(request))
     today = _client_day(request)
     start = range_start(today, timeframe)
     client = _google_client(token, request)
