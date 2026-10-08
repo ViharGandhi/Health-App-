@@ -28,3 +28,5 @@ def test_dashboard_and_detail_use_identical_date_and_profile():
         for key in ('strain', 'sleep', 'recovery'):
             detail = client.get('/api/' + key, headers=HEADERS).json()
             assert dashboard[key] == detail
+        analytics = client.get('/api/recovery/analytics?demo=legacy', headers=HEADERS).json()
+        assert analytics['current'] == dashboard['recovery']

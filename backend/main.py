@@ -252,9 +252,9 @@ def _cached_data_page(function):
     return wrapped
 
 
-def _demo_dashboard(request: Request):
+def _demo_dashboard(request: Request, day: date | None = None):
     client = _google_client('demo', request)
-    return get_mock_dashboard(_client_day(request), _client_age(request),
+    return get_mock_dashboard(day or _client_day(request), _client_age(request),
                               client.strain_timezone, client.strain_sex, STRAIN_CONFIG)
 
 
@@ -501,7 +501,7 @@ async def _recovery_response(client, today: date, history: dict, sleep: dict | N
                                        "is_calibrating": estimate.status == "building_reference"})
 
 
-async def _demo_recovery_analytics(end: date, timeframe: str, demo: str) -> dict:
+async def _demo_recovery_analytics(end: date, timeframe: str, demo: str, request: Request | None = None) -> dict:
     previous_start = range_start(range_start(end, timeframe) - timedelta(days=1), timeframe)
     start, _ = baseline_bounds(previous_start)
     history = mock_recovery_history(start, end)
@@ -512,7 +512,7 @@ async def _demo_recovery_analytics(end: date, timeframe: str, demo: str) -> dict
             "in_bed_duration": night["period_minutes"] * 60,
             "sleep_duration_available": night["asleep_minutes"] is not None} if night else None)
     need = demo_sleep_need_inputs(sleeps, end).for_tonight(end - timedelta(days=1))
-    current = (get_mock_dashboard(end).recovery if demo == "legacy"
+    current = ((_demo_dashboard(request, end) if request else get_mock_dashboard(end)).recovery if demo == "legacy"
                else (await _recovery_response(None, end, history, raw, need)).model_copy(update={"is_mock": True}))
     return build_recovery_analytics(history, sleeps, end, timeframe, current.model_dump(), is_mock=True, demo_mode=demo)
 
@@ -569,7 +569,7 @@ async def recovery_endpoint(request: Request, response: Response, demo: Literal[
         if get_session(request):
             raise HTTPException(401, "Reconnect Google Health to refresh recovery data")
         if demo == "estimate":
-            return (await _demo_recovery_analytics(_client_day(request), "W", demo))["current"]
+            return (await _demo_recovery_analytics(_client_day(request), "W", demo, request))["current"]
         mock = _demo_dashboard(request)
         return mock.recovery
 
@@ -592,7 +592,7 @@ async def recovery_analytics_endpoint(request: Request, response: Response,
     if not token:
         if get_session(request):
             raise HTTPException(401, "Reconnect Google Health to refresh recovery data")
-        return await _demo_recovery_analytics(end, timeframe, demo)
+        return await _demo_recovery_analytics(end, timeframe, demo, request)
     previous_start = range_start(range_start(end, timeframe) - timedelta(days=1), timeframe)
     start, _ = baseline_bounds(previous_start)
     client = _google_client(token, request)
