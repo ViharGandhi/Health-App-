@@ -147,13 +147,13 @@ class RecoveryCalculator:
           Formula: clamp(50 + z * 25, 0, 100)
         Fallback (no/short history): ratio vs scalar baseline clamped [0.5x, 1.5x] -> [0, 100].
         """
-        if today_hrv is None:
+        if today_hrv is None or not math.isfinite(today_hrv) or today_hrv <= 0:
             return 50.0
         if history is not None:
             z = hrv_z_score(today_hrv, history)
             if z is not None:
                 return clamp(50.0 + z * 25.0, 0.0, 100.0)
-        if baseline is None or baseline <= 0:
+        if baseline is None or not math.isfinite(baseline) or baseline <= 0:
             return 50.0
         ratio = today_hrv / baseline
         return normalize_ratio(ratio, low=0.5, high=1.5)
@@ -165,7 +165,8 @@ class RecoveryCalculator:
         deviation = baseline - today_rhr  (positive = RHR dropped = good).
         Band: [-10 bpm, +10 bpm] -> [0, 100].
         """
-        if today_rhr is None or baseline is None:
+        if (today_rhr is None or baseline is None or not math.isfinite(today_rhr)
+                or not math.isfinite(baseline) or today_rhr <= 0 or baseline <= 0):
             return 50.0
         deviation = baseline - today_rhr
         return normalize_ratio(deviation, low=-10.0, high=10.0)
