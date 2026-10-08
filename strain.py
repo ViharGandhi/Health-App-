@@ -118,10 +118,24 @@ def calculate_strain(samples: list, sessions: list[dict], window: dict, age: int
         raise ValueError('Sex must be m or f')
     cleaned = clean_samples(samples, window, config)
     hr_max = 208 - .7 * age if age is not None else None
-    rest = [v for v in resting_hrs if math.isfinite(v) and 0 < v][-7:]
+    rest = []
+    rejected = 0
+    for value in resting_hrs:
+        try:
+            parsed = float(value)
+        except (TypeError, ValueError):
+            rejected += 1
+            continue
+        if (not math.isfinite(parsed) or not config.hr_floor <= parsed <= config.hr_ceiling
+                or (hr_max is not None and parsed >= hr_max)):
+            rejected += 1
+        else:
+            rest.append(parsed)
+    rest = rest[-7:]
     hr_rest = median(rest) if rest else 60.
     params = {'hr_max': hr_max, 'hr_rest': hr_rest, 'hr_rest_source': 'recovery' if rest else 'default',
-              'strain_l': config.strain_l, 'sex': sex, 'sex_source': 'default' if sex_defaulted else 'profile'}
+              'strain_l': config.strain_l, 'sex': sex, 'sex_source': 'default' if sex_defaulted else 'profile',
+              'rhr_rejected_count': rejected}
     workouts = sorted((s for s in sessions if s['end'] >= window['start'] and s['start'] <= window['end']), key=lambda s: s['start'])
     details = [{**s, 'load': 0., 'zone_minutes': empty_zones(), 'hr_sum': 0., 'counted_minutes': 0., 'recorded': False, 'max_hr': None} for s in workouts]
     zones, activity_zones = empty_zones(), empty_zones()
@@ -171,7 +185,7 @@ def calculate_strain(samples: list, sessions: list[dict], window: dict, age: int
     score = strain_score(load, config) if age is not None else None
     return {'strain': score, 'label': strain_label(score), 'load': load if age is not None else None,
             'coverage': coverage, 'low_coverage': coverage < config.low_coverage_threshold,
-            'calibrating': not rest or sex_defaulted, 'age_missing': age is None, 'params': params,
+            'calibrating': not rest or sex_defaulted or rejected > 0, 'age_missing': age is None, 'params': params,
             'avg_hr': mean(hr for _, hr in cleaned) if cleaned else None,
             'max_hr': max((bpm for _, bpm in cleaned), default=None), 'zone_minutes': zones if age is not None else None,
             'workouts': output, 'activity_zone_minutes': activity_zones if age is not None and all(d['recorded'] for d in details) else None,
