@@ -28,7 +28,7 @@ class StressConfig:
 
 
 DEFAULT_CONFIG = StressConfig()
-ALGO_VERSION = "sleep-stress-2"
+ALGO_VERSION = "sleep-stress-3"
 
 
 @dataclass(frozen=True)
@@ -254,12 +254,22 @@ def _stage_baseline(windows: list[ValidWindow], config: StressConfig, fallback: 
 def build_baseline(current: NightWindows, history: list[NightWindows],
                    config: StressConfig = DEFAULT_CONFIG) -> tuple[dict[str, StageBaseline], int, bool]:
     first_date = current.night.night_date - timedelta(days=config.baseline_nights_target)
-    previous = sorted((item for item in history
-                       if first_date <= item.night.night_date < current.night.night_date
-                       and item.night.sleep_id != current.night.sleep_id
-                       and item.night.main_sleep
-                       and item.coverage >= config.min_night_coverage and item.windows),
-                      key=lambda item: item.night.end_utc, reverse=True)[:config.baseline_nights_target]
+    # Match stage-store/main-sleep selection: longest main session, then ID.
+    by_id = {}
+    for item in sorted(history, key=lambda n: (n.night.end_utc, n.night.sleep_id)):
+        if (first_date <= item.night.night_date < current.night.night_date
+                and item.night.sleep_id != current.night.sleep_id
+                and item.night.main_sleep and not item.night.nap
+                and item.coverage >= config.min_night_coverage and item.windows):
+            by_id[item.night.sleep_id] = item
+    by_date = {}
+    for item in by_id.values():
+        day = item.night.night_date
+        previous_item = by_date.get(day)
+        key = lambda n: (n.night.end_utc - n.night.start_utc, n.night.sleep_id)
+        if previous_item is None or key(item) > key(previous_item):
+            by_date[day] = item
+    previous = [by_date[day] for day in sorted(by_date, reverse=True)][:config.baseline_nights_target]
     if len(previous) < config.baseline_nights_min:
         return {}, len(previous), False
     pooled = [window for item in previous for window in item.windows]
