@@ -32,7 +32,7 @@ def log_hrv_stats(values: list) -> Optional[tuple]:
     Returns (mean_ln, sd_ln), or None if fewer than MIN_DAYS_REQUIRED samples.
     'values' must be ordered oldest -> newest.
     """
-    positives = [v for v in values if v > 0]
+    positives = [v for v in values if math.isfinite(v) and v > 0]
     if len(positives) < MIN_DAYS_REQUIRED:
         return None
     lns = [math.log(v) for v in positives]
@@ -49,7 +49,7 @@ def log_hrv_stats(values: list) -> Optional[tuple]:
 
 def hrv_z_score(today: float, values: list) -> Optional[float]:
     """Z-score of today's HRV against personal log-domain baseline. Positive = above norm = better."""
-    if today <= 0:
+    if not math.isfinite(today) or today <= 0:
         return None
     stats = log_hrv_stats(values)
     if stats is None or stats[1] == 0:
