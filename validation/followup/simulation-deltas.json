@@ -1,0 +1,4186 @@
+[
+  {
+    "path": "/cases/625/actual/z",
+    "before": -0.0,
+    "after": 3.0,
+    "family": "date joins",
+    "case": "recovery dedup and excluded dates",
+    "reason": "Approved prior-seven-date Recovery window"
+  },
+  {
+    "path": "/cases/625/expected/z",
+    "before": 0,
+    "after": 3.0,
+    "family": "date joins",
+    "case": "recovery dedup and excluded dates",
+    "reason": "Approved prior-seven-date Recovery window"
+  },
+  {
+    "path": "/cases/828/actual",
+    "before": 81.48030066227396,
+    "after": 84.69877955687114,
+    "family": "sleep score",
+    "case": "weighted score 0",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/828/expected",
+    "before": 81.48030066227396,
+    "after": 84.69877955687114,
+    "family": "sleep score",
+    "case": "weighted score 0",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/828/inputs/components/duration",
+    "before": 88.07970779778823,
+    "after": 100.0,
+    "family": "sleep score",
+    "case": "weighted score 0",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/830/actual",
+    "before": 50.85195232901934,
+    "after": 51.28752608181071,
+    "family": "sleep score",
+    "case": "weighted score 2",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/830/expected",
+    "before": 50.85195232901934,
+    "after": 51.28752608181071,
+    "family": "sleep score",
+    "case": "weighted score 2",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/830/inputs/components/duration",
+    "before": 11.920292202211755,
+    "after": 13.53352832366127,
+    "family": "sleep score",
+    "case": "weighted score 2",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/832/actual",
+    "before": 35.42275810650775,
+    "after": 35.60194725714015,
+    "family": "sleep score",
+    "case": "weighted score 4",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/832/expected",
+    "before": 35.42275810650775,
+    "after": 35.60194725714015,
+    "family": "sleep score",
+    "case": "weighted score 4",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/832/inputs/components/duration",
+    "before": 4.903846986453809,
+    "after": 5.567510507314546,
+    "family": "sleep score",
+    "case": "weighted score 4",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/836/actual",
+    "before": 44.256345635732565,
+    "after": 44.929549343798335,
+    "family": "sleep score",
+    "case": "weighted score 8",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/836/expected",
+    "before": 44.25634563573257,
+    "after": 44.929549343798335,
+    "family": "sleep score",
+    "case": "weighted score 8",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/836/inputs/components/duration",
+    "before": 18.423481351504005,
+    "after": 20.916828418414255,
+    "family": "sleep score",
+    "case": "weighted score 8",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/838/actual",
+    "before": 27.686414858539337,
+    "after": 27.762377591606338,
+    "family": "sleep score",
+    "case": "weighted score 10",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/838/expected",
+    "before": 27.68641485853934,
+    "after": 27.762377591606338,
+    "family": "sleep score",
+    "case": "weighted score 10",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/838/inputs/components/duration",
+    "before": 2.0788625780005283,
+    "after": 2.360206033804225,
+    "family": "sleep score",
+    "case": "weighted score 10",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/839/actual",
+    "before": 53.81494962766432,
+    "after": 55.13940719030234,
+    "family": "sleep score",
+    "case": "weighted score 11",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/839/expected",
+    "before": 53.81494962766431,
+    "after": 55.13940719030234,
+    "family": "sleep score",
+    "case": "weighted score 11",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/839/inputs/components/duration",
+    "before": 36.24626381846415,
+    "after": 41.15166219860499,
+    "family": "sleep score",
+    "case": "weighted score 11",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/841/actual",
+    "before": 61.89764321763647,
+    "after": 62.8623469908495,
+    "family": "sleep score",
+    "case": "weighted score 13",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/841/expected",
+    "before": 61.89764321763647,
+    "after": 62.86234699084952,
+    "family": "sleep score",
+    "case": "weighted score 13",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/841/inputs/components/duration",
+    "before": 26.400927033782406,
+    "after": 29.9739039716085,
+    "family": "sleep score",
+    "case": "weighted score 13",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/842/actual",
+    "before": 31.475347352335152,
+    "after": 31.62761005284882,
+    "family": "sleep score",
+    "case": "weighted score 14",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/842/expected",
+    "before": 31.475347352335156,
+    "after": 31.62761005284882,
+    "family": "sleep score",
+    "case": "weighted score 14",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/842/inputs/components/duration",
+    "before": 4.166954206926439,
+    "after": 4.730890134754824,
+    "family": "sleep score",
+    "case": "weighted score 14",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/844/actual",
+    "before": 39.16722299363382,
+    "after": 39.58140876842697,
+    "family": "sleep score",
+    "case": "weighted score 16",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/844/expected",
+    "before": 39.16722299363382,
+    "after": 39.58140876842697,
+    "family": "sleep score",
+    "case": "weighted score 16",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/844/inputs/components/duration",
+    "before": 11.334970093798544,
+    "after": 12.868991481921308,
+    "family": "sleep score",
+    "case": "weighted score 16",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/845/actual",
+    "before": 42.885598163208215,
+    "after": 43.03781088834732,
+    "family": "sleep score",
+    "case": "weighted score 17",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/845/expected",
+    "before": 42.885598163208215,
+    "after": 43.03781088834732,
+    "family": "sleep score",
+    "case": "weighted score 17",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/845/inputs/components/duration",
+    "before": 4.165586537125812,
+    "after": 4.7293373709743545,
+    "family": "sleep score",
+    "case": "weighted score 17",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/846/actual",
+    "before": 40.294367540342826,
+    "after": 41.086375404511294,
+    "family": "sleep score",
+    "case": "weighted score 18",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/846/expected",
+    "before": 40.29436754034283,
+    "after": 41.086375404511294,
+    "family": "sleep score",
+    "case": "weighted score 18",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/846/inputs/components/duration",
+    "before": 21.67477977457416,
+    "after": 24.60814223445736,
+    "family": "sleep score",
+    "case": "weighted score 18",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/847/actual",
+    "before": 28.26560396162978,
+    "after": 28.3582131874401,
+    "family": "sleep score",
+    "case": "weighted score 19",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/847/expected",
+    "before": 28.265603961629783,
+    "after": 28.3582131874401,
+    "family": "sleep score",
+    "case": "weighted score 19",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/847/inputs/components/duration",
+    "before": 2.534425054781378,
+    "after": 2.8774221874121837,
+    "family": "sleep score",
+    "case": "weighted score 19",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/849/actual",
+    "before": 43.81614912624833,
+    "after": 44.80914239509203,
+    "family": "sleep score",
+    "case": "weighted score 21",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/849/expected",
+    "before": 43.81614912624833,
+    "after": 44.80914239509203,
+    "family": "sleep score",
+    "case": "weighted score 21",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/849/inputs/components/duration",
+    "before": 27.175122108691276,
+    "after": 30.85287495626055,
+    "family": "sleep score",
+    "case": "weighted score 21",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/851/actual",
+    "before": 36.87561363671556,
+    "after": 37.14225788286608,
+    "family": "sleep score",
+    "case": "weighted score 23",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/851/expected",
+    "before": 36.87561363671557,
+    "after": 37.14225788286609,
+    "family": "sleep score",
+    "case": "weighted score 23",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/851/inputs/components/duration",
+    "before": 7.297219604678758,
+    "after": 8.284790886717722,
+    "family": "sleep score",
+    "case": "weighted score 23",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/855/actual",
+    "before": 58.66846461903983,
+    "after": 60.285482311245396,
+    "family": "sleep score",
+    "case": "weighted score 27",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/855/expected",
+    "before": 58.66846461903983,
+    "after": 60.28548231124539,
+    "family": "sleep score",
+    "case": "weighted score 27",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/855/inputs/components/duration",
+    "before": 44.25272015063055,
+    "after": 50.241674566206704,
+    "family": "sleep score",
+    "case": "weighted score 27",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/857/actual",
+    "before": 30.752626851515192,
+    "after": 30.917181463554336,
+    "family": "sleep score",
+    "case": "weighted score 29",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/857/expected",
+    "before": 30.752626851515195,
+    "after": 30.91718146355434,
+    "family": "sleep score",
+    "case": "weighted score 29",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/857/inputs/components/duration",
+    "before": 4.503345406277819,
+    "after": 5.112806932348727,
+    "family": "sleep score",
+    "case": "weighted score 29",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/858/actual",
+    "before": 68.29988212689922,
+    "after": 71.40221378967705,
+    "family": "sleep score",
+    "case": "weighted score 30",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/858/expected",
+    "before": 68.29988212689922,
+    "after": 71.40221378967705,
+    "family": "sleep score",
+    "case": "weighted score 30",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/858/inputs/components/duration",
+    "before": 84.90112108797842,
+    "after": 96.39123835752595,
+    "family": "sleep score",
+    "case": "weighted score 30",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/860/actual",
+    "before": 64.01586462300777,
+    "after": 65.10930633424837,
+    "family": "sleep score",
+    "case": "weighted score 32",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/860/expected",
+    "before": 64.01586462300777,
+    "after": 65.10930633424837,
+    "family": "sleep score",
+    "case": "weighted score 32",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/860/inputs/components/duration",
+    "before": 29.92408201950943,
+    "after": 33.973866135215374,
+    "family": "sleep score",
+    "case": "weighted score 32",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/862/actual",
+    "before": 47.20552815304016,
+    "after": 47.68501873503123,
+    "family": "sleep score",
+    "case": "weighted score 34",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/862/expected",
+    "before": 47.20552815304017,
+    "after": 47.685018735031235,
+    "family": "sleep score",
+    "case": "weighted score 34",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/862/inputs/components/duration",
+    "before": 13.122158552744029,
+    "after": 14.898049597155385,
+    "family": "sleep score",
+    "case": "weighted score 34",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/863/actual",
+    "before": 61.1517634586979,
+    "after": 63.49996651700202,
+    "family": "sleep score",
+    "case": "weighted score 35",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/863/expected",
+    "before": 61.15176345869789,
+    "after": 63.499966517002015,
+    "family": "sleep score",
+    "case": "weighted score 35",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/863/inputs/components/duration",
+    "before": 64.26297825736908,
+    "after": 72.96002662145843,
+    "family": "sleep score",
+    "case": "weighted score 35",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/864/actual",
+    "before": 31.686420070824063,
+    "after": 31.902128091340437,
+    "family": "sleep score",
+    "case": "weighted score 36",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/864/expected",
+    "before": 31.686420070824067,
+    "after": 31.902128091340437,
+    "family": "sleep score",
+    "case": "weighted score 36",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/864/inputs/components/duration",
+    "before": 5.903254313276898,
+    "after": 6.702172907781984,
+    "family": "sleep score",
+    "case": "weighted score 36",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/865/actual",
+    "before": 49.52980484589878,
+    "after": 49.616171399990904,
+    "family": "sleep score",
+    "case": "weighted score 37",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/865/expected",
+    "before": 49.52980484589878,
+    "after": 49.616171399990904,
+    "family": "sleep score",
+    "case": "weighted score 37",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/865/inputs/components/duration",
+    "before": 2.3635826416965484,
+    "after": 2.6834587679636925,
+    "family": "sleep score",
+    "case": "weighted score 37",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/866/actual",
+    "before": 61.522630775231406,
+    "after": 64.09637831619729,
+    "family": "sleep score",
+    "case": "weighted score 38",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/866/expected",
+    "before": 61.522630775231406,
+    "after": 64.09637831619729,
+    "family": "sleep score",
+    "case": "weighted score 38",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/866/inputs/components/duration",
+    "before": 70.4354257951174,
+    "after": 79.96782409499103,
+    "family": "sleep score",
+    "case": "weighted score 38",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/869/actual",
+    "before": 48.18583973281369,
+    "after": 49.0587325499616,
+    "family": "sleep score",
+    "case": "weighted score 41",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/869/expected",
+    "before": 48.18583973281369,
+    "after": 49.058732549961604,
+    "family": "sleep score",
+    "case": "weighted score 41",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/869/inputs/components/duration",
+    "before": 23.888348126887113,
+    "after": 27.12128448669419,
+    "family": "sleep score",
+    "case": "weighted score 41",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/870/actual",
+    "before": 38.77586373236732,
+    "after": 39.3670460930788,
+    "family": "sleep score",
+    "case": "weighted score 42",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/870/expected",
+    "before": 38.77586373236733,
+    "after": 39.367046093078805,
+    "family": "sleep score",
+    "case": "weighted score 42",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/870/inputs/components/duration",
+    "before": 16.178813437019894,
+    "after": 18.3683777359513,
+    "family": "sleep score",
+    "case": "weighted score 42",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/871/actual",
+    "before": 33.60223789837687,
+    "after": 33.83988493874513,
+    "family": "sleep score",
+    "case": "weighted score 43",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/871/expected",
+    "before": 33.60223789837687,
+    "after": 33.83988493874513,
+    "family": "sleep score",
+    "case": "weighted score 43",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/871/inputs/components/duration",
+    "before": 6.503656714910715,
+    "after": 7.383830938496856,
+    "family": "sleep score",
+    "case": "weighted score 43",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/875/actual",
+    "before": 27.964299592507242,
+    "after": 28.04932298413369,
+    "family": "sleep score",
+    "case": "weighted score 47",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/875/expected",
+    "before": 27.964299592507242,
+    "after": 28.04932298413369,
+    "family": "sleep score",
+    "case": "weighted score 47",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/875/inputs/components/duration",
+    "before": 2.3268244831450593,
+    "after": 2.641725933613381,
+    "family": "sleep score",
+    "case": "weighted score 47",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/879/actual",
+    "before": 58.83553971881055,
+    "after": 60.75338710872772,
+    "family": "sleep score",
+    "case": "weighted score 51",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/879/expected",
+    "before": 58.83553971881055,
+    "after": 60.75338710872772,
+    "family": "sleep score",
+    "case": "weighted score 51",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/879/inputs/components/duration",
+    "before": 52.485488715872954,
+    "after": 59.588627197047664,
+    "family": "sleep score",
+    "case": "weighted score 51",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/880/actual",
+    "before": 45.554013712655696,
+    "after": 46.740050579043555,
+    "family": "sleep score",
+    "case": "weighted score 52",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/880/expected",
+    "before": 45.554013712655696,
+    "after": 46.74005057904356,
+    "family": "sleep score",
+    "case": "weighted score 52",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/880/inputs/components/duration",
+    "before": 32.45812200422161,
+    "after": 36.85085113899148,
+    "family": "sleep score",
+    "case": "weighted score 52",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/881/actual",
+    "before": 75.71313598743897,
+    "after": 77.92736683613657,
+    "family": "sleep score",
+    "case": "weighted score 53",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/881/expected",
+    "before": 75.71313598743897,
+    "after": 77.92736683613657,
+    "family": "sleep score",
+    "case": "weighted score 53",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/881/inputs/components/duration",
+    "before": 60.596577618553276,
+    "after": 68.79743261372958,
+    "family": "sleep score",
+    "case": "weighted score 53",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/886/actual",
+    "before": 74.15282762428575,
+    "after": 77.36899839128994,
+    "family": "sleep score",
+    "case": "weighted score 58",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/886/expected",
+    "before": 74.15282762428575,
+    "after": 77.36899839128994,
+    "family": "sleep score",
+    "case": "weighted score 58",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/886/inputs/components/duration",
+    "before": 88.01654155975835,
+    "after": 99.92828514125536,
+    "family": "sleep score",
+    "case": "weighted score 58",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/888/actual",
+    "before": 76.19476485447642,
+    "after": 78.68498084627214,
+    "family": "sleep score",
+    "case": "weighted score 60",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/888/expected",
+    "before": 76.19476485447642,
+    "after": 78.68498084627214,
+    "family": "sleep score",
+    "case": "weighted score 60",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/888/inputs/components/duration",
+    "before": 68.1494283771583,
+    "after": 77.37245056899428,
+    "family": "sleep score",
+    "case": "weighted score 60",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/892/actual",
+    "before": 45.11074972900631,
+    "after": 46.20774987744795,
+    "family": "sleep score",
+    "case": "weighted score 64",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/892/expected",
+    "before": 45.11074972900631,
+    "after": 46.20774987744795,
+    "family": "sleep score",
+    "case": "weighted score 64",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/892/inputs/components/duration",
+    "before": 30.021465323594654,
+    "after": 34.08442883634149,
+    "family": "sleep score",
+    "case": "weighted score 64",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/896/actual",
+    "before": 42.109341706243804,
+    "after": 42.233645315282054,
+    "family": "sleep score",
+    "case": "weighted score 68",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/896/expected",
+    "before": 42.109341706243804,
+    "after": 42.23364531528206,
+    "family": "sleep score",
+    "case": "weighted score 68",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/896/inputs/components/duration",
+    "before": 3.401801261048953,
+    "after": 3.8621849982276797,
+    "family": "sleep score",
+    "case": "weighted score 68",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/898/actual",
+    "before": 55.25805555429294,
+    "after": 57.13267872462039,
+    "family": "sleep score",
+    "case": "weighted score 70",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/898/expected",
+    "before": 55.25805555429294,
+    "after": 57.13267872462039,
+    "family": "sleep score",
+    "case": "weighted score 70",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/898/inputs/components/duration",
+    "before": 51.30257692557314,
+    "after": 58.2456257045637,
+    "family": "sleep score",
+    "case": "weighted score 70",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/899/actual",
+    "before": 57.10408354579827,
+    "after": 58.23525181170404,
+    "family": "sleep score",
+    "case": "weighted score 71",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/899/expected",
+    "before": 57.10408354579827,
+    "after": 58.23525181170404,
+    "family": "sleep score",
+    "case": "weighted score 71",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/899/inputs/components/duration",
+    "before": 30.95653990410307,
+    "after": 35.14605200005037,
+    "family": "sleep score",
+    "case": "weighted score 71",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/901/actual",
+    "before": 84.00920233618353,
+    "after": 86.87913735165648,
+    "family": "sleep score",
+    "case": "weighted score 73",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/901/expected",
+    "before": 84.00920233618353,
+    "after": 86.87913735165648,
+    "family": "sleep score",
+    "case": "weighted score 73",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/901/inputs/components/duration",
+    "before": 78.54115122079632,
+    "after": 89.17054016699244,
+    "family": "sleep score",
+    "case": "weighted score 73",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/902/actual",
+    "before": 74.24443942351061,
+    "after": 77.30693666214924,
+    "family": "sleep score",
+    "case": "weighted score 74",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/902/expected",
+    "before": 74.24443942351063,
+    "after": 77.30693666214925,
+    "family": "sleep score",
+    "case": "weighted score 74",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/902/inputs/components/duration",
+    "before": 83.8109774041517,
+    "after": 95.15355976947993,
+    "family": "sleep score",
+    "case": "weighted score 74",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/903/actual",
+    "before": 44.98092120786097,
+    "after": 45.41797225067981,
+    "family": "sleep score",
+    "case": "weighted score 75",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/903/expected",
+    "before": 44.980921207860966,
+    "after": 45.41797225067981,
+    "family": "sleep score",
+    "case": "weighted score 75",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/903/inputs/components/duration",
+    "before": 11.960721012905688,
+    "after": 13.579428578901386,
+    "family": "sleep score",
+    "case": "weighted score 75",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/905/actual",
+    "before": 58.5616304115235,
+    "after": 60.535140659755335,
+    "family": "sleep score",
+    "case": "weighted score 77",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/905/expected",
+    "before": 58.5616304115235,
+    "after": 60.535140659755335,
+    "family": "sleep score",
+    "case": "weighted score 77",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/905/inputs/components/duration",
+    "before": 54.00880717036855,
+    "after": 61.31810438604199,
+    "family": "sleep score",
+    "case": "weighted score 77",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/906/actual",
+    "before": 47.83769339169089,
+    "after": 48.58865646204154,
+    "family": "sleep score",
+    "case": "weighted score 78",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/906/expected",
+    "before": 47.83769339169089,
+    "after": 48.58865646204154,
+    "family": "sleep score",
+    "case": "weighted score 78",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/906/inputs/components/duration",
+    "before": 20.551512055726565,
+    "after": 23.332856760728983,
+    "family": "sleep score",
+    "case": "weighted score 78",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/907/actual",
+    "before": 71.76145555219874,
+    "after": 74.71119054062237,
+    "family": "sleep score",
+    "case": "weighted score 79",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/907/expected",
+    "before": 71.76145555219874,
+    "after": 74.71119054062237,
+    "family": "sleep score",
+    "case": "weighted score 79",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/907/inputs/components/duration",
+    "before": 80.72502706089162,
+    "after": 91.64997146246063,
+    "family": "sleep score",
+    "case": "weighted score 79",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/908/actual",
+    "before": 65.88990165995907,
+    "after": 67.86042578452998,
+    "family": "sleep score",
+    "case": "weighted score 80",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/908/expected",
+    "before": 65.88990165995907,
+    "after": 67.86042578452998,
+    "family": "sleep score",
+    "case": "weighted score 80",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/908/inputs/components/duration",
+    "before": 53.92708629907651,
+    "after": 61.22532379748729,
+    "family": "sleep score",
+    "case": "weighted score 80",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/912/actual",
+    "before": 43.79165807593992,
+    "after": 44.53257615400306,
+    "family": "sleep score",
+    "case": "weighted score 84",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/912/expected",
+    "before": 43.79165807593993,
+    "after": 44.53257615400306,
+    "family": "sleep score",
+    "case": "weighted score 84",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/912/inputs/components/duration",
+    "before": 20.276612013038374,
+    "after": 23.02075304290183,
+    "family": "sleep score",
+    "case": "weighted score 84",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/913/actual",
+    "before": 29.477809527994765,
+    "after": 29.555527152966917,
+    "family": "sleep score",
+    "case": "weighted score 85",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/913/expected",
+    "before": 29.477809527994765,
+    "after": 29.555527152966917,
+    "family": "sleep score",
+    "case": "weighted score 85",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/913/inputs/components/duration",
+    "before": 2.1268884844254865,
+    "after": 2.4147315398779,
+    "family": "sleep score",
+    "case": "weighted score 85",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/915/actual",
+    "before": 57.521128790535215,
+    "after": 59.36797693557246,
+    "family": "sleep score",
+    "case": "weighted score 87",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/915/expected",
+    "before": 57.521128790535215,
+    "after": 59.367976935572464,
+    "family": "sleep score",
+    "case": "weighted score 87",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/915/inputs/components/duration",
+    "before": 50.54246129587485,
+    "after": 57.38263961082762,
+    "family": "sleep score",
+    "case": "weighted score 87",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/917/actual",
+    "before": 66.48635719779759,
+    "after": 69.05759978409708,
+    "family": "sleep score",
+    "case": "weighted score 89",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/917/expected",
+    "before": 66.48635719779759,
+    "after": 69.05759978409708,
+    "family": "sleep score",
+    "case": "weighted score 89",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/917/inputs/components/duration",
+    "before": 70.36687301528315,
+    "after": 79.88999370528127,
+    "family": "sleep score",
+    "case": "weighted score 89",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/919/actual",
+    "before": 27.997801297906776,
+    "after": 28.08247650816163,
+    "family": "sleep score",
+    "case": "weighted score 91",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/919/expected",
+    "before": 27.99780129790678,
+    "after": 28.082476508161633,
+    "family": "sleep score",
+    "case": "weighted score 91",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/919/inputs/components/duration",
+    "before": 2.317295847266165,
+    "after": 2.630907737098958,
+    "family": "sleep score",
+    "case": "weighted score 91",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/920/actual",
+    "before": 43.74051894849399,
+    "after": 44.07597584092902,
+    "family": "sleep score",
+    "case": "weighted score 92",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/920/expected",
+    "before": 43.74051894849399,
+    "after": 44.07597584092902,
+    "family": "sleep score",
+    "case": "weighted score 92",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/920/inputs/components/duration",
+    "before": 9.180406655464152,
+    "after": 10.42283959040868,
+    "family": "sleep score",
+    "case": "weighted score 92",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/921/actual",
+    "before": 61.61693459049729,
+    "after": 64.12061772081356,
+    "family": "sleep score",
+    "case": "weighted score 93",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/921/expected",
+    "before": 61.616934590497294,
+    "after": 64.12061772081356,
+    "family": "sleep score",
+    "case": "weighted score 93",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/921/inputs/components/duration",
+    "before": 68.5179818661229,
+    "after": 77.79088234877574,
+    "family": "sleep score",
+    "case": "weighted score 93",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/922/actual",
+    "before": 53.89446846849536,
+    "after": 54.96819363130274,
+    "family": "sleep score",
+    "case": "weighted score 94",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/922/expected",
+    "before": 53.89446846849537,
+    "after": 54.968193631302746,
+    "family": "sleep score",
+    "case": "weighted score 94",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/922/inputs/components/duration",
+    "before": 29.38450171413769,
+    "after": 33.36126157638725,
+    "family": "sleep score",
+    "case": "weighted score 94",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/924/actual",
+    "before": 28.848666640588853,
+    "after": 28.951765471628946,
+    "family": "sleep score",
+    "case": "weighted score 96",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/924/expected",
+    "before": 28.848666640588853,
+    "after": 28.951765471628946,
+    "family": "sleep score",
+    "case": "weighted score 96",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/924/inputs/components/duration",
+    "before": 2.8214927640349274,
+    "after": 3.2033402864056484,
+    "family": "sleep score",
+    "case": "weighted score 96",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/925/actual",
+    "before": 35.20916437017554,
+    "after": 35.60655550892512,
+    "family": "sleep score",
+    "case": "weighted score 97",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/925/expected",
+    "before": 35.20916437017554,
+    "after": 35.60655550892512,
+    "family": "sleep score",
+    "case": "weighted score 97",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/925/inputs/components/duration",
+    "before": 10.875353397920565,
+    "after": 12.347172430326404,
+    "family": "sleep score",
+    "case": "weighted score 97",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/926/actual",
+    "before": 37.03644976615275,
+    "after": 37.327054362268804,
+    "family": "sleep score",
+    "case": "weighted score 98",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/926/expected",
+    "before": 37.03644976615275,
+    "after": 37.327054362268804,
+    "family": "sleep score",
+    "case": "weighted score 98",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/926/inputs/components/duration",
+    "before": 7.952939493735733,
+    "after": 9.029252812684103,
+    "family": "sleep score",
+    "case": "weighted score 98",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/927/actual",
+    "before": 38.951098934712384,
+    "after": 39.526946399744155,
+    "family": "sleep score",
+    "case": "weighted score 99",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/927/expected",
+    "before": 38.951098934712384,
+    "after": 39.526946399744155,
+    "family": "sleep score",
+    "case": "weighted score 99",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/927/inputs/components/duration",
+    "before": 15.759145272395386,
+    "after": 17.891913661401944,
+    "family": "sleep score",
+    "case": "weighted score 99",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/929/actual",
+    "before": 60.070180272814284,
+    "after": 62.29574319947862,
+    "family": "sleep score",
+    "case": "weighted score 101",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/929/expected",
+    "before": 60.070180272814284,
+    "after": 62.29574319947862,
+    "family": "sleep score",
+    "case": "weighted score 101",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/929/inputs/components/duration",
+    "before": 60.90670117341873,
+    "after": 69.1495268277311,
+    "family": "sleep score",
+    "case": "weighted score 101",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/930/actual",
+    "before": 74.1774520040798,
+    "after": 76.51454854259627,
+    "family": "sleep score",
+    "case": "weighted score 102",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/930/expected",
+    "before": 74.1774520040798,
+    "after": 76.51454854259627,
+    "family": "sleep score",
+    "case": "weighted score 102",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/930/inputs/components/duration",
+    "before": 63.959027524870024,
+    "after": 72.61494063048663,
+    "family": "sleep score",
+    "case": "weighted score 102",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/932/actual",
+    "before": 57.921760262832365,
+    "after": 59.90873493847177,
+    "family": "sleep score",
+    "case": "weighted score 104",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/932/expected",
+    "before": 57.921760262832365,
+    "after": 59.90873493847177,
+    "family": "sleep score",
+    "case": "weighted score 104",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/932/inputs/components/duration",
+    "before": 54.377286464644705,
+    "after": 61.73645192997583,
+    "family": "sleep score",
+    "case": "weighted score 104",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/934/actual",
+    "before": 65.64864956391754,
+    "after": 68.4925592029006,
+    "family": "sleep score",
+    "case": "weighted score 106",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/934/expected",
+    "before": 65.64864956391754,
+    "after": 68.4925592029006,
+    "family": "sleep score",
+    "case": "weighted score 106",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/934/inputs/components/duration",
+    "before": 77.82891801013068,
+    "after": 88.36191667303083,
+    "family": "sleep score",
+    "case": "weighted score 106",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/936/actual",
+    "before": 40.459688046994316,
+    "after": 41.00248626821766,
+    "family": "sleep score",
+    "case": "weighted score 108",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/936/expected",
+    "before": 40.459688046994316,
+    "after": 41.00248626821766,
+    "family": "sleep score",
+    "case": "weighted score 108",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/936/inputs/components/duration",
+    "before": 14.85469076673714,
+    "after": 16.86505454904581,
+    "family": "sleep score",
+    "case": "weighted score 108",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/938/actual",
+    "before": 49.9787178689474,
+    "after": 50.44473512574803,
+    "family": "sleep score",
+    "case": "weighted score 110",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/938/expected",
+    "before": 49.9787178689474,
+    "after": 50.44473512574803,
+    "family": "sleep score",
+    "case": "weighted score 110",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/938/inputs/components/duration",
+    "before": 12.753435753961607,
+    "after": 14.479425593963947,
+    "family": "sleep score",
+    "case": "weighted score 110",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/942/actual",
+    "before": 32.32187329019178,
+    "after": 32.56566246317409,
+    "family": "sleep score",
+    "case": "weighted score 114",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/942/expected",
+    "before": 32.32187329019178,
+    "after": 32.56566246317409,
+    "family": "sleep score",
+    "case": "weighted score 114",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/942/inputs/components/duration",
+    "before": 6.671747686956287,
+    "after": 7.5746705498537334,
+    "family": "sleep score",
+    "case": "weighted score 114",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/943/actual",
+    "before": 65.44509190725796,
+    "after": 66.80592508308966,
+    "family": "sleep score",
+    "case": "weighted score 115",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/943/expected",
+    "before": 65.44509190725796,
+    "after": 66.80592508308968,
+    "family": "sleep score",
+    "case": "weighted score 115",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/943/inputs/components/duration",
+    "before": 37.24175065743101,
+    "after": 42.281873530881754,
+    "family": "sleep score",
+    "case": "weighted score 115",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/944/actual",
+    "before": 79.71266205266453,
+    "after": 82.84290178807063,
+    "family": "sleep score",
+    "case": "weighted score 116",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/944/expected",
+    "before": 79.71266205266453,
+    "after": 82.84290178807063,
+    "family": "sleep score",
+    "case": "weighted score 116",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/944/inputs/components/duration",
+    "before": 85.66487780747224,
+    "after": 97.25835830897633,
+    "family": "sleep score",
+    "case": "weighted score 116",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/945/actual",
+    "before": 64.11532659389515,
+    "after": 66.52424110835265,
+    "family": "sleep score",
+    "case": "weighted score 117",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/945/expected",
+    "before": 64.11532659389515,
+    "after": 66.52424110835265,
+    "family": "sleep score",
+    "case": "weighted score 117",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/945/inputs/components/duration",
+    "before": 65.92446105501774,
+    "after": 74.84636666411963,
+    "family": "sleep score",
+    "case": "weighted score 117",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/946/actual",
+    "before": 30.636080875240282,
+    "after": 30.795276620496864,
+    "family": "sleep score",
+    "case": "weighted score 118",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/946/expected",
+    "before": 30.636080875240285,
+    "after": 30.79527662049687,
+    "family": "sleep score",
+    "case": "weighted score 118",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/946/inputs/components/duration",
+    "before": 4.35668997189618,
+    "after": 4.94630384321686,
+    "family": "sleep score",
+    "case": "weighted score 118",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/947/actual",
+    "before": 74.61672199933783,
+    "after": 77.73851569995227,
+    "family": "sleep score",
+    "case": "weighted score 119",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/947/expected",
+    "before": 74.61672199933784,
+    "after": 77.73851569995229,
+    "family": "sleep score",
+    "case": "weighted score 119",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/947/inputs/components/duration",
+    "before": 85.4337362338089,
+    "after": 96.9959351249735,
+    "family": "sleep score",
+    "case": "weighted score 119",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/949/actual",
+    "before": 40.36973396999791,
+    "after": 40.79508958804172,
+    "family": "sleep score",
+    "case": "weighted score 121",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/949/expected",
+    "before": 40.36973396999792,
+    "after": 40.79508958804172,
+    "family": "sleep score",
+    "case": "weighted score 121",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/949/inputs/components/duration",
+    "before": 11.640653791559304,
+    "after": 13.216044969499334,
+    "family": "sleep score",
+    "case": "weighted score 121",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/950/actual",
+    "before": 56.750522157610106,
+    "after": 57.361963721202955,
+    "family": "sleep score",
+    "case": "weighted score 122",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/950/expected",
+    "before": 56.750522157610106,
+    "after": 57.361963721202955,
+    "family": "sleep score",
+    "case": "weighted score 122",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/950/inputs/components/duration",
+    "before": 16.733244498538603,
+    "after": 18.99784288221582,
+    "family": "sleep score",
+    "case": "weighted score 122",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/957/actual",
+    "before": 59.77742103156938,
+    "after": 62.00653398543407,
+    "family": "sleep score",
+    "case": "weighted score 129",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/957/expected",
+    "before": 59.77742103156938,
+    "after": 62.00653398543407,
+    "family": "sleep score",
+    "case": "weighted score 129",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/957/inputs/components/duration",
+    "before": 61.0038543220709,
+    "after": 69.25982822527344,
+    "family": "sleep score",
+    "case": "weighted score 129",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/959/actual",
+    "before": 67.99994814706832,
+    "after": 70.80448075030877,
+    "family": "sleep score",
+    "case": "weighted score 131",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/959/expected",
+    "before": 67.99994814706832,
+    "after": 70.80448075030877,
+    "family": "sleep score",
+    "case": "weighted score 131",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/959/inputs/components/duration",
+    "before": 76.75129161712435,
+    "after": 87.13844940690375,
+    "family": "sleep score",
+    "case": "weighted score 131",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/963/actual",
+    "before": 57.29281641444023,
+    "after": 59.31548078380535,
+    "family": "sleep score",
+    "case": "weighted score 135",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/963/expected",
+    "before": 57.29281641444024,
+    "after": 59.315480783805356,
+    "family": "sleep score",
+    "case": "weighted score 135",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/963/inputs/components/duration",
+    "before": 55.3540018316556,
+    "after": 62.84535134782271,
+    "family": "sleep score",
+    "case": "weighted score 135",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/965/actual",
+    "before": 55.56283006995757,
+    "after": 57.28374254268756,
+    "family": "sleep score",
+    "case": "weighted score 137",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/965/expected",
+    "before": 55.56283006995757,
+    "after": 57.28374254268756,
+    "family": "sleep score",
+    "case": "weighted score 137",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/965/inputs/components/duration",
+    "before": 47.09599556426433,
+    "after": 53.4697454632643,
+    "family": "sleep score",
+    "case": "weighted score 137",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/966/actual",
+    "before": 43.861626998798435,
+    "after": 43.9918358609715,
+    "family": "sleep score",
+    "case": "weighted score 138",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/966/expected",
+    "before": 43.861626998798435,
+    "after": 43.991835860971506,
+    "family": "sleep score",
+    "case": "weighted score 138",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/966/inputs/components/duration",
+    "before": 3.563409582128573,
+    "after": 4.045664627214004,
+    "family": "sleep score",
+    "case": "weighted score 138",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/967/actual",
+    "before": 59.14311149694142,
+    "after": 60.81205528001351,
+    "family": "sleep score",
+    "case": "weighted score 139",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/967/expected",
+    "before": 59.14311149694142,
+    "after": 60.81205528001351,
+    "family": "sleep score",
+    "case": "weighted score 139",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/967/inputs/components/duration",
+    "before": 45.673774959559935,
+    "after": 51.8550482301973,
+    "family": "sleep score",
+    "case": "weighted score 139",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/969/actual",
+    "before": 41.01590557116186,
+    "after": 41.84876554424537,
+    "family": "sleep score",
+    "case": "weighted score 141",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/969/expected",
+    "before": 41.01590557116186,
+    "after": 41.84876554424537,
+    "family": "sleep score",
+    "case": "weighted score 141",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/969/inputs/components/duration",
+    "before": 22.792774309881256,
+    "after": 25.87744087685723,
+    "family": "sleep score",
+    "case": "weighted score 141",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/970/actual",
+    "before": 53.78016024114491,
+    "after": 55.59037550723254,
+    "family": "sleep score",
+    "case": "weighted score 142",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/970/expected",
+    "before": 53.780160241144905,
+    "after": 55.59037550723254,
+    "family": "sleep score",
+    "case": "weighted score 142",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/970/inputs/components/duration",
+    "before": 49.53993389726721,
+    "after": 56.24443488277694,
+    "family": "sleep score",
+    "case": "weighted score 142",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/971/actual",
+    "before": 35.51442328612272,
+    "after": 35.928733824840954,
+    "family": "sleep score",
+    "case": "weighted score 143",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/971/expected",
+    "before": 35.51442328612272,
+    "after": 35.92873382484096,
+    "family": "sleep score",
+    "case": "weighted score 143",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/971/inputs/components/duration",
+    "before": 11.338384492471217,
+    "after": 12.872867969205428,
+    "family": "sleep score",
+    "case": "weighted score 143",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/972/actual",
+    "before": 60.69751771652695,
+    "after": 62.25233908762656,
+    "family": "sleep score",
+    "case": "weighted score 144",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/972/expected",
+    "before": 60.69751771652696,
+    "after": 62.25233908762656,
+    "family": "sleep score",
+    "case": "weighted score 144",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/972/inputs/components/duration",
+    "before": 42.550601240263816,
+    "after": 48.30919891100309,
+    "family": "sleep score",
+    "case": "weighted score 144",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/977/actual",
+    "before": 30.061804198298468,
+    "after": 30.208693794849715,
+    "family": "sleep score",
+    "case": "weighted score 149",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/977/expected",
+    "before": 30.061804198298468,
+    "after": 30.20869379484972,
+    "family": "sleep score",
+    "case": "weighted score 149",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/977/inputs/components/duration",
+    "before": 4.019909145431403,
+    "after": 4.5639446882138115,
+    "family": "sleep score",
+    "case": "weighted score 149",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/978/actual",
+    "before": 77.52125053460391,
+    "after": 79.93764421033919,
+    "family": "sleep score",
+    "case": "weighted score 150",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/978/expected",
+    "before": 77.52125053460392,
+    "after": 79.93764421033919,
+    "family": "sleep score",
+    "case": "weighted score 150",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/978/inputs/components/duration",
+    "before": 66.12914232262658,
+    "after": 75.07874852905353,
+    "family": "sleep score",
+    "case": "weighted score 150",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/979/actual",
+    "before": 30.431372683961754,
+    "after": 30.594638509555093,
+    "family": "sleep score",
+    "case": "weighted score 151",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/979/expected",
+    "before": 30.431372683961758,
+    "after": 30.594638509555093,
+    "family": "sleep score",
+    "case": "weighted score 151",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/979/inputs/components/duration",
+    "before": 4.468075349434763,
+    "after": 5.072763592373044,
+    "family": "sleep score",
+    "case": "weighted score 151",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/980/actual",
+    "before": 43.59166423081498,
+    "after": 44.10828187871013,
+    "family": "sleep score",
+    "case": "weighted score 152",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/980/expected",
+    "before": 43.59166423081498,
+    "after": 44.10828187871013,
+    "family": "sleep score",
+    "case": "weighted score 152",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/980/inputs/components/duration",
+    "before": 14.138210303684646,
+    "after": 16.051608999592606,
+    "family": "sleep score",
+    "case": "weighted score 152",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/981/actual",
+    "before": 28.917322705480032,
+    "after": 29.028147265735605,
+    "family": "sleep score",
+    "case": "weighted score 153",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/981/expected",
+    "before": 28.917322705480032,
+    "after": 29.02814726573561,
+    "family": "sleep score",
+    "case": "weighted score 153",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/981/inputs/components/duration",
+    "before": 3.032921825436166,
+    "after": 3.443383159716075,
+    "family": "sleep score",
+    "case": "weighted score 153",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/983/actual",
+    "before": 82.68608144542239,
+    "after": 85.65214759735686,
+    "family": "sleep score",
+    "case": "weighted score 155",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/983/expected",
+    "before": 82.68608144542239,
+    "after": 85.65214759735686,
+    "family": "sleep score",
+    "case": "weighted score 155",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/983/inputs/components/duration",
+    "before": 81.17195996215963,
+    "after": 92.1573901545095,
+    "family": "sleep score",
+    "case": "weighted score 155",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/984/actual",
+    "before": 81.40564952261043,
+    "after": 84.47601049484408,
+    "family": "sleep score",
+    "case": "weighted score 156",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/984/expected",
+    "before": 81.40564952261043,
+    "after": 84.47601049484408,
+    "family": "sleep score",
+    "case": "weighted score 156",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/984/inputs/components/duration",
+    "before": 84.02618321407998,
+    "after": 95.39789051864902,
+    "family": "sleep score",
+    "case": "weighted score 156",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/985/actual",
+    "before": 41.98360772438998,
+    "after": 42.299516479792814,
+    "family": "sleep score",
+    "case": "weighted score 157",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/985/expected",
+    "before": 41.98360772438998,
+    "after": 42.299516479792814,
+    "family": "sleep score",
+    "case": "weighted score 157",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/985/inputs/components/duration",
+    "before": 8.645435243759042,
+    "after": 9.815467671176966,
+    "family": "sleep score",
+    "case": "weighted score 157",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/986/actual",
+    "before": 56.56499485184002,
+    "after": 58.55759613034278,
+    "family": "sleep score",
+    "case": "weighted score 158",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/986/expected",
+    "before": 56.56499485184001,
+    "after": 58.55759613034277,
+    "family": "sleep score",
+    "case": "weighted score 158",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/986/inputs/components/duration",
+    "before": 54.53126899873266,
+    "after": 61.91127373392807,
+    "family": "sleep score",
+    "case": "weighted score 158",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/989/actual",
+    "before": 30.220794664847517,
+    "after": 30.35646669916752,
+    "family": "sleep score",
+    "case": "weighted score 161",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/989/expected",
+    "before": 30.220794664847517,
+    "after": 30.356466699167523,
+    "family": "sleep score",
+    "case": "weighted score 161",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/989/inputs/components/duration",
+    "before": 3.7129195283206227,
+    "after": 4.2154085443206455,
+    "family": "sleep score",
+    "case": "weighted score 161",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/992/actual",
+    "before": 53.34736118245164,
+    "after": 53.80653719391005,
+    "family": "sleep score",
+    "case": "weighted score 164",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/992/expected",
+    "before": 53.34736118245165,
+    "after": 53.80653719391005,
+    "family": "sleep score",
+    "case": "weighted score 164",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/992/inputs/components/duration",
+    "before": 12.566212251664423,
+    "after": 14.266864145954823,
+    "family": "sleep score",
+    "case": "weighted score 164",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/997/actual",
+    "before": 29.79471713468058,
+    "after": 29.928067649313665,
+    "family": "sleep score",
+    "case": "weighted score 169",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/997/expected",
+    "before": 29.79471713468058,
+    "after": 29.928067649313665,
+    "family": "sleep score",
+    "case": "weighted score 169",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/997/inputs/components/duration",
+    "before": 3.6493867905374557,
+    "after": 4.143277585474796,
+    "family": "sleep score",
+    "case": "weighted score 169",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/999/actual",
+    "before": 40.63347713499616,
+    "after": 41.406500055324415,
+    "family": "sleep score",
+    "case": "weighted score 171",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/999/expected",
+    "before": 40.63347713499616,
+    "after": 41.406500055324415,
+    "family": "sleep score",
+    "case": "weighted score 171",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/999/inputs/components/duration",
+    "before": 21.155221200239417,
+    "after": 24.018269053307016,
+    "family": "sleep score",
+    "case": "weighted score 171",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1000/actual",
+    "before": 37.608456064804926,
+    "after": 38.076578294214386,
+    "family": "sleep score",
+    "case": "weighted score 172",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1000/expected",
+    "before": 37.608456064804926,
+    "after": 38.076578294214386,
+    "family": "sleep score",
+    "case": "weighted score 172",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1000/inputs/components/duration",
+    "before": 12.811042275048065,
+    "after": 14.544828309897916,
+    "family": "sleep score",
+    "case": "weighted score 172",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1002/actual",
+    "before": 42.88779858550402,
+    "after": 43.39043094415725,
+    "family": "sleep score",
+    "case": "weighted score 174",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1002/expected",
+    "before": 42.88779858550403,
+    "after": 43.39043094415726,
+    "family": "sleep score",
+    "case": "weighted score 174",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1002/inputs/components/duration",
+    "before": 13.755476648987166,
+    "after": 15.617077977332459,
+    "family": "sleep score",
+    "case": "weighted score 174",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1004/actual",
+    "before": 70.74325346704566,
+    "after": 73.87525906172586,
+    "family": "sleep score",
+    "case": "weighted score 176",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1004/expected",
+    "before": 70.74325346704566,
+    "after": 73.87525906172586,
+    "family": "sleep score",
+    "case": "weighted score 176",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1004/inputs/components/duration",
+    "before": 85.71320385650593,
+    "after": 97.3132245775437,
+    "family": "sleep score",
+    "case": "weighted score 176",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1007/actual",
+    "before": 47.73187488685429,
+    "after": 48.40527649416519,
+    "family": "sleep score",
+    "case": "weighted score 179",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1007/expected",
+    "before": 47.7318748868543,
+    "after": 48.4052764941652,
+    "family": "sleep score",
+    "case": "weighted score 179",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1007/inputs/components/duration",
+    "before": 18.42889723529749,
+    "after": 20.92297726237491,
+    "family": "sleep score",
+    "case": "weighted score 179",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1012/actual",
+    "before": 39.689187338848605,
+    "after": 39.95474797786239,
+    "family": "sleep score",
+    "case": "weighted score 184",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1012/expected",
+    "before": 39.68918733884861,
+    "after": 39.95474797786239,
+    "family": "sleep score",
+    "case": "weighted score 184",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1012/inputs/components/duration",
+    "before": 7.2675646642247775,
+    "after": 8.251122586498038,
+    "family": "sleep score",
+    "case": "weighted score 184",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1015/actual",
+    "before": 35.606276171335686,
+    "after": 35.99903891343912,
+    "family": "sleep score",
+    "case": "weighted score 187",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1015/expected",
+    "before": 35.606276171335686,
+    "after": 35.99903891343912,
+    "family": "sleep score",
+    "case": "weighted score 187",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1015/inputs/components/duration",
+    "before": 10.748688648044949,
+    "after": 12.203365470650276,
+    "family": "sleep score",
+    "case": "weighted score 187",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1017/actual",
+    "before": 81.50461408846239,
+    "after": 84.37293682102724,
+    "family": "sleep score",
+    "case": "weighted score 189",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1017/expected",
+    "before": 81.50461408846239,
+    "after": 84.37293682102724,
+    "family": "sleep score",
+    "case": "weighted score 189",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1017/inputs/components/duration",
+    "before": 78.49702807688789,
+    "after": 89.12044560490585,
+    "family": "sleep score",
+    "case": "weighted score 189",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1018/actual",
+    "before": 46.83843711562349,
+    "after": 47.10900909256013,
+    "family": "sleep score",
+    "case": "weighted score 190",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1018/expected",
+    "before": 46.83843711562349,
+    "after": 47.10900909256013,
+    "family": "sleep score",
+    "case": "weighted score 190",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1018/inputs/components/duration",
+    "before": 7.404709319938575,
+    "after": 8.406827753037248,
+    "family": "sleep score",
+    "case": "weighted score 190",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1021/actual",
+    "before": 32.30237073846264,
+    "after": 32.54755604270661,
+    "family": "sleep score",
+    "case": "weighted score 193",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1021/expected",
+    "before": 32.30237073846264,
+    "after": 32.54755604270661,
+    "family": "sleep score",
+    "case": "weighted score 193",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1021/inputs/components/duration",
+    "before": 6.709955435896484,
+    "after": 7.618049155318585,
+    "family": "sleep score",
+    "case": "weighted score 193",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1025/actual",
+    "before": 74.48088199252739,
+    "after": 77.55657591439166,
+    "family": "sleep score",
+    "case": "weighted score 197",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1025/expected",
+    "before": 74.48088199252739,
+    "after": 77.55657591439166,
+    "family": "sleep score",
+    "case": "weighted score 197",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1025/inputs/components/duration",
+    "before": 84.17212937701879,
+    "after": 95.56358834688645,
+    "family": "sleep score",
+    "case": "weighted score 197",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1027/actual",
+    "before": 80.06857700515076,
+    "after": 82.67497136776961,
+    "family": "sleep score",
+    "case": "weighted score 199",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1027/expected",
+    "before": 80.06857700515077,
+    "after": 82.67497136776961,
+    "family": "sleep score",
+    "case": "weighted score 199",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1027/inputs/components/duration",
+    "before": 71.32886726417482,
+    "after": 80.98217971831868,
+    "family": "sleep score",
+    "case": "weighted score 199",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1029/actual",
+    "before": 31.727439123878728,
+    "after": 31.838228977691504,
+    "family": "sleep score",
+    "case": "weighted score 201",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1029/expected",
+    "before": 31.727439123878725,
+    "after": 31.838228977691504,
+    "family": "sleep score",
+    "case": "weighted score 201",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1029/inputs/components/duration",
+    "before": 3.031972018573867,
+    "after": 3.442304810473046,
+    "family": "sleep score",
+    "case": "weighted score 201",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1030/actual",
+    "before": 43.45033655423646,
+    "after": 44.445753915295874,
+    "family": "sleep score",
+    "case": "weighted score 202",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1030/expected",
+    "before": 43.45033655423646,
+    "after": 44.445753915295874,
+    "family": "sleep score",
+    "case": "weighted score 202",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/cases/1030/inputs/components/duration",
+    "before": 27.24146193599083,
+    "after": 30.92819290287756,
+    "family": "sleep score",
+    "case": "weighted score 202",
+    "reason": "Approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/recovery/score",
+    "before": 63.3,
+    "after": 68.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/recovery/sleep_component",
+    "before": 63.3,
+    "after": 74.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/recovery/status",
+    "before": "yellow",
+    "after": "green",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/recovery/strain_component",
+    "before": 19.5,
+    "after": 46.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/recovery/training_recommendation",
+    "before": "Moderate day \u2014 steady training is fine. Consider a deload \u2014 high cumulative strain.",
+    "after": "Peak day \u2014 push intensity. Your body is recovered.",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/average_bed_time",
+    "before": "11:19 PM",
+    "after": "11:35 PM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/average_wake_time",
+    "before": "7:41 AM",
+    "after": "8:00 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/consistency_minutes",
+    "before": 53.9,
+    "after": 30.1,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/duration_score",
+    "before": 65.1,
+    "after": 92.3,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/efficiency_pct",
+    "before": 87.7,
+    "after": 90.6,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/restfulness_score",
+    "before": 7.8,
+    "after": 12.8,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/score",
+    "before": 63.3,
+    "after": 74.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/sleep_debt_hours",
+    "before": 0.28278044072275155,
+    "after": 0.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/sleep_end",
+    "before": "05:44 AM",
+    "after": "07:07 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/sleep_need/debt_add_min",
+    "before": 5.768720990744132,
+    "after": 0.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/sleep_need/sleep_debt_min",
+    "before": 16.966826443365093,
+    "after": 0.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/sleep_need/strain_add_min",
+    "before": 6.127984057145291,
+    "after": 20.64080586934271,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/sleep_need/total_need_min",
+    "before": 461.89670504788944,
+    "after": 470.6408058693427,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/sleep_need_hours",
+    "before": 7.698278417464824,
+    "after": 7.844013431155712,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/sleep_start",
+    "before": "10:28 PM",
+    "after": "11:02 PM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/stage_score",
+    "before": 84.6,
+    "after": 91.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/stages/awake_minutes",
+    "before": 53.6,
+    "after": 45.6,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/stages/core_minutes",
+    "before": 233.3,
+    "after": 268.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/stages/deep_minutes",
+    "before": 65.0,
+    "after": 74.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/stages/rem_minutes",
+    "before": 84.1,
+    "after": 96.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/stages/total_minutes",
+    "before": 382.4,
+    "after": 439.4,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/tonight_sleep_need/debt_add_min",
+    "before": 10.305286804634651,
+    "after": 5.768720990744132,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/tonight_sleep_need/sleep_debt_min",
+    "before": 30.309667072454854,
+    "after": 16.966826443365093,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/tonight_sleep_need/strain_add_min",
+    "before": 20.936293735664204,
+    "after": 4.894366033855733,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/tonight_sleep_need/total_need_min",
+    "before": 481.24158054029886,
+    "after": 460.6630870245999,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/total_sleep_hours",
+    "before": 6.37,
+    "after": 7.32,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/activity_zone_minutes/zone2",
+    "before": 36.0,
+    "after": 2.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/activity_zone_minutes/zone3",
+    "before": 1.0,
+    "after": 40.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/activity_zone_minutes/zone4",
+    "before": 41.0,
+    "after": 0.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/analytics/strain_target/status",
+    "before": "on",
+    "after": "under",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/avg_hr",
+    "before": 76.3,
+    "after": 72.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/day_window/end",
+    "before": "2026-10-08T22:00:00Z",
+    "after": "2026-10-07T22:00:00+02:00",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/day_window/start",
+    "before": "2026-10-08T07:00:00Z",
+    "after": "2026-10-07T07:00:00+02:00",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/incidental_strain",
+    "before": 18.1,
+    "after": 17.2,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/label",
+    "before": "High",
+    "after": "Moderate",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/load",
+    "before": 147.9,
+    "after": 68.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/max_hr",
+    "before": 160.0,
+    "after": 135.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/params/rhr_rejected_count",
+    "before": null,
+    "after": 0,
+    "key_changed": true,
+    "reason": "RHR rejection diagnostics"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/score_100",
+    "before": 80.7,
+    "after": 53.4,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/score_21",
+    "before": 16.9,
+    "after": 11.2,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/strain",
+    "before": 16.9,
+    "after": 11.2,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/suggested_workouts/0/end",
+    "before": "2026-10-08T10:20:00Z",
+    "after": "2026-10-07T10:20:00+02:00",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/suggested_workouts/0/start",
+    "before": "2026-10-08T10:00:00Z",
+    "after": "2026-10-07T10:00:00+02:00",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/workout_strain",
+    "before": 129.8,
+    "after": 51.5,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/workouts",
+    "before": [
+      {
+        "activity_name": "Weightlifting",
+        "name": "Weightlifting",
+        "exercise_type": "WEIGHTLIFTING",
+        "start": "2026-10-08T12:00:00Z",
+        "end": "2026-10-08T12:35:00Z",
+        "duration_min": 35.0,
+        "strain": 6.4,
+        "load": 32.4,
+        "avg_hr": 125.0,
+        "max_hr": 125.0,
+        "zone_minutes": {
+          "zone1": 0.0,
+          "zone2": 35.0,
+          "zone3": 0.0,
+          "zone4": 0.0,
+          "zone5": 0.0
+        }
+      },
+      {
+        "activity_name": "Tempo Run",
+        "name": "Tempo Run",
+        "exercise_type": "RUNNING",
+        "start": "2026-10-08T17:00:00Z",
+        "end": "2026-10-08T17:45:00Z",
+        "duration_min": 45.0,
+        "strain": 13.9,
+        "load": 97.3,
+        "avg_hr": 154.0,
+        "max_hr": 160.0,
+        "zone_minutes": {
+          "zone1": 1.0,
+          "zone2": 1.0,
+          "zone3": 1.0,
+          "zone4": 41.0,
+          "zone5": 0.0
+        }
+      }
+    ],
+    "after": [
+      {
+        "activity_name": "Easy Jog",
+        "name": "Easy Jog",
+        "exercise_type": "RUNNING",
+        "start": "2026-10-07T17:00:00+02:00",
+        "end": "2026-10-07T17:45:00+02:00",
+        "duration_min": 45.0,
+        "strain": 9.2,
+        "load": 51.5,
+        "avg_hr": 130.6,
+        "max_hr": 135.0,
+        "zone_minutes": {
+          "zone1": 1.0,
+          "zone2": 2.0,
+          "zone3": 40.0,
+          "zone4": 0.0,
+          "zone5": 0.0
+        }
+      }
+    ],
+    "length_changed": true,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/zone_minutes/zone1",
+    "before": 5.0,
+    "after": 4.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/zone_minutes/zone2",
+    "before": 57.0,
+    "after": 22.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/zone_minutes/zone3",
+    "before": 1.0,
+    "after": 40.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/zone_minutes/zone4",
+    "before": 41.0,
+    "after": 0.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/latest_heart_rate/sample_time",
+    "before": "2026-10-08T11:29:00",
+    "after": "2026-10-07T11:29:00",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/deep_sleep_hrv/0/date",
+    "before": "2026-10-02",
+    "after": "2026-10-01",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/deep_sleep_hrv/1/date",
+    "before": "2026-10-03",
+    "after": "2026-10-02",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/deep_sleep_hrv/2/date",
+    "before": "2026-10-04",
+    "after": "2026-10-03",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/deep_sleep_hrv/3/date",
+    "before": "2026-10-05",
+    "after": "2026-10-04",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/deep_sleep_hrv/4/date",
+    "before": "2026-10-06",
+    "after": "2026-10-05",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/deep_sleep_hrv/5/date",
+    "before": "2026-10-07",
+    "after": "2026-10-06",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/deep_sleep_hrv/6/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/hrv/0/date",
+    "before": "2026-10-02",
+    "after": "2026-10-01",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/hrv/1/date",
+    "before": "2026-10-03",
+    "after": "2026-10-02",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/hrv/2/date",
+    "before": "2026-10-04",
+    "after": "2026-10-03",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/hrv/3/date",
+    "before": "2026-10-05",
+    "after": "2026-10-04",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/hrv/4/date",
+    "before": "2026-10-06",
+    "after": "2026-10-05",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/hrv/5/date",
+    "before": "2026-10-07",
+    "after": "2026-10-06",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/hrv/6/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/nrem_hr/0/date",
+    "before": "2026-10-02",
+    "after": "2026-10-01",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/nrem_hr/1/date",
+    "before": "2026-10-03",
+    "after": "2026-10-02",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/nrem_hr/2/date",
+    "before": "2026-10-04",
+    "after": "2026-10-03",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/nrem_hr/3/date",
+    "before": "2026-10-05",
+    "after": "2026-10-04",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/nrem_hr/4/date",
+    "before": "2026-10-06",
+    "after": "2026-10-05",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/nrem_hr/5/date",
+    "before": "2026-10-07",
+    "after": "2026-10-06",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/nrem_hr/6/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/respiratory_rate/0/date",
+    "before": "2026-10-02",
+    "after": "2026-10-01",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/respiratory_rate/1/date",
+    "before": "2026-10-03",
+    "after": "2026-10-02",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/respiratory_rate/2/date",
+    "before": "2026-10-04",
+    "after": "2026-10-03",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/respiratory_rate/3/date",
+    "before": "2026-10-05",
+    "after": "2026-10-04",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/respiratory_rate/4/date",
+    "before": "2026-10-06",
+    "after": "2026-10-05",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/respiratory_rate/5/date",
+    "before": "2026-10-07",
+    "after": "2026-10-06",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/respiratory_rate/6/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/rhr/0/date",
+    "before": "2026-10-02",
+    "after": "2026-10-01",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/rhr/1/date",
+    "before": "2026-10-03",
+    "after": "2026-10-02",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/rhr/2/date",
+    "before": "2026-10-04",
+    "after": "2026-10-03",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/rhr/3/date",
+    "before": "2026-10-05",
+    "after": "2026-10-04",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/rhr/4/date",
+    "before": "2026-10-06",
+    "after": "2026-10-05",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/rhr/5/date",
+    "before": "2026-10-07",
+    "after": "2026-10-06",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/rhr/6/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/skin_temperature/0/date",
+    "before": "2026-10-02",
+    "after": "2026-10-01",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/skin_temperature/1/date",
+    "before": "2026-10-03",
+    "after": "2026-10-02",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/skin_temperature/2/date",
+    "before": "2026-10-04",
+    "after": "2026-10-03",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/skin_temperature/3/date",
+    "before": "2026-10-05",
+    "after": "2026-10-04",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/skin_temperature/4/date",
+    "before": "2026-10-06",
+    "after": "2026-10-05",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/skin_temperature/5/date",
+    "before": "2026-10-07",
+    "after": "2026-10-06",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/skin_temperature/6/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/spo2/0/date",
+    "before": "2026-10-02",
+    "after": "2026-10-01",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/spo2/1/date",
+    "before": "2026-10-03",
+    "after": "2026-10-02",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/spo2/2/date",
+    "before": "2026-10-04",
+    "after": "2026-10-03",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/spo2/3/date",
+    "before": "2026-10-05",
+    "after": "2026-10-04",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/spo2/4/date",
+    "before": "2026-10-06",
+    "after": "2026-10-05",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/spo2/5/date",
+    "before": "2026-10-07",
+    "after": "2026-10-06",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/spo2/6/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/vo2_max/0/date",
+    "before": "2026-10-02",
+    "after": "2026-10-01",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/vo2_max/1/date",
+    "before": "2026-10-03",
+    "after": "2026-10-02",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/vo2_max/2/date",
+    "before": "2026-10-04",
+    "after": "2026-10-03",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/vo2_max/3/date",
+    "before": "2026-10-05",
+    "after": "2026-10-04",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/vo2_max/4/date",
+    "before": "2026-10-06",
+    "after": "2026-10-05",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/vo2_max/5/date",
+    "before": "2026-10-07",
+    "after": "2026-10-06",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/metrics/vo2_max/6/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/previous_range_end",
+    "before": "2026-10-01",
+    "after": "2026-09-30",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/previous_range_start",
+    "before": "2026-09-25",
+    "after": "2026-09-24",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/range_end",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/body/range_start",
+    "before": "2026-10-02",
+    "after": "2026-10-01",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/heart-rate/body/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/health/heart-rate/body/latest_heart_rate/sample_time",
+    "before": "2026-10-08T11:29:00",
+    "after": "2026-10-07T11:29:00",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/averages/recovery",
+    "before": 71.57142857142857,
+    "after": 71,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/averages/sleep_performance",
+    "before": 72.60331616744652,
+    "after": 74.17766603197876,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/components/z_hrv",
+    "before": 0.9495794004725954,
+    "after": 1.0200354412081676,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/percent",
+    "before": 72,
+    "after": 73,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/recent_nights",
+    "before": 7,
+    "after": 6,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/score",
+    "before": 72,
+    "after": 73,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/z",
+    "before": 0.58,
+    "after": 0.62,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/days/0/sleep_performance",
+    "before": 85.07233781596122,
+    "after": 88.27612134590862,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/days/1/recovery",
+    "before": 74,
+    "after": 71,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/days/2/recovery",
+    "before": 74,
+    "after": 75,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/days/2/sleep_performance",
+    "before": 62.613843270215625,
+    "after": 64.76119976957821,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/days/3/recovery",
+    "before": 72,
+    "after": 70,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/days/4/recovery",
+    "before": 93,
+    "after": 91,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/days/5/recovery",
+    "before": 85,
+    "after": 86,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/days/6/recovery",
+    "before": 72,
+    "after": 73,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/days/6/sleep_performance",
+    "before": 67.32312573235006,
+    "after": 69.84373502570129,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/monthly_buckets/5/averages/recovery",
+    "before": 71.57142857142857,
+    "after": 71,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/monthly_buckets/5/averages/sleep_performance",
+    "before": 72.60331616744652,
+    "after": 74.17766603197876,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/previous_averages/recovery",
+    "before": 49,
+    "after": 47.714285714285715,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/previous_averages/sleep_performance",
+    "before": 73.51886429176365,
+    "after": 75.27790637099666,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/prior_30_day_averages/sleep_performance",
+    "before": 72.676860050663,
+    "after": 74.09976449227567,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/sleep/performance",
+    "before": 67.32312573235006,
+    "after": 69.84373502570129,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/components/z_hrv",
+    "before": 0.9495794004725954,
+    "after": 1.0200354412081676,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/percent",
+    "before": 72,
+    "after": 73,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/recent_nights",
+    "before": 7,
+    "after": 6,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/score",
+    "before": 72.0,
+    "after": 73.0,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/z",
+    "before": 0.58,
+    "after": 0.62,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=legacy/body/score",
+    "before": 63.3,
+    "after": 68.7,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=legacy/body/sleep_component",
+    "before": 63.3,
+    "after": 74.0,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=legacy/body/status",
+    "before": "yellow",
+    "after": "green",
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=legacy/body/strain_component",
+    "before": 19.5,
+    "after": 46.7,
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=legacy/body/training_recommendation",
+    "before": "Moderate day \u2014 steady training is fine. Consider a deload \u2014 high cumulative strain.",
+    "after": "Peak day \u2014 push intensity. Your body is recovered.",
+    "reason": "Approved prior-date Recovery weighting"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/average_bed_time",
+    "before": "11:19 PM",
+    "after": "11:35 PM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/average_wake_time",
+    "before": "7:41 AM",
+    "after": "8:00 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/consistency_minutes",
+    "before": 53.9,
+    "after": 30.1,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/duration_score",
+    "before": 65.1,
+    "after": 92.3,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/efficiency_pct",
+    "before": 87.7,
+    "after": 90.6,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/restfulness_score",
+    "before": 7.8,
+    "after": 12.8,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/score",
+    "before": 63.3,
+    "after": 74.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/sleep_debt_hours",
+    "before": 0.28278044072275155,
+    "after": 0.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/sleep_end",
+    "before": "05:44 AM",
+    "after": "07:07 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/sleep_need/debt_add_min",
+    "before": 5.768720990744132,
+    "after": 0.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/sleep_need/sleep_debt_min",
+    "before": 16.966826443365093,
+    "after": 0.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/sleep_need/strain_add_min",
+    "before": 6.127984057145291,
+    "after": 20.64080586934271,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/sleep_need/total_need_min",
+    "before": 461.89670504788944,
+    "after": 470.6408058693427,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/sleep_need_hours",
+    "before": 7.698278417464824,
+    "after": 7.844013431155712,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/sleep_start",
+    "before": "10:28 PM",
+    "after": "11:02 PM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/stage_score",
+    "before": 84.6,
+    "after": 91.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/stages/awake_minutes",
+    "before": 53.6,
+    "after": 45.6,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/stages/core_minutes",
+    "before": 233.3,
+    "after": 268.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/stages/deep_minutes",
+    "before": 65.0,
+    "after": 74.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/stages/rem_minutes",
+    "before": 84.1,
+    "after": 96.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/stages/total_minutes",
+    "before": 382.4,
+    "after": 439.4,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/tonight_sleep_need/debt_add_min",
+    "before": 10.305286804634651,
+    "after": 5.768720990744132,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/tonight_sleep_need/sleep_debt_min",
+    "before": 30.309667072454854,
+    "after": 16.966826443365093,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/tonight_sleep_need/strain_add_min",
+    "before": 20.936293735664204,
+    "after": 4.894366033855733,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/tonight_sleep_need/total_need_min",
+    "before": 481.24158054029886,
+    "after": 460.6630870245999,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/total_sleep_hours",
+    "before": 6.37,
+    "after": 7.32,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/analytics/body/averages/performance",
+    "before": 72.60331616744652,
+    "after": 74.17766603197876,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/analytics/body/days/0/performance",
+    "before": 85.07233781596122,
+    "after": 88.27612134590862,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/analytics/body/days/2/performance",
+    "before": 62.613843270215625,
+    "after": 64.76119976957821,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/analytics/body/days/6/performance",
+    "before": 67.32312573235006,
+    "after": 69.84373502570129,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/analytics/body/previous_averages/performance",
+    "before": 73.51886429176365,
+    "after": 75.27790637099666,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/analytics/body/prior_30_averages/performance",
+    "before": 72.67636880000428,
+    "after": 74.09886774448502,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/analytics/body/tonight_sleep_need/strain_add_min",
+    "before": 20.936293735664204,
+    "after": 4.894366033855733,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/analytics/body/tonight_sleep_need/total_need_min",
+    "before": 476.70501472640836,
+    "after": 460.6630870245999,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/average_value",
+    "before": 45.4,
+    "after": 42.8,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/0/bed_time",
+    "before": "11:33 PM",
+    "after": "11:08 PM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/0/bed_variability_minutes",
+    "before": 30.3,
+    "after": 30.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/0/date",
+    "before": "2026-10-02",
+    "after": "2026-10-01",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/0/value",
+    "before": 47.8,
+    "after": 48.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/0/wake_time",
+    "before": "7:43 AM",
+    "after": "7:39 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/0/wake_variability_minutes",
+    "before": 66.9,
+    "after": 67.2,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/1/bed_time",
+    "before": "12:09 AM",
+    "after": "11:33 PM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/1/bed_variability_minutes",
+    "before": 31.2,
+    "after": 30.3,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/1/date",
+    "before": "2026-10-03",
+    "after": "2026-10-02",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/1/value",
+    "before": 43.5,
+    "after": 47.8,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/1/wake_time",
+    "before": "9:11 AM",
+    "after": "7:43 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/1/wake_variability_minutes",
+    "before": 57.0,
+    "after": 66.9,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/2/bed_time",
+    "before": "12:06 AM",
+    "after": "12:09 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/2/bed_variability_minutes",
+    "before": 32.8,
+    "after": 31.2,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/2/date",
+    "before": "2026-10-04",
+    "after": "2026-10-03",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/2/value",
+    "before": 44.6,
+    "after": 43.5,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/2/wake_time",
+    "before": "8:25 AM",
+    "after": "9:11 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/2/wake_variability_minutes",
+    "before": 57.7,
+    "after": 57.0,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/3/bed_time",
+    "before": "11:42 PM",
+    "after": "12:06 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/3/bed_variability_minutes",
+    "before": 33.2,
+    "after": 32.8,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/3/date",
+    "before": "2026-10-05",
+    "after": "2026-10-04",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/3/value",
+    "before": 45.7,
+    "after": 44.6,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/3/wake_time",
+    "before": "8:14 AM",
+    "after": "8:25 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/3/wake_variability_minutes",
+    "before": 59.1,
+    "after": 57.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/4/bed_time",
+    "before": "11:25 PM",
+    "after": "11:42 PM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/4/bed_variability_minutes",
+    "before": 29.2,
+    "after": 33.2,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/4/date",
+    "before": "2026-10-06",
+    "after": "2026-10-05",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/4/value",
+    "before": 39.7,
+    "after": 45.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/4/wake_time",
+    "before": "7:43 AM",
+    "after": "8:14 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/4/wake_variability_minutes",
+    "before": 51.2,
+    "after": 59.1,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/5/bed_time",
+    "before": "9:49 PM",
+    "after": "11:25 PM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/5/bed_variability_minutes",
+    "before": 43.9,
+    "after": 29.2,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/5/date",
+    "before": "2026-10-07",
+    "after": "2026-10-06",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/5/value",
+    "before": 42.3,
+    "after": 39.7,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/5/wake_time",
+    "before": "6:43 AM",
+    "after": "7:43 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/5/wake_variability_minutes",
+    "before": 42.7,
+    "after": 51.2,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/6/bed_time",
+    "before": "10:28 PM",
+    "after": "11:02 PM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/6/bed_variability_minutes",
+    "before": 48.1,
+    "after": 24.2,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/6/date",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/6/value",
+    "before": 53.9,
+    "after": 30.1,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/6/wake_time",
+    "before": "5:44 AM",
+    "after": "7:07 AM",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/days/6/wake_variability_minutes",
+    "before": 63.5,
+    "after": 37.2,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/range_end",
+    "before": "2026-10-08",
+    "after": "2026-10-07",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/range_start",
+    "before": "2026-10-02",
+    "after": "2026-10-01",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/need/body/formatted_total_need",
+    "before": "7h 57m",
+    "after": "7h 41m",
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/need/body/strain_add_min",
+    "before": 20.936293735664204,
+    "after": 4.894366033855733,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/need/body/total_need_min",
+    "before": 476.70501472640836,
+    "after": 460.6630870245999,
+    "reason": "Selected date/profile alignment and approved duration normalization"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/0/algo_version",
+    "before": "sleep-stress-2",
+    "after": "sleep-stress-5",
+    "reason": "Stress algorithm cache version"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/1/algo_version",
+    "before": "sleep-stress-2",
+    "after": "sleep-stress-5",
+    "reason": "Stress algorithm cache version"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/2/algo_version",
+    "before": "sleep-stress-2",
+    "after": "sleep-stress-5",
+    "reason": "Stress algorithm cache version"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/3/algo_version",
+    "before": "sleep-stress-2",
+    "after": "sleep-stress-5",
+    "reason": "Stress algorithm cache version"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/4/algo_version",
+    "before": "sleep-stress-2",
+    "after": "sleep-stress-5",
+    "reason": "Stress algorithm cache version"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/5/algo_version",
+    "before": "sleep-stress-2",
+    "after": "sleep-stress-5",
+    "reason": "Stress algorithm cache version"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/6/algo_version",
+    "before": "sleep-stress-2",
+    "after": "sleep-stress-5",
+    "reason": "Stress algorithm cache version"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/current/params/rhr_rejected_count",
+    "before": null,
+    "after": 0,
+    "key_changed": true,
+    "reason": "RHR rejection diagnostics"
+  },
+  {
+    "path": "/demo/api_demo//api/strain?demo=true/body/params/rhr_rejected_count",
+    "before": null,
+    "after": 0,
+    "key_changed": true,
+    "reason": "RHR rejection diagnostics"
+  },
+  {
+    "path": "/findings/0/data/at_7_5_h",
+    "before": 81.48030066227396,
+    "after": 84.69877955687114,
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/0/data/jump_points",
+    "before": 3.218478894597183,
+    "after": 0.0,
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/0/inference",
+    "before": "The undersleep sigmoid ends at 88.0797, but the next branch begins at 100. Weighted total jumps about 3.22 points for an arbitrarily small duration increase. Formula matches source, but continuity fails; review before changing.",
+    "after": "Approved sigmoid normalization reaches 100 at ratio 1; the prior 3.22-point discontinuity is removed. Oversleep penalty remains a product heuristic.",
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/0/title",
+    "before": "Sleep duration score discontinuity at 100% of need",
+    "after": "Sleep duration continuity regression",
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/1/data/nights_used",
+    "before": 7,
+    "after": 1,
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/1/data/status",
+    "before": "ok",
+    "after": "insufficient_baseline",
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/1/inference",
+    "before": "The pure baseline builder counts rows rather than unique wake dates/session IDs. Repeating one prior night satisfies the seven-night minimum. Persistence keys by sleep ID, but the connected pipeline feeds prepared raw rows to score_night before storage, so storage uniqueness does not itself protect this baseline. Actual reconciled input duplication and multiple main sleeps on a date need review.",
+    "after": "Repeated sessions now count once; seven copies of one night cannot establish a baseline. The connected path prepares unreconciled raw sessions before storage, making this gate necessary.",
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/1/title",
+    "before": "Sleep stress baseline assumes unique sessions",
+    "after": "Sleep stress unique-night regression",
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/2/data/returned_baseline",
+    "before": -1.0,
+    "after": null,
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/2/inference",
+    "before": "Nonpositive daily HRV is accepted into the descriptive median. HR chart and connected Recovery filter invalid readings, but this trend helper does not. This can display an impossible reference if invalid device/fixture data reach it.",
+    "after": "Invalid summaries are excluded before current values, reference medians and period averages. Unspecified HRV/respiration/temperature/VO2 ceilings still need a product decision.",
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/2/title",
+    "before": "Health trend adapter trusts daily summary values",
+    "after": "Health trend validity regression",
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/3/data/load",
+    "before": 0.0,
+    "after": 2.2853221989782315,
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/3/data/params/hr_rest",
+    "before": 1000,
+    "after": 60.0,
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/3/data/params/hr_rest_source",
+    "before": "recovery",
+    "after": "default",
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/3/data/params/rhr_rejected_count",
+    "before": null,
+    "after": 1,
+    "key_changed": true,
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/3/inference",
+    "before": "The function accepts finite positive RHR even above estimated maximum HR; the HRR denominator is floored at 1 and load becomes zero in this case. Realistic valid-input cases pass; malformed RHR should be rejected or flagged upstream.",
+    "after": "RHR outside existing HR limits or at/above estimated HRmax is rejected. Default 60 bpm is used when nothing remains, with rejection count and calibration flag.",
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/3/title",
+    "before": "Strain resting-HR baseline lacks an upper plausibility bound",
+    "after": "Strain resting-HR validity regression",
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/4/data/effective_today_log_weight",
+    "before": 0.39999999999999997,
+    "after": 0.3,
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/4/data/z_hrv",
+    "before": 5.545177444479554,
+    "after": 4.1588830833596635,
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/4/inference",
+    "before": "The recent seven-date window includes today; with all seven readings, today receives 40% total log-signal weight, not 30%. This is deterministic source behavior; clarify whether the intended recent signal should exclude today. Existing tests codify the inclusive window.",
+    "after": "Approved prior-seven-date recent window excludes today; today has exactly 30% log-signal weight. Minimum-count and confidence thresholds are unchanged.",
+    "reason": "Corrected regression probe and updated finding interpretation"
+  },
+  {
+    "path": "/findings/4/title",
+    "before": "Today HRV participates in both recent and today terms",
+    "after": "Recovery current-night weighting regression",
+    "reason": "Corrected regression probe and updated finding interpretation"
+  }
+]

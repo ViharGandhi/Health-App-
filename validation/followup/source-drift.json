@@ -1,0 +1,52 @@
+[
+  {
+    "file": "backend\\auth.py",
+    "missing": false,
+    "differs_from_audit_branch_content": true
+  },
+  {
+    "file": "backend\\google_health_client.py",
+    "missing": false,
+    "differs_from_audit_branch_content": true
+  },
+  {
+    "file": "backend\\main.py",
+    "missing": false,
+    "differs_from_audit_branch_content": true
+  },
+  {
+    "file": "backend\\models.py",
+    "missing": false,
+    "differs_from_audit_branch_content": true
+  },
+  {
+    "file": "backend\\sleep_stress.py",
+    "missing": false,
+    "differs_from_audit_branch_content": true
+  },
+  {
+    "file": "backend\\sleep_stress_pipeline.py",
+    "missing": false,
+    "differs_from_audit_branch_content": true
+  },
+  {
+    "file": "backend\\strain_service.py",
+    "missing": false,
+    "differs_from_audit_branch_content": true
+  },
+  {
+    "file": "backend\\test_health.py",
+    "missing": false,
+    "differs_from_audit_branch_content": true
+  },
+  {
+    "file": "backend\\test_sleep_need_integration.py",
+    "missing": false,
+    "differs_from_audit_branch_content": true
+  },
+  {
+    "file": "backend\\test_sleep_stress.py",
+    "missing": false,
+    "differs_from_audit_branch_content": true
+  }
+]

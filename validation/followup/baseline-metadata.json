@@ -1,0 +1,7 @@
+{
+  "test_exit": 1,
+  "test_runtime_s": 73.64168509999581,
+  "simulation_runtime_s": 6.744463899995026,
+  "checks": 1295,
+  "failed": 0
+}
