@@ -1,7 +1,7 @@
 from dataclasses import replace
 from datetime import timedelta
 
-from sleep_stress import build_baseline
+from sleep_stress import adapt_google_sleep, build_baseline
 from test_sleep_stress import DAY, make_night, baseline_history
 
 
@@ -32,3 +32,18 @@ def test_nap_marked_main_cannot_count_as_reference_night():
                                         night_date=DAY - timedelta(days=8)))
     assert build_baseline(current, [*prior, nap])[1] == 7
     assert build_baseline(current, [nap] * 7)[1] == 0
+
+
+def test_explicit_main_sleep_takes_priority_over_longer_unspecified_session():
+    current = make_night(DAY, [(20, 80, 5)] * 4)
+    prior = baseline_history()
+    start = prior[0].night.start_utc - timedelta(hours=1)
+    end = prior[0].night.end_utc
+    unknown = adapt_google_sleep({'name': 'unspecified', 'sleep': {'type': 'STAGES',
+        'interval': {'startTime': start.isoformat(), 'endTime': end.isoformat(), 'endUtcOffset': '0s'},
+        'metadata': {'processed': True, 'stagesStatus': 'SUCCEEDED'},
+        'stages': [{'startTime': start.isoformat(), 'endTime': end.isoformat(), 'type': 'LIGHT'}]}})
+    windows = tuple(replace(prior[0].windows[0], start_utc=start + timedelta(minutes=i * 5),
+        end_utc=start + timedelta(minutes=(i + 1) * 5), hr=75.) for i in range(84))
+    longer = replace(prior[0], night=unknown, windows=windows, asleep_minutes=420.)
+    assert build_baseline(current, [longer, *prior]) == build_baseline(current, prior)

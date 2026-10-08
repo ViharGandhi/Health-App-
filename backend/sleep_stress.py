@@ -28,7 +28,7 @@ class StressConfig:
 
 
 DEFAULT_CONFIG = StressConfig()
-ALGO_VERSION = "sleep-stress-4"
+ALGO_VERSION = "sleep-stress-5"
 
 
 @dataclass(frozen=True)
@@ -63,6 +63,7 @@ class SleepNight:
     processed: bool = True
     main_sleep: bool = True
     nap: bool = False
+    main_sleep_explicit: bool = True
 
 
 @dataclass(frozen=True)
@@ -127,6 +128,7 @@ def adapt_google_sleep(point: dict) -> SleepNight:
         type=sleep_type, stages=stages, awakenings=awakenings,
         processed=processed, main_sleep=metadata.get("mainSleep") is not False,
         nap=metadata.get("nap") is True,
+        main_sleep_explicit=metadata.get("mainSleep") is True,
     )
 
 
@@ -267,7 +269,8 @@ def build_baseline(current: NightWindows, history: list[NightWindows],
     for item in by_id.values():
         day = item.night.night_date
         previous_item = by_date.get(day)
-        key = lambda n: (n.night.end_utc - n.night.start_utc, n.night.sleep_id)
+        key = lambda n: (n.night.main_sleep_explicit,
+                         n.night.end_utc - n.night.start_utc, n.night.sleep_id)
         if previous_item is None or key(item) > key(previous_item):
             by_date[day] = item
     previous = [by_date[day] for day in sorted(by_date, reverse=True)][:config.baseline_nights_target]
