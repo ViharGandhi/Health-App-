@@ -116,9 +116,10 @@ def recovery_from_history(history: dict[str, list[dict]], day: date,
 
     The 180-minute exclusion applies to the supplied sleep modifier; daily RMSSD
     summaries have no duration/coverage field, so no historical coverage is inferred.
+    Recent HRV uses the seven prior dates; today appears only in its 30% term.
     """
     start, end = baseline_bounds(day)
-    recent_start = day - timedelta(days=RECENT_WINDOW - 1)
+    recent_start = day - timedelta(days=RECENT_WINDOW)
     points = {key: {date.fromisoformat(point["date"]): point for point in values}
               for key, values in history.items()}
     hrv = points.get("hrv", {})
@@ -142,7 +143,7 @@ def recovery_from_history(history: dict[str, list[dict]], day: date,
             illness_flag |= spread > 0 and abs(current - center) > ILLNESS_SD_MULTIPLIER * spread
     return calculate_recovery(
         [point["value"] for when, point in hrv.items() if start <= when <= end],
-        [point["value"] for when, point in hrv.items() if recent_start <= when <= day],
+        [point["value"] for when, point in hrv.items() if recent_start <= when < day],
         today_hrv, baseline_rhr, today_rhr if known_method else None,
         sleep_min, need_min, illness_flag,
     )
