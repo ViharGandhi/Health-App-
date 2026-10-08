@@ -8,9 +8,21 @@ from statistics import mean, median
 
 from models import HealthPoint, HealthResponse, HeartRatePoint, LatestHeartRate, HealthHeartRateResponse
 from sleep_trends import range_start
+from recovery_score import positive
 
 
 METRICS = ("hrv", "deep_sleep_hrv", "nrem_hr", "rhr", "spo2", "respiratory_rate", "skin_temperature", "vo2_max")
+
+
+def valid_health_value(metric: str, value) -> bool:
+    """Existing HR quality limits and percentage units; no new clinical ceilings."""
+    if not isinstance(value, (int, float)) or not positive(value):
+        return False
+    if metric in ("rhr", "nrem_hr"):
+        return 30 <= value <= 230
+    if metric == "spo2":
+        return value <= 100
+    return True
 
 
 def build_heart_rate_response(
@@ -42,7 +54,9 @@ def build_health_response(
     averages = {}
     previous_averages = {}
     for key in METRICS:
-        by_date = {point["date"]: point for point in history.get(key, [])}
+        by_date = {point["date"]: {**point, "value": point.get("value")
+                                 if valid_health_value(key, point.get("value")) else None}
+                   for point in history.get(key, [])}
         for lower, upper, target in ((start, end, averages), (previous_start, previous_end, previous_averages)):
             values = [point["value"] for day, point in by_date.items()
                       if lower.isoformat() <= day <= upper.isoformat() and point.get("value") is not None]
