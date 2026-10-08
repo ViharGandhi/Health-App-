@@ -9,6 +9,11 @@ export function useStrainAnalytics(range: StrainRange = 'W', metric: StrainMetri
   const [error, setError] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
   const [demo, setDemo] = useState<boolean | null>(null);
+  useEffect(() => {
+    const update = () => setAttempt(value => value + 1);
+    window.addEventListener('ojas:dynamic-sync', update);
+    return () => window.removeEventListener('ojas:dynamic-sync', update);
+  }, []);
   useEffect(() => { setDemo(new URLSearchParams(window.location.search).get('demo') === 'true'); }, []);
   useEffect(() => {
     if (demo == null) return;

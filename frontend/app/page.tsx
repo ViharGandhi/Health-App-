@@ -35,13 +35,20 @@ export default function DashboardPage() {
   const [strain, setStrain] = useState<StrainData | null>(null);
   const [strainError, setStrainError] = useState(false);
   const [unavailable, setUnavailable] = useState<string | null>(null);
+  const [syncRevision, setSyncRevision] = useState(0);
+  useEffect(() => {
+    const update = () => setSyncRevision(value => value + 1);
+    window.addEventListener('ojas:dynamic-sync', update);
+    return () => window.removeEventListener('ojas:dynamic-sync', update);
+  }, []);
   const { data, error, demo, changeDemo } = useRecoveryAnalytics('W', day);
   useEffect(() => {
     let active = true;
-    setStrain(null); setStrainError(false);
+    setStrain(current => current?.date === (day ?? localDay()) ? current : null);
+    setStrainError(false);
     api.getStrain(day).then(value => { if (active) setStrain(value); }).catch(() => { if (active) setStrainError(true); });
     return () => { active = false; };
-  }, [day]);
+  }, [day, syncRevision]);
   const activityMessage = 'Activity logging and live workout recording are not connected yet. Recorded device activities are listed here when available.';
   if (error) return <div className={styles.errorState} role="alert">{error}<button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button><Link href="/connect">Connect Google Health</Link></div>;
   if (!data) return <div className={styles.pageWrapper}><div className={styles.loading} role="status">Loading your overview…</div></div>;

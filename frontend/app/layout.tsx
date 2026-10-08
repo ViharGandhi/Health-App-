@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import NavBar from '@/components/NavBar';
+import DynamicSync from '@/components/DynamicSync';
 
 export const metadata: Metadata = {
   title: 'Ojas — Health and Recovery',
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
+        <DynamicSync />
         <main>
           {children}
         </main>

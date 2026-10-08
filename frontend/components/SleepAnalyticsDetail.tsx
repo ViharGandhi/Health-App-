@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSleepSyncRevision } from '@/lib/useSleepSyncRevision';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
@@ -33,6 +34,7 @@ function weeklyBuckets(days: SleepAnalyticsDay[]): SleepAnalyticsDay[] {
 export default function SleepAnalyticsDetail({ slug }: { slug: string }) {
   const item = sleepMetrics.find(m => m.slug === slug)!;
   const router = useRouter();
+  const sleepRevision = useSleepSyncRevision();
   const [range, setRange] = useState<'W' | 'M' | '6M'>('W');
   const [data, setData] = useState<SleepAnalytics | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -41,7 +43,7 @@ export default function SleepAnalyticsDetail({ slug }: { slug: string }) {
     setData(null); setError(null);
     api.getSleepAnalytics(range).then(value => { if (active) setData(value); }).catch(reason => { if (active) setError(reason instanceof Error ? reason.message : 'Sleep analytics unavailable.'); });
     return () => { active = false; };
-  }, [range]);
+  }, [range, sleepRevision]);
   const average = data?.averages[item.metric];
   const previous = data?.previous_averages[item.metric];
   const delta = average != null && previous != null ? average - previous : null;

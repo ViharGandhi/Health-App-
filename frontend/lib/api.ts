@@ -113,9 +113,28 @@ export const api = {
   getDataStatus: () => apiFetch<{ last_synced_at: string | null; stored_ranges: number }>('/api/data/status'),
 
   syncNow: async () => {
-    const response = await fetch(`${BACKEND_URL}/api/data/refresh`, { method: 'POST', credentials: 'include' });
-    if (!response.ok) throw new Error('Could not refresh data. Check your connection and retry.');
-    responses.clear();
+    await api.syncDynamic(true, crypto.randomUUID());
+  },
+
+  syncDynamic: async (force: boolean, session: string, homeVisit = false) => {
+    const today = new Date();
+    const age = window.localStorage.getItem('ojas_age');
+    const response = await fetch(`${BACKEND_URL}/api/data/sync?${new URLSearchParams({ force: String(force), session, home_visit: String(homeVisit) })}`, {
+      method: 'POST', credentials: 'include', signal: AbortSignal.timeout(120000),
+      headers: { 'X-User-Timezone': Intl.DateTimeFormat().resolvedOptions().timeZone,
+        'X-User-Date': `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`,
+        ...(age ? { 'X-User-Age': age } : {}) },
+    });
+    if (response.status === 401) return { synced: false, connected: false };
+    if (!response.ok) throw new Error('Activity sync failed. Saved stats are still available.');
+    const result = await response.json() as { synced: boolean; data_updated?: boolean; sleep_updated?: boolean; cursor: string | null; completed: number | null };
+    window.dispatchEvent(new CustomEvent('ojas:sync-status', { detail: { completed: result.completed } }));
+    if (result.synced || result.data_updated) {
+      responses.clear();
+      window.dispatchEvent(new CustomEvent('ojas:dynamic-sync', { detail: { completed: result.completed } }));
+      if (result.sleep_updated) window.dispatchEvent(new CustomEvent('ojas:sleep-sync'));
+    }
+    return { ...result, connected: true };
   },
 
   /** Start Google OAuth flow (redirects browser to Google) */

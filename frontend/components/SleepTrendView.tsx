@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useSleepSyncRevision } from '@/lib/useSleepSyncRevision';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import type { SleepTrend, SleepConsistencyScore } from '@/lib/types';
@@ -623,6 +624,7 @@ function ConsistencyBreakdown({ trend }: { trend: TrendData }) {
 }
 
 export default function SleepTrendView({ metric }: { metric: Metric }) {
+  const sleepRevision = useSleepSyncRevision();
   const [timeframe, setTimeframe] = useState<Timeframe>(metric === 'consistency' ? 'W' : 'M');
   const [trend, setTrend] = useState<TrendData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -657,7 +659,7 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
     return () => {
       active = false;
     };
-  }, [metric, timeframe]);
+  }, [metric, timeframe, sleepRevision]);
 
   const title = metric === 'efficiency' ? 'SLEEP EFFICIENCY' : 'SLEEP CONSISTENCY';
   const unit = '%';

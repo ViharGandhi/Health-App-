@@ -6,6 +6,7 @@ import asyncio
 import hashlib
 import math
 import os
+import re
 import time
 from functools import lru_cache
 from pathlib import Path
@@ -63,6 +64,17 @@ class GoogleHealthClient:
         }
 
     async def _points(self, data_type: str, filter_expr: str, *, reconcile: bool = True) -> list[dict]:
+        if self.store and getattr(self, 'stored_only', False):
+            count('database_hits')
+            query = read_range(filter_expr)
+            if query is None:
+                before = re.fullmatch(r'([a-z_.]+) < "([^"]+)"', filter_expr)
+                if before:
+                    query = read_range(f'{before[1]} >= "1900-01-01" AND {before[1]} < "{before[2]}"')
+            if query:
+                return await asyncio.to_thread(self.store.local_read, self.account_key, data_type, query, reconcile)
+            return await asyncio.to_thread(self.store.exact_read, self.account_key,
+                                          exact_key(data_type, filter_expr, reconcile), now=0) or []
         if not self.cache:
             return await self._fetch_points(data_type, filter_expr, reconcile=reconcile)
         key = (self.account_key, data_type, filter_expr, reconcile)
@@ -344,6 +356,9 @@ class GoogleHealthClient:
         return sessions
 
     async def get_daily_steps(self, start: date, end: date) -> dict[date, int]:
+        if self.store and getattr(self, 'stored_only', False):
+            values = await asyncio.to_thread(self.store.stored_steps, self.account_key, start, end)
+            return {date.fromisoformat(day): value for day, value in values.items()}
         if not self.store:
             return await self._fetch_daily_steps(start, end)
         key = exact_key('steps-rollup', f'{start}/{end}', True)
@@ -375,7 +390,10 @@ class GoogleHealthClient:
                 while True:
                     for attempt in range(4):
                         await self._pace_request()
+                        started = time.monotonic()
                         response = await client.post(f"{BASE_URL}/steps/dataPoints:dailyRollUp", headers=self.headers, json=body)
+                        count('google_requests')
+                        count('google_ms', (time.monotonic() - started) * 1000)
                         if response.status_code not in (429, 503) or attempt == 3:
                             break
                         retry_after = response.headers.get("Retry-After", "")
@@ -384,11 +402,11 @@ class GoogleHealthClient:
                     response.raise_for_status()
                     payload = response.json()
                     for point in payload.get("rollupDataPoints", []):
-                        count = point.get("steps", {}).get("countSum")
-                        if count is not None:
+                        step_count = point.get("steps", {}).get("countSum")
+                        if step_count is not None:
                             day = _google_date(point["civilStartTime"]["date"])
                             if start <= day <= end:
-                                values[day] = int(count)
+                                values[day] = int(step_count)
                     if not payload.get("nextPageToken"):
                         break
                     body["pageToken"] = payload["nextPageToken"]

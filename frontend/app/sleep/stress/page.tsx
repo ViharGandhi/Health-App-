@@ -4,6 +4,7 @@ import { sleepStressStatus } from '@/lib/sleepStressStatus';
 /** Sleep Stress trend view using scored sleep sessions from the backend. */
 
 import { useEffect, useState } from 'react';
+import { useSleepSyncRevision } from '@/lib/useSleepSyncRevision';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import type { SleepStressHistory } from '@/lib/types';
@@ -85,6 +86,7 @@ function buildBars(history: SleepStressHistory, timeframe: Timeframe): StressBar
 }
 
 export default function SleepStressTrendPage() {
+  const sleepRevision = useSleepSyncRevision();
   const router = useRouter();
   const [timeframe, setTimeframe] = useState<Timeframe>('M');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -100,7 +102,7 @@ export default function SleepStressTrendPage() {
       if (active) { setHistory(null); setError(reason instanceof Error ? reason.message : 'Sleep stress unavailable.'); }
     });
     return () => { active = false; };
-  }, [timeframe]);
+  }, [timeframe, sleepRevision]);
 
   const days = history ? buildBars(history, timeframe) : [];
   const scoredDays = days.reduce((total, day) => total + day.scoredDays, 0);

@@ -8,13 +8,13 @@ from fastapi.encoders import jsonable_encoder
 from health_read_store import CacheInvalidated
 from read_metrics import count, read_metrics
 
-FRESH_SECONDS = 120
+FRESH_SECONDS = 900
 _jobs = {}
 
 
-async def cached_page_result(client, key, path, response, compute):
+async def cached_page_result(client, key, path, response, compute, *, frozen=False, prepare=False):
     store, account = client.store, client.account_key
-    snapshot = await asyncio.to_thread(store.snapshot_read, account, key)
+    snapshot = await asyncio.to_thread(store.snapshot_read, account, key, now=0 if frozen else None)
     job_key = (asyncio.get_running_loop(), account, key)
 
     async def rebuild(background):
@@ -34,9 +34,11 @@ async def cached_page_result(client, key, path, response, compute):
         if not task.cancelled() and task.exception() is not None:
             logging.getLogger('uvicorn.error').warning('Page refresh failed for %s (%s)', path, type(task.exception()).__name__)
 
+    if prepare:
+        return await rebuild(False)
     if snapshot:
         updated, value = snapshot
-        stale = time.time() - updated >= FRESH_SECONDS
+        stale = not frozen and time.time() - updated >= FRESH_SECONDS
         response.headers['X-Data-Updated-At'] = datetime.fromtimestamp(updated, timezone.utc).isoformat()
         response.headers['X-Data-Cache'] = 'stale' if stale else 'hit'
         count('snapshot_hits')

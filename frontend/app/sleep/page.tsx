@@ -76,8 +76,18 @@ export default function SleepPage() {
   const [selectedStage, setSelectedStage] = useState<SleepStage | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [sleepRevision, setSleepRevision] = useState(0);
+  useEffect(() => {
+    const update = () => setSleepRevision(value => value + 1);
+    window.addEventListener('ojas:sleep-sync', update);
+    return () => window.removeEventListener('ojas:sleep-sync', update);
+  }, []);
 
   useEffect(() => {
+    setError('');
+    setAnalyticsError(false);
+    setStressError('');
+    setStageRangesError(false);
     api.getSleep()
       .then(setData)
       .catch(reason => setError(reason instanceof Error ? reason.message : 'Sleep data unavailable.'))
@@ -87,7 +97,7 @@ export default function SleepPage() {
     api.getSleepStress('W').then(setStress).catch(reason => { setStress(null); setStressError(reason instanceof Error ? reason.message : 'Sleep stress unavailable.'); });
     api.getSleepStageRanges().then(setStageHistory)
       .catch(() => setStageRangesError(true)).finally(() => setStageRangesLoading(false));
-  }, []);
+  }, [sleepRevision]);
 
   if (error) return <div className={styles.loadingPage} role="alert"><p>{error}</p><button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button></div>;
 

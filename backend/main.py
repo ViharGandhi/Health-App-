@@ -28,6 +28,7 @@ import time
 import asyncio
 import hashlib
 import json
+import inspect
 from functools import wraps
 from dataclasses import asdict
 from datetime import datetime, timedelta, date, timezone
@@ -43,6 +44,7 @@ from fastapi.responses import JSONResponse
 import httpx
 from read_metrics import read_metrics
 from page_snapshots import cached_page_result
+from dynamic_sync import sync_dynamic
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -216,6 +218,8 @@ def _google_client(token: str, request: Request):
     if sex is not None and sex.lower() not in ("m", "f"):
         raise HTTPException(400, "X-User-Sex must be m or f")
     client.strain_sex, client.strain_sex_defaulted = (sex or "m").lower(), sex is None
+    if getattr(client, 'store', None) is not None:
+        client.stored_only = True
     return client
 
 
@@ -233,10 +237,18 @@ def _cached_data_page(function):
             return await function(*args, **kwargs)
         client = _google_client(token, request)
         day, age = _client_day(request), _client_age(request)
-        key = hashlib.sha256(json.dumps(['page-v1', request.url.path, sorted(request.query_params.multi_items()),
+        dynamic = await asyncio.to_thread(client.store.dynamic_status, client.account_key)
+        daily_sleep = request.url.path.startswith(('/api/sleep', '/api/recovery'))
+        parameters = inspect.signature(function).bind(*args, **kwargs)
+        parameters.apply_defaults()
+        effective = {k: v for k, v in parameters.arguments.items() if k not in ('request', 'response')}
+        strain_revision = dynamic.get('revision', 0) if request.url.path.startswith('/api/strain') or request.url.path == '/api/dashboard' else 0
+        key = hashlib.sha256(json.dumps(['page-v4', request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
             str(day), age, str(client.strain_timezone), client.strain_sex, client.strain_sex_defaulted,
-            repr(STRAIN_CONFIG)]).encode()).hexdigest()
-        return await cached_page_result(client, key, request.url.path, response, lambda: function(*args, **kwargs))
+            repr(STRAIN_CONFIG), strain_revision, dynamic.get('sleep_revision', 0)], default=str).encode()).hexdigest()
+        frozen = daily_sleep and await asyncio.to_thread(client.store.sleep_day_prepared, client.account_key, day)
+        return await cached_page_result(client, key, request.url.path, response, lambda: function(*args, **kwargs),
+                                        frozen=frozen, prepare=getattr(request.state, 'prepare_sleep', False))
     return wrapped
 
 
@@ -267,6 +279,20 @@ async def refresh_data(request: Request, response: Response):
             if key[0] == client.account_key:
                 cache.pop(key, None)
     return {"refresh_requested": True}
+
+
+@app.post('/api/data/sync')
+async def sync_data(request: Request, response: Response, session: str, force: bool = False, home_visit: bool = False):
+    if not 1 <= len(session) <= 128:
+        raise HTTPException(400, 'Invalid app session')
+    token = await _get_token(request, response)
+    if not token:
+        raise HTTPException(401, 'Connect Google Health to sync activities')
+    client = _google_client(token, request)
+    if client.store is None:
+        raise HTTPException(401, 'Reconnect Google Health to establish your account identity')
+    return await sync_dynamic(client, session, force, age=_client_age(request), config=STRAIN_CONFIG,
+                              prepare_sleep=lambda: _prepare_sleep_pages(request), home_visit=home_visit)
 
 
 async def _compute_real_strain(client: GoogleHealthClient, target_date: date, age: Optional[int] = None,
@@ -720,7 +746,7 @@ async def sleep_stage_ranges_endpoint(request: Request, response: Response, days
         return {"is_mock": True, "nights": mock_stage_ranges(today, days)}
     client = _google_client(token, request)
     try:
-        user_id = await client.get_health_user_id()
+        user_id = (session or {}).get('health_user_id') or client.account_key
         nights = await sync_stage_ranges(client, user_id, stage_store(), today - timedelta(days=days - 1), today)
     except httpx.HTTPStatusError as error:
         if error.response.status_code == 401:
@@ -910,3 +936,40 @@ async def sleep_efficiency_endpoint(
     client = _google_client(token, request)
     history = await client.get_sleep_trend_history(start, today)
     return build_sleep_trend(history, start, today, timeframe, "efficiency", False)
+
+
+async def _prepare_sleep_pages(request: Request):
+    """Build the standard Sleep/Recovery views before freezing the daily results."""
+    views = [
+        ('/api/sleep', sleep_endpoint, {}),
+        ('/api/sleep/need', sleep_need_endpoint, {}),
+        ('/api/sleep/heart-rate', sleep_heart_rate_endpoint, {}),
+        ('/api/sleep/stages/typical-ranges', sleep_stage_ranges_endpoint, {}),
+        ('/api/recovery', recovery_endpoint, {'demo': 'estimate'}),
+        ('/api/recovery', recovery_endpoint, {'demo': 'legacy'}),
+        ('/api/sleep/stress', sleep_stress_endpoint, {}),
+    ]
+    for timeframe in ('W', 'M', '6M'):
+        views.extend([
+            ('/api/sleep/analytics', sleep_analytics_endpoint, {'timeframe': timeframe}),
+            ('/api/sleep/stress', sleep_stress_endpoint, {'timeframe': timeframe}),
+            ('/api/recovery/analytics', recovery_analytics_endpoint, {'timeframe': timeframe}),
+        ])
+    for timeframe in ('W', 'M', '6M', '1Y'):
+        views.extend([
+            ('/api/sleep/consistency', sleep_consistency_endpoint, {'timeframe': timeframe}),
+            ('/api/sleep/efficiency', sleep_efficiency_endpoint, {'timeframe': timeframe}),
+            ('/api/sleep/consistency/score', sleep_consistency_score_endpoint,
+             {'timeframe': 'Y' if timeframe == '1Y' else timeframe}),
+        ])
+    token = await _get_token(request, Response())
+    client = _google_client(token, request)
+    today = _client_day(request)
+    point = select_sleep(await client.get_sleep_stage_points(today, today), today)
+    if point:
+        views.append(('/api/sleep/heart-rate', sleep_heart_rate_endpoint,
+                      {'night_date': today, 'sleep_id': point['name']}))
+    for path, function, parameters in views:
+        scope = {**request.scope, 'path': path, 'raw_path': path.encode(), 'query_string': b'',
+                 'state': {**request.scope.get('state', {}), 'prepare_sleep': True}}
+        await function(request=Request(scope), response=Response(), **parameters)

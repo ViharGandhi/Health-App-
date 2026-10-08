@@ -106,6 +106,17 @@ class HealthReadStore:
                     PRIMARY KEY(account,key));
                 CREATE TABLE IF NOT EXISTS cache_epochs (account TEXT PRIMARY KEY, epoch INTEGER NOT NULL);
                 CREATE TABLE IF NOT EXISTS calculation_versions (account TEXT PRIMARY KEY, version INTEGER NOT NULL);
+                CREATE TABLE IF NOT EXISTS dynamic_state (
+                    account TEXT PRIMARY KEY, cursor TEXT NOT NULL, completed REAL NOT NULL, revision INTEGER NOT NULL);
+                CREATE TABLE IF NOT EXISTS dynamic_sessions (
+                    account TEXT NOT NULL, session TEXT NOT NULL, PRIMARY KEY(account,session));
+                CREATE TABLE IF NOT EXISTS home_visits (
+                    account TEXT PRIMARY KEY, visited REAL NOT NULL);
+                CREATE TABLE IF NOT EXISTS dynamic_steps (
+                    account TEXT NOT NULL, day TEXT NOT NULL, count INTEGER NOT NULL, PRIMARY KEY(account,day));
+                CREATE TABLE IF NOT EXISTS sleep_days (
+                    account TEXT NOT NULL, day TEXT NOT NULL, sleep_id TEXT NOT NULL,
+                    completed REAL NOT NULL, PRIMARY KEY(account,day));
                 CREATE TABLE IF NOT EXISTS page_snapshots (
                     account TEXT NOT NULL, key TEXT NOT NULL, epoch INTEGER NOT NULL,
                     updated REAL NOT NULL, payload TEXT NOT NULL, PRIMARY KEY(account,key));
@@ -117,9 +128,12 @@ class HealthReadStore:
                     reconciled INTEGER NOT NULL, lower_bound TEXT NOT NULL, upper_bound TEXT NOT NULL,
                     stamp TEXT NOT NULL, point_key TEXT NOT NULL, payload TEXT NOT NULL,
                     PRIMARY KEY(account,kind,field,reconciled,lower_bound,upper_bound,stamp,point_key));
+                CREATE INDEX IF NOT EXISTS local_point_times ON read_points(account,kind,reconciled,field,stamp);
             ''')
             if 'indexed' not in {r[1] for r in conn.execute('PRAGMA table_info(read_slices)')}:
                 conn.execute('ALTER TABLE read_slices ADD COLUMN indexed INTEGER NOT NULL DEFAULT 0')
+            if 'prepared' not in {r[1] for r in conn.execute('PRAGMA table_info(sleep_days)')}:
+                conn.execute('ALTER TABLE sleep_days ADD COLUMN prepared INTEGER NOT NULL DEFAULT 0')
             # Upgrade existing snapshots once; subsequent reads use indexed times.
             with conn:
                 for row in conn.execute('SELECT account,kind,field,reconciled,lower_bound,upper_bound,payload FROM read_slices WHERE indexed=0').fetchall():
@@ -140,6 +154,106 @@ class HealthReadStore:
 
     def connection(self):
         return closing(sqlite3.connect(self.path, timeout=30))
+
+    def local_read(self, account, kind, query, reconciled=True):
+        """Read persisted observations, including expired coverage and incremental streams."""
+        lower = (datetime.fromisoformat(query.start) - timedelta(days=1)).isoformat(timespec='microseconds')
+        upper = (datetime.fromisoformat(query.end) + timedelta(days=1)).isoformat(timespec='microseconds')
+        with self.connection() as conn:
+            rows = conn.execute('''SELECT p.payload FROM read_points p JOIN read_slices s
+                USING(account,kind,field,reconciled,lower_bound,upper_bound)
+                WHERE p.account=? AND p.kind=? AND p.reconciled=? AND p.stamp>=? AND p.stamp<?
+                AND NOT EXISTS (SELECT 1 FROM read_slices newer WHERE newer.account=s.account
+                    AND newer.kind=s.kind AND newer.field=s.field AND newer.reconciled=s.reconciled
+                    AND newer.lower_bound<=p.stamp AND newer.upper_bound>p.stamp
+                    AND (newer.fetched>s.fetched OR (newer.fetched=s.fetched AND newer.rowid>s.rowid)))
+                ORDER BY s.fetched DESC,s.rowid DESC''', (account, kind, reconciled, lower, upper)).fetchall()
+        points, seen = [], set()
+        for (payload,) in rows:
+            point = json.loads(payload)
+            stamp = point_clock(point, query.field)
+            if stamp is None or not query.start <= stamp < query.end:
+                continue
+            if kind == 'heart-rate':
+                identity = point_clock(point, 'heart_rate.sample_time.physical_time')
+            elif kind == 'exercise':
+                identity = point.get('name') or (point_clock(point, 'exercise.interval.start_time'), point.get('exercise', {}).get('exerciseType'))
+            else:
+                identity = point.get('name') or payload
+            if identity not in seen:
+                seen.add(identity)
+                points.append(point)
+        return points
+
+    def dynamic_status(self, account, session=None):
+        with self.connection() as conn:
+            row = conn.execute('SELECT cursor,completed,revision FROM dynamic_state WHERE account=?', (account,)).fetchone()
+            seen = bool(conn.execute('SELECT 1 FROM dynamic_sessions WHERE account=? AND session=?', (account, session)).fetchone()) if session else False
+            sleep_revision = conn.execute('SELECT COUNT(*) FROM sleep_days WHERE account=?', (account,)).fetchone()[0]
+            sleep_completed = conn.execute('SELECT MAX(completed) FROM sleep_days WHERE account=?', (account,)).fetchone()[0]
+            home_visit = conn.execute('SELECT visited FROM home_visits WHERE account=?', (account,)).fetchone()
+        return {'cursor': row[0] if row else None, 'completed': row[1] if row else None,
+                'revision': row[2] if row else 0, 'session_seen': seen, 'sleep_revision': sleep_revision,
+                'sleep_completed': sleep_completed, 'home_visit': home_visit[0] if home_visit else None}
+
+    def remember_home_visit(self, account, visited):
+        with self.connection() as conn, conn:
+            conn.execute('INSERT INTO home_visits VALUES (?,?) ON CONFLICT(account) DO UPDATE SET visited=excluded.visited',
+                         (account, visited))
+
+    def sleep_day_saved(self, account, day):
+        with self.connection() as conn:
+            return bool(conn.execute('SELECT 1 FROM sleep_days WHERE account=? AND day=?', (account, str(day))).fetchone())
+
+    def finish_sleep_day(self, account, day, sleep_id, epoch):
+        with self.connection() as conn, conn:
+            self._check_epoch(conn, account, epoch)
+            conn.execute('INSERT OR IGNORE INTO sleep_days (account,day,sleep_id,completed) VALUES (?,?,?,?)',
+                         (account, str(day), sleep_id, time.time()))
+
+    def sleep_day_prepared(self, account, day):
+        with self.connection() as conn:
+            return bool(conn.execute('SELECT 1 FROM sleep_days WHERE account=? AND day=? AND prepared=1',
+                                     (account, str(day))).fetchone())
+
+    def finish_sleep_preparation(self, account, day, epoch):
+        with self.connection() as conn, conn:
+            self._check_epoch(conn, account, epoch)
+            conn.execute('UPDATE sleep_days SET prepared=1,completed=? WHERE account=? AND day=?',
+                         (time.time(), account, str(day)))
+
+    def dynamic_finish(self, account, session, cursor, steps, *, completed=None):
+        with self.connection() as conn, conn:
+            conn.execute('BEGIN IMMEDIATE')
+            conn.executemany('INSERT OR REPLACE INTO dynamic_steps VALUES (?,?,?)',
+                             [(account, str(day), value) for day, value in steps.items()])
+            conn.execute('''INSERT INTO dynamic_state VALUES (?,?,?,1) ON CONFLICT(account)
+                DO UPDATE SET cursor=excluded.cursor,completed=excluded.completed,revision=revision+1''',
+                (account, cursor, time.time() if completed is None else completed))
+            self._remember_session(conn, account, session)
+
+    @staticmethod
+    def _remember_session(conn, account, session):
+        conn.execute('INSERT OR IGNORE INTO dynamic_sessions VALUES (?,?)', (account, session))
+        conn.execute('''DELETE FROM dynamic_sessions WHERE account=? AND rowid NOT IN
+            (SELECT rowid FROM dynamic_sessions WHERE account=? ORDER BY rowid DESC LIMIT 64)''', (account, account))
+
+    def remember_session(self, account, session):
+        with self.connection() as conn, conn:
+            self._remember_session(conn, account, session)
+
+    def stored_steps(self, account, start, end):
+        with self.connection() as conn:
+            rows = conn.execute('SELECT day,count FROM dynamic_steps WHERE account=? AND day>=? AND day<=?', (account, str(start), str(end))).fetchall()
+            old = conn.execute('SELECT payload FROM exact_reads WHERE account=? ORDER BY fetched DESC', (account,)).fetchall()
+        values = dict(rows)
+        for (payload,) in old:
+            item = json.loads(payload)
+            if isinstance(item, dict):
+                for day, count in item.items():
+                    if re.fullmatch(r'\d{4}-\d{2}-\d{2}', day) and isinstance(count, int) and str(start) <= day <= str(end):
+                        values.setdefault(day, count)
+        return values
 
     @staticmethod
     def cutoff(now: float) -> str:
@@ -181,7 +295,7 @@ class HealthReadStore:
         return points, missing
 
     def range_write(self, account: str, kind: str, query: ReadRange, reconciled: bool,
-                    points: list[dict], *, now: float | None = None, epoch: int | None = None) -> bool:
+                    points: list[dict], *, now: float | None = None, epoch: int | None = None, invalidate=True) -> bool:
         now = time.time() if now is None else now
         positions = [point_clock(p, query.field) for p in points]
         if any(p is None for p in positions):
@@ -197,7 +311,7 @@ class HealthReadStore:
                 identity = (account, kind, query.field, reconciled, lower, upper)
                 previous = conn.execute('SELECT payload FROM read_slices WHERE account=? AND kind=? AND field=? AND reconciled=? AND lower_bound=? AND upper_bound=?', identity).fetchone()
                 unchanged = previous is not None and previous[0] == serialized
-                if not unchanged and kind in ('heart-rate', 'sleep', 'exercise', 'daily-resting-heart-rate'):
+                if invalidate and not unchanged and kind in ('heart-rate', 'sleep', 'exercise', 'daily-resting-heart-rate'):
                     # Only changed readings invalidate scores; a freshness check
                     # with identical data must retain saved historical results.
                     lower_day = datetime.fromisoformat(lower).date() - timedelta(days=2)
@@ -308,8 +422,10 @@ class HealthReadStore:
             row = conn.execute('''SELECT MAX(fetched), COUNT(*) FROM (
                 SELECT fetched FROM read_slices WHERE account=? UNION ALL
                 SELECT fetched FROM exact_reads WHERE account=?)''', (account, account)).fetchone()
-        return {'last_synced_at': datetime.fromtimestamp(row[0], timezone.utc).isoformat() if row[0] else None,
-                'stored_ranges': row[1]}
+        dynamic = self.dynamic_status(account)
+        stamp = dynamic['completed']
+        return {'last_synced_at': datetime.fromtimestamp(stamp, timezone.utc).isoformat() if stamp else None,
+                'stored_ranges': row[1], 'dynamic_cursor': dynamic['cursor']}
 
 
 def exact_key(kind: str, expression: str, reconciled: bool) -> str:

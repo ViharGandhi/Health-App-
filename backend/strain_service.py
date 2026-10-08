@@ -50,7 +50,8 @@ async def load_strain_days(client, start, end, now, age, config=StrainConfig()):
     keys = {day: f'{profile}:{day}' for day in days}
     lock = _calculation_locks.setdefault((asyncio.get_running_loop(), account, profile), asyncio.Lock())
     async with lock:
-        cached = await asyncio.to_thread(store.days_read, account, list(keys.values()))
+        cached = await asyncio.to_thread(store.days_read, account, list(keys.values()),
+                                         now=0 if getattr(client, 'stored_only', False) else None)
         values = {day: json.loads(cached[key], object_hook=_decode_day) for day, key in keys.items() if key in cached}
         missing = [day for day in days if day not in values]
         if missing:

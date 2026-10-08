@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock
 from fastapi import Response
 import pytest
 from health_read_store import HealthReadStore, CacheInvalidated
-from page_snapshots import cached_page_result
+from page_snapshots import cached_page_result, FRESH_SECONDS
 
 
 def test_authenticated_route_reload_uses_snapshot_and_explicit_refresh_bypasses_it():
@@ -49,7 +49,7 @@ def test_snapshot_survives_restart_and_stale_page_does_not_wait_for_calculation(
             client.store = HealthReadStore(path)
             assert await cached_page_result(client, 'page', '/api/strain', Response(), compute) == {'strain': 8}
             compute.assert_awaited_once()
-            store.snapshot_write('user', 'page', {'strain': 8}, store.epoch('user'), now=time.time() - 121)
+            store.snapshot_write('user', 'page', {'strain': 8}, store.epoch('user'), now=time.time() - FRESH_SECONDS - 1)
             started, release = asyncio.Event(), asyncio.Event()
             async def delayed():
                 started.set()
@@ -84,3 +84,16 @@ def test_failed_calculation_is_not_cached():
                 await cached_page_result(client, 'page', '/api/strain', Response(), compute)
             assert store.snapshot_read('user', 'page') is None
     asyncio.run(asyncio.wait_for(run(), 10))
+
+
+def test_frozen_daily_result_never_recalculates_after_ttl(tmp_path):
+    async def run():
+        store = HealthReadStore(tmp_path / 'health.db')
+        client = SimpleNamespace(store=store, account_key='user')
+        store.snapshot_write('user', 'sleep', {'score': 80}, 0, now=0)
+        compute = AsyncMock(side_effect=AssertionError('daily result recalculated'))
+        response = Response()
+        assert await cached_page_result(client, 'sleep', '/api/sleep', response, compute, frozen=True) == {'score': 80}
+        assert response.headers['X-Data-Cache'] == 'hit'
+        compute.assert_not_awaited()
+    asyncio.run(run())

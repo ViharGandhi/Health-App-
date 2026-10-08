@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useId, useMemo, useState } from 'react';
+import { useSleepSyncRevision } from '@/lib/useSleepSyncRevision';
 import { api } from '@/lib/api';
 import type { SleepHeartRate, SleepStage, SleepStageRangeNight } from '@/lib/types';
 import { LEFT, RIGHT, chartPosition, heartRatePaths, nearestReading, stageWindows } from '@/lib/sleepHeartRateChart';
@@ -14,6 +15,7 @@ export default function SleepHeartRateChart({ night, waiting, selectedStage }: {
   const [inGap, setInGap] = useState(false);
   const sleepId = night?.sleep_id, nightDate = night?.night_date;
   const clipId = useId();
+  const sleepRevision = useSleepSyncRevision();
 
   useEffect(() => {
     if (waiting) return;
@@ -25,7 +27,7 @@ export default function SleepHeartRateChart({ night, waiting, selectedStage }: {
       if (!cancelled) setResult({ data, loading: false, error: false });
     }).catch(() => { if (!cancelled) setResult({ data: null, loading: false, error: true }); });
     return () => { cancelled = true; };
-  }, [sleepId, nightDate, waiting]);
+  }, [sleepId, nightDate, waiting, sleepRevision]);
 
   const data = result.data;
   const samples = useMemo(() => data?.samples.map(s => ({ time: Date.parse(s.timestamp), bpm: s.bpm })) ?? [], [data]);
