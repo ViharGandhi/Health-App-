@@ -48,7 +48,7 @@ class ReadRange:
 
 
 def read_range(expression: str) -> ReadRange | None:
-    match = re.fullmatch(r'([a-z_.]+) >= "([^"]+)" AND \1 < "([^"]+)"', expression)
+    match = re.fullmatch(r'([a-z0-9_.]+) >= "([^"]+)" AND \1 < "([^"]+)"', expression)
     if not match:
         return None
     try:
