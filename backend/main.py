@@ -243,7 +243,7 @@ def _cached_data_page(function):
         parameters.apply_defaults()
         effective = {k: v for k, v in parameters.arguments.items() if k not in ('request', 'response')}
         strain_revision = dynamic.get('revision', 0) if request.url.path.startswith('/api/strain') or request.url.path == '/api/dashboard' else 0
-        key = hashlib.sha256(json.dumps(['page-v6', request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
+        key = hashlib.sha256(json.dumps(['page-v7', request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
             str(day), age, str(client.strain_timezone), client.strain_sex, client.strain_sex_defaulted,
             repr(STRAIN_CONFIG), strain_revision, dynamic.get('sleep_revision', 0)], default=str).encode()).hexdigest()
         frozen = daily_sleep and await asyncio.to_thread(client.store.sleep_day_prepared, client.account_key, day)
@@ -329,8 +329,8 @@ async def _load_sleep_need_inputs(client: GoogleHealthClient, today: date, age: 
 
 async def _compute_real_sleep(client: GoogleHealthClient, target_date: date, need: SleepNeedResult | None, age: Optional[int] = None) -> SleepResponse:
     raw = await client.get_sleep_session(target_date)
-    if not raw:
-        # No sleep data — return zeros
+    if not raw or not raw['sleep_duration_available']:
+        # Missing, pending or impossible summary durations cannot establish a score.
         return SleepResponse(
             score=None, sleep_need_hours=need.total_need_min / 60 if need else None, total_sleep_hours=0.0,
             sleep_need=asdict(need) if need else None,
