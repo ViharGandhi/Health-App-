@@ -141,14 +141,8 @@ def compute_mock_sleep() -> SleepResponse:
 
     # Compute sub-scores for frontend display
     total_h = sleep.total_duration / 3600.0
-    ratio = total_h / sleep_need
-    if ratio <= 1.0:
-        x = 8.0 * (ratio - 0.75)
-        dur_score = 100.0 / (1.0 + math.exp(-x))
-    elif ratio <= 1.10:
-        dur_score = 100.0
-    else:
-        dur_score = max(30.0, 100.0 - (ratio - 1.10) * 75.0)
+    dur_score = SleepCalculator.compute_duration_score(
+        total_h + sleep.nap_duration_seconds / 3600, sleep_need)
 
     efficiency = sleep.total_duration / sleep.in_bed_duration * 100
     stages = SleepStages(

@@ -365,16 +365,8 @@ async def _compute_real_sleep(client: GoogleHealthClient, target_date: date, nee
     ) if sleep_need is not None else None
 
     total_h = sleep.total_duration / 3600.0
-    ratio = total_h / sleep_need if sleep_need is not None else None
-    if ratio is None:
-        dur_score = None
-    elif ratio <= 1.0:
-        x = 8.0 * (ratio - 0.75)
-        dur_score = 100.0 / (1.0 + math.exp(-x))
-    elif ratio <= 1.10:
-        dur_score = 100.0
-    else:
-        dur_score = max(30.0, 100.0 - (ratio - 1.10) * 75.0)
+    dur_score = SleepCalculator.compute_duration_score(
+        total_h + sleep.nap_duration_seconds / 3600, sleep_need) if sleep_need is not None else None
 
     efficiency = SleepEfficiencyCalculator.calculate_single_night(sleep.total_duration, sleep.in_bed_duration)
     stages = SleepStages(
