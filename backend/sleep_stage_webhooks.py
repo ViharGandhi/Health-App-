@@ -14,6 +14,7 @@ import tink
 from tink import signature
 
 from sleep_stage_store import SleepStageStore
+from provider_payload import payload_boundary
 
 
 router = APIRouter()
@@ -48,6 +49,7 @@ async def verify_notification(body: bytes, encoded_signature: str):
     raise HTTPException(401, "Invalid webhook signature")
 
 
+@payload_boundary
 def enqueue_sleep_notifications(payload, store):
     notifications = payload if isinstance(payload, list) else [payload]
     jobs = []
