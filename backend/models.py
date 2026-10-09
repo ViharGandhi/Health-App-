@@ -6,7 +6,8 @@ Shared between main.py, google_health_client.py, and mock_data.py.
 """
 
 from __future__ import annotations
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, PrivateAttr, field_serializer
+from math import floor
 from typing import Optional, List, Dict, Literal
 from datetime import datetime
 
@@ -35,6 +36,7 @@ class ZoneMinutes(BaseModel):
 
 
 class WorkoutDetail(BaseModel):
+    _raw_strain: Optional[float] = PrivateAttr(default=None)
     activity_name: str
     name: str
     exercise_type: Optional[str] = None
@@ -47,8 +49,14 @@ class WorkoutDetail(BaseModel):
     max_hr: Optional[float] = None
     zone_minutes: ZoneMinutes
 
+    @field_serializer('strain', when_used='json')
+    def display_strain(self, value):
+        raw = self._raw_strain if self._raw_strain is not None else value
+        return floor(raw * 10) / 10
+
 
 class StrainResponse(BaseModel):
+    _raw_strain: Optional[float] = PrivateAttr(default=None)
     date: str
     mode: Literal["connected", "demo"]
     day_window: dict
@@ -77,6 +85,11 @@ class StrainResponse(BaseModel):
     age_is_default: bool = False
     is_calibrating: bool = False
     is_mock: bool = True
+
+    @field_serializer('strain', 'score_21', when_used='json')
+    def display_strain(self, value):
+        raw = self._raw_strain if self._raw_strain is not None else value
+        return floor(raw * 10) / 10 if raw is not None else None
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -118,7 +131,6 @@ class RecoveryResponse(BaseModel):
     training_recommendation: str
     is_calibrating: bool = False
     is_mock: bool = True
-
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Sleep

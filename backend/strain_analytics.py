@@ -66,7 +66,7 @@ def build_strain_analytics(history: list[dict], current, start: date, end: date,
         averages[key] = mean(valid) if valid else None
     return {"date": end.isoformat(), "today": today.isoformat(), "timeframe": timeframe, "range_start": start.isoformat(), "range_end": end.isoformat(),
             "previous_range_start": previous_start.isoformat(), "previous_range_end": previous_end.isoformat(),
-            "is_mock": is_mock, "current": current.model_dump(), "days": days, "previous_days": previous,
+            "is_mock": is_mock, "current": current.model_dump(mode='json'), "days": days, "previous_days": previous,
             "prior_30_day_averages": averages}
 
 
