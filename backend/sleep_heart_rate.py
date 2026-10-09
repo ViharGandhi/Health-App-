@@ -36,7 +36,7 @@ def select_sleep(points: list[dict], today: date, sleep_id: str | None = None, *
 
 def build_sleep_heart_rate(point: dict | None, readings: list[dict], is_mock: bool) -> dict:
     if point is None:
-        return {"is_mock": is_mock, "status": "no_sleep", "samples": [], "stage_intervals": []}
+        return {"is_mock": is_mock, 'estimator': 'observed_sleep_heart_rate', "status": "no_sleep", "samples": [], "stage_intervals": []}
     interval = point["sleep"]["interval"]
     start, end = instant(interval["startTime"]), instant(interval["endTime"])
     samples, conflicts = {}, set()
@@ -62,7 +62,7 @@ def build_sleep_heart_rate(point: dict | None, readings: list[dict], is_mock: bo
     stats, _ = stage_stats(night)
     stage_intervals = [{"stage": s.stage, "start": s.start_utc.isoformat(), "end": s.end_utc.isoformat()}
                        for s in night.segments] if stats else []
-    return {"is_mock": is_mock, "status": "ok" if ordered else "no_readings",
+    return {"is_mock": is_mock, 'estimator': 'observed_sleep_heart_rate', "status": "ok" if ordered else "no_readings",
             "sleep_id": point["name"], "night_date": end_local[:10],
             "start": start.isoformat(), "end": end.isoformat(),
             "start_local": start_local, "end_local": end_local, "samples": ordered,

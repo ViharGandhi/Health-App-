@@ -76,6 +76,7 @@ def build_sleep_trend(
     else:
         average = round(sum(values) / len(values), 1) if values else None
     return SleepTrendResponse(
+        estimator='pooled_sleep_efficiency' if metric == 'efficiency' else 'seven_night_clock_variability',
         is_mock=is_mock, timeframe=timeframe,
         range_start=start.isoformat(), range_end=end.isoformat(),
         average_value=average,

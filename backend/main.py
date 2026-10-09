@@ -244,7 +244,7 @@ def _cached_data_page(function):
         parameters.apply_defaults()
         effective = {k: v for k, v in parameters.arguments.items() if k not in ('request', 'response')}
         strain_revision = dynamic.get('revision', 0) if request.url.path.startswith('/api/strain') or request.url.path == '/api/dashboard' else 0
-        key = hashlib.sha256(json.dumps(['page-v12', request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
+        key = hashlib.sha256(json.dumps(['page-v13', request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
             str(day), age, str(client.strain_timezone), client.strain_sex, client.strain_sex_defaulted,
             repr(STRAIN_CONFIG), strain_revision, dynamic.get('sleep_revision', 0)], default=str).encode()).hexdigest()
         frozen = daily_sleep and await asyncio.to_thread(client.store.sleep_day_prepared, client.account_key, day)
@@ -465,6 +465,7 @@ async def _compute_real_recovery(
         or len(hrv_history) < 7 or len(rhr_history) < 7
     )
     return RecoveryResponse(
+        estimator='descriptive_vitals',
         score=None, status="calibrating" if calibrating else "signals",
         today_hrv=today_hrv if positive(today_hrv) else None,
         today_rhr=resting_hr(today_rhr, age),
@@ -514,6 +515,7 @@ async def _recovery_response(client, today: date, history: dict, sleep: dict | N
     if estimate.confidence == "low":
         reason += " Low confidence: zone only; percentage withheld."
     return response.model_copy(update={**asdict(estimate), "score": estimate.percent,
+                                       'estimator': 'connected_recovery',
                                        "status_reason": reason,
                                        "training_recommendation": reason,
                                        "is_calibrating": estimate.status == "building_reference"})
@@ -673,7 +675,7 @@ async def sleep_need_endpoint(request: Request, response: Response):
         inputs = demo_sleep_need_inputs(nights, today, _demo_dashboard(request).strain.score_100)
     tonight = inputs.for_tonight(today)
     last_night = inputs.for_tonight(today - timedelta(days=1))
-    return {"date": today.isoformat(), "is_mock": not token,
+    return {"date": today.isoformat(), "is_mock": not token, 'estimator': 'bounded_sleep_need',
             "status": "estimated" if tonight else "missing_strain",
             **(asdict(tonight) if tonight else {}),
             "formatted_total_need": format_sleep_minutes(tonight.total_need_min) if tonight else None,
@@ -762,7 +764,7 @@ async def sleep_stage_ranges_endpoint(request: Request, response: Response, days
     if not token:
         if session:
             raise HTTPException(401, "Reconnect Google Health to refresh sleep data")
-        return {"is_mock": True, "nights": mock_stage_ranges(today, days)}
+        return {"is_mock": True, "nights": mock_stage_ranges(today, days), 'estimator': 'personal_stage_ranges'}
     client = _google_client(token, request)
     try:
         user_id = (session or {}).get('health_user_id') or client.account_key
@@ -771,7 +773,7 @@ async def sleep_stage_ranges_endpoint(request: Request, response: Response, days
         if error.response.status_code == 401:
             raise HTTPException(401, "Reconnect Google Health to refresh sleep data") from error
         raise
-    return {"is_mock": False, "nights": nights}
+    return {"is_mock": False, "nights": nights, 'estimator': 'personal_stage_ranges'}
 
 
 @app.get("/api/sleep/stress", response_model=SleepStressHistoryResponse)

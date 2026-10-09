@@ -1,0 +1,95 @@
+FFFFFFFFFFFFF                                                            [100%]
+================================== FAILURES ===================================
+__________ test_each_score_route_names_its_estimator[/api/recovery] ___________
+backend\test_estimator_identity.py:21: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+___ test_each_score_route_names_its_estimator[/api/recovery?demo=estimate] ____
+backend\test_estimator_identity.py:21: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+_____ test_each_score_route_names_its_estimator[/api/recovery/analytics] ______
+backend\test_estimator_identity.py:21: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+____________ test_each_score_route_names_its_estimator[/api/sleep] ____________
+backend\test_estimator_identity.py:21: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+_______ test_each_score_route_names_its_estimator[/api/sleep/analytics] _______
+backend\test_estimator_identity.py:21: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+______ test_each_score_route_names_its_estimator[/api/sleep/consistency] ______
+backend\test_estimator_identity.py:21: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+___ test_each_score_route_names_its_estimator[/api/sleep/consistency/score] ___
+backend\test_estimator_identity.py:21: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+______ test_each_score_route_names_its_estimator[/api/sleep/efficiency] _______
+backend\test_estimator_identity.py:21: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+_________ test_each_score_route_names_its_estimator[/api/sleep/need] __________
+backend\test_estimator_identity.py:21: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+________ test_each_score_route_names_its_estimator[/api/sleep/stress] _________
+backend\test_estimator_identity.py:21: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+_ test_each_score_route_names_its_estimator[/api/sleep/stages/typical-ranges] _
+backend\test_estimator_identity.py:21: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+______ test_each_score_route_names_its_estimator[/api/sleep/heart-rate] _______
+backend\test_estimator_identity.py:21: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+__________ test_connected_and_legacy_modes_report_actual_algorithms ___________
+backend\test_estimator_identity.py:29: in test_connected_and_legacy_modes_report_actual_algorithms
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_estimator_identity.py:27: in run
+    assert (await _compute_connected_recovery(client, DAY, 30)).estimator == 'connected_recovery'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pydantic\main.py:856: in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+E   AttributeError: 'RecoveryResponse' object has no attribute 'estimator'. Did you mean: 'estimated'?
+=========================== short test summary info ===========================
+FAILED backend/test_estimator_identity.py::test_each_score_route_names_its_estimator[/api/recovery]
+FAILED backend/test_estimator_identity.py::test_each_score_route_names_its_estimator[/api/recovery?demo=estimate]
+FAILED backend/test_estimator_identity.py::test_each_score_route_names_its_estimator[/api/recovery/analytics]
+FAILED backend/test_estimator_identity.py::test_each_score_route_names_its_estimator[/api/sleep]
+FAILED backend/test_estimator_identity.py::test_each_score_route_names_its_estimator[/api/sleep/analytics]
+FAILED backend/test_estimator_identity.py::test_each_score_route_names_its_estimator[/api/sleep/consistency]
+FAILED backend/test_estimator_identity.py::test_each_score_route_names_its_estimator[/api/sleep/consistency/score]
+FAILED backend/test_estimator_identity.py::test_each_score_route_names_its_estimator[/api/sleep/efficiency]
+FAILED backend/test_estimator_identity.py::test_each_score_route_names_its_estimator[/api/sleep/need]
+FAILED backend/test_estimator_identity.py::test_each_score_route_names_its_estimator[/api/sleep/stress]
+FAILED backend/test_estimator_identity.py::test_each_score_route_names_its_estimator[/api/sleep/stages/typical-ranges]
+FAILED backend/test_estimator_identity.py::test_each_score_route_names_its_estimator[/api/sleep/heart-rate]
+FAILED backend/test_estimator_identity.py::test_connected_and_legacy_modes_report_actual_algorithms
+13 failed in 3.74s

@@ -94,7 +94,7 @@ def build_recovery_analytics(history: dict, sleeps: list[dict], end: date, timef
         rows = [d for d in days if left.isoformat() <= d["date"] <= right.isoformat()]
         buckets.append({"start_date": left.isoformat(), "end_date": right.isoformat(),
                         "averages": averages(rows), "counts": {m: sum(d[m] is not None for d in rows) for m in METRICS}})
-    return {"is_mock": is_mock, "demo_mode": demo_mode if is_mock else None, "timeframe": timeframe,
+    return {"is_mock": is_mock, 'estimator': current.get('estimator', 'connected_recovery'), "demo_mode": demo_mode if is_mock else None, "timeframe": timeframe,
             "range_start": start.isoformat(), "range_end": end.isoformat(),
             "previous_range_end": previous_end.isoformat(), "days": days,
             "averages": averages(days), "previous_averages": averages(previous),

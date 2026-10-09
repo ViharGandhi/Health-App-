@@ -84,6 +84,7 @@ class StrainResponse(BaseModel):
 # ──────────────────────────────────────────────────────────────────────────────
 
 class RecoveryResponse(BaseModel):
+    estimator: str = 'legacy_prototype'
     rejected_readings: Dict[str, int] = Field(default_factory=dict)
     data_quality_flag: bool = False
     score: Optional[float] = Field(description="Demo score or connected estimated percent; null when confidence is low or reference is insufficient")
@@ -132,6 +133,7 @@ class SleepStages(BaseModel):
 
 
 class SleepResponse(BaseModel):
+    estimator: str = 'legacy_composite_sleep'
     components_available: Dict[str, bool] = Field(default_factory=dict)
     defaulted_components: Dict[str, float] = Field(default_factory=dict)
     component_coverage: float = 0.
@@ -172,6 +174,7 @@ class SleepTrendDay(BaseModel):
 
 
 class SleepTrendResponse(BaseModel):
+    estimator: str = 'pooled_sleep_efficiency'
     is_mock: bool
     timeframe: str
     range_start: str
@@ -192,6 +195,7 @@ class SleepConsistencyScorePoint(BaseModel):
 
 
 class SleepConsistencyScoreResponse(BaseModel):
+    estimator: str = 'four_night_clock_consistency'
     is_mock: bool
     timeframe: str
     range_start: str
@@ -241,6 +245,7 @@ class SleepStressNightResponse(BaseModel):
 
 
 class SleepStressHistoryResponse(BaseModel):
+    estimator: str = 'windowed_sleep_stress'
     is_mock: bool
     range_start: str
     range_end: str
