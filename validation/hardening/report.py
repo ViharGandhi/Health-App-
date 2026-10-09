@@ -48,9 +48,10 @@ LOCATIONS = {
     '206f2dd': ('backend/google_health_client.py', '_fetch_daily_steps'),
     'b1e11d0': ('backend/sleep_stage_webhooks.py', 'enqueue_sleep_notifications'),
     '4688814': ('backend/strain_analytics.py', 'build_strain_analytics'),
+    '2f43686': ('backend/sleep_stress.py', 'adapt_google_hrv'),
 }
 HIGH = {'269d5c2', '462437e', '2bd38e3', '626641d', 'b873319', '925213f', '7225925',
-        '0f410b5', '2125b38', '08e988a', '2f05440', '206f2dd', 'b1e11d0'}
+        '0f410b5', '2125b38', '08e988a', '2f05440', '206f2dd', 'b1e11d0', '2f43686'}
 LOW = {'a47cfcb', 'b578a51', '4688814'}
 
 
@@ -123,7 +124,7 @@ def main():
         lines.append(f"| {row['id']} | `{row['source']}:{row['line']}` `{row['callable']}` | {row['severity']} | {title} | {tests} | `{row['commit']}` |")
     lines += ['', '## Decisions and retained policies', '',
         'No decision is waiting. [The decision record](DECISIONS.md) retains options, numerical effects and the accepted contracts.', '',
-        '- Composite sleep: keep defaults, expose partial/availability. Missing HRV, sleeping HR and HR dip have 28% total weight and add 14 neutral points. Normal connected fixtures have 72% weighted availability; the illness fixture remains 69.1 sleep despite its abnormal vitals.',
+        '- Composite sleep: keep defaults, expose partial/availability. Missing HRV, sleeping HR and HR dip have 28% total weight and add 14 neutral points. The seven staged connected profile fixtures have 72% weighted availability; the illness fixture remains 69.1 sleep despite its abnormal vitals.',
         '- Main sleep: explicit main, otherwise unspecified, longest physical UTC duration, greatest stable ID. The reproduced A/B example now selects 400 asleep minutes in a 9 h session over 450 asleep minutes in an 8 h session. Naps/secondary exclusions and calculator eligibility thresholds remain.',
         '- Ceilings: existing HR 30–230 bpm and unit SpO2 limits, provider RMSSD <=200 ms and daily VO2 <=100. Unsupported daily/deep HRV, respiration and temperature ceilings remain deferred; 1e9 still passes their finite/positive gate.',
         '- Serialization: floor public 0–21 strain fields and historical rows to one decimal; preserve model/calculation values and inputs to averages/Recovery. 16.86 serializes as 16.8 while its model remains 16.9; values just below 21 serialize as 20.9.',
@@ -136,9 +137,9 @@ def main():
         f"| Combined final suite | Baseline backend and runner were separate | {metadata['tests']} JUnit cases; {metadata['runtime_s']:.3f} s; 0 failures/errors/skips/warnings |",
         f"| Independent formula checks | 1,295/1,295; {baseline['simulations']['runtime_s']:.3f} s | 1,295/1,295; all case inputs/expected/actual/tolerance/status unchanged |",
         f"| Generated properties | Prior audit had property tests | {summary['property_batches']} batches; {summary['passing_property_examples']:,} passing examples; generator retries are not test skips |",
-        '| Offline replay / profiles | 19 routes; 7 profiles | 19 routes plus W/M/6M replay; 9 profiles; original five and eight hardening probes on each |', '',
+        '| Offline replay / profiles | 19 routes; 7 profiles | 19 routes plus W/M/6M replay; 9 profiles; original five and nine hardening probes on each |', '',
         'The baseline source identity matched all 82 listed hashes with zero drift. [Baseline metadata](baseline/metadata.json), '
-        '[final suite log](final/tests.log), [XML](final/test-results.xml), [property statistics](fuzz-statistics.log), '
+        '[final suite log](final/tests.log), [XML](final/test-results.xml), [property statistics](fuzz-statistics-v2.log), '
         '[source hashes](final/source-hashes.json) and [read-only verification script](../followup/verify_artifacts.py) retain the evidence.', '',
         f"Exactly **{len(deltas)} response leaves** changed against both the preserved audit and execution baselines. "
         'The [complete before/after leaf table](final/audit-deltas.json) assigns a specific cause/commit to each. '
@@ -150,8 +151,8 @@ def main():
         'and historical row/activity displays 13.9→13.8, 6.4→6.3, 3.6→3.5 or 9.2→9.1. '
         'Other added numeric leaves are availability/provenance/zero rejection counts, not score retuning. '
         'The repeated dashboard/detail/current values agree. Historical averages and comparisons retain their previous model inputs.', '',
-        'Cache namespaces: `strain-v2` retains raw formula values; `page-v30` replaces page-v8 through all intervening versions; '
-        '`sleep-stress-9`, `sleep-stage-ranges-3` and `steps-rollup-v2` invalidate affected derivations/rollups. '
+        'Cache namespaces: `strain-v2` retains raw formula values; `page-v31` replaces page-v8 through all intervening versions; '
+        '`sleep-stress-10`, `sleep-stage-ranges-3` and `steps-rollup-v2` invalidate affected derivations/rollups. '
         '[Cache tests](../../backend/test_audit_cache_versions.py) and [step-cache tests](../../backend/test_provider_step_counts.py) '
         'prove old keys cannot serve the reproduced bad results. Invalid stored historical step counts are excluded. '
         'Previously truncated fractional counts cannot be distinguished from genuine integers without fetching source data again.', '',
@@ -171,6 +172,9 @@ def main():
         'The remote-timezone fixture uses device +02:00 and user -08:00: physical instant equality is true, while device wake date 2026-10-07 maps to user date 2026-10-06. '
         'Provider civil wake dates select summary sleep and request timezone selects activity days. Its sleep score is withheld with sleep_need_unavailable. '
         'This is a calendar/data-availability result, not evidence of physiological deterioration or proof that device/user date labels should be unified.', '',
+        'Anchor probes: no configured anchor withholds with hrv_anchor_unconfigured; a configured anchor shifted 12 hours outside sleep yields zero coverage and insufficient_baseline. '
+        'A five-minute shift can still yield status ok with reduced coverage and no withholding reason. Different UTC-offset representations of the same physical samples give identical results apart from computation time. '
+        'Therefore operator configuration and the legacy alignment_verified field do not prove empirical timestamp alignment; start/end semantics still require real-device calibration.', '',
         'The 1,000-night options experiment retains all inputs and candidate results in [sleep-component-options.json](sleep-component-options.json). '
         'Defaults produce 23.277–84.712, mean 57.717. Removing neutral points gives 9.277–70.712; renormalizing gives 12.885–98.211. '
         'The accepted default policy leaves profile scores unchanged. These distributions do not establish which policy is clinically better.', '',
@@ -193,6 +197,10 @@ def main():
         'Sandboxed async runs were bounded failures in Windows socket-pair initialization, not evidence of a backend deadlock. Their timeout logs remain retained. '
         'Tests default to 30 seconds; one measured 15-route/6-month replay has a scoped 120-second limit; whole-suite capture has a 300-second limit. '
         'Final unrestricted-IPC runs still block external network. No warning filter hides deprecations; expected blocked-socket UserWarning is asserted.', '',
+        '| Infrastructure finding | Reproduced / status | Regression | Commit |', '|---|---|---|---|',
+        '| Deprecated Starlette/AnyIO portal import | yes / fixed by AnyIO pin | [test_testclient_compatibility.py](../../backend/test_testclient_compatibility.py) | `f279e6f` |',
+        '| Unbounded offline test/network paths | yes / bounded and blocked; Windows IPC limitation distinguished | [test_offline_infrastructure.py](../../backend/test_offline_infrastructure.py) | `2a47dc5` |',
+        '| Default timeout shorter than measured large demo replay | yes / scoped bounded timeout | [test_strain_analytics.py](../../backend/test_strain_analytics.py) | `94c6835` |', '',
         'The baseline failure was a fixed October fixture evaluated against a moving recent-refresh clock. Its test clock was frozen; cache behavior was not patched to satisfy it. '
         'An existing sleep-analytics fixture gained the approved availability fields. The historical API assertion was changed to compare JSON output under the approved display spec, '
         'while dedicated tests preserve its model/average expectations. A new generic-mean property incorrectly prohibited signed means; its oracle was corrected to the documented generic mean contract. '
@@ -222,10 +230,10 @@ def main():
         'All scoring coefficients and existing clinical/product thresholds remain unchanged in this hardening task. Approved provider/unit validity limits, '
         'selection, availability, error contracts and display/cache behavior changed as documented. Nothing was merged, rebased onto main, pushed or deployed; no remote was modified.', '',
         '## Reproduce', '', '```powershell',
-        '.venv/hardening-clean/Scripts/python.exe validation/hardening/regress.py final-suite-complete backend validation/followup/test_live_script.py',
+        '.venv/hardening-clean/Scripts/python.exe validation/hardening/regress.py final-suite-complete-v2 backend validation/followup/test_live_script.py',
         '.venv/Scripts/python.exe validation/hardening/evidence.py',
         '.venv/Scripts/python.exe validation/hardening/simulations.py',
-        '.venv/Scripts/python.exe validation/hardening/build_artifacts.py final-suite-complete',
+        '.venv/Scripts/python.exe validation/hardening/build_artifacts.py final-suite-complete-v2',
         '.venv/Scripts/python.exe validation/hardening/report.py',
         '.venv/Scripts/python.exe validation/followup/verify_artifacts.py', '```', '']
     (HERE / 'REPORT.md').write_text('\n'.join(lines), encoding='utf-8')

@@ -1,17 +1,17 @@
 {
   "tests": {
-    "runtime_s": 123.37474859999202,
+    "runtime_s": 120.03484839999874,
     "exit_code": 0,
     "junit_written": true,
-    "tests": 704,
+    "tests": 712,
     "failures": 0,
     "errors": 0,
     "skipped": 0
   },
   "callable_count": 326,
   "numeric_literals": 1906,
-  "property_batches": 71,
-  "passing_property_examples": 14300,
+  "property_batches": 74,
+  "passing_property_examples": 14900,
   "simulation_checks": 1295,
   "unchanged_formula_cases": 1295,
   "changed_leaves": 122,

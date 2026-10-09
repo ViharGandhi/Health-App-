@@ -476,8 +476,8 @@
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/0/algo_version",
     "before": "sleep-stress-5",
-    "after": "sleep-stress-9",
-    "reason": "Provider bounds, main selection, reasons and partition cache namespace (c968fce, 623fc73, d37a4ad, 70ede57)"
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
   },
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/0/anchor_verification",
@@ -510,8 +510,8 @@
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/1/algo_version",
     "before": "sleep-stress-5",
-    "after": "sleep-stress-9",
-    "reason": "Provider bounds, main selection, reasons and partition cache namespace (c968fce, 623fc73, d37a4ad, 70ede57)"
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
   },
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/1/anchor_verification",
@@ -544,8 +544,8 @@
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/2/algo_version",
     "before": "sleep-stress-5",
-    "after": "sleep-stress-9",
-    "reason": "Provider bounds, main selection, reasons and partition cache namespace (c968fce, 623fc73, d37a4ad, 70ede57)"
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
   },
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/2/anchor_verification",
@@ -578,8 +578,8 @@
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/3/algo_version",
     "before": "sleep-stress-5",
-    "after": "sleep-stress-9",
-    "reason": "Provider bounds, main selection, reasons and partition cache namespace (c968fce, 623fc73, d37a4ad, 70ede57)"
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
   },
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/3/anchor_verification",
@@ -612,8 +612,8 @@
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/4/algo_version",
     "before": "sleep-stress-5",
-    "after": "sleep-stress-9",
-    "reason": "Provider bounds, main selection, reasons and partition cache namespace (c968fce, 623fc73, d37a4ad, 70ede57)"
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
   },
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/4/anchor_verification",
@@ -646,8 +646,8 @@
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/5/algo_version",
     "before": "sleep-stress-5",
-    "after": "sleep-stress-9",
-    "reason": "Provider bounds, main selection, reasons and partition cache namespace (c968fce, 623fc73, d37a4ad, 70ede57)"
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
   },
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/5/anchor_verification",
@@ -680,8 +680,8 @@
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/6/algo_version",
     "before": "sleep-stress-5",
-    "after": "sleep-stress-9",
-    "reason": "Provider bounds, main selection, reasons and partition cache namespace (c968fce, 623fc73, d37a4ad, 70ede57)"
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
   },
   {
     "path": "/demo/api_demo//api/sleep/stress/body/nights/6/anchor_verification",

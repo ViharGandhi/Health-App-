@@ -36,11 +36,15 @@ def main():
     for profile in profiles:
         assert profile['five_fix_probes']['stress_unique_nights'] == 1
         assert profile['hardening_probes']['missing_anchor_withheld_reason'] == 'hrv_anchor_unconfigured'
+        assert profile['hardening_probes']['boolean_sample_rejected']
     replay = json.loads((OUT / 'demo-replay.json').read_text())
     assert len(replay['routes']) == 19 and all(r['status'] == 200 for r in replay['routes'].values())
     coverage = json.loads((OUT / 'fuzz-coverage.json').read_text())
     assert all(r['passing_examples'] >= 200 and r['failing_examples'] == 0 for r in coverage['batches'])
     assert json.loads((HARDENING / 'baseline/source-drift.json').read_text()) == []
+    preserved = json.loads((HARDENING / 'baseline-immutability.json').read_text())
+    for name, digest in preserved['baseline_file_hashes'].items():
+        assert hashlib.sha256((HARDENING / 'baseline' / name).read_bytes()).hexdigest() == digest, name
     print(json.dumps(dict(source_hashes_verified=len(manifest), relative_evidence_links='verified',
         simulation_checks=1295, junit_cases=metadata['tests'], explained_delta_leaves=len(changes),
         profiles=9, property_batches=len(coverage['batches']), passing_property_examples=coverage['passing_examples'],

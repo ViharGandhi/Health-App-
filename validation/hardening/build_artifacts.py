@@ -92,7 +92,7 @@ def inventories():
 
 
 def fuzz_statistics():
-    text = (HERE / 'fuzz-statistics.log').read_text()
+    text = (HERE / 'fuzz-statistics-v2.log').read_text()
     batches = []
     for name, body in re.findall(r'^(backend/test_[^\n]+):\n(.*?)(?=^backend/test_|\Z)', text, re.M | re.S):
         match = re.search(r'(\d+) passing, (\d+) failing, and (\d+) invalid test cases', body)
@@ -106,7 +106,7 @@ def fuzz_statistics():
 
 
 def main():
-    label = sys.argv[1] if len(sys.argv) > 1 else 'final-suite'
+    label = sys.argv[1] if len(sys.argv) > 1 else 'final-suite-complete-v2'
     metadata = json.loads((HERE / (label + '-metadata.json')).read_text())
     assert metadata['exit_code'] == 0 and metadata['junit_written']
     assert metadata['failures'] == metadata['errors'] == metadata['skipped'] == 0

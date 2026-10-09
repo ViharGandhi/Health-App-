@@ -1,8 +1,8 @@
 {
-  "runtime_s": 120.03484839999874,
+  "runtime_s": 43.075291600005585,
   "exit_code": 0,
   "junit_written": true,
-  "tests": 712,
+  "tests": 115,
   "failures": 0,
   "errors": 0,
   "skipped": 0

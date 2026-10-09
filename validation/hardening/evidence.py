@@ -26,7 +26,7 @@ from recovery_score import recovery_from_history
 from health_trends import build_health_response
 from strain import calculate_strain
 from strain_service import strain_response
-from sleep_stress import score_night, prepare_night
+from sleep_stress import score_night, prepare_night, adapt_google_hrv
 from sleep_stress_pipeline import compute_connected_sleep_stress
 from sleep_stress_store import SleepStressStore
 from mock_sleep_stress import _raw_night
@@ -125,13 +125,21 @@ async def extra_profiles():
         with tempfile.TemporaryDirectory() as directory:
             withheld = (await compute_connected_sleep_stress(source, DAY, DAY, None,
                 SleepStressStore(Path(directory) / 'stress.db')))[0]
+        raw_hrv[0]['heartRateVariability']['rootMeanSquareOfSuccessiveDifferencesMilliseconds'] = True
+        try:
+            adapt_google_hrv(raw_hrv, 'start')
+        except ValueError:
+            boolean_sample_rejected = True
+        else:
+            boolean_sample_rejected = False
+        assert boolean_sample_rejected
         row['hardening_probes'] = dict(boolean_hrv_rejected=not valid_metric('hrv', True),
             sample_hrv_201_rejected=not valid_metric('sample_hrv', 201.),
             vo2_101_rejected=not valid_metric('vo2_max', 101.), daily_hrv_1e9_remains_unbounded=valid_metric('hrv', 1e9),
             stable_even_median=finite_median([1.79e308] * 2),
             json_strain=model.model_dump(mode='json')['strain'], model_strain=model.strain,
             partition_withheld_reason=invalid_night.withheld_reason,
-            missing_anchor_withheld_reason=withheld['withheld_reason'])
+            missing_anchor_withheld_reason=withheld['withheld_reason'], boolean_sample_rejected=boolean_sample_rejected)
         assert row['hardening_probes']['json_strain'] == 16.8 and model.strain == 16.9
         assert invalid_night.withheld_reason and withheld['withheld_reason']
     save('adversarial-profiles.json', rows)
@@ -148,7 +156,7 @@ def run():
     asyncio.run(original.profiles())
     asyncio.run(extra_profiles())
     original.constants()
-    print('Offline evidence: 19 demo routes, W/M/6M replays, 9 profiles, 5 original and 8 hardening probes per profile.')
+    print('Offline evidence: 19 demo routes, W/M/6M replays, 9 profiles, 5 original and 9 hardening probes per profile.')
 
 
 if __name__ == '__main__':

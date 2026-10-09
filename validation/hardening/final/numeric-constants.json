@@ -313,7 +313,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 303,
+    "line": 305,
     "literal": 14,
     "context": "async def get_hrv_history(self, days: int = 14) -> list[float]:",
     "comment": null,
@@ -321,7 +321,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 579,
+    "line": 583,
     "literal": 4,
     "context": "async def get_sleep_history_nights(self, days: int = 4, end_date: date | None = None) -> list[dict]:",
     "comment": null,
@@ -329,7 +329,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 585,
+    "line": 589,
     "literal": 7,
     "context": "async def get_sleep_efficiency_history(self, days: int = 7) -> list[dict]:",
     "comment": null,
@@ -337,7 +337,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 137,
+    "line": 139,
     "literal": 3,
     "context": "for attempt in range(3):",
     "comment": null,
@@ -345,7 +345,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 194,
+    "line": 196,
     "literal": 64,
     "context": "while len(_request_lanes) > 64:",
     "comment": null,
@@ -353,7 +353,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 119,
+    "line": 121,
     "literal": 1,
     "context": "return cached[1]",
     "comment": null,
@@ -361,7 +361,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 130,
+    "line": 132,
     "literal": 64,
     "context": "while len(_point_cache) > 64:",
     "comment": null,
@@ -369,7 +369,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 191,
+    "line": 193,
     "literal": 0.0,
     "context": "_request_lanes[key] = [asyncio.Lock(), 0.0]",
     "comment": null,
@@ -377,7 +377,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 196,
+    "line": 198,
     "literal": 0,
     "context": "async with lane[0]:",
     "comment": null,
@@ -385,7 +385,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 198,
+    "line": 200,
     "literal": 0,
     "context": "if delay > 0:",
     "comment": null,
@@ -393,7 +393,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 200,
+    "line": 202,
     "literal": 1,
     "context": "lane[1] = time.monotonic() + 0.5",
     "comment": null,
@@ -401,7 +401,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 200,
+    "line": 202,
     "literal": 0.5,
     "context": "lane[1] = time.monotonic() + 0.5",
     "comment": null,
@@ -409,7 +409,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 206,
+    "line": 208,
     "literal": 25,
     "context": "params = {\"filter\": filter_expr, \"pageSize\": 25 if data_type in (\"sleep\", \"exercise\") else 10000}",
     "comment": null,
@@ -417,7 +417,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 206,
+    "line": 208,
     "literal": 10000,
     "context": "params = {\"filter\": filter_expr, \"pageSize\": 25 if data_type in (\"sleep\", \"exercise\") else 10000}",
     "comment": null,
@@ -425,7 +425,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 577,
+    "line": 581,
     "literal": 0,
     "context": "return records[0] if records else None",
     "comment": null,
@@ -433,7 +433,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 79,
+    "line": 81,
     "literal": 0,
     "context": "count = float(stage.get('count', 0))",
     "comment": null,
@@ -441,7 +441,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 80,
+    "line": 82,
     "literal": 0,
     "context": "if not math.isfinite(count) or count < 0 or not count.is_integer():",
     "comment": null,
@@ -449,7 +449,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 116,
+    "line": 118,
     "literal": 0,
     "context": "if cached and cached[0] > time.monotonic():",
     "comment": null,
@@ -457,7 +457,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 128,
+    "line": 130,
     "literal": 60,
     "context": "_point_cache[key] = (time.monotonic() + 60, points)",
     "comment": null,
@@ -465,7 +465,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 183,
+    "line": 185,
     "literal": 0,
     "context": "if key[0] == self.account_key:",
     "comment": null,
@@ -473,7 +473,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 197,
+    "line": 199,
     "literal": 1,
     "context": "delay = lane[1] - time.monotonic()",
     "comment": null,
@@ -481,7 +481,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 211,
+    "line": 213,
     "literal": 20.0,
     "context": "async with httpx.AsyncClient(timeout=20.0) as client:",
     "comment": null,
@@ -489,7 +489,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 213,
+    "line": 215,
     "literal": 4,
     "context": "for attempt in range(4):",
     "comment": null,
@@ -497,7 +497,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 246,
+    "line": 248,
     "literal": 20.0,
     "context": "async with httpx.AsyncClient(timeout=20.0) as client:",
     "comment": null,
@@ -505,7 +505,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 305,
+    "line": 307,
     "literal": 1,
     "context": "end = date.today() - timedelta(days=1)",
     "comment": null,
@@ -513,7 +513,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 434,
+    "line": 438,
     "literal": 20.0,
     "context": "async with httpx.AsyncClient(timeout=20.0) as client:",
     "comment": null,
@@ -521,7 +521,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 440,
+    "line": 444,
     "literal": 1,
     "context": "\"windowSizeDays\": 1, \"pageSize\": 10000, \"dataSourceFamily\": WEARABLES}",
     "comment": null,
@@ -529,7 +529,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 440,
+    "line": 444,
     "literal": 10000,
     "context": "\"windowSizeDays\": 1, \"pageSize\": 10000, \"dataSourceFamily\": WEARABLES}",
     "comment": null,
@@ -537,7 +537,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 501,
+    "line": 505,
     "literal": 60,
     "context": "stage_totals = {s[\"type\"]: float(s[\"minutes\"]) * 60 for s in summary.get(\"stagesSummary\", [])}",
     "comment": null,
@@ -545,7 +545,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 503,
+    "line": 507,
     "literal": 0,
     "context": "asleep_minutes = float(summary.get(\"minutesAsleep\") or 0)",
     "comment": null,
@@ -553,7 +553,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 508,
+    "line": 512,
     "literal": 0,
     "context": "and 0 <= asleep_minutes <= (physical_end - physical_start).total_seconds() / 60)",
     "comment": null,
@@ -561,7 +561,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 526,
+    "line": 530,
     "literal": 0.0,
     "context": "\"nap_duration_seconds\": 0.0,",
     "comment": null,
@@ -569,7 +569,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 546,
+    "line": 550,
     "literal": 60,
     "context": "return {record[\"date\"]: record[\"total_duration\"] / 60 if record[\"sleep_duration_available\"] else None",
     "comment": null,
@@ -577,7 +577,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 572,
+    "line": 576,
     "literal": 0.0,
     "context": "totals[day] = totals.get(day, 0.0) + minutes",
     "comment": null,
@@ -585,7 +585,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 589,
+    "line": 593,
     "literal": 60,
     "context": "\"time_asleep_minutes\": r[\"total_duration\"] / 60,",
     "comment": null,
@@ -593,7 +593,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 590,
+    "line": 594,
     "literal": 60,
     "context": "\"time_in_bed_minutes\": r[\"in_bed_duration\"] / 60,",
     "comment": null,
@@ -601,7 +601,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 591,
+    "line": 595,
     "literal": 60,
     "context": "\"awake_minutes\": r[\"awake_duration\"] / 60,",
     "comment": null,
@@ -609,7 +609,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 601,
+    "line": 605,
     "literal": 60,
     "context": "\"time_asleep_minutes\": record[\"total_duration\"] / 60,",
     "comment": null,
@@ -617,7 +617,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 602,
+    "line": 606,
     "literal": 60,
     "context": "\"time_in_bed_minutes\": record[\"in_bed_duration\"] / 60,",
     "comment": null,
@@ -625,7 +625,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 141,
+    "line": 143,
     "literal": 2,
     "context": "if attempt == 2:",
     "comment": null,
@@ -633,7 +633,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 306,
+    "line": 308,
     "literal": 1,
     "context": "start = end - timedelta(days=days - 1)",
     "comment": null,
@@ -641,7 +641,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 442,
+    "line": 446,
     "literal": 4,
     "context": "for attempt in range(4):",
     "comment": null,
@@ -649,7 +649,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 508,
+    "line": 512,
     "literal": 60,
     "context": "and 0 <= asleep_minutes <= (physical_end - physical_start).total_seconds() / 60)",
     "comment": null,
@@ -657,7 +657,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 515,
+    "line": 519,
     "literal": 60,
     "context": "\"total_duration\": asleep_minutes * 60,",
     "comment": null,
@@ -665,7 +665,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 519,
+    "line": 523,
     "literal": 0.0,
     "context": "\"deep_sleep_duration\": stage_totals.get(\"DEEP\", 0.0),",
     "comment": null,
@@ -673,7 +673,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 520,
+    "line": 524,
     "literal": 0.0,
     "context": "\"rem_sleep_duration\": stage_totals.get(\"REM\", 0.0),",
     "comment": null,
@@ -681,7 +681,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 521,
+    "line": 525,
     "literal": 0.0,
     "context": "\"core_sleep_duration\": stage_totals.get(\"LIGHT\", 0.0),",
     "comment": null,
@@ -689,7 +689,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 522,
+    "line": 526,
     "literal": 60,
     "context": "\"awake_duration\": float(summary.get(\"minutesAwake\", 0)) * 60,",
     "comment": null,
@@ -697,7 +697,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 523,
+    "line": 527,
     "literal": 60,
     "context": "\"in_bed_duration\": float(summary.get(\"minutesInSleepPeriod\", 0)) * 60,",
     "comment": null,
@@ -705,7 +705,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 541,
+    "line": 545,
     "literal": 1,
     "context": "selected.append(max(candidates, key=lambda item: item[0])[1])",
     "comment": null,
@@ -713,7 +713,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 565,
+    "line": 569,
     "literal": 0,
     "context": "if left.tzinfo is None or right.tzinfo is None or right > now or not 0 <= minutes <= (right - left).total_seconds() / 60 or not math.isfinite(minutes):",
     "comment": null,
@@ -721,7 +721,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 109,
+    "line": 111,
     "literal": 0,
     "context": "exact_key(data_type, filter_expr, reconcile), now=0) or []",
     "comment": null,
@@ -729,7 +729,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 218,
+    "line": 220,
     "literal": 1000,
     "context": "count('google_ms', (time.monotonic() - started) * 1000)",
     "comment": null,
@@ -737,7 +737,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 219,
+    "line": 221,
     "literal": 3,
     "context": "if response.status_code not in (429, 503) or attempt == 3:",
     "comment": null,
@@ -745,7 +745,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 222,
+    "line": 224,
     "literal": 2,
     "context": "delay = float(retry_after) if retry_after.replace(\".\", \"\", 1).isdigit() else 2 ** attempt",
     "comment": null,
@@ -753,7 +753,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 502,
+    "line": 506,
     "literal": 0,
     "context": "awake_count = sum(int(s.get(\"count\", 0)) for s in summary.get(\"stagesSummary\", []) if s.get(\"type\") == \"AWAKE\")",
     "comment": null,
@@ -761,7 +761,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 525,
+    "line": 529,
     "literal": 60,
     "context": "\"sleep_latency_seconds\": float(summary[\"minutesToFallAsleep\"]) * 60 if \"minutesToFallAsleep\" in summary else None,",
     "comment": null,
@@ -769,7 +769,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 565,
+    "line": 569,
     "literal": 60,
     "context": "if left.tzinfo is None or right.tzinfo is None or right > now or not 0 <= minutes <= (right - left).total_seconds() / 60 or not math.isfinite(minutes):",
     "comment": null,
@@ -785,7 +785,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 219,
+    "line": 221,
     "literal": 429,
     "context": "if response.status_code not in (429, 503) or attempt == 3:",
     "comment": null,
@@ -793,7 +793,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 219,
+    "line": 221,
     "literal": 503,
     "context": "if response.status_code not in (429, 503) or attempt == 3:",
     "comment": null,
@@ -801,7 +801,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 223,
+    "line": 225,
     "literal": 30,
     "context": "await asyncio.sleep(min(delay, 30))",
     "comment": null,
@@ -809,7 +809,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 401,
+    "line": 405,
     "literal": 60,
     "context": "\"active_minutes\": float(exercise[\"activeDuration\"].removesuffix(\"s\")) / 60 if exercise.get(\"activeDuration\") else",
     "comment": null,
@@ -817,7 +817,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 403,
+    "line": 407,
     "literal": 60,
     "context": "datetime.fromisoformat(interval[\"startTime\"].replace(\"Z\", \"+00:00\"))).total_seconds() / 60,",
     "comment": null,
@@ -825,7 +825,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 437,
+    "line": 441,
     "literal": 1,
     "context": "upper = min(end + timedelta(days=1), lower + timedelta(days=90))",
     "comment": null,
@@ -833,7 +833,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 437,
+    "line": 441,
     "literal": 90,
     "context": "upper = min(end + timedelta(days=1), lower + timedelta(days=90))",
     "comment": null,
@@ -841,7 +841,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 447,
+    "line": 451,
     "literal": 1000,
     "context": "count('google_ms', (time.monotonic() - started) * 1000)",
     "comment": null,
@@ -849,7 +849,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 448,
+    "line": 452,
     "literal": 3,
     "context": "if response.status_code not in (429, 503) or attempt == 3:",
     "comment": null,
@@ -857,137 +857,9 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 451,
+    "line": 455,
     "literal": 2,
     "context": "delay = float(retry_after) if retry_after.replace(\".\", \"\", 1).isdigit() else 2 ** attempt",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 494,
-    "literal": 0,
-    "context": "onset = start_dt + timedelta(minutes=float(summary.get(\"minutesToFallAsleep\", 0)))",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 495,
-    "literal": 0,
-    "context": "wake = end_dt - timedelta(minutes=float(summary.get(\"minutesAfterWakeUp\", 0)))",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 522,
-    "literal": 0,
-    "context": "\"awake_duration\": float(summary.get(\"minutesAwake\", 0)) * 60,",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 523,
-    "literal": 0,
-    "context": "\"in_bed_duration\": float(summary.get(\"minutesInSleepPeriod\", 0)) * 60,",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 581,
-    "literal": 1,
-    "context": "records = await self._sleep_records(end - timedelta(days=days - 1), end)",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 586,
-    "literal": 1,
-    "context": "records = await self._sleep_records(date.today() - timedelta(days=days - 1), date.today())",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 105,
-    "literal": 1,
-    "context": "query = read_range(f'{before[1]} >= \"1900-01-01\" AND {before[1]} < \"{before[2]}\"')",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 105,
-    "literal": 1,
-    "context": "query = read_range(f'{before[1]} >= \"1900-01-01\" AND {before[1]} < \"{before[2]}\"')",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 105,
-    "literal": 2,
-    "context": "query = read_range(f'{before[1]} >= \"1900-01-01\" AND {before[1]} < \"{before[2]}\"')",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 222,
-    "literal": 1,
-    "context": "delay = float(retry_after) if retry_after.replace(\".\", \"\", 1).isdigit() else 2 ** attempt",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 374,
-    "literal": 1,
-    "context": "sample_start = f\"{(start - timedelta(days=1)).isoformat()}T00:00:00Z\"",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 375,
-    "literal": 2,
-    "context": "sample_end = f\"{(end + timedelta(days=2)).isoformat()}T00:00:00Z\"",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 448,
-    "literal": 429,
-    "context": "if response.status_code not in (429, 503) or attempt == 3:",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 448,
-    "literal": 503,
-    "context": "if response.status_code not in (429, 503) or attempt == 3:",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 452,
-    "literal": 30,
-    "context": "await asyncio.sleep(min(delay, 30))",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/google_health_client.py",
-    "line": 461,
-    "literal": 0,
-    "context": "if integer_count < 0 or (not isinstance(step_count, str) and integer_count != step_count):",
     "comment": null,
     "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
   },
@@ -995,7 +867,7 @@
     "source": "backend/google_health_client.py",
     "line": 498,
     "literal": 0,
-    "context": "if (physical_start + timedelta(minutes=float(summary.get('minutesToFallAsleep', 0)))",
+    "context": "onset = start_dt + timedelta(minutes=float(summary.get(\"minutesToFallAsleep\", 0)))",
     "comment": null,
     "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
   },
@@ -1003,21 +875,69 @@
     "source": "backend/google_health_client.py",
     "line": 499,
     "literal": 0,
-    "context": ">= physical_end - timedelta(minutes=float(summary.get('minutesAfterWakeUp', 0)))):",
+    "context": "wake = end_dt - timedelta(minutes=float(summary.get(\"minutesAfterWakeUp\", 0)))",
     "comment": null,
     "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 242,
+    "line": 526,
+    "literal": 0,
+    "context": "\"awake_duration\": float(summary.get(\"minutesAwake\", 0)) * 60,",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 527,
+    "literal": 0,
+    "context": "\"in_bed_duration\": float(summary.get(\"minutesInSleepPeriod\", 0)) * 60,",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 585,
     "literal": 1,
-    "context": "f'{field} < \"{(end + timedelta(days=1)).isoformat()}\"')",
+    "context": "records = await self._sleep_records(end - timedelta(days=days - 1), end)",
     "comment": null,
     "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 451,
+    "line": 590,
+    "literal": 1,
+    "context": "records = await self._sleep_records(date.today() - timedelta(days=days - 1), date.today())",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 107,
+    "literal": 1,
+    "context": "query = read_range(f'{before[1]} >= \"1900-01-01\" AND {before[1]} < \"{before[2]}\"')",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 107,
+    "literal": 1,
+    "context": "query = read_range(f'{before[1]} >= \"1900-01-01\" AND {before[1]} < \"{before[2]}\"')",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 107,
+    "literal": 2,
+    "context": "query = read_range(f'{before[1]} >= \"1900-01-01\" AND {before[1]} < \"{before[2]}\"')",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 224,
     "literal": 1,
     "context": "delay = float(retry_after) if retry_after.replace(\".\", \"\", 1).isdigit() else 2 ** attempt",
     "comment": null,
@@ -1025,7 +945,87 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 541,
+    "line": 378,
+    "literal": 1,
+    "context": "sample_start = f\"{(start - timedelta(days=1)).isoformat()}T00:00:00Z\"",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 379,
+    "literal": 2,
+    "context": "sample_end = f\"{(end + timedelta(days=2)).isoformat()}T00:00:00Z\"",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 452,
+    "literal": 429,
+    "context": "if response.status_code not in (429, 503) or attempt == 3:",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 452,
+    "literal": 503,
+    "context": "if response.status_code not in (429, 503) or attempt == 3:",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 456,
+    "literal": 30,
+    "context": "await asyncio.sleep(min(delay, 30))",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 465,
+    "literal": 0,
+    "context": "if integer_count < 0 or (not isinstance(step_count, str) and integer_count != step_count):",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 502,
+    "literal": 0,
+    "context": "if (physical_start + timedelta(minutes=float(summary.get('minutesToFallAsleep', 0)))",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 503,
+    "literal": 0,
+    "context": ">= physical_end - timedelta(minutes=float(summary.get('minutesAfterWakeUp', 0)))):",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 244,
+    "literal": 1,
+    "context": "f'{field} < \"{(end + timedelta(days=1)).isoformat()}\"')",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 455,
+    "literal": 1,
+    "context": "delay = float(retry_after) if retry_after.replace(\".\", \"\", 1).isdigit() else 2 ** attempt",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 545,
     "literal": 0,
     "context": "selected.append(max(candidates, key=lambda item: item[0])[1])",
     "comment": null,
@@ -7465,7 +7465,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 84,
+    "line": 86,
     "literal": 51,
     "context": "baseline = rng.randint(51, 65)",
     "comment": null,
@@ -7473,7 +7473,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 84,
+    "line": 86,
     "literal": 65,
     "context": "baseline = rng.randint(51, 65)",
     "comment": null,
@@ -7481,7 +7481,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 87,
+    "line": 89,
     "literal": 0,
     "context": "readings, elapsed = [], 0",
     "comment": null,
@@ -7489,7 +7489,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 91,
+    "line": 93,
     "literal": 0,
     "context": "bump = {\"AWAKE\": 15, \"LIGHT\": 1, \"DEEP\": -7, \"REM\": 6}.get(stage, 0)",
     "comment": null,
@@ -7497,7 +7497,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 96,
+    "line": 98,
     "literal": 35,
     "context": "elapsed += rng.randint(35, 55)",
     "comment": null,
@@ -7505,7 +7505,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 96,
+    "line": 98,
     "literal": 55,
     "context": "elapsed += rng.randint(35, 55)",
     "comment": null,
@@ -7521,7 +7521,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 69,
+    "line": 71,
     "literal": 10,
     "context": "\"sleep_id\": point[\"name\"], \"night_date\": end_local[:10],",
     "comment": null,
@@ -7537,7 +7537,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 91,
+    "line": 93,
     "literal": 15,
     "context": "bump = {\"AWAKE\": 15, \"LIGHT\": 1, \"DEEP\": -7, \"REM\": 6}.get(stage, 0)",
     "comment": null,
@@ -7545,7 +7545,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 91,
+    "line": 93,
     "literal": 1,
     "context": "bump = {\"AWAKE\": 15, \"LIGHT\": 1, \"DEEP\": -7, \"REM\": 6}.get(stage, 0)",
     "comment": null,
@@ -7553,7 +7553,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 91,
+    "line": 93,
     "literal": 6,
     "context": "bump = {\"AWAKE\": 15, \"LIGHT\": 1, \"DEEP\": -7, \"REM\": 6}.get(stage, 0)",
     "comment": null,
@@ -7561,7 +7561,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 92,
+    "line": 94,
     "literal": 0,
     "context": "bpm = round(baseline + bump + 3 * math.sin(elapsed / 700) + rng.gauss(0, 2.5))",
     "comment": null,
@@ -7569,7 +7569,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 92,
+    "line": 94,
     "literal": 2.5,
     "context": "bpm = round(baseline + bump + 3 * math.sin(elapsed / 700) + rng.gauss(0, 2.5))",
     "comment": null,
@@ -7577,7 +7577,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 93,
+    "line": 95,
     "literal": 0.4,
     "context": "if not duration * 0.4 <= elapsed < duration * 0.4 + 720:",
     "comment": null,
@@ -7585,7 +7585,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 93,
+    "line": 95,
     "literal": 720,
     "context": "if not duration * 0.4 <= elapsed < duration * 0.4 + 720:",
     "comment": null,
@@ -7593,7 +7593,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 52,
+    "line": 54,
     "literal": 1,
     "context": "if not start <= timestamp < end or not 1 <= bpm <= 300 or not bpm.is_integer():",
     "comment": null,
@@ -7601,7 +7601,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 52,
+    "line": 54,
     "literal": 300,
     "context": "if not start <= timestamp < end or not 1 <= bpm <= 300 or not bpm.is_integer():",
     "comment": null,
@@ -7609,7 +7609,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 91,
+    "line": 93,
     "literal": 7,
     "context": "bump = {\"AWAKE\": 15, \"LIGHT\": 1, \"DEEP\": -7, \"REM\": 6}.get(stage, 0)",
     "comment": null,
@@ -7617,7 +7617,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 92,
+    "line": 94,
     "literal": 3,
     "context": "bpm = round(baseline + bump + 3 * math.sin(elapsed / 700) + rng.gauss(0, 2.5))",
     "comment": null,
@@ -7625,7 +7625,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 93,
+    "line": 95,
     "literal": 0.4,
     "context": "if not duration * 0.4 <= elapsed < duration * 0.4 + 720:",
     "comment": null,
@@ -7641,7 +7641,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 92,
+    "line": 94,
     "literal": 700,
     "context": "bpm = round(baseline + bump + 3 * math.sin(elapsed / 700) + rng.gauss(0, 2.5))",
     "comment": null,
@@ -8577,7 +8577,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 186,
+    "line": 190,
     "literal": 0.0,
     "context": "total = 0.0",
     "comment": null,
@@ -8585,7 +8585,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 357,
+    "line": 361,
     "literal": 0.0,
     "context": "hrv_only = 0.0",
     "comment": null,
@@ -8601,7 +8601,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 184,
+    "line": 188,
     "literal": 0.0,
     "context": "return 0.0",
     "comment": null,
@@ -8609,7 +8609,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 187,
+    "line": 191,
     "literal": 0,
     "context": "start, end = intervals[0]",
     "comment": null,
@@ -8617,7 +8617,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 194,
+    "line": 198,
     "literal": 60,
     "context": "return (total + (end - start).total_seconds()) / 60",
     "comment": null,
@@ -8625,7 +8625,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 199,
+    "line": 203,
     "literal": 60,
     "context": "asleep = sum((segment.end_utc - segment.start_utc).total_seconds() for segment in asleep_stages) / 60",
     "comment": null,
@@ -8633,7 +8633,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 203,
+    "line": 207,
     "literal": 0.0,
     "context": "return max(0.0, asleep - _merged_minutes(interruptions))",
     "comment": null,
@@ -8641,7 +8641,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 322,
+    "line": 326,
     "literal": 0,
     "context": "\"confidence\": \"low\", \"status\": \"ok\", \"nights_available\": 0,",
     "comment": null,
@@ -8649,7 +8649,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 188,
+    "line": 192,
     "literal": 1,
     "context": "for next_start, next_end in intervals[1:]:",
     "comment": null,
@@ -8657,15 +8657,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 228,
-    "literal": 0.0,
-    "context": "return NightWindows(night, (), 0.0, 0.0, 'invalid_stage_partition')",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/sleep_stress.py",
-    "line": 228,
+    "line": 232,
     "literal": 0.0,
     "context": "return NightWindows(night, (), 0.0, 0.0, 'invalid_stage_partition')",
     "comment": null,
@@ -8675,13 +8667,21 @@
     "source": "backend/sleep_stress.py",
     "line": 232,
     "literal": 0.0,
+    "context": "return NightWindows(night, (), 0.0, 0.0, 'invalid_stage_partition')",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 236,
+    "literal": 0.0,
     "context": "return NightWindows(night, (), asleep, 0.0)",
     "comment": null,
     "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 262,
+    "line": 266,
     "literal": 0.0,
     "context": "return NightWindows(night, tuple(valid), asleep, min(1.0, covered / asleep) if asleep else 0.0)",
     "comment": null,
@@ -8689,7 +8689,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 316,
+    "line": 320,
     "literal": 60,
     "context": "'physical_duration_minutes': (night.end_utc - night.start_utc).total_seconds() / 60,",
     "comment": null,
@@ -8697,7 +8697,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 320,
+    "line": 324,
     "literal": 2,
     "context": "\"stress_pct\": None, \"valid_minutes\": round(valid_minutes, 2),",
     "comment": null,
@@ -8705,7 +8705,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 321,
+    "line": 325,
     "literal": 2,
     "context": "\"asleep_minutes\": round(current.asleep_minutes, 2), \"coverage\": round(current.coverage, 3),",
     "comment": null,
@@ -8713,7 +8713,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 321,
+    "line": 325,
     "literal": 3,
     "context": "\"asleep_minutes\": round(current.asleep_minutes, 2), \"coverage\": round(current.coverage, 3),",
     "comment": null,
@@ -8721,7 +8721,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 324,
+    "line": 328,
     "literal": 0,
     "context": "\"baseline\": {\"nights_used\": 0, \"fallback_used\": False, \"per_stage\": {}},",
     "comment": null,
@@ -8729,7 +8729,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 362,
+    "line": 366,
     "literal": 0.0,
     "context": "level = max(0.0, min(z_hrv, z_hr))",
     "comment": null,
@@ -8737,7 +8737,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 370,
+    "line": 374,
     "literal": 3,
     "context": "if item[3]:",
     "comment": null,
@@ -8745,7 +8745,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 164,
+    "line": 166,
     "literal": 0,
     "context": "if 0 < (following[0] - previous[0]).total_seconds() <= 3600]",
     "comment": null,
@@ -8753,7 +8753,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 164,
+    "line": 166,
     "literal": 3600,
     "context": "if 0 < (following[0] - previous[0]).total_seconds() <= 3600]",
     "comment": null,
@@ -8761,7 +8761,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 170,
+    "line": 174,
     "literal": 0,
     "context": "neighbor = samples[index + 1][0] if anchor == \"start\" and index + 1 < len(samples) else (",
     "comment": null,
@@ -8769,7 +8769,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 174,
+    "line": 178,
     "literal": 0,
     "context": "if duration <= 0 or duration > cadence * 1.5:",
     "comment": null,
@@ -8777,7 +8777,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 202,
+    "line": 206,
     "literal": 0,
     "context": "if _overlap(segment.start_utc, segment.end_utc, start, end) > 0]",
     "comment": null,
@@ -8785,7 +8785,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 225,
+    "line": 229,
     "literal": 0.0,
     "context": "return NightWindows(night, (), 0.0, 0.0, 'invalid_stage_partition')",
     "comment": null,
@@ -8793,7 +8793,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 225,
+    "line": 229,
     "literal": 0.0,
     "context": "return NightWindows(night, (), 0.0, 0.0, 'invalid_stage_partition')",
     "comment": null,
@@ -8801,16 +8801,8 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 227,
+    "line": 231,
     "literal": 0,
-    "context": "if not 0 < duration <= 86400 or cursor != night.end_utc:",
-    "comment": null,
-    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
-  },
-  {
-    "source": "backend/sleep_stress.py",
-    "line": 227,
-    "literal": 86400,
     "context": "if not 0 < duration <= 86400 or cursor != night.end_utc:",
     "comment": null,
     "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
@@ -8818,6 +8810,14 @@
   {
     "source": "backend/sleep_stress.py",
     "line": 231,
+    "literal": 86400,
+    "context": "if not 0 < duration <= 86400 or cursor != night.end_utc:",
+    "comment": null,
+    "status": "Retained literal; dimensional/control review or empirical provenance required, depending on role"
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 235,
     "literal": 3600,
     "context": "(night.end_utc - night.start_utc).total_seconds() < config.min_sleep_hours * 3600):",
     "comment": null,
@@ -8825,7 +8825,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 239,
+    "line": 243,
     "literal": 0,
     "context": "if (duration <= 0 or interval is None or window.start_utc < night.start_utc",
     "comment": null,
@@ -8833,7 +8833,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 251,
+    "line": 255,
     "literal": 0.7,
     "context": "if covered / duration < 0.7 or stage not in (\"LIGHT\", \"REM\", \"DEEP\", \"ASLEEP\"):",
     "comment": null,
@@ -8841,7 +8841,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 262,
+    "line": 266,
     "literal": 1.0,
     "context": "return NightWindows(night, tuple(valid), asleep, min(1.0, covered / asleep) if asleep else 0.0)",
     "comment": null,
@@ -8849,7 +8849,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 333,
+    "line": 337,
     "literal": 3600,
     "context": "if night.nap or (night.end_utc - night.start_utc).total_seconds() < config.min_sleep_hours * 3600:",
     "comment": null,
@@ -8857,7 +8857,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 353,
+    "line": 357,
     "literal": 0.75,
     "context": "result[\"confidence\"] = (\"high\" if current.coverage >= 0.75 and not fallback_used",
     "comment": null,
@@ -8865,7 +8865,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 399,
+    "line": 403,
     "literal": 2,
     "context": "\"stressed_minutes\": round(stressed_minutes, 2),",
     "comment": null,
@@ -8873,7 +8873,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 400,
+    "line": 404,
     "literal": 3,
     "context": "\"stressed_hours\": round(stressed_minutes / 60, 3),",
     "comment": null,
@@ -8881,7 +8881,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 401,
+    "line": 405,
     "literal": 2,
     "context": "\"stress_pct\": round(100 * stressed_minutes / valid_minutes, 2),",
     "comment": null,
@@ -8889,7 +8889,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 402,
+    "line": 406,
     "literal": 2,
     "context": "\"peak_level\": round(max((item[2] for item in stressed), default=0.0), 2),",
     "comment": null,
@@ -8897,7 +8897,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 404,
+    "line": 408,
     "literal": 0.0,
     "context": "if stressed_minutes else 0.0,",
     "comment": null,
@@ -8905,7 +8905,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 405,
+    "line": 409,
     "literal": 2,
     "context": "\"hrv_only_minutes\": round(hrv_only, 2), \"episodes\": episodes,",
     "comment": null,
@@ -8913,7 +8913,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 161,
+    "line": 163,
     "literal": 0,
     "context": "), key=lambda item: item[0])",
     "comment": null,
@@ -8921,7 +8921,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 171,
+    "line": 175,
     "literal": 0,
     "context": "samples[index - 1][0] if anchor == \"end\" and index else None",
     "comment": null,
@@ -8929,7 +8929,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 174,
+    "line": 178,
     "literal": 1.5,
     "context": "if duration <= 0 or duration > cadence * 1.5:",
     "comment": null,
@@ -8937,7 +8937,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 209,
+    "line": 213,
     "literal": 0,
     "context": "if 0 < (later - earlier).total_seconds() <= 60)",
     "comment": null,
@@ -8945,7 +8945,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 209,
+    "line": 213,
     "literal": 60,
     "context": "if 0 < (later - earlier).total_seconds() <= 60)",
     "comment": null,
@@ -8953,7 +8953,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 244,
+    "line": 248,
     "literal": 0,
     "context": "if any(_overlap(window.start_utc, window.end_utc, start, end) > 0",
     "comment": null,
@@ -8961,7 +8961,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 250,
+    "line": 254,
     "literal": 0,
     "context": "stage, covered = max(overlaps, key=lambda item: item[1], default=(\"AWAKE\", 0))",
     "comment": null,
@@ -8969,7 +8969,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 260,
+    "line": 264,
     "literal": 60,
     "context": "log(window.rmssd_ms), median(heart_rates), duration / 60))",
     "comment": null,
@@ -8977,7 +8977,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 390,
+    "line": 394,
     "literal": 2,
     "context": "\"minutes\": round(minutes, 2), \"dominant_stage\": max(stages, key=stages.get),",
     "comment": null,
@@ -8985,7 +8985,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 392,
+    "line": 396,
     "literal": 2,
     "context": "for item in run) / minutes, 2),",
     "comment": null,
@@ -8993,7 +8993,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 394,
+    "line": 398,
     "literal": 2,
     "context": "* 100 * item[0].minutes for item in run) / minutes, 2),",
     "comment": null,
@@ -9001,7 +9001,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 395,
+    "line": 399,
     "literal": 2,
     "context": "\"peak_level\": round(max(item[2] for item in run), 2),",
     "comment": null,
@@ -9009,7 +9009,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 397,
+    "line": 401,
     "literal": 0,
     "context": "stressed_minutes = sum(item[0].minutes for item in stressed)",
     "comment": null,
@@ -9017,7 +9017,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 400,
+    "line": 404,
     "literal": 60,
     "context": "\"stressed_hours\": round(stressed_minutes / 60, 3),",
     "comment": null,
@@ -9025,7 +9025,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 403,
+    "line": 407,
     "literal": 2,
     "context": "\"mean_level\": round(sum(item[2] * item[0].minutes for item in stressed) / stressed_minutes, 2)",
     "comment": null,
@@ -9033,7 +9033,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 425,
+    "line": 429,
     "literal": 2,
     "context": "\"valid_minutes\": round(valid, 2),",
     "comment": null,
@@ -9041,7 +9041,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 162,
+    "line": 164,
     "literal": 0,
     "context": "deltas = [(following[0] - previous[0]).total_seconds()",
     "comment": null,
@@ -9049,7 +9049,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 162,
+    "line": 164,
     "literal": 0,
     "context": "deltas = [(following[0] - previous[0]).total_seconds()",
     "comment": null,
@@ -9057,7 +9057,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 163,
+    "line": 165,
     "literal": 1,
     "context": "for previous, following in zip(samples, samples[1:])",
     "comment": null,
@@ -9065,7 +9065,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 170,
+    "line": 174,
     "literal": 1,
     "context": "neighbor = samples[index + 1][0] if anchor == \"start\" and index + 1 < len(samples) else (",
     "comment": null,
@@ -9073,7 +9073,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 170,
+    "line": 174,
     "literal": 1,
     "context": "neighbor = samples[index + 1][0] if anchor == \"start\" and index + 1 < len(samples) else (",
     "comment": null,
@@ -9081,7 +9081,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 250,
+    "line": 254,
     "literal": 1,
     "context": "stage, covered = max(overlaps, key=lambda item: item[1], default=(\"AWAKE\", 0))",
     "comment": null,
@@ -9089,7 +9089,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 385,
+    "line": 389,
     "literal": 0,
     "context": "minutes = sum(item[0].minutes for item in run)",
     "comment": null,
@@ -9097,7 +9097,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 401,
+    "line": 405,
     "literal": 100,
     "context": "\"stress_pct\": round(100 * stressed_minutes / valid_minutes, 2),",
     "comment": null,
@@ -9105,7 +9105,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 402,
+    "line": 406,
     "literal": 0.0,
     "context": "\"peak_level\": round(max((item[2] for item in stressed), default=0.0), 2),",
     "comment": null,
@@ -9113,7 +9113,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 424,
+    "line": 428,
     "literal": 2,
     "context": "\"sessions\": len(sessions), \"stressed_minutes\": round(stressed, 2) if scored else None,",
     "comment": null,
@@ -9121,7 +9121,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 426,
+    "line": 430,
     "literal": 2,
     "context": "\"stress_pct\": round(100 * stressed / valid, 2) if valid else None})",
     "comment": null,
@@ -9129,7 +9129,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 171,
+    "line": 175,
     "literal": 1,
     "context": "samples[index - 1][0] if anchor == \"end\" and index else None",
     "comment": null,
@@ -9137,7 +9137,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 208,
+    "line": 212,
     "literal": 1,
     "context": "deltas = sorted((later - earlier).total_seconds() for earlier, later in zip(ordered, ordered[1:])",
     "comment": null,
@@ -9145,7 +9145,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 371,
+    "line": 375,
     "literal": 0,
     "context": "if run and item[0].start_utc != run[-1][0].end_utc:",
     "comment": null,
@@ -9153,7 +9153,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 371,
+    "line": 375,
     "literal": 0,
     "context": "if run and item[0].start_utc != run[-1][0].end_utc:",
     "comment": null,
@@ -9161,7 +9161,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 386,
+    "line": 390,
     "literal": 0,
     "context": "stages = {stage: sum(item[0].minutes for item in run if item[0].stage == stage)",
     "comment": null,
@@ -9169,7 +9169,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 387,
+    "line": 391,
     "literal": 0,
     "context": "for stage in {item[0].stage for item in run}}",
     "comment": null,
@@ -9177,7 +9177,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 402,
+    "line": 406,
     "literal": 2,
     "context": "\"peak_level\": round(max((item[2] for item in stressed), default=0.0), 2),",
     "comment": null,
@@ -9185,7 +9185,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 419,
+    "line": 423,
     "literal": 0,
     "context": "item.get('physical_duration_minutes', 0), item['sleep_id']), default=None)",
     "comment": null,
@@ -9193,7 +9193,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 164,
+    "line": 166,
     "literal": 0,
     "context": "if 0 < (following[0] - previous[0]).total_seconds() <= 3600]",
     "comment": null,
@@ -9201,7 +9201,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 164,
+    "line": 166,
     "literal": 0,
     "context": "if 0 < (following[0] - previous[0]).total_seconds() <= 3600]",
     "comment": null,
@@ -9209,7 +9209,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 242,
+    "line": 246,
     "literal": 1,
     "context": "or (valid and window.start_utc < valid[-1].end_utc)):",
     "comment": null,
@@ -9217,7 +9217,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 389,
+    "line": 393,
     "literal": 0,
     "context": "\"start\": run[0][0].start_utc.isoformat(), \"end\": run[-1][0].end_utc.isoformat(),",
     "comment": null,
@@ -9225,7 +9225,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 389,
+    "line": 393,
     "literal": 0,
     "context": "\"start\": run[0][0].start_utc.isoformat(), \"end\": run[-1][0].end_utc.isoformat(),",
     "comment": null,
@@ -9233,7 +9233,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 395,
+    "line": 399,
     "literal": 2,
     "context": "\"peak_level\": round(max(item[2] for item in run), 2),",
     "comment": null,
@@ -9241,7 +9241,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 426,
+    "line": 430,
     "literal": 100,
     "context": "\"stress_pct\": round(100 * stressed / valid, 2) if valid else None})",
     "comment": null,
@@ -9249,7 +9249,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 371,
+    "line": 375,
     "literal": 1,
     "context": "if run and item[0].start_utc != run[-1][0].end_utc:",
     "comment": null,
@@ -9257,7 +9257,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 386,
+    "line": 390,
     "literal": 0,
     "context": "stages = {stage: sum(item[0].minutes for item in run if item[0].stage == stage)",
     "comment": null,
@@ -9265,7 +9265,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 389,
+    "line": 393,
     "literal": 0,
     "context": "\"start\": run[0][0].start_utc.isoformat(), \"end\": run[-1][0].end_utc.isoformat(),",
     "comment": null,
@@ -9273,7 +9273,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 389,
+    "line": 393,
     "literal": 1,
     "context": "\"start\": run[0][0].start_utc.isoformat(), \"end\": run[-1][0].end_utc.isoformat(),",
     "comment": null,
@@ -9281,7 +9281,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 394,
+    "line": 398,
     "literal": 100,
     "context": "* 100 * item[0].minutes for item in run) / minutes, 2),",
     "comment": null,
@@ -9289,7 +9289,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 403,
+    "line": 407,
     "literal": 2,
     "context": "\"mean_level\": round(sum(item[2] * item[0].minutes for item in stressed) / stressed_minutes, 2)",
     "comment": null,
@@ -9297,7 +9297,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 391,
+    "line": 395,
     "literal": 0,
     "context": "\"mean_hr_delta_bpm\": round(sum((item[0].hr - item[1].hr_median) * item[0].minutes",
     "comment": null,
@@ -9305,7 +9305,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 393,
+    "line": 397,
     "literal": 1,
     "context": "\"mean_hrv_drop_pct\": round(sum((1 - exp(item[0].ln_hrv - item[1].ln_hrv_median))",
     "comment": null,
@@ -9313,7 +9313,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 394,
+    "line": 398,
     "literal": 0,
     "context": "* 100 * item[0].minutes for item in run) / minutes, 2),",
     "comment": null,
@@ -9321,7 +9321,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 403,
+    "line": 407,
     "literal": 0,
     "context": "\"mean_level\": round(sum(item[2] * item[0].minutes for item in stressed) / stressed_minutes, 2)",
     "comment": null,
@@ -9329,7 +9329,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 391,
+    "line": 395,
     "literal": 0,
     "context": "\"mean_hr_delta_bpm\": round(sum((item[0].hr - item[1].hr_median) * item[0].minutes",
     "comment": null,
@@ -9337,7 +9337,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 391,
+    "line": 395,
     "literal": 1,
     "context": "\"mean_hr_delta_bpm\": round(sum((item[0].hr - item[1].hr_median) * item[0].minutes",
     "comment": null,
@@ -9345,7 +9345,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 393,
+    "line": 397,
     "literal": 0,
     "context": "\"mean_hrv_drop_pct\": round(sum((1 - exp(item[0].ln_hrv - item[1].ln_hrv_median))",
     "comment": null,
@@ -9353,7 +9353,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 393,
+    "line": 397,
     "literal": 1,
     "context": "\"mean_hrv_drop_pct\": round(sum((1 - exp(item[0].ln_hrv - item[1].ln_hrv_median))",
     "comment": null,

@@ -230,7 +230,7 @@
     "id": "H13",
     "source": "backend/google_health_client.py",
     "callable": "_sleep_records",
-    "line": 477,
+    "line": 481,
     "severity": "medium",
     "reproduced": true,
     "status": "fixed",
@@ -339,7 +339,7 @@
     "id": "H19",
     "source": "backend/sleep_stress.py",
     "callable": "prepare_night",
-    "line": 215,
+    "line": 219,
     "severity": "medium",
     "reproduced": true,
     "status": "fixed",
@@ -358,7 +358,7 @@
     "id": "H20",
     "source": "backend/google_health_client.py",
     "callable": "get_daily_hrv",
-    "line": 263,
+    "line": 265,
     "severity": "high",
     "reproduced": true,
     "status": "fixed",
@@ -521,7 +521,7 @@
     "id": "H29",
     "source": "backend/google_health_client.py",
     "callable": "get_health_history",
-    "line": 320,
+    "line": 322,
     "severity": "medium",
     "reproduced": true,
     "status": "fixed",
@@ -559,7 +559,7 @@
     "id": "H31",
     "source": "backend/google_health_client.py",
     "callable": "_fetch_points",
-    "line": 203,
+    "line": 205,
     "severity": "high",
     "reproduced": true,
     "status": "fixed",
@@ -620,7 +620,7 @@
     "id": "H34",
     "source": "backend/google_health_client.py",
     "callable": "_fetch_daily_steps",
-    "line": 430,
+    "line": 434,
     "severity": "high",
     "reproduced": true,
     "status": "fixed",
@@ -672,6 +672,25 @@
     "failing_outputs": [
       "after-history-display.log",
       "before-history-display.log",
+      "cache-validity-before.log"
+    ]
+  },
+  {
+    "id": "H37",
+    "source": "backend/sleep_stress.py",
+    "callable": "adapt_google_hrv",
+    "line": 149,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix boolean samples becoming numeric HRV and chart readings: reject before coercion; backend/test_sample_boolean_coercion.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_sample_boolean_coercion.py"
+    ],
+    "commit": "2f43686",
+    "failing_outputs": [
+      "before-sample-booleans.log",
       "cache-validity-before.log"
     ]
   }

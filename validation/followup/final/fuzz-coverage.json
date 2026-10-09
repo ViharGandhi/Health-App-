@@ -1,28 +1,22 @@
 {
   "batches": [
     {
-      "test": "backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[points_response]",
+      "test": "backend/test_auth_payload_fuzz.py::test_session_and_refresh_payloads_fail_closed[session]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 37
+    },
+    {
+      "test": "backend/test_auth_payload_fuzz.py::test_session_and_refresh_payloads_fail_closed[refresh_payload]",
       "passing_examples": 200,
       "failing_examples": 0,
       "generator_retries": 28
     },
     {
-      "test": "backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[steps_response]",
-      "passing_examples": 200,
-      "failing_examples": 0,
-      "generator_retries": 29
-    },
-    {
-      "test": "backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[stage_pipeline]",
+      "test": "backend/test_auth_payload_fuzz.py::test_callback_malformed_token_response_fails_closed",
       "passing_examples": 200,
       "failing_examples": 0,
       "generator_retries": 22
-    },
-    {
-      "test": "backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[sleep_summary]",
-      "passing_examples": 200,
-      "failing_examples": 0,
-      "generator_retries": 31
     },
     {
       "test": "backend/test_analytics_properties.py::test_constant_hr_strain_monotonic_and_bounded",
@@ -83,30 +77,6 @@
       "passing_examples": 200,
       "failing_examples": 0,
       "generator_retries": 0
-    },
-    {
-      "test": "backend/test_webhook_payload_fuzz.py::test_notification_adapter_rejects_malformed_payload_explicitly",
-      "passing_examples": 200,
-      "failing_examples": 0,
-      "generator_retries": 33
-    },
-    {
-      "test": "backend/test_auth_payload_fuzz.py::test_session_and_refresh_payloads_fail_closed[session]",
-      "passing_examples": 200,
-      "failing_examples": 0,
-      "generator_retries": 37
-    },
-    {
-      "test": "backend/test_auth_payload_fuzz.py::test_session_and_refresh_payloads_fail_closed[refresh_payload]",
-      "passing_examples": 200,
-      "failing_examples": 0,
-      "generator_retries": 28
-    },
-    {
-      "test": "backend/test_auth_payload_fuzz.py::test_callback_malformed_token_response_fails_closed",
-      "passing_examples": 200,
-      "failing_examples": 0,
-      "generator_retries": 22
     },
     {
       "test": "backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[local_datetime]",
@@ -173,12 +143,6 @@
       "passing_examples": 200,
       "failing_examples": 0,
       "generator_retries": 25
-    },
-    {
-      "test": "backend/test_provider_step_counts.py::test_invalid_step_count_is_rejected_instead_of_truncated",
-      "passing_examples": 200,
-      "failing_examples": 0,
-      "generator_retries": 0
     },
     {
       "test": "backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[daily_hrv]",
@@ -253,6 +217,66 @@
       "generator_retries": 0
     },
     {
+      "test": "backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[points_response]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 28
+    },
+    {
+      "test": "backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[steps_response]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 29
+    },
+    {
+      "test": "backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[stage_pipeline]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 22
+    },
+    {
+      "test": "backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[sleep_summary]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 31
+    },
+    {
+      "test": "backend/test_provider_step_counts.py::test_invalid_step_count_is_rejected_instead_of_truncated",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_shared_validity.py::test_rhr_acceptance_agrees_without_age",
+      "passing_examples": 250,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_shared_validity.py::test_hrv_acceptance_agrees_across_layers",
+      "passing_examples": 250,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_sample_boolean_coercion.py::test_sample_adapters_never_coerce_booleans_to_numbers[stress_hr]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_sample_boolean_coercion.py::test_sample_adapters_never_coerce_booleans_to_numbers[stress_hrv]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_sample_boolean_coercion.py::test_sample_adapters_never_coerce_booleans_to_numbers[intraday_hr]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
       "test": "backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[latency]",
       "passing_examples": 200,
       "failing_examples": 0,
@@ -275,6 +299,18 @@
       "passing_examples": 200,
       "failing_examples": 0,
       "generator_retries": 0
+    },
+    {
+      "test": "backend/test_sleep_chart_fuzz.py::test_additional_sleep_adapters_validate_payload[sleep_observations]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 24
+    },
+    {
+      "test": "backend/test_sleep_chart_fuzz.py::test_additional_sleep_adapters_validate_payload[sleep_hr_chart]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 18
     },
     {
       "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[strain_mapping]",
@@ -349,16 +385,10 @@
       "generator_retries": 0
     },
     {
-      "test": "backend/test_shared_validity.py::test_rhr_acceptance_agrees_without_age",
-      "passing_examples": 250,
+      "test": "backend/test_webhook_payload_fuzz.py::test_notification_adapter_rejects_malformed_payload_explicitly",
+      "passing_examples": 200,
       "failing_examples": 0,
-      "generator_retries": 0
-    },
-    {
-      "test": "backend/test_shared_validity.py::test_hrv_acceptance_agrees_across_layers",
-      "passing_examples": 250,
-      "failing_examples": 0,
-      "generator_retries": 0
+      "generator_retries": 33
     },
     {
       "test": "backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[strain]",
@@ -413,20 +443,8 @@
       "passing_examples": 200,
       "failing_examples": 0,
       "generator_retries": 0
-    },
-    {
-      "test": "backend/test_sleep_chart_fuzz.py::test_additional_sleep_adapters_validate_payload[sleep_observations]",
-      "passing_examples": 200,
-      "failing_examples": 0,
-      "generator_retries": 24
-    },
-    {
-      "test": "backend/test_sleep_chart_fuzz.py::test_additional_sleep_adapters_validate_payload[sleep_hr_chart]",
-      "passing_examples": 200,
-      "failing_examples": 0,
-      "generator_retries": 18
     }
   ],
-  "passing_examples": 14300,
+  "passing_examples": 14900,
   "interpretation": "Passing means valid bounded output or an allowed explicit validation/withholding result. Generator retries are not skipped pytest tests."
 }

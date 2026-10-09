@@ -3,6 +3,7 @@ from collections import Counter
 import importlib.util
 import json
 import math
+import re
 from pathlib import Path
 import shutil
 import sys
@@ -80,13 +81,13 @@ def run():
                 change['reason'] = 'Personal-range withholding diagnostics schema (97833bd)'
             elif p.endswith('/algo_version') and change['before'] == 'sleep-stage-ranges-1' and change['after'] == 'sleep-stage-ranges-3':
                 change['reason'] = 'Main selection and overlong-stage cache namespace (623fc73, af85696)'
-            elif p.endswith('/algo_version') and change['before'] == 'sleep-stress-5' and change['after'] == 'sleep-stress-9':
-                change['reason'] = 'Provider bounds, main selection, reasons and partition cache namespace (c968fce, 623fc73, d37a4ad, 70ede57)'
+            elif p.endswith('/algo_version') and change['before'] == 'sleep-stress-5' and change['after'] == 'sleep-stress-10':
+                change['reason'] = 'Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)'
             elif '/api/sleep/stress/' in p and any(p.endswith('/' + key) for key in ('anchor_verification', 'main_sleep_explicit', 'physical_duration_minutes', 'withheld_reason')) and change.get('key_added'):
                 change['reason'] = 'Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)'
             elif p.endswith('/workouts/0/strain') and change['before'] == 9.2 and change['after'] == 9.1:
                 change['reason'] = 'Approved JSON-only flooring of the unchanged raw workout strain (b578a51)'
-            elif '/api/strain/analytics?demo=true/body/' in p and ('/days/' in p or '/previous_days/' in p) and (p.endswith('/score') or re_activity(p)) and (change['before'], change['after']) in ((13.9, 13.8), (6.4, 6.3), (3.6, 3.5), (9.2, 9.1)):
+            elif '/api/strain/analytics?demo=true/body/' in p and ('/days/' in p or '/previous_days/' in p) and (p.endswith('/score') or re.search(r'/activities/\d+/strain$', p)) and (change['before'], change['after']) in ((13.9, 13.8), (6.4, 6.3), (3.6, 3.5), (9.2, 9.1)):
                 change['reason'] = 'Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)'
             elif p.endswith('/computed_at'):
                 change['reason'] = 'Computation-clock metadata only'
@@ -99,15 +100,10 @@ def run():
             changed_paths=[d['path'] for d in changes[:35]])))
     if '--preview' not in sys.argv:
         audit.OUT = OUT
-        shutil.copyfile(HERE / 'final-suite-complete.xml', OUT / 'test-results.xml')
+        shutil.copyfile(HERE / 'final-suite-complete-v2.xml', OUT / 'test-results.xml')
         audit.write()
     (OUT / 'simulation-run-metadata.json').write_text(json.dumps(dict(checks=1295, passed=1295,
         runtime_s=time.perf_counter() - started), indent=2))
-
-
-def re_activity(path):
-    import re
-    return bool(re.search(r'/activities/\d+/strain$', path))
 
 
 if __name__ == '__main__':

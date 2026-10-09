@@ -7,7 +7,7 @@
     "Approved JSON-only flooring of the unchanged raw workout strain (b578a51)": 3,
     "Personal-range withholding diagnostics schema (97833bd)": 5,
     "Main selection and overlong-stage cache namespace (623fc73, af85696)": 8,
-    "Provider bounds, main selection, reasons and partition cache namespace (c968fce, 623fc73, d37a4ad, 70ede57)": 7,
+    "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)": 7,
     "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)": 28,
     "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)": 16
   },

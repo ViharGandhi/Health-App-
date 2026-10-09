@@ -87,7 +87,8 @@
       "json_strain": 16.8,
       "model_strain": 16.9,
       "partition_withheld_reason": "invalid_stage_partition",
-      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured"
+      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured",
+      "boolean_sample_rejected": true
     }
   },
   {
@@ -178,7 +179,8 @@
       "json_strain": 16.8,
       "model_strain": 16.9,
       "partition_withheld_reason": "invalid_stage_partition",
-      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured"
+      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured",
+      "boolean_sample_rejected": true
     }
   },
   {
@@ -269,7 +271,8 @@
       "json_strain": 16.8,
       "model_strain": 16.9,
       "partition_withheld_reason": "invalid_stage_partition",
-      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured"
+      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured",
+      "boolean_sample_rejected": true
     }
   },
   {
@@ -360,7 +363,8 @@
       "json_strain": 16.8,
       "model_strain": 16.9,
       "partition_withheld_reason": "invalid_stage_partition",
-      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured"
+      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured",
+      "boolean_sample_rejected": true
     }
   },
   {
@@ -451,7 +455,8 @@
       "json_strain": 16.8,
       "model_strain": 16.9,
       "partition_withheld_reason": "invalid_stage_partition",
-      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured"
+      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured",
+      "boolean_sample_rejected": true
     }
   },
   {
@@ -542,7 +547,8 @@
       "json_strain": 16.8,
       "model_strain": 16.9,
       "partition_withheld_reason": "invalid_stage_partition",
-      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured"
+      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured",
+      "boolean_sample_rejected": true
     }
   },
   {
@@ -633,7 +639,8 @@
       "json_strain": 16.8,
       "model_strain": 16.9,
       "partition_withheld_reason": "invalid_stage_partition",
-      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured"
+      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured",
+      "boolean_sample_rejected": true
     }
   },
   {
@@ -761,7 +768,8 @@
       "json_strain": 16.8,
       "model_strain": 16.9,
       "partition_withheld_reason": "invalid_stage_partition",
-      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured"
+      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured",
+      "boolean_sample_rejected": true
     }
   },
   {
@@ -903,7 +911,8 @@
       "json_strain": 16.8,
       "model_strain": 16.9,
       "partition_withheld_reason": "invalid_stage_partition",
-      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured"
+      "missing_anchor_withheld_reason": "hrv_anchor_unconfigured",
+      "boolean_sample_rejected": true
     }
   }
 ]

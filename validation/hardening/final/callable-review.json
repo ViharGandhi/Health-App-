@@ -197,13 +197,14 @@
     "callable": "_valid_sleep_summary",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
-      "backend/test_adapter_fuzz.py"
+      "backend/test_adapter_fuzz.py",
+      "backend/test_sample_boolean_coercion.py"
     ],
     "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 88,
+    "line": 90,
     "callable": "GoogleHealthClient.__init__",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -220,6 +221,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -231,7 +233,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 98,
+    "line": 100,
     "callable": "GoogleHealthClient._points",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -248,6 +250,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -259,7 +262,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 125,
+    "line": 127,
     "callable": "GoogleHealthClient._cache_points",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -276,6 +279,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -287,7 +291,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 136,
+    "line": 138,
     "callable": "GoogleHealthClient._stored_points",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -304,6 +308,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -315,7 +320,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 144,
+    "line": 146,
     "callable": "GoogleHealthClient._read_stored_points",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -332,6 +337,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -343,7 +349,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 178,
+    "line": 180,
     "callable": "GoogleHealthClient._invalidate_calculations",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -360,6 +366,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -371,7 +378,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 186,
+    "line": 188,
     "callable": "GoogleHealthClient._pace_request",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -388,6 +395,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -399,7 +407,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 203,
+    "line": 205,
     "callable": "GoogleHealthClient._fetch_points",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -416,6 +424,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -427,7 +436,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 238,
+    "line": 240,
     "callable": "GoogleHealthClient.get_sleep_stage_points",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -444,6 +453,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -455,7 +465,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 245,
+    "line": 247,
     "callable": "GoogleHealthClient.get_health_user_id",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -472,6 +482,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -483,7 +494,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 251,
+    "line": 253,
     "callable": "GoogleHealthClient.get_sleep_heart_rate_points",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -500,6 +511,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -511,7 +523,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 263,
+    "line": 265,
     "callable": "GoogleHealthClient.get_daily_hrv",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -528,6 +540,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -539,7 +552,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 276,
+    "line": 278,
     "callable": "GoogleHealthClient.get_deep_sleep_hrv",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -556,6 +569,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -567,7 +581,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 290,
+    "line": 292,
     "callable": "GoogleHealthClient.get_resting_heart_rate",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -584,6 +598,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -595,7 +610,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 303,
+    "line": 305,
     "callable": "GoogleHealthClient.get_hrv_history",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -612,6 +627,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -623,7 +639,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 320,
+    "line": 322,
     "callable": "GoogleHealthClient.get_health_history",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -640,6 +656,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -651,7 +668,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 356,
+    "line": 358,
     "callable": "GoogleHealthClient.get_intraday_heart_rate",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -668,6 +685,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -679,7 +697,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 372,
+    "line": 376,
     "callable": "GoogleHealthClient.get_sleep_stress_points",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -696,6 +714,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -707,7 +726,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 376,
+    "line": 380,
     "callable": "GoogleHealthClient.get_sleep_stress_points.sample_filter",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -724,6 +743,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -735,7 +755,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 386,
+    "line": 390,
     "callable": "GoogleHealthClient.get_workout_sessions",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -752,6 +772,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -763,7 +784,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 407,
+    "line": 411,
     "callable": "GoogleHealthClient.get_daily_steps",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -780,6 +801,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -791,7 +813,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 430,
+    "line": 434,
     "callable": "GoogleHealthClient._fetch_daily_steps",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -808,6 +830,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -819,7 +842,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 477,
+    "line": 481,
     "callable": "GoogleHealthClient._sleep_records",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -836,6 +859,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -847,7 +871,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 544,
+    "line": 548,
     "callable": "GoogleHealthClient.get_sleep_need_history",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -864,6 +888,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -875,7 +900,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 550,
+    "line": 554,
     "callable": "GoogleHealthClient.get_nap_minutes_history",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -892,6 +917,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -903,7 +929,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 575,
+    "line": 579,
     "callable": "GoogleHealthClient.get_sleep_session",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -920,6 +946,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -931,7 +958,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 579,
+    "line": 583,
     "callable": "GoogleHealthClient.get_sleep_history_nights",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -948,6 +975,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -959,7 +987,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 585,
+    "line": 589,
     "callable": "GoogleHealthClient.get_sleep_efficiency_history",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -976,6 +1004,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -987,7 +1016,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 595,
+    "line": 599,
     "callable": "GoogleHealthClient.get_sleep_trend_history",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -1004,6 +1033,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -1015,7 +1045,7 @@
   },
   {
     "source": "backend/google_health_client.py",
-    "line": 605,
+    "line": 609,
     "callable": "GoogleHealthClient.get_main_sleep_timing_history",
     "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
     "explicit_test_imports": [
@@ -1032,6 +1062,7 @@
       "backend/test_provider_step_counts.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_heart_rate.py",
       "backend/test_sleep_need_integration.py",
       "backend/test_sleep_stage_ranges.py",
@@ -2177,6 +2208,7 @@
       "backend/test_private_stage_logging.py",
       "backend/test_provider_transport_fuzz.py",
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_analytics.py",
       "backend/test_sleep_analytics_inputs.py",
       "backend/test_sleep_heart_rate.py",
@@ -2507,6 +2539,7 @@
     "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
     "explicit_test_imports": [
       "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_chart_fuzz.py",
       "backend/test_sleep_heart_rate.py"
     ],
@@ -2514,7 +2547,7 @@
   },
   {
     "source": "backend/sleep_heart_rate.py",
-    "line": 75,
+    "line": 77,
     "callable": "mock_sleep_heart_rate_points",
     "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
     "explicit_test_imports": [
@@ -2874,24 +2907,26 @@
     "callable": "adapt_google_hr",
     "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
     "explicit_test_imports": [
-      "backend/test_adapter_fuzz.py"
+      "backend/test_adapter_fuzz.py",
+      "backend/test_sample_boolean_coercion.py"
     ],
     "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 147,
+    "line": 149,
     "callable": "adapt_google_hrv",
     "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
     "explicit_test_imports": [
       "backend/test_adapter_fuzz.py",
+      "backend/test_sample_boolean_coercion.py",
       "backend/test_sleep_stress.py"
     ],
     "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 182,
+    "line": 186,
     "callable": "_merged_minutes",
     "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
     "explicit_test_imports": [],
@@ -2899,7 +2934,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 197,
+    "line": 201,
     "callable": "asleep_minutes",
     "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
     "explicit_test_imports": [],
@@ -2907,7 +2942,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 206,
+    "line": 210,
     "callable": "infer_hr_interval_seconds",
     "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
     "explicit_test_imports": [],
@@ -2915,7 +2950,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 215,
+    "line": 219,
     "callable": "prepare_night",
     "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
     "explicit_test_imports": [
@@ -2929,7 +2964,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 265,
+    "line": 269,
     "callable": "_stage_baseline",
     "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
     "explicit_test_imports": [],
@@ -2937,7 +2972,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 274,
+    "line": 278,
     "callable": "build_baseline",
     "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
     "explicit_test_imports": [
@@ -2949,7 +2984,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 309,
+    "line": 313,
     "callable": "score_night",
     "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
     "explicit_test_imports": [
@@ -2962,7 +2997,7 @@
   },
   {
     "source": "backend/sleep_stress.py",
-    "line": 410,
+    "line": 414,
     "callable": "summarize_nights",
     "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
     "explicit_test_imports": [
