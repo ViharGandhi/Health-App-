@@ -161,4 +161,6 @@ class StoredClientTests(unittest.TestCase):
             self.store.expire_recent(client.account_key)
             client._fetch_points.return_value = [point(5, 80)]
             self.assertEqual(await client._points(KIND, expression), [point(5, 80)])
-        asyncio.run(check())
+        # Keep the fixed 5 October fixture inside the explicit recent-refresh window.
+        with patch('health_read_store.time.time', return_value=NOW):
+            asyncio.run(check())
