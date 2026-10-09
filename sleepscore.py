@@ -209,8 +209,14 @@ class SleepCalculator:
             return 0.0
         ratio = total_hours / sleep_need
         if ratio <= 1.0:
-            raw = 100.0 / (1.0 + math.exp(-steepness * (ratio - midpoint)))
-            at_need = 100.0 / (1.0 + math.exp(-steepness * (1.0 - midpoint)))
+            try:
+                raw = 100.0 / (1.0 + math.exp(-steepness * (ratio - midpoint)))
+                at_need = 100.0 / (1.0 + math.exp(-steepness * (1.0 - midpoint)))
+            except OverflowError:
+                # Evaluate the same ratio in log space only when direct exponentiation overflows.
+                log_sigmoid = lambda x: -math.log1p(math.exp(-x)) if x >= 0 else x - math.log1p(math.exp(x))
+                return 100.0 * math.exp(log_sigmoid(steepness * (ratio - midpoint))
+                                        - log_sigmoid(steepness * (1.0 - midpoint)))
             return raw / at_need * 100.0
         if ratio <= 1.10:
             return 100.0
