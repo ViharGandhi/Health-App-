@@ -9,6 +9,7 @@ from math import exp, isfinite, log
 from statistics import median
 from validity import valid_metric
 from sleep_selection import main_sleep_key
+from provider_payload import payload_boundary
 
 
 @dataclass(frozen=True)
@@ -107,6 +108,7 @@ def _overlap(start: datetime, end: datetime, other_start: datetime, other_end: d
     return max(0.0, (min(end, other_end) - max(start, other_start)).total_seconds())
 
 
+@payload_boundary
 def adapt_google_sleep(point: dict) -> SleepNight:
     """Adapt the documented v4 sleep DataPoint; reject incomplete processing later."""
     sleep = point["sleep"]
@@ -134,6 +136,7 @@ def adapt_google_sleep(point: dict) -> SleepNight:
     )
 
 
+@payload_boundary
 def adapt_google_hr(point: dict) -> HrSample:
     metric = point["heartRate"]
     return HrSample(_instant(metric["sampleTime"]["physicalTime"]), float(metric["beatsPerMinute"]))

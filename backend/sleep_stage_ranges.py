@@ -7,6 +7,7 @@ from datetime import date, datetime, timedelta, timezone
 from statistics import median
 import logging
 from validity import finite_number
+from provider_payload import payload_boundary
 
 
 STAGES = ("awake", "light", "deep", "rem")
@@ -76,6 +77,7 @@ def instant(value: str) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
+@payload_boundary
 def adapt_google_sleep(point: dict) -> SleepNight:
     """Documented v4 DataPoint, not yet checked against a live Fitbit Air response.
 

@@ -19,6 +19,7 @@ from health_read_store import HealthReadStore, ReadRange, read_range, exact_key,
 from read_metrics import count
 from sleep_selection import main_sleep_key
 from validity import sleep_duration
+from provider_payload import payload_boundary
 
 
 BASE_URL = "https://health.googleapis.com/v4/users/me/dataTypes"
@@ -297,6 +298,7 @@ class GoogleHealthClient:
                 dated.append((_google_date(metric["date"]), float(value)))
         return [value for _, value in sorted(dated)]
 
+    @payload_boundary
     async def get_health_history(self, start: date, end: date, metrics: tuple[str, ...] | None = None) -> dict[str, list[dict]]:
         """Fetch dated Fitbit Air summaries; optional API fields stay absent."""
         specs = {
@@ -440,6 +442,7 @@ class GoogleHealthClient:
                 lower = upper
         return values
 
+    @payload_boundary
     async def _sleep_records(self, start: date, end: date) -> list[dict]:
         points = await self._points(
             "sleep", _day_filter("sleep.interval.civil_end_time", start, end)

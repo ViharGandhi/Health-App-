@@ -77,6 +77,7 @@ from sleep_stage_pipeline import sync_stage_ranges
 from sleep_stage_webhooks import router as sleep_stage_webhook_router, stage_store
 from health_trends import build_health_response, build_heart_rate_response
 from validity import positive, resting_hr
+from provider_payload import InvalidProviderPayload
 from strain_analytics import strain_range_start, strain_day, build_strain_analytics
 from mock_data import (
     get_mock_dashboard, compute_mock_strain, compute_mock_sleep,
@@ -142,6 +143,12 @@ async def data_timings(request: Request, call_next):
         return response
     finally:
         read_metrics.reset(context)
+
+
+@app.exception_handler(InvalidProviderPayload)
+async def provider_payload_error(request: Request, error: InvalidProviderPayload):
+    return JSONResponse({'detail': 'Google Health returned malformed data; retry or refresh',
+                         'reason': 'invalid_provider_payload'}, status_code=502)
 
 
 @app.exception_handler(httpx.HTTPStatusError)
