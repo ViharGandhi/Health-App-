@@ -6,6 +6,7 @@ from dataclasses import asdict, dataclass
 from datetime import date, datetime, timedelta, timezone
 from statistics import median
 import logging
+from validity import finite_number
 
 
 STAGES = ("awake", "light", "deep", "rem")
@@ -27,7 +28,8 @@ class StageRangeConfig:
             raise ValueError("Require 1 <= min_nights <= window_nights")
         if self.denominator not in ("time_in_bed", "time_asleep"):
             raise ValueError("Unknown denominator")
-        if self.spread_scale <= 0 or self.spread_floor_pct <= 0 or self.min_sleep_hours <= 0:
+        if any(not finite_number(value) or value <= 0
+               for value in (self.spread_scale, self.spread_floor_pct, self.min_sleep_hours)):
             raise ValueError("Spread and sleep limits must be positive")
 
 

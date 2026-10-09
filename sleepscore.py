@@ -18,7 +18,7 @@ Modifications:
 from __future__ import annotations
 
 import math
-from backend.validity import positive, resting_hr
+from backend.validity import positive, resting_hr, finite_number, sleep_duration
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, date, time
 from typing import List, Optional, Tuple
@@ -30,6 +30,8 @@ from typing import List, Optional, Tuple
 
 def clamp(value: float, min_val: float, max_val: float) -> float:
     """Clamp *value* into [min_val, max_val]."""
+    if not all(finite_number(v) for v in (value, min_val, max_val)):
+        raise ValueError('Clamp inputs must be finite numbers')
     return max(min_val, min(max_val, value))
 
 
@@ -43,9 +45,17 @@ def normalize_ratio(value: float, low: float, high: float) -> float:
         return 50.0  # Default to neutral if range is invalid
 
     if high > low:
+        if value <= low:
+            return 0.
+        if value >= high:
+            return 100.
         # Standard range: low maps to 0, high maps to 100
         return clamp((value - low) / (high - low) * 100.0, 0.0, 100.0)
     else:
+        if value >= low:
+            return 0.
+        if value <= high:
+            return 100.
         # Inverted range: low maps to 100, high maps to 0 (lower is better)
         return clamp((low - value) / (low - high) * 100.0, 0.0, 100.0)
 
@@ -132,6 +142,18 @@ class SleepData:
     # Sleep onset latency
     sleep_latency_seconds: Optional[float] = None  # seconds from in-bed to first sleep onset
 
+    def __post_init__(self):
+        durations = (self.total_duration, self.deep_sleep_duration, self.rem_sleep_duration,
+                     self.core_sleep_duration, self.awake_duration, self.in_bed_duration,
+                     self.nap_duration_seconds)
+        if not all(sleep_duration(value) for value in durations):
+            raise ValueError('Sleep durations must be finite and between zero and 24 hours')
+        if (not finite_number(self.interruption_count) or self.interruption_count < 0
+                or self.interruption_count != int(self.interruption_count)):
+            raise ValueError('Interruption count must be a nonnegative integer')
+        if self.sleep_latency_seconds is not None and not sleep_duration(self.sleep_latency_seconds):
+            raise ValueError('Sleep latency must be a valid duration')
+
     # — convenience properties —
 
     @property
@@ -181,6 +203,8 @@ class SleepCalculator:
     def compute_duration_score(total_hours: float, sleep_need: float,
                                steepness: float = 8.0, midpoint: float = 0.75) -> float:
         """Approved rescaling: the original sigmoid reaches 100 at need."""
+        if not all(finite_number(v) for v in (total_hours, sleep_need, steepness, midpoint)):
+            raise ValueError('Duration inputs must be finite numbers')
         if total_hours <= 0 or sleep_need <= 0:
             return 0.0
         ratio = total_hours / sleep_need

@@ -2,8 +2,17 @@
 from math import isfinite
 
 
+def finite_number(value) -> bool:
+    if type(value) not in (int, float):
+        return False
+    try:
+        return isfinite(value)
+    except OverflowError:
+        return False
+
+
 def positive(value) -> bool:
-    return type(value) in (int, float) and isfinite(value) and value > 0
+    return finite_number(value) and value > 0
 
 
 def resting_hr(value, age=None, *, parse_strings=False, low=30, high=230) -> float | None:
@@ -36,4 +45,4 @@ def valid_metric(metric: str, value, age=None) -> bool:
 def sleep_duration(value, *, unit='seconds') -> bool:
     """Zero is measured absence; durations are bounded by one calendar day."""
     limit = {'seconds': 86400, 'minutes': 1440, 'hours': 24}[unit]
-    return type(value) in (int, float) and isfinite(value) and 0 <= value <= limit
+    return finite_number(value) and 0 <= value <= limit

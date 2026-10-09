@@ -7,7 +7,7 @@ Python port of:
 """
 
 import math
-from backend.validity import positive, resting_hr
+from backend.validity import positive, resting_hr, finite_number
 from typing import Optional
 
 MIN_DAYS_REQUIRED = 7
@@ -21,8 +21,16 @@ def normalize_ratio(value: float, low: float, high: float) -> float:
     if low == high:
         return 50.0
     if high > low:
+        if value <= low:
+            return 0.
+        if value >= high:
+            return 100.
         return clamp((value - low) / (high - low) * 100.0, 0.0, 100.0)
     else:
+        if value >= low:
+            return 0.
+        if value <= high:
+            return 100.
         return clamp((low - value) / (low - high) * 100.0, 0.0, 100.0)
 
 
@@ -97,6 +105,9 @@ class RecoveryCalculator:
 
     @staticmethod
     def calculate(inp: RecoveryInput) -> dict:
+        required = (inp.sleep_score, inp.yesterday_strain, inp.recovery_adjustment)
+        if not all(finite_number(value) for value in required) or (inp.acr is not None and not finite_number(inp.acr)):
+            raise ValueError('Recovery inputs must be finite numbers')
         hrv_comp    = RecoveryCalculator._hrv_component(inp.today_hrv, inp.hrv_baseline, inp.hrv_history)
         rhr_comp    = RecoveryCalculator._rhr_component(inp.today_rhr, inp.rhr_baseline)
         sleep_comp  = clamp(inp.sleep_score, 0.0, 100.0)

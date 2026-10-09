@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="18" skipped="0" tests="18" time="0.166" timestamp="2026-10-09T16:31:20.803718+02:00" hostname="Zangetsu"><testcase classname="backend.test_numeric_missingness_hardening" name="test_nonfinite_sleep_duration_is_rejected[nan]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:14: in test_nonfinite_sleep_duration_is_rejected
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_nonfinite_sleep_duration_is_rejected[inf]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:14: in test_nonfinite_sleep_duration_is_rejected
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_nonfinite_sleep_duration_is_rejected[-inf]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:14: in test_nonfinite_sleep_duration_is_rejected
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_nonfinite_sleep_data_cannot_turn_into_plausible_score[total_duration]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_nonfinite_sleep_data_cannot_turn_into_plausible_score[deep_sleep_duration]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_nonfinite_sleep_data_cannot_turn_into_plausible_score[rem_sleep_duration]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_nonfinite_sleep_data_cannot_turn_into_plausible_score[core_sleep_duration]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_nonfinite_sleep_data_cannot_turn_into_plausible_score[awake_duration]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_nonfinite_sleep_data_cannot_turn_into_plausible_score[in_bed_duration]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_nonfinite_sleep_data_cannot_turn_into_plausible_score[nap_duration_seconds]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_legacy_required_numeric_inputs_reject_nonfinite[sleep_score]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:27: in test_legacy_required_numeric_inputs_reject_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_legacy_required_numeric_inputs_reject_nonfinite[yesterday_strain]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:27: in test_legacy_required_numeric_inputs_reject_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_legacy_required_numeric_inputs_reject_nonfinite[acr]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:27: in test_legacy_required_numeric_inputs_reject_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_legacy_required_numeric_inputs_reject_nonfinite[recovery_adjustment]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:27: in test_legacy_required_numeric_inputs_reject_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_stage_configuration_rejects_nonfinite[spread_scale]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:33: in test_stage_configuration_rejects_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_stage_configuration_rejects_nonfinite[spread_floor_pct]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:33: in test_stage_configuration_rejects_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_stage_configuration_rejects_nonfinite[min_sleep_hours]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_numeric_missingness_hardening.py:33: in test_stage_configuration_rejects_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="backend.test_numeric_missingness_hardening" name="test_unrepresentable_integer_is_rejected_without_overflow" time="0.001"><failure message="OverflowError: int too large to convert to float">backend\test_numeric_missingness_hardening.py:38: in test_unrepresentable_integer_is_rejected_without_overflow
+    assert positive(10 ** 400) is False
+           ^^^^^^^^^^^^^^^^^^^
+backend\validity.py:6: in positive
+    return type(value) in (int, float) and isfinite(value) and value &gt; 0
+                                           ^^^^^^^^^^^^^^^
+E   OverflowError: int too large to convert to float</failure></testcase></testsuite></testsuites>
