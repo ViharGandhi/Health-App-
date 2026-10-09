@@ -1,0 +1,56 @@
+........................................................................ [ 18%]
+................................................F................. [ 36%]
+........................................................................................................................... [ 68%]
+........................................................................ [ 87%]
+................................................                         [100%]
+================================== FAILURES ===================================
+_ StoredClientTests.test_explicit_refresh_bypasses_memory_and_replaces_readings _
+
+self = <test_health_read_store.StoredClientTests testMethod=test_explicit_refresh_bypasses_memory_and_replaces_readings>
+
+    def test_explicit_refresh_bypasses_memory_and_replaces_readings(self):
+        async def check():
+            client = google.GoogleHealthClient('token', cache=True, account_id='account', store=self.store)
+            client._fetch_points = AsyncMock(return_value=[point(5)])
+            expression = query('2026-10-05', '2026-10-06').expression(query('2026-10-05', '2026-10-06').start, query('2026-10-05', '2026-10-06').end)
+            await client._points(KIND, expression)
+            self.store.expire_recent(client.account_key)
+            client._fetch_points.return_value = [point(5, 80)]
+            self.assertEqual(await client._points(KIND, expression), [point(5, 80)])
+>       asyncio.run(check())
+
+backend\test_health_read_store.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_health_read_store.py:163: in check
+    self.assertEqual(await client._points(KIND, expression), [point(5, 80)])
+E   AssertionError: Lists differ: [{'da[23 chars]': {'averageHeartRateVariabilityMilliseconds':[48 chars]6}}}] != [{'da[23 chars]': {'date': {'year': 2026, 'month': 10, 'day':[48 chars]80}}]
+E   
+E   First differing element 0:
+E   {'dai[22 chars]': {'averageHeartRateVariabilityMilliseconds':[47 chars]26}}}
+E   {'dai[22 chars]': {'date': {'year': 2026, 'month': 10, 'day':[47 chars] 80}}
+E   
+E   - [{'dailyHeartRateVariability': {'averageHeartRateVariabilityMilliseconds': 40,
+E   ?                                                                            ^
+E   
+E   + [{'dailyHeartRateVariability': {'averageHeartRateVariabilityMilliseconds': 80,
+E   ?                                                                            ^
+E   
+E                                     'date': {'day': 5, 'month': 10, 'year': 2026}}}]
+============================== warnings summary ===============================
+.venv\Lib\site-packages\starlette\testclient.py:40
+  E:\Projects\Health-App-\.venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend/test_health_read_store.py::StoredClientTests::test_explicit_refresh_bypasses_memory_and_replaces_readings
+1 failed, 380 passed, 1 warning, 27 subtests passed in 80.92s (0:01:20)

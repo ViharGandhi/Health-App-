@@ -1,0 +1,27 @@
+......F..                                                                [100%]
+================================== FAILURES ===================================
+_ test_typed_calculation_chains_are_finite_bounded_and_repeatable[sleep_trends] _
+backend\test_structured_calculator_fuzz.py:31: in test_typed_calculation_chains_are_finite_bounded_and_repeatable
+    'sleep_stress', 'sleep_trends', 'health_analytics', 'legacy_clock'])
+    ^^^^^^^^
+backend\test_structured_calculator_fuzz.py:89: in test_typed_calculation_chains_are_finite_bounded_and_repeatable
+    finite_tree([build_sleep_trend(records, DAY - timedelta(days=6), DAY, 'W', 'efficiency', True),
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_trends.py:47: in build_sleep_trend
+    by_date = {record["date"]: record for record in records if usable(record)}
+                                                               ^^^^^^^^^^^^^^
+backend\sleep_trends.py:45: in usable
+    and SleepEfficiencyCalculator.calculate_single_night(asleep * 60, period * 60) is not None)
+                                                         ^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+E   Failing test case: test_typed_calculation_chains_are_finite_bounded_and_repeatable(
+E       # The test always failed when commented parts were varied together.
+E       chain='sleep_trends',
+E       hrv=1.0,  # or any other generated value
+E       hr=35.0,  # or any other generated value
+E       minutes=180,  # or any other generated value
+E       age=18,  # or any other generated value
+E   )
+=========================== short test summary info ===========================
+FAILED backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[sleep_trends]
+1 failed, 8 passed in 26.62s

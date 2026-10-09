@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.602" timestamp="2026-10-09T20:12:22.622810+02:00" hostname="Zangetsu"><testcase classname="backend.test_provider_step_counts" name="test_stored_only_excludes_invalid_historical_counts" time="0.062"><failure message="assert {datetime.dat...6, 10, 7): -1} == {}&#10;  &#10;  Left contains 1 more item:&#10;  {datetime.date(2026, 10, 7): -1}&#10;  Use -v to get more diff">backend\test_provider_step_counts.py:55: in test_stored_only_excludes_invalid_historical_counts
+    assert asyncio.run(client.get_daily_steps(day, day)) == {}
+E   assert {datetime.dat...6, 10, 7): -1} == {}
+E     
+E     Left contains 1 more item:
+E     {datetime.date(2026, 10, 7): -1}
+E     Use -v to get more diff</failure></testcase></testsuite></testsuites>

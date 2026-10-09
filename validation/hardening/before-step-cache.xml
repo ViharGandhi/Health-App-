@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.575" timestamp="2026-10-09T20:11:52.033067+02:00" hostname="Zangetsu"><testcase classname="backend.test_provider_step_counts" name="test_previous_rollup_cache_cannot_bypass_validation" time="0.064"><failure message="assert {datetime.dat...6, 10, 7): -1} == {datetime.dat...26, 10, 7): 0}&#10;  &#10;  Differing items:&#10;  {datetime.date(2026, 10, 7): -1} != {datetime.date(2026, 10, 7): 0}&#10;  Use -v to get more diff">backend\test_provider_step_counts.py:45: in test_previous_rollup_cache_cannot_bypass_validation
+    assert asyncio.run(client.get_daily_steps(day, day)) == {day: 0}
+E   assert {datetime.dat...6, 10, 7): -1} == {datetime.dat...26, 10, 7): 0}
+E     
+E     Differing items:
+E     {datetime.date(2026, 10, 7): -1} != {datetime.date(2026, 10, 7): 0}
+E     Use -v to get more diff</failure></testcase></testsuite></testsuites>

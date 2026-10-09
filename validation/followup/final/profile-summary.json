@@ -1,0 +1,83 @@
+[
+  {
+    "profile": "fit",
+    "recovery": 50,
+    "recovery_status": "ok",
+    "recovery_reason": "Estimated baseline-relative recovery; above normal means higher than usual, not necessarily better.",
+    "sleep_score": 69.1,
+    "need_minutes": 432.27888661484883,
+    "strain": 14.843626807622364
+  },
+  {
+    "profile": "older",
+    "recovery": 50,
+    "recovery_status": "ok",
+    "recovery_reason": "Estimated baseline-relative recovery; above normal means higher than usual, not necessarily better.",
+    "sleep_score": 69.1,
+    "need_minutes": 438.61720439950176,
+    "strain": 18.77497819872905
+  },
+  {
+    "profile": "sedentary",
+    "recovery": 50,
+    "recovery_status": "ok",
+    "recovery_reason": "Estimated baseline-relative recovery; above normal means higher than usual, not necessarily better.",
+    "sleep_score": 69.1,
+    "need_minutes": 428.0,
+    "strain": 13.754647214465292
+  },
+  {
+    "profile": "sleep_deprived",
+    "recovery": 31,
+    "recovery_status": "ok",
+    "recovery_reason": "Estimated baseline-relative recovery; above normal means higher than usual, not necessarily better.",
+    "sleep_score": 30.5,
+    "need_minutes": 492.3935465853841,
+    "strain": 14.497490635266695
+  },
+  {
+    "profile": "illness",
+    "recovery": 0,
+    "recovery_status": "ok",
+    "recovery_reason": "Estimated baseline-relative recovery; above normal means higher than usual, not necessarily better.",
+    "sleep_score": 69.1,
+    "need_minutes": 429.94610900377444,
+    "strain": 14.497490635266695
+  },
+  {
+    "profile": "new_user",
+    "recovery": null,
+    "recovery_status": "building_reference",
+    "recovery_reason": "Building reference: 0/21 baseline HRV days; 4/4 recent nights required.",
+    "sleep_score": 69.1,
+    "need_minutes": 430.4789374792308,
+    "strain": 14.497490635266695
+  },
+  {
+    "profile": "irregular_schedule",
+    "recovery": 50,
+    "recovery_status": "ok",
+    "recovery_reason": "Estimated baseline-relative recovery; above normal means higher than usual, not necessarily better.",
+    "sleep_score": 69.1,
+    "need_minutes": 430.5646433340719,
+    "strain": 14.497490635266695
+  },
+  {
+    "profile": "stopped_sync_10_days",
+    "recovery": null,
+    "recovery_status": "building_reference",
+    "recovery_reason": "Building reference: 58/21 baseline HRV days; 0/4 recent nights required.",
+    "sleep_score": null,
+    "need_minutes": null,
+    "strain": 14.497490635266695
+  },
+  {
+    "profile": "remote_timezone",
+    "recovery": 38,
+    "recovery_status": "ok",
+    "recovery_reason": "Estimated baseline-relative recovery; above normal means higher than usual, not necessarily better.",
+    "sleep_score": null,
+    "need_minutes": null,
+    "strain": 14.497490635266695
+  }
+]

@@ -1,0 +1,52 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+_ test_missing_duration_is_unusable_instead_of_raising[efficiency-time_asleep_minutes] _
+backend\test_sleep_trend_missing_duration.py:15: in test_missing_duration_is_unusable_instead_of_raising
+    result = build_sleep_trend([record], day, day, 'W', metric, False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_trends.py:47: in build_sleep_trend
+    by_date = {record["date"]: record for record in records if usable(record)}
+                                                               ^^^^^^^^^^^^^^
+backend\sleep_trends.py:45: in usable
+    and SleepEfficiencyCalculator.calculate_single_night(asleep * 60, period * 60) is not None)
+                                                         ^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+_ test_missing_duration_is_unusable_instead_of_raising[efficiency-time_in_bed_minutes] _
+backend\test_sleep_trend_missing_duration.py:15: in test_missing_duration_is_unusable_instead_of_raising
+    result = build_sleep_trend([record], day, day, 'W', metric, False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_trends.py:47: in build_sleep_trend
+    by_date = {record["date"]: record for record in records if usable(record)}
+                                                               ^^^^^^^^^^^^^^
+backend\sleep_trends.py:45: in usable
+    and SleepEfficiencyCalculator.calculate_single_night(asleep * 60, period * 60) is not None)
+                                                                      ^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+_ test_missing_duration_is_unusable_instead_of_raising[consistency-time_asleep_minutes] _
+backend\test_sleep_trend_missing_duration.py:15: in test_missing_duration_is_unusable_instead_of_raising
+    result = build_sleep_trend([record], day, day, 'W', metric, False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_trends.py:47: in build_sleep_trend
+    by_date = {record["date"]: record for record in records if usable(record)}
+                                                               ^^^^^^^^^^^^^^
+backend\sleep_trends.py:45: in usable
+    and SleepEfficiencyCalculator.calculate_single_night(asleep * 60, period * 60) is not None)
+                                                         ^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+_ test_missing_duration_is_unusable_instead_of_raising[consistency-time_in_bed_minutes] _
+backend\test_sleep_trend_missing_duration.py:15: in test_missing_duration_is_unusable_instead_of_raising
+    result = build_sleep_trend([record], day, day, 'W', metric, False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_trends.py:47: in build_sleep_trend
+    by_date = {record["date"]: record for record in records if usable(record)}
+                                                               ^^^^^^^^^^^^^^
+backend\sleep_trends.py:45: in usable
+    and SleepEfficiencyCalculator.calculate_single_night(asleep * 60, period * 60) is not None)
+                                                                      ^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'
+=========================== short test summary info ===========================
+FAILED backend/test_sleep_trend_missing_duration.py::test_missing_duration_is_unusable_instead_of_raising[efficiency-time_asleep_minutes]
+FAILED backend/test_sleep_trend_missing_duration.py::test_missing_duration_is_unusable_instead_of_raising[efficiency-time_in_bed_minutes]
+FAILED backend/test_sleep_trend_missing_duration.py::test_missing_duration_is_unusable_instead_of_raising[consistency-time_asleep_minutes]
+FAILED backend/test_sleep_trend_missing_duration.py::test_missing_duration_is_unusable_instead_of_raising[consistency-time_in_bed_minutes]
+4 failed in 2.68s

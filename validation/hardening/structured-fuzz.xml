@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.752" timestamp="2026-10-09T20:02:43.150365+02:00" hostname="Zangetsu"><testcase classname="" name="backend.test_structured_calculator_fuzz" time="0.000"><error message="collection failure">ImportError while importing test module 'E:\Projects\Health-App-\backend\test_structured_calculator_fuzz.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\test_structured_calculator_fuzz.py:23: in &lt;module&gt;
+    from run_simulations import stress_night
+E   ModuleNotFoundError: No module named 'run_simulations'</error></testcase></testsuite></testsuites>
