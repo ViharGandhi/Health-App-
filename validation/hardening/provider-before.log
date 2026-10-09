@@ -1,0 +1,17 @@
+F....F                                                                   [100%]
+================================== FAILURES ===================================
+_______________ test_daily_vo2_obeys_approved_provider_ceiling ________________
+backend\test_provider_validity.py:12: in test_daily_vo2_obeys_approved_provider_ceiling
+    assert not valid_health_value('vo2_max', 100.01)
+E   AssertionError: assert not True
+E    +  where True = valid_health_value('vo2_max', 100.01)
+_______ test_sample_hrv_obeys_its_own_ceiling_without_capping_daily_hrv _______
+backend\test_provider_validity.py:29: in test_sample_hrv_obeys_its_own_ceiling_without_capping_daily_hrv
+    assert not prepare_night(night, windows, samples).windows
+E   AssertionError: assert not (ValidWindow(start_utc=datetime.datetime(2026, 10, 6, 23, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 6, 23, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=20.72326583694641, hr=60.0, minutes=5.0),)
+E    +  where (ValidWindow(start_utc=datetime.datetime(2026, 10, 6, 23, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 6, 23, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=20.72326583694641, hr=60.0, minutes=5.0),) = NightWindows(night=SleepNight(sleep_id='2026-10-07', night_date=datetime.date(2026, 10, 7), start_utc=datetime.datetim... stage='LIGHT', ln_hrv=20.72326583694641, hr=60.0, minutes=5.0),), asleep_minutes=360.0, coverage=0.013888888888888888).windows
+E    +    where NightWindows(night=SleepNight(sleep_id='2026-10-07', night_date=datetime.date(2026, 10, 7), start_utc=datetime.datetim... stage='LIGHT', ln_hrv=20.72326583694641, hr=60.0, minutes=5.0),), asleep_minutes=360.0, coverage=0.013888888888888888) = prepare_night(SleepNight(sleep_id='2026-10-07', night_date=datetime.date(2026, 10, 7), start_utc=datetime.datetime(2026, 10, 6, 23, ...e.timezone.utc), stage='LIGHT'),), awakenings=(), processed=True, main_sleep=True, nap=False, main_sleep_explicit=True), [HrvWindow(start_utc=datetime.datetime(2026, 10, 6, 23, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 6, 23, 5, tzinfo=datetime.timezone.utc), rmssd_ms=1000000000.0)], [HrSample(time_utc=datetime.datetime(2026, 10, 6, 23, 0, tzinfo=datetime.timezone.utc), bpm=60.0), HrSample(time_utc=d..., bpm=60.0), HrSample(time_utc=datetime.datetime(2026, 10, 6, 23, 0, 25, tzinfo=datetime.timezone.utc), bpm=60.0), ...])
+=========================== short test summary info ===========================
+FAILED backend/test_provider_validity.py::test_daily_vo2_obeys_approved_provider_ceiling
+FAILED backend/test_provider_validity.py::test_sample_hrv_obeys_its_own_ceiling_without_capping_daily_hrv
+2 failed, 4 passed in 0.64s

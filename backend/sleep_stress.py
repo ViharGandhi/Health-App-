@@ -7,6 +7,7 @@ from dataclasses import asdict, dataclass
 from datetime import date, datetime, timedelta, timezone
 from math import exp, isfinite, log
 from statistics import median
+from validity import valid_metric
 
 
 @dataclass(frozen=True)
@@ -28,7 +29,7 @@ class StressConfig:
 
 
 DEFAULT_CONFIG = StressConfig()
-ALGO_VERSION = "sleep-stress-5"
+ALGO_VERSION = "sleep-stress-6"
 
 
 @dataclass(frozen=True)
@@ -221,7 +222,7 @@ def prepare_night(
         duration = (window.end_utc - window.start_utc).total_seconds()
         if (duration <= 0 or interval is None or window.start_utc < night.start_utc
                 or window.end_utc > night.end_utc or window.rmssd_ms is None
-                or not isfinite(window.rmssd_ms) or window.rmssd_ms <= 0
+                or not valid_metric('sample_hrv', window.rmssd_ms)
                 or (valid and window.start_utc < valid[-1].end_utc)):
             continue
         if any(_overlap(window.start_utc, window.end_utc, start, end) > 0

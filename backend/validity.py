@@ -26,7 +26,11 @@ def valid_metric(metric: str, value, age=None) -> bool:
         return resting_hr(value) is not None
     if not positive(value):
         return False
-    return value <= 100 if metric == 'spo2' else True
+    # Provider v4 contract, approved 9 October 2026; daily HRV has no such cap.
+    # https://developers.google.com/health/reference/rest/v4/users.dataTypes.dataPoints
+    if metric in ('spo2', 'vo2_max'):
+        return value <= 100
+    return value <= 200 if metric == 'sample_hrv' else True
 
 
 def sleep_duration(value, *, unit='seconds') -> bool:
