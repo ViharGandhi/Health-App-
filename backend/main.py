@@ -244,7 +244,7 @@ def _cached_data_page(function):
         parameters.apply_defaults()
         effective = {k: v for k, v in parameters.arguments.items() if k not in ('request', 'response')}
         strain_revision = dynamic.get('revision', 0) if request.url.path.startswith('/api/strain') or request.url.path == '/api/dashboard' else 0
-        key = hashlib.sha256(json.dumps(['page-v9', request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
+        key = hashlib.sha256(json.dumps(['page-v10', request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
             str(day), age, str(client.strain_timezone), client.strain_sex, client.strain_sex_defaulted,
             repr(STRAIN_CONFIG), strain_revision, dynamic.get('sleep_revision', 0)], default=str).encode()).hexdigest()
         frozen = daily_sleep and await asyncio.to_thread(client.store.sleep_day_prepared, client.account_key, day)
@@ -339,6 +339,8 @@ async def _compute_real_sleep(client: GoogleHealthClient, target_date: date, nee
             stages=SleepStages(deep_minutes=0, rem_minutes=0, core_minutes=0, awake_minutes=0, total_minutes=0),
             duration_score=0.0, stage_score=0.0, restfulness_score=0.0, hr_dip_score=0.0,
             is_mock=False,
+            components_available={name: False for name in ('duration', 'stages', 'efficiency', 'sleeping_hrv', 'sleeping_hr', 'hr_dip', 'restfulness')},
+            partial=True, status_reason='sleep_duration_unavailable',
         )
 
     sleep = SleepData(
@@ -400,8 +402,23 @@ async def _compute_real_sleep(client: GoogleHealthClient, target_date: date, nee
     ]
     consistency_res = SleepConsistencyCalculator.calculate(parsed_nights)
     deep_sleep_hrv = await client.get_deep_sleep_hrv(target_date)
+    available = {
+        'duration': need is not None, 'stages': need is not None and raw.get('stage_breakdown_available', False),
+        'efficiency': efficiency is not None,
+        'sleeping_hrv': positive(sleeping_hrv), 'sleeping_hr': resting_hr(sleeping_hr) is not None,
+        'hr_dip': resting_hr(sleeping_hr) is not None and resting_hr(waking_hr) is not None,
+        'restfulness': raw.get('restfulness_available', False),
+    }
+    defaults = {'duration': 0., 'stages': 0., 'efficiency': 50., 'sleeping_hrv': 50.,
+                'sleeping_hr': 50., 'hr_dip': 50., 'restfulness': restfulness}
+    weights = {'duration': .27, 'stages': .20, 'efficiency': .10, 'sleeping_hrv': .05,
+               'sleeping_hr': .05, 'hr_dip': .18, 'restfulness': .15}
 
     return SleepResponse(
+        components_available=available,
+        defaulted_components={key: defaults[key] for key, valid in available.items() if not valid},
+        component_coverage=sum(weights[key] for key, valid in available.items() if valid),
+        partial=not all(available.values()), status_reason='sleep_need_unavailable' if need is None else None,
         score=round(score, 1) if score is not None else None,
         sleep_need_hours=sleep_need,
         sleep_need=asdict(need) if need else None,
@@ -689,7 +706,10 @@ async def sleep_analytics_endpoint(request: Request, response: Response, timefra
                 and current.sleep_end == datetime.fromisoformat(nights[-1]["wake_time"]).strftime("%I:%M %p")
                 and abs(current.stages.total_minutes - nights[-1]["asleep_minutes"]) < 1):
             nights[-1].update(performance=current.score, need_minutes=need.total_need_min,
-                             need_components=need_components(need))
+                             need_components=need_components(need),
+                             components_available=current.components_available,
+                             defaulted_components=current.defaulted_components,
+                             component_coverage=current.component_coverage, partial=current.partial)
     result = build_sleep_analytics(nights, today, timeframe, not token)
     tonight = inputs.for_tonight(today)
     result["tonight_sleep_need"] = asdict(tonight) if tonight else None

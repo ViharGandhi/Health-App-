@@ -446,6 +446,8 @@ class GoogleHealthClient:
                 "main_sleep": metadata.get("mainSleep"),
                 "total_duration": asleep_minutes * 60,
                 "sleep_duration_available": duration_available,
+                "stage_breakdown_available": bool(summary.get('stagesSummary')),
+                "restfulness_available": summary.get('minutesAwake') is not None,
                 "deep_sleep_duration": stage_totals.get("DEEP", 0.0),
                 "rem_sleep_duration": stage_totals.get("REM", 0.0),
                 "core_sleep_duration": stage_totals.get("LIGHT", 0.0),

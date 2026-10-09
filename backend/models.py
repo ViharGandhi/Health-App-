@@ -132,6 +132,11 @@ class SleepStages(BaseModel):
 
 
 class SleepResponse(BaseModel):
+    components_available: Dict[str, bool] = Field(default_factory=dict)
+    defaulted_components: Dict[str, float] = Field(default_factory=dict)
+    component_coverage: float = 0.
+    partial: bool = False
+    status_reason: Optional[str] = None
     score: Optional[float] = Field(description="Sleep score 0–100; absent without a sleep-need estimate")
     sleep_need_hours: Optional[float]
     sleep_need: Optional[Dict[str, float]] = None
