@@ -1,0 +1,20 @@
+FF..F                                                                    [100%]
+================================== FAILURES ===================================
+_ test_clock_transition_does_not_discard_positive_physical_sleep[day0-2026-10-25T00:45:00Z-2026-10-25T01:15:00Z-7200s-3600s] _
+backend\test_sleep_dst_elapsed.py:23: in test_clock_transition_does_not_discard_positive_physical_sleep
+    assert result is not None
+E   assert None is not None
+_ test_clock_transition_does_not_discard_positive_physical_sleep[day1-2027-10-31T00:45:00Z-2027-10-31T01:15:00Z-7200s-3600s] _
+backend\test_sleep_dst_elapsed.py:23: in test_clock_transition_does_not_discard_positive_physical_sleep
+    assert result is not None
+E   assert None is not None
+_________ test_analytics_compares_instants_instead_of_timestamp_text __________
+backend\test_sleep_dst_elapsed.py:31: in test_analytics_compares_instants_instead_of_timestamp_text
+    assert len(records) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])
+=========================== short test summary info ===========================
+FAILED backend/test_sleep_dst_elapsed.py::test_clock_transition_does_not_discard_positive_physical_sleep[day0-2026-10-25T00:45:00Z-2026-10-25T01:15:00Z-7200s-3600s]
+FAILED backend/test_sleep_dst_elapsed.py::test_clock_transition_does_not_discard_positive_physical_sleep[day1-2027-10-31T00:45:00Z-2027-10-31T01:15:00Z-7200s-3600s]
+FAILED backend/test_sleep_dst_elapsed.py::test_analytics_compares_instants_instead_of_timestamp_text
+3 failed, 2 passed in 0.74s

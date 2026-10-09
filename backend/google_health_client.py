@@ -459,13 +459,14 @@ class GoogleHealthClient:
                 summary = {}
             onset = start_dt + timedelta(minutes=float(summary.get("minutesToFallAsleep", 0)))
             wake = end_dt - timedelta(minutes=float(summary.get("minutesAfterWakeUp", 0)))
-            if onset >= wake:
+            physical_start = datetime.fromisoformat(interval["startTime"].replace("Z", "+00:00"))
+            physical_end = datetime.fromisoformat(interval["endTime"].replace("Z", "+00:00"))
+            if (physical_start + timedelta(minutes=float(summary.get('minutesToFallAsleep', 0)))
+                    >= physical_end - timedelta(minutes=float(summary.get('minutesAfterWakeUp', 0)))):
                 continue
             stage_totals = {s["type"]: float(s["minutes"]) * 60 for s in summary.get("stagesSummary", [])}
             awake_count = sum(int(s.get("count", 0)) for s in summary.get("stagesSummary", []) if s.get("type") == "AWAKE")
             asleep_minutes = float(summary.get("minutesAsleep") or 0)
-            physical_start = datetime.fromisoformat(interval["startTime"].replace("Z", "+00:00"))
-            physical_end = datetime.fromisoformat(interval["endTime"].replace("Z", "+00:00"))
             duration_available = (summary_valid and summary.get("minutesAsleep") is not None and metadata.get("processed") is not False
                                   and physical_start.tzinfo is not None and physical_end.tzinfo is not None
                                   and physical_end <= datetime.now(timezone.utc) and math.isfinite(asleep_minutes)

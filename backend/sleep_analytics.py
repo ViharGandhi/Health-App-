@@ -99,10 +99,10 @@ def sleep_observations(points: list[dict], today: date, *, is_mock: bool = False
 
 def timing_records(observations: list[dict]) -> list[dict]:
     return [{"date": date.fromisoformat(n["date"]),
-             "bed_time": datetime.fromisoformat(n["onset_time"]).replace(tzinfo=None),
-             "wake_time": datetime.fromisoformat(n["sleep_wake_time"]).replace(tzinfo=None),
+             "bed_time": datetime.fromisoformat(n["onset_time"]),
+             "wake_time": datetime.fromisoformat(n["sleep_wake_time"]),
              "time_asleep_minutes": n["asleep_minutes"], "time_in_bed_minutes": n["period_minutes"]}
-            for n in observations if n["onset_time"] < n["sleep_wake_time"]]
+            for n in observations if datetime.fromisoformat(n["onset_time"]) < datetime.fromisoformat(n["sleep_wake_time"])]
 
 
 def build_sleep_analytics(observations: list[dict], today: date, timeframe: str, is_mock: bool) -> dict:
