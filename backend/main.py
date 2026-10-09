@@ -242,7 +242,7 @@ def _cached_data_page(function):
     @wraps(function)
     async def wrapped(*args, **kwargs):
         request, response = kwargs.get('request'), kwargs.get('response')
-        if request is None or response is None:
+        if request is None or response is None or kwargs.get('demo') is True:
             return await function(*args, **kwargs)
         session = get_session(request) or {}
         if not (session.get('health_user_id') or session.get('user_email')):
