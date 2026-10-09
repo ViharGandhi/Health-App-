@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="6" time="1.873" timestamp="2026-10-09T19:35:42.153909+02:00" hostname="Zangetsu"><properties><property name="hypothesis-statistics-backend/test_extended_hardening.py::test_additional_sleep_adapters_validate_payload[sleep_observations]" value="YmFja2VuZC90ZXN0X2V4dGVuZGVkX2hhcmRlbmluZy5weTo6dGVzdF9hZGRpdGlvbmFsX3NsZWVwX2FkYXB0ZXJzX3ZhbGlkYXRlX3BheWxvYWRbc2xlZXBfb2JzZXJ2YXRpb25zXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuNjggc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC03IG1zLCBvZiB3aGljaCB+IDAtNiBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMjAwIHBhc3NpbmcsIDAgZmFpbGluZywgYW5kIDI0IGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBFdmVudHM6CiAgICAgICogNi4yNSUsIERyYXcgZm9yIHJlY3Vyc2l2ZShvbmVfb2Yobm9uZSgpLCBib29sZWFucygpLCBpbnRlZ2VycygpLCBmbG9hdHMoKSwgdGV4dChtYXhfc2l6ZT00MCkpLCBsYW1iZGEgY2hpbGQ6IHN0Lm9uZV9vZihzdC5saXN0cyhjaGlsZCwgbWF4X3NpemU9NCksIHN0LmRpY3Rpb25hcmllcyhzdC5zYW1wbGVkX2Zyb20oWydzbGVlcCcsICdpbnRlcnZhbCcsICdzdGFydFRpbWUnLCAnZW5kVGltZScsICdzYW1wbGVUaW1lJywgJ3BoeXNpY2FsVGltZScsICdoZWFydFJhdGUnLCAnaGVhcnRSYXRlVmFyaWFiaWxpdHknLCAneWVhcicsICdtb250aCcsICdkYXknLCAnc3RhZ2VzJywgJ21ldGFkYXRhJ10pLCBjaGlsZCwgbWF4X3NpemU9NSkpLCBtaW5fbGVhdmVzPU5vbmUsIG1heF9sZWF2ZXM9MTUpIGV4Y2VlZGVkIG1heF9sZWF2ZXM9MTUgYW5kIGhhZCB0byBiZSByZXRyaWVkCgogIC0gU3RvcHBlZCBiZWNhdXNlIHNldHRpbmdzLm1heF9leGFtcGxlcz0yMDA=" /><property name="hypothesis-statistics-backend/test_extended_hardening.py::test_additional_sleep_adapters_validate_payload[sleep_hr_chart]" value="YmFja2VuZC90ZXN0X2V4dGVuZGVkX2hhcmRlbmluZy5weTo6dGVzdF9hZGRpdGlvbmFsX3NsZWVwX2FkYXB0ZXJzX3ZhbGlkYXRlX3BheWxvYWRbc2xlZXBfaHJfY2hhcnRdOgoKICAtIGR1cmluZyBnZW5lcmF0ZSBwaGFzZSAoMC4yNiBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAxLTQyIG1zLCBvZiB3aGljaCB+IDAtMjIgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDEgcGFzc2luZywgMTUgZmFpbGluZywgYW5kIDQgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDIgZGlzdGluY3QgZXJyb3JzIGluIHRoaXMgcGhhc2UKICAgIC0gRXZlbnRzOgogICAgICAqIDEwLjAwJSwgRHJhdyBmb3IgcmVjdXJzaXZlKG9uZV9vZihub25lKCksIGJvb2xlYW5zKCksIGludGVnZXJzKCksIGZsb2F0cygpLCB0ZXh0KG1heF9zaXplPTQwKSksIGxhbWJkYSBjaGlsZDogc3Qub25lX29mKHN0Lmxpc3RzKGNoaWxkLCBtYXhfc2l6ZT00KSwgc3QuZGljdGlvbmFyaWVzKHN0LnNhbXBsZWRfZnJvbShbJ3NsZWVwJywgJ2ludGVydmFsJywgJ3N0YXJ0VGltZScsICdlbmRUaW1lJywgJ3NhbXBsZVRpbWUnLCAncGh5c2ljYWxUaW1lJywgJ2hlYXJ0UmF0ZScsICdoZWFydFJhdGVWYXJpYWJpbGl0eScsICd5ZWFyJywgJ21vbnRoJywgJ2RheScsICdzdGFnZXMnLCAnbWV0YWRhdGEnXSksIGNoaWxkLCBtYXhfc2l6ZT01KSksIG1pbl9sZWF2ZXM9Tm9uZSwgbWF4X2xlYXZlcz0xNSkgZXhjZWVkZWQgbWF4X2xlYXZlcz0xNSBhbmQgaGFkIHRvIGJlIHJldHJpZWQKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjEyIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDEtMTIgbXMsIG9mIHdoaWNoIH4gMC0xIG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAxIHBhc3NpbmcsIDkgZmFpbGluZywgYW5kIDEgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDExIHNocmlua3Mgb2Ygd2hpY2ggNSB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /></properties><testcase classname="backend.test_extended_hardening" name="test_extreme_finite_references_never_produce_infinite_ranges[hrv-values0]" time="0.002" /><testcase classname="backend.test_extended_hardening" name="test_extreme_finite_references_never_produce_infinite_ranges[respiratory_rate-values1]" time="0.002" /><testcase classname="backend.test_extended_hardening" name="test_25_hour_sleep_partition_is_rejected" time="0.001"><failure message="AssertionError: assert (NightStageStats(sleep_id='synthetic', night_date=datetime.date(2026, 10, 7), start_utc=datetime.datetime(2026, 10, 6, ...ive': 0.0}, pct={'awake': 0.0, 'light': 100.0, 'deep': 0.0, 'rem': 0.0, 'restorative': 0.0}, denominator='time_in_bed') is None)">backend\test_extended_hardening.py:35: in test_25_hour_sleep_partition_is_rejected
+    assert stats is None and status == 'invalid_stage_partition'
+E   AssertionError: assert (NightStageStats(sleep_id='synthetic', night_date=datetime.date(2026, 10, 7), start_utc=datetime.datetime(2026, 10, 6, ...ive': 0.0}, pct={'awake': 0.0, 'light': 100.0, 'deep': 0.0, 'rem': 0.0, 'restorative': 0.0}, denominator='time_in_bed') is None)</failure></testcase><testcase classname="backend.test_extended_hardening" name="test_duration_large_slope_remains_numerically_stable" time="0.001"><failure message="OverflowError: math range error">backend\test_extended_hardening.py:39: in test_duration_large_slope_remains_numerically_stable
+    assert 0 &lt;= SleepCalculator.compute_duration_score(.01, 7.5, 1000., .75) &lt;= 100
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleepscore.py:212: in compute_duration_score
+    raw = 100.0 / (1.0 + math.exp(-steepness * (ratio - midpoint)))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   OverflowError: math range error</failure></testcase><testcase classname="backend.test_extended_hardening" name="test_additional_sleep_adapters_validate_payload[sleep_observations]" time="0.710" /><testcase classname="backend.test_extended_hardening" name="test_additional_sleep_adapters_validate_payload[sleep_hr_chart]" time="0.407"><failure message="ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)">+ Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_extended_hardening.py", line 43, in test_additional_sleep_adapters_validate_payload
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_extended_hardening.py", line 47, in test_additional_sleep_adapters_validate_payload
+    |     result = sleep_observations([value], DAY) if adapter == 'sleep_observations' else build_sleep_heart_rate(value, [], False)
+    |                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 42, in build_sleep_heart_rate
+    |     interval = point["sleep"]["interval"]
+    |                ~~~~~^^^^^^^^^
+    | KeyError: 'sleep'
+    | Failing test case: test_additional_sleep_adapters_validate_payload(
+    |     adapter='sleep_hr_chart',
+    |     value={},
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         E:\Projects\Health-App-\backend\sleep_heart_rate.py:42
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_extended_hardening.py", line 47, in test_additional_sleep_adapters_validate_payload
+    |     result = sleep_observations([value], DAY) if adapter == 'sleep_observations' else build_sleep_heart_rate(value, [], False)
+    |                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 42, in build_sleep_heart_rate
+    |     interval = point["sleep"]["interval"]
+    |                ~~~~~^^^^^^^^^
+    | TypeError: list indices must be integers or slices, not str
+    | Failing test case: test_additional_sleep_adapters_validate_payload(
+    |     adapter='sleep_hr_chart',
+    |     value=[],
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         E:\Projects\Health-App-\backend\sleep_heart_rate.py:42
+    +------------------------------------</failure></testcase></testsuite></testsuites>

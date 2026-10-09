@@ -36,6 +36,7 @@ def select_sleep(points: list[dict], today: date, sleep_id: str | None = None, *
     return max(candidates, key=lambda item: item[:2])[-1] if candidates else None
 
 
+@payload_boundary
 def build_sleep_heart_rate(point: dict | None, readings: list[dict], is_mock: bool) -> dict:
     if point is None:
         return {"is_mock": is_mock, 'estimator': 'observed_sleep_heart_rate', "status": "no_sleep", "samples": [], "stage_intervals": []}
