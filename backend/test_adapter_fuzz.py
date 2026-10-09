@@ -24,6 +24,8 @@ payload = st.recursive(scalar, lambda child: st.one_of(st.lists(child, max_size=
 def finite_tree(value):
     if is_dataclass(value):
         finite_tree(asdict(value))
+    elif hasattr(value, 'model_dump'):
+        finite_tree(value.model_dump())
     elif isinstance(value, float):
         assert math.isfinite(value)
     elif isinstance(value, dict):

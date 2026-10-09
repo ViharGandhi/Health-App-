@@ -13,6 +13,7 @@ from sleep_consistency import (
     SleepConsistencyCalculator, SleepNight, consistency_label, score_main_sleep,
 )
 from sleep_efficiency import SleepEfficiencyCalculator
+from validity import sleep_duration
 
 
 class DateRangeError(ValueError):
@@ -42,6 +43,7 @@ def build_sleep_trend(
         bedtime, wake = record["bed_time"], record["wake_time"]
         asleep, period = record["time_asleep_minutes"], record["time_in_bed_minutes"]
         return (bedtime < wake and 0 < (wake - bedtime).total_seconds() <= 24 * 3600
+                and sleep_duration(asleep, unit='minutes') and sleep_duration(period, unit='minutes')
                 and SleepEfficiencyCalculator.calculate_single_night(asleep * 60, period * 60) is not None)
 
     by_date = {record["date"]: record for record in records if usable(record)}
