@@ -20,6 +20,7 @@ from __future__ import annotations
 import os
 import json
 import time
+import math
 import hashlib
 import base64
 import secrets
@@ -76,7 +77,8 @@ def _sign(data: dict) -> str:
 
 def _unsign(token: str) -> Optional[dict]:
     try:
-        return _signer.loads(token, max_age=COOKIE_MAX_AGE)
+        value = _signer.loads(token, max_age=COOKIE_MAX_AGE)
+        return value if isinstance(value, dict) else None
     except Exception:
         return None
 
@@ -126,9 +128,11 @@ async def get_valid_access_token(session: dict) -> Optional[str]:
     Returns a valid access token from the session, refreshing if needed.
     Updates session in-place with new token data.
     """
-    if not session:
+    if not isinstance(session, dict) or not session:
         return None
     expires_at = session.get("expires_at", 0)
+    if type(expires_at) not in (int, float) or not math.isfinite(expires_at):
+        return None
     if time.time() < expires_at - 60:  # 60s buffer
         return session.get("access_token")
     # Token expired — refresh

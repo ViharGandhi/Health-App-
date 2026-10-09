@@ -59,7 +59,7 @@ from sleep_consistency import SleepConsistencyCalculator, SleepNight
 from sleep_efficiency import SleepEfficiencyCalculator
 
 # ── App-layer imports ──────────────────────────────────────────────────────────
-from auth import router as auth_router, get_session, get_valid_access_token, set_session
+from auth import router as auth_router, get_session, get_valid_access_token, set_session, COOKIE_NAME
 from google_health_client import GoogleHealthClient
 from sleep_trends import build_consistency_scores, build_sleep_trend, range_start
 from sleep_stress_store import SleepStressStore
@@ -176,9 +176,13 @@ async def _get_token(request: Request, response: Response) -> Optional[str]:
         return request.state.valid_health_token
     session = get_session(request)
     if not session:
+        if COOKIE_NAME in request.cookies:
+            raise HTTPException(401, 'Invalid Google Health session; reconnect')
         return None
     old_token = session.get("access_token")
     token = await get_valid_access_token(session)
+    if not token:
+        raise HTTPException(401, 'Google Health session expired; reconnect')
     if token and token != old_token:
         set_session(response, session)
     if token:
