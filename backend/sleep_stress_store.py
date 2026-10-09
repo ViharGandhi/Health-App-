@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import sqlite3
 from contextlib import closing
 from pathlib import Path
@@ -21,7 +22,12 @@ class SleepStressStore:
             connection.execute("PRAGMA foreign_keys = ON")
             connection.executescript(MIGRATION.read_text(encoding="utf-8"))
 
-    def upsert(self, result: dict, source: NightWindows) -> None:
+    @staticmethod
+    def _key(sleep_id: str, account: str | None) -> str:
+        return hashlib.sha256(json.dumps([account, sleep_id]).encode()).hexdigest() if account else sleep_id
+
+    def upsert(self, result: dict, source: NightWindows, *, account: str | None = None) -> None:
+        key = self._key(result['sleep_id'], account)
         with closing(sqlite3.connect(self.path)) as connection, connection:
             connection.execute("PRAGMA foreign_keys = ON")
             connection.execute(
@@ -29,18 +35,18 @@ class SleepStressStore:
                 "VALUES (?, ?, ?, ?, ?) ON CONFLICT(sleep_id) DO UPDATE SET "
                 "night_date=excluded.night_date, computed_at=excluded.computed_at, "
                 "algo_version=excluded.algo_version, payload=excluded.payload",
-                (result["sleep_id"], result["night_date"], result["computed_at"],
+                (key, result["night_date"], result["computed_at"],
                  result["algo_version"], json.dumps(result)),
             )
-            connection.execute("DELETE FROM sleep_stress_windows WHERE sleep_id = ?", (result["sleep_id"],))
+            connection.execute("DELETE FROM sleep_stress_windows WHERE sleep_id = ?", (key,))
             connection.executemany(
                 "INSERT INTO sleep_stress_windows VALUES (?, ?, ?, ?, ?, ?, ?)",
-                [(result["sleep_id"], window.start_utc.isoformat(), window.end_utc.isoformat(),
+                [(key, window.start_utc.isoformat(), window.end_utc.isoformat(),
                   window.stage, window.ln_hrv, window.hr, window.minutes)
                  for window in source.windows],
             )
 
-    def get(self, sleep_id: str) -> dict | None:
+    def get(self, sleep_id: str, *, account: str | None = None) -> dict | None:
         with closing(sqlite3.connect(self.path)) as connection:
-            row = connection.execute("SELECT payload FROM sleep_stress WHERE sleep_id = ?", (sleep_id,)).fetchone()
+            row = connection.execute("SELECT payload FROM sleep_stress WHERE sleep_id = ?", (self._key(sleep_id, account),)).fetchone()
         return json.loads(row[0]) if row else None

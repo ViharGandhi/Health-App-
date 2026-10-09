@@ -1,0 +1,10 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_____ test_two_accounts_with_same_fallback_sleep_id_have_separate_records _____
+backend\test_stress_account_isolation.py:28: in test_two_accounts_with_same_fallback_sleep_id_have_separate_records
+    assert len(records) == 2
+E   assert 1 == 2
+E    +  where 1 = len([('{"sleep_id": "sleep-2026-10-07T05:00:00+00:00", "night_date": "2026-10-07", "main_sleep_explicit": true, "physical_...: 1.4826, "ln_hrv_spread_floor": 0.02, "hr_spread_floor": 0.5, "min_sleep_hours": 3.0}, "alignment_verified": true}',)])
+=========================== short test summary info ===========================
+FAILED backend/test_stress_account_isolation.py::test_two_accounts_with_same_fallback_sleep_id_have_separate_records
+1 failed in 0.52s

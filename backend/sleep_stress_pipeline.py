@@ -27,7 +27,7 @@ async def compute_connected_sleep_stress(
             scored["alignment_verified"] = anchor is not None
             scored['anchor_verification'] = 'operator_configured' if anchor else 'unconfigured'
             if anchor:
-                store.upsert(scored, item)
+                store.upsert(scored, item, account=getattr(client, 'account_key', None))
             else:
                 other = next(n for n in candidates["end"] if n.night.sleep_id == item.night.sleep_id)
                 alternative = score_night(other, candidates["end"])
