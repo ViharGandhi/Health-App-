@@ -12,7 +12,7 @@ from provider_payload import payload_boundary
 
 STAGES = ("awake", "light", "deep", "rem")
 METRICS = STAGES + ("restorative",)
-ALGO_VERSION = "sleep-stage-ranges-2"
+ALGO_VERSION = "sleep-stage-ranges-3"
 
 
 @dataclass(frozen=True)
@@ -110,6 +110,8 @@ def stage_stats(night: SleepNight, config: StageRangeConfig = DEFAULT_CONFIG) ->
         return None, "stages_pending" if not night.processed or night.stages_status in ("", "STAGES_STATE_UNSPECIFIED") else "stages_unavailable"
     if night.nap:
         return None, "nap_excluded"
+    if not 0 < (night.end_utc - night.start_utc).total_seconds() <= 86400:
+        return None, 'invalid_stage_partition'
     minutes = {s: 0.0 for s in STAGES}
     cursor = night.start_utc
     for segment in sorted(night.segments, key=lambda s: s.start_utc):
