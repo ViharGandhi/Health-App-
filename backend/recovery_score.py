@@ -3,9 +3,9 @@
 from dataclasses import dataclass, field, replace
 from datetime import date, timedelta
 from math import erf, isfinite, log, sqrt
-from statistics import mean, median
+from statistics import mean
 from typing import Sequence
-from validity import positive, valid_metric, resting_hr
+from validity import positive, valid_metric, resting_hr, finite_median as median
 
 
 BASELINE_DAYS = 60

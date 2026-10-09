@@ -1,5 +1,18 @@
 """Shared existing numeric/unit gates; these are not clinical reference ranges."""
 from math import isfinite
+from statistics import mean
+
+
+def finite_median(values):
+    """Median with a stable midpoint for finite numbers near float's upper limit."""
+    ordered = sorted(values)
+    if not ordered or not all(finite_number(value) for value in ordered):
+        raise ValueError('Median requires finite numbers')
+    middle = len(ordered) // 2
+    if len(ordered) % 2:
+        return ordered[middle]
+    summed = ordered[middle - 1] + ordered[middle]
+    return summed / 2 if finite_number(summed) else mean(ordered[middle - 1:middle + 1])
 
 
 def finite_number(value) -> bool:

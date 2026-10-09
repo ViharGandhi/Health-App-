@@ -1,0 +1,59 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+______ test_large_finite_even_medians_do_not_overflow[robust_reference] _______
+backend\test_unbounded_median.py:20: in test_large_finite_even_medians_do_not_overflow
+    finite_tree(result)
+backend\test_adapter_fuzz.py:34: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:28: in finite_tree
+    assert math.isfinite(value)
+E   assert False
+E    +  where False = <built-in function isfinite>(inf)
+E    +    where <built-in function isfinite> = math.isfinite
+___________ test_large_finite_even_medians_do_not_overflow[health] ____________
+backend\test_unbounded_median.py:20: in test_large_finite_even_medians_do_not_overflow
+    finite_tree(result)
+backend\test_adapter_fuzz.py:31: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:31: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:34: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:31: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:28: in finite_tree
+    assert math.isfinite(value)
+E   assert False
+E    +  where False = <built-in function isfinite>(inf)
+E    +    where <built-in function isfinite> = math.isfinite
+____ test_large_finite_even_medians_do_not_overflow[descriptive_recovery] _____
+backend\test_unbounded_median.py:20: in test_large_finite_even_medians_do_not_overflow
+    finite_tree(result)
+backend\test_adapter_fuzz.py:31: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:28: in finite_tree
+    assert math.isfinite(value)
+E   assert False
+E    +  where False = <built-in function isfinite>(inf)
+E    +    where <built-in function isfinite> = math.isfinite
+__ test_boolean_provider_vitals_are_counted_as_rejected_not_converted_to_one __
+backend\test_provider_boolean.py:19: in test_boolean_provider_vitals_are_counted_as_rejected_not_converted_to_one
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_provider_boolean.py:17: in run
+    assert result.rejected_readings['hrv_today'] == 1
+E   assert 0 == 1
+=========================== short test summary info ===========================
+FAILED backend/test_unbounded_median.py::test_large_finite_even_medians_do_not_overflow[robust_reference]
+FAILED backend/test_unbounded_median.py::test_large_finite_even_medians_do_not_overflow[health]
+FAILED backend/test_unbounded_median.py::test_large_finite_even_medians_do_not_overflow[descriptive_recovery]
+FAILED backend/test_provider_boolean.py::test_boolean_provider_vitals_are_counted_as_rejected_not_converted_to_one
+4 failed in 1.29s

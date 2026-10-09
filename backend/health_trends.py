@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from datetime import date, datetime, timedelta
 from math import isfinite
-from statistics import mean, median
+from statistics import mean
 
 from models import HealthPoint, HealthResponse, HeartRatePoint, LatestHeartRate, HealthHeartRateResponse
 from sleep_trends import range_start
-from validity import valid_metric
+from validity import valid_metric, finite_median as median
 
 
 METRICS = ("hrv", "deep_sleep_hrv", "nrem_hr", "rhr", "spo2", "respiratory_rate", "skin_temperature", "vo2_max")

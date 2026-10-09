@@ -33,7 +33,6 @@ from functools import wraps
 from dataclasses import asdict
 from datetime import datetime, timedelta, date, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
-from statistics import median
 from typing import Optional, Literal
 
 # Allow importing the algo files from the project root
@@ -76,7 +75,7 @@ from recovery_analytics import build_recovery_analytics, mock_recovery_history, 
 from sleep_stage_pipeline import sync_stage_ranges
 from sleep_stage_webhooks import router as sleep_stage_webhook_router, stage_store
 from health_trends import build_health_response, build_heart_rate_response
-from validity import positive, resting_hr
+from validity import positive, resting_hr, finite_median as median
 from provider_payload import InvalidProviderPayload
 from strain_analytics import strain_range_start, strain_day, build_strain_analytics
 from mock_data import (
@@ -269,7 +268,7 @@ def _cached_data_page(function):
         parameters.apply_defaults()
         effective = {k: v for k, v in parameters.arguments.items() if k not in ('request', 'response')}
         strain_revision = dynamic.get('revision', 0) if request.url.path.startswith('/api/strain') or request.url.path == '/api/dashboard' else 0
-        key = hashlib.sha256(json.dumps(['page-v25', request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
+        key = hashlib.sha256(json.dumps(['page-v26', request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
             str(day), age, str(client.strain_timezone), client.strain_sex, client.strain_sex_defaulted,
             repr(STRAIN_CONFIG), strain_revision, dynamic.get('sleep_revision', 0)], default=str).encode()).hexdigest()
         frozen = daily_sleep and await asyncio.to_thread(client.store.sleep_day_prepared, client.account_key, day)
