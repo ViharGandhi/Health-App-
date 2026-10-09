@@ -1,0 +1,128 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+___________ test_public_helpers_validate_malformed_scalars[latency] ___________
+  + Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 19, in test_public_helpers_validate_malformed_scalars
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 23, in test_public_helpers_validate_malformed_scalars
+    |     result = RECIPES[helper](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\sleepscore.py", line 320, in compute_sleep_latency_score
+    |     lat_min = latency_seconds / 60.0
+    |               ~~~~~~~~~~~~~~~~^~~~~~
+    | TypeError: unsupported operand type(s) for /: 'str' and 'float'
+    | Failing test case: test_public_helpers_validate_malformed_scalars(
+    |     helper='latency',
+    |     value='',
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 28, in test_public_helpers_validate_malformed_scalars
+    |     assert result >= 0
+    | AssertionError: assert -0.0833333333333357 >= 0
+    | Failing test case: test_public_helpers_validate_malformed_scalars(
+    |     helper='latency',
+    |     value=-601.0,
+    | )
+    +------------------------------------
+________ test_public_helpers_validate_malformed_scalars[interruption] _________
+  + Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 19, in test_public_helpers_validate_malformed_scalars
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 30, in test_public_helpers_validate_malformed_scalars
+    |     assert result <= 100
+    | AssertionError: assert 115.0 <= 100
+    | Failing test case: test_public_helpers_validate_malformed_scalars(
+    |     helper='interruption',
+    |     value=-1,
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 23, in test_public_helpers_validate_malformed_scalars
+    |     result = RECIPES[helper](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\sleepscore.py", line 267, in compute_interruption_score
+    |     return max(0.0, 100.0 - count * 15.0)
+    |                             ~~~~~~^~~~~~
+    | TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+    | Failing test case: test_public_helpers_validate_malformed_scalars(
+    |     helper='interruption',
+    |     value=None,
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         E:\Projects\Health-App-\backend\test_public_helper_fuzz.py:24
+    +------------------------------------
+_________ test_public_helpers_validate_malformed_scalars[age_target] __________
+backend\test_public_helper_fuzz.py:19: in test_public_helpers_validate_malformed_scalars
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^
+backend\test_public_helper_fuzz.py:23: in test_public_helpers_validate_malformed_scalars
+    result = RECIPES[helper](value)
+             ^^^^^^^^^^^^^^^^^^^^^^
+sleepscore.py:234: in optimal_deep_ratio
+    if age is None or age <= 30:
+                      ^^^^^^^^^
+E   TypeError: '<=' not supported between instances of 'str' and 'int'
+E   Failing test case: test_public_helpers_validate_malformed_scalars(
+E       helper='age_target',
+E       value='',
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_public_helper_fuzz.py:24
+__________ test_public_helpers_validate_malformed_scalars[baseline] ___________
+  + Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 19, in test_public_helpers_validate_malformed_scalars
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 28, in test_public_helpers_validate_malformed_scalars
+    |     assert result >= 0
+    | AssertionError: assert -1.0 >= 0
+    | Failing test case: test_public_helpers_validate_malformed_scalars(
+    |     helper='baseline',
+    |     value=-1.0,
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 23, in test_public_helpers_validate_malformed_scalars
+    |     result = RECIPES[helper](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 14, in <lambda>
+    |     'baseline': lambda x: compute_baseline([(datetime(2026, 10, 7), x)] * 7),
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\sleepscore.py", line 74, in compute_baseline
+    |     return sum(values) / len(values)
+    |            ^^^^^^^^^^^
+    | TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
+    | Failing test case: test_public_helpers_validate_malformed_scalars(
+    |     helper='baseline',
+    |     value=None,
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         E:\Projects\Health-App-\backend\test_public_helper_fuzz.py:24
+    +------------------------------------
+=========================== short test summary info ===========================
+FAILED backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[latency]
+FAILED backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[interruption]
+FAILED backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[age_target]
+FAILED backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[baseline]
+4 failed in 1.81s

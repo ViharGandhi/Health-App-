@@ -20,6 +20,7 @@ from __future__ import annotations
 import math
 from backend.validity import positive, resting_hr, finite_number, sleep_duration
 from dataclasses import dataclass, field
+from statistics import mean
 from datetime import datetime, timedelta, date, time
 from typing import List, Optional, Tuple
 
@@ -71,7 +72,9 @@ def compute_baseline(history: List[Tuple[datetime, float]]) -> Optional[float]:
     if not history:
         return None
     values = [v for _, v in history]
-    return sum(values) / len(values)
+    if not all(finite_number(value) for value in values):
+        raise ValueError('Baseline values must be finite numbers')
+    return mean(values)
 
 
 def log_hrv_stats(values: List[float]) -> Optional[Tuple[float, float]]:
@@ -231,6 +234,8 @@ class SleepCalculator:
         Targets 20 % up to age 30, then eases ~0.2 pp/yr, floored at 10 %.
         Returns the baseline 20 % when age is unknown.
         """
+        if age is not None and not finite_number(age):
+            raise ValueError('Age must be a finite number')
         if age is None or age <= 30:
             return SleepCalculator.OPTIMAL_DEEP_RATIO
         reduced = SleepCalculator.OPTIMAL_DEEP_RATIO - (age - 30) * 0.002
@@ -264,6 +269,8 @@ class SleepCalculator:
     @staticmethod
     def compute_interruption_score(count: int) -> float:
         """Each interruption costs 15 points; floor at 0."""
+        if not finite_number(count) or count < 0 or count != int(count):
+            raise ValueError('Interruption count must be a nonnegative integer')
         return max(0.0, 100.0 - count * 15.0)
 
     @staticmethod
@@ -317,6 +324,8 @@ class SleepCalculator:
         """
         if latency_seconds is None:
             return 50.0
+        if not sleep_duration(latency_seconds):
+            raise ValueError('Latency must be a valid duration')
         lat_min = latency_seconds / 60.0
 
         if 10.0 <= lat_min <= 20.0:
