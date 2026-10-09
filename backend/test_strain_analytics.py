@@ -6,6 +6,7 @@ from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
 
 import httpx
+import pytest
 from fastapi.testclient import TestClient
 
 from main import app, _compute_real_strain
@@ -100,6 +101,7 @@ class StrainAnalyticsTests(unittest.TestCase):
         client.get_workout_sessions.assert_awaited_once()
         client.get_daily_steps.assert_awaited_once()
 
+    @pytest.mark.timeout(120)
     def test_demo_ranges_are_aligned_and_future_requests_rejected(self):
         with patch("main._get_token", AsyncMock(return_value=None)):
             for timeframe in ("W", "M", "6M"):
