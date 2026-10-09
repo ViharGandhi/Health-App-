@@ -410,7 +410,7 @@ class GoogleHealthClient:
             return {date.fromisoformat(day): value for day, value in values.items()}
         if not self.store:
             return await self._fetch_daily_steps(start, end)
-        key = exact_key('steps-rollup', f'{start}/{end}', True)
+        key = exact_key('steps-rollup-v2', f'{start}/{end}', True)
         lane_key = (asyncio.get_running_loop(), self.account_key, key)
         async with _range_locks.setdefault(lane_key, asyncio.Lock()):
             epoch = await asyncio.to_thread(self.store.epoch, self.account_key)
@@ -455,9 +455,14 @@ class GoogleHealthClient:
                     for point in payload.get("rollupDataPoints", []):
                         step_count = point.get("steps", {}).get("countSum")
                         if step_count is not None:
+                            if isinstance(step_count, bool):
+                                raise ValueError('Step count must be a nonnegative integer')
+                            integer_count = int(step_count)
+                            if integer_count < 0 or (not isinstance(step_count, str) and integer_count != step_count):
+                                raise ValueError('Step count must be a nonnegative integer')
                             day = _google_date(point["civilStartTime"]["date"])
                             if start <= day <= end:
-                                values[day] = int(step_count)
+                                values[day] = integer_count
                     if not payload.get("nextPageToken"):
                         break
                     token = payload['nextPageToken']
