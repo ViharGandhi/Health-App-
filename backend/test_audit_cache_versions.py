@@ -32,7 +32,7 @@ def test_previous_strain_cache_cannot_bypass_corrected_rhr_gate():
     asyncio.run(run())
 
 
-@pytest.mark.parametrize('version', ['page-v4'] + [f'page-v{i}' for i in range(8, 30)])
+@pytest.mark.parametrize('version', ['page-v4'] + [f'page-v{i}' for i in range(8, 31)])
 def test_updated_algorithms_use_new_page_snapshot_namespace(version):
     async def run():
         scope = {'type': 'http', 'method': 'GET', 'path': '/api/sleep', 'query_string': b'',

@@ -48,6 +48,8 @@ def build_sleep_heart_rate(point: dict | None, readings: list[dict], is_mock: bo
         try:
             clock = metric["sampleTime"]
             timestamp = instant(clock["physicalTime"])
+            if isinstance(metric['beatsPerMinute'], bool):
+                continue
             bpm = float(metric["beatsPerMinute"])
             if not start <= timestamp < end or not 1 <= bpm <= 300 or not bpm.is_integer():
                 continue

@@ -31,7 +31,7 @@ class StressConfig:
 
 
 DEFAULT_CONFIG = StressConfig()
-ALGO_VERSION = "sleep-stress-9"
+ALGO_VERSION = "sleep-stress-10"
 
 
 @dataclass(frozen=True)
@@ -140,6 +140,8 @@ def adapt_google_sleep(point: dict) -> SleepNight:
 @payload_boundary
 def adapt_google_hr(point: dict) -> HrSample:
     metric = point["heartRate"]
+    if isinstance(metric['beatsPerMinute'], bool):
+        raise ValueError('Heart rate must be numeric')
     return HrSample(_instant(metric["sampleTime"]["physicalTime"]), float(metric["beatsPerMinute"]))
 
 
@@ -167,6 +169,8 @@ def adapt_google_hrv(points: list[dict], anchor: str) -> list[HrvWindow]:
     cadence = median(deltas)
     windows = []
     for index, (stamp, value) in enumerate(samples):
+        if isinstance(value, bool):
+            raise ValueError('RMSSD must be numeric')
         neighbor = samples[index + 1][0] if anchor == "start" and index + 1 < len(samples) else (
             samples[index - 1][0] if anchor == "end" and index else None
         )

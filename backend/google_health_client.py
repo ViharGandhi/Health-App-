@@ -76,6 +76,8 @@ def _valid_sleep_summary(summary) -> bool:
                 return False
             if isinstance(stage.get('minutes'), bool) or not sleep_duration(float(stage['minutes']), unit='minutes'):
                 return False
+            if isinstance(stage.get('count'), bool):
+                return False
             count = float(stage.get('count', 0))
             if not math.isfinite(count) or count < 0 or not count.is_integer():
                 return False
@@ -363,6 +365,8 @@ class GoogleHealthClient:
             metric = point.get("heartRate", {})
             clock = metric.get("sampleTime", {})
             if clock.get("physicalTime") and metric.get("beatsPerMinute") is not None:
+                if isinstance(metric['beatsPerMinute'], bool):
+                    raise ValueError('Heart rate must be numeric')
                 samples.append((
                     _local_datetime(clock["physicalTime"], clock.get("utcOffset", "0s"), preserve_offset=preserve_offset),
                     float(metric["beatsPerMinute"]),
