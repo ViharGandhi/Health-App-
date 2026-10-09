@@ -14,7 +14,7 @@ METRICS = ("recovery", "hrv", "rhr", "respiratory_rate", "sleep_performance")
 VITALS = ("hrv", "rhr", "respiratory_rate", "skin_temperature", "spo2")
 
 
-def typical_ranges(history: dict, day: date, age=None) -> dict:
+def typical_ranges(history: dict, day: date, age=None, *, diagnostics: dict | None = None) -> dict:
     start, end = baseline_bounds(day)
     today_rhr = next((p for p in history.get("rhr", []) if p["date"] == day.isoformat()), {})
     ranges = {}
@@ -25,16 +25,30 @@ def typical_ranges(history: dict, day: date, age=None) -> dict:
                        and p.get("method") == today_rhr["method"])]
         if len(values) < MIN_BASELINE_DAYS:
             ranges[metric] = None
+            if diagnostics is not None:
+                diagnostics[metric] = 'insufficient_reference'
             continue
         transformed = [math.log(v) for v in values] if metric == "hrv" else values
         center, spread = robust(transformed, .05 if metric == "hrv" else 1.0 if metric == "rhr" else 0.0)
         if spread == 0:
             ranges[metric] = None
+            if diagnostics is not None:
+                diagnostics[metric] = 'flat_reference'
             continue
         low, high = center - spread, center + spread
         if metric == "hrv":
-            low, high = math.exp(low), math.exp(high)
+            try:
+                low, high = math.exp(low), math.exp(high)
+            except OverflowError:
+                low, high = math.nan, math.nan
+        if not all(math.isfinite(value) for value in (low, high)):
+            ranges[metric] = None
+            if diagnostics is not None:
+                diagnostics[metric] = 'numeric_range_overflow'
+            continue
         ranges[metric] = {"low": low, "high": high, "days": len(values)}
+        if diagnostics is not None:
+            diagnostics[metric] = None
     return ranges
 
 
@@ -72,7 +86,8 @@ def build_recovery_analytics(history: dict, sleeps: list[dict], end: date, timef
     def averages(rows):
         return {metric: mean(values) if (values := [r[metric] for r in rows if positive(r[metric]) or r[metric] == 0]) else None
                 for metric in METRICS}
-    ranges = typical_ranges(history, end, age)
+    range_reasons = {}
+    ranges = typical_ranges(history, end, age, diagnostics=range_reasons)
     latest = days[-1]
     assessed = [metric for metric in VITALS if ranges[metric] is not None and positive(latest.get(metric))]
     within = sum(ranges[metric]["low"] <= latest[metric] <= ranges[metric]["high"] for metric in assessed)
@@ -98,7 +113,8 @@ def build_recovery_analytics(history: dict, sleeps: list[dict], end: date, timef
             "range_start": start.isoformat(), "range_end": end.isoformat(),
             "previous_range_end": previous_end.isoformat(), "days": days,
             "averages": averages(days), "previous_averages": averages(previous),
-            "typical_ranges": ranges, "prior_30_day_averages": comparisons, "monthly_buckets": buckets,
+            "typical_ranges": ranges, 'typical_range_reasons': range_reasons,
+            "prior_30_day_averages": comparisons, "monthly_buckets": buckets,
             "current": current, "sleep": sleep_by_date.get(end.isoformat()),
             "health_monitor": {"within": within, "assessed": len(assessed), "expected": len(VITALS)},
             "notes": ("Older prototype demo: historical prototype scores are not stored; earlier bars remain blank. "
