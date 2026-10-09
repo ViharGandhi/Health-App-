@@ -106,6 +106,7 @@ def timing_records(observations: list[dict]) -> list[dict]:
 
 
 def build_sleep_analytics(observations: list[dict], today: date, timeframe: str, is_mock: bool) -> dict:
+    observations = [dict(night) for night in observations]
     start = range_start(today, timeframe)
     previous_end = start - timedelta(days=1)
     previous_start = range_start(previous_end, timeframe)
