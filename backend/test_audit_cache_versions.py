@@ -10,6 +10,7 @@ from fastapi import Request, Response
 from strain import StrainConfig
 from strain_service import load_strain_days, _encode_day
 from main import _cached_data_page, STRAIN_CONFIG
+import pytest
 
 
 def test_previous_strain_cache_cannot_bypass_corrected_rhr_gate():
@@ -31,7 +32,8 @@ def test_previous_strain_cache_cannot_bypass_corrected_rhr_gate():
     asyncio.run(run())
 
 
-def test_updated_algorithms_use_new_page_snapshot_namespace():
+@pytest.mark.parametrize('version', ['page-v4', 'page-v8'])
+def test_updated_algorithms_use_new_page_snapshot_namespace(version):
     async def run():
         scope = {'type': 'http', 'method': 'GET', 'path': '/api/sleep', 'query_string': b'',
                  'headers': [(b'x-user-date', b'2026-10-07')]}
@@ -39,7 +41,7 @@ def test_updated_algorithms_use_new_page_snapshot_namespace():
         store = SimpleNamespace(dynamic_status=lambda account: {}, sleep_day_prepared=lambda *args: True)
         client = SimpleNamespace(store=store, account_key='synthetic', strain_timezone=timezone.utc,
                                  strain_sex='m', strain_sex_defaulted=False)
-        old_key = hashlib.sha256(json.dumps(['page-v4', '/api/sleep', [], '2026-10-07', None,
+        old_key = hashlib.sha256(json.dumps([version, '/api/sleep', [], '2026-10-07', None,
             'UTC', 'm', False, repr(STRAIN_CONFIG), 0, 0], default=str).encode()).hexdigest()
         async def cached(client, key, path, response, compute, **kw):
             return {'score': 81.5} if key == old_key else await compute()

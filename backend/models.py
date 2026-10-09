@@ -84,6 +84,8 @@ class StrainResponse(BaseModel):
 # ──────────────────────────────────────────────────────────────────────────────
 
 class RecoveryResponse(BaseModel):
+    rejected_readings: Dict[str, int] = Field(default_factory=dict)
+    data_quality_flag: bool = False
     score: Optional[float] = Field(description="Demo score or connected estimated percent; null when confidence is low or reference is insufficient")
     status: str = Field(description="Demo: green/yellow/red; dashboard comparisons: signals/calibrating; connected Recovery: building_reference/ok")
     z: Optional[float] = None

@@ -7,6 +7,7 @@ Python port of:
 """
 
 import math
+from backend.validity import positive, resting_hr
 from typing import Optional
 
 MIN_DAYS_REQUIRED = 7
@@ -32,7 +33,7 @@ def log_hrv_stats(values: list) -> Optional[tuple]:
     Returns (mean_ln, sd_ln), or None if fewer than MIN_DAYS_REQUIRED samples.
     'values' must be ordered oldest -> newest.
     """
-    positives = [v for v in values if math.isfinite(v) and v > 0]
+    positives = [v for v in values if positive(v)]
     if len(positives) < MIN_DAYS_REQUIRED:
         return None
     lns = [math.log(v) for v in positives]
@@ -49,7 +50,7 @@ def log_hrv_stats(values: list) -> Optional[tuple]:
 
 def hrv_z_score(today: float, values: list) -> Optional[float]:
     """Z-score of today's HRV against personal log-domain baseline. Positive = above norm = better."""
-    if not math.isfinite(today) or today <= 0:
+    if not positive(today):
         return None
     stats = log_hrv_stats(values)
     if stats is None or stats[1] == 0:
@@ -147,13 +148,13 @@ class RecoveryCalculator:
           Formula: clamp(50 + z * 25, 0, 100)
         Fallback (no/short history): ratio vs scalar baseline clamped [0.5x, 1.5x] -> [0, 100].
         """
-        if today_hrv is None or not math.isfinite(today_hrv) or today_hrv <= 0:
+        if not positive(today_hrv):
             return 50.0
         if history is not None:
             z = hrv_z_score(today_hrv, history)
             if z is not None:
                 return clamp(50.0 + z * 25.0, 0.0, 100.0)
-        if baseline is None or not math.isfinite(baseline) or baseline <= 0:
+        if not positive(baseline):
             return 50.0
         ratio = today_hrv / baseline
         return normalize_ratio(ratio, low=0.5, high=1.5)
@@ -165,8 +166,7 @@ class RecoveryCalculator:
         deviation = baseline - today_rhr  (positive = RHR dropped = good).
         Band: [-10 bpm, +10 bpm] -> [0, 100].
         """
-        if (today_rhr is None or baseline is None or not math.isfinite(today_rhr)
-                or not math.isfinite(baseline) or today_rhr <= 0 or baseline <= 0):
+        if resting_hr(today_rhr) is None or resting_hr(baseline) is None:
             return 50.0
         deviation = baseline - today_rhr
         return normalize_ratio(deviation, low=-10.0, high=10.0)

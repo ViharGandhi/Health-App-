@@ -4,6 +4,7 @@ from datetime import date, datetime, time, timedelta, timezone
 from enum import IntEnum
 import math
 from statistics import mean, median
+from backend.validity import resting_hr
 
 
 @dataclass(frozen=True)
@@ -121,13 +122,8 @@ def calculate_strain(samples: list, sessions: list[dict], window: dict, age: int
     rest = []
     rejected = 0
     for value in resting_hrs:
-        try:
-            parsed = float(value)
-        except (TypeError, ValueError):
-            rejected += 1
-            continue
-        if (not math.isfinite(parsed) or not config.hr_floor <= parsed <= config.hr_ceiling
-                or (hr_max is not None and parsed >= hr_max)):
+        parsed = resting_hr(value, age, parse_strings=True, low=config.hr_floor, high=config.hr_ceiling)
+        if parsed is None:
             rejected += 1
         else:
             rest.append(parsed)

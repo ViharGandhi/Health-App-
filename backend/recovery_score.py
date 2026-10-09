@@ -1,10 +1,11 @@
 """Pure baseline-relative Recovery estimate for connected daily Fitbit summaries."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field, replace
 from datetime import date, timedelta
 from math import erf, isfinite, log, sqrt
 from statistics import mean, median
 from typing import Sequence
+from validity import positive, valid_metric, resting_hr
 
 
 BASELINE_DAYS = 60
@@ -30,10 +31,6 @@ CONFIDENCE_HIGH_BASELINE = 45
 CONFIDENCE_MED_BASELINE = 28
 
 
-def positive(value: float | None) -> bool:
-    return value is not None and isfinite(value) and value > 0
-
-
 def robust(values: Sequence[float], sd_floor: float) -> tuple[float, float]:
     center = median(values)
     return center, max(1.4826 * median(abs(value - center) for value in values), sd_floor)
@@ -57,6 +54,8 @@ class RecoveryEstimate:
     rhr_baseline_days: int
     illness_flag: bool
     estimated: bool = True
+    rejected_readings: dict[str, int] = field(default_factory=dict)
+    data_quality_flag: bool = False
 
 
 def calculate_recovery(
@@ -64,10 +63,16 @@ def calculate_recovery(
     today_hrv: float | None = None, baseline_rhr: Sequence[float] = (),
     today_rhr: float | None = None, sleep_min: float | None = None,
     need_min: float | None = None, illness_flag: bool = False,
+    age: int | None = None,
 ) -> RecoveryEstimate:
     baseline = [log(value) for value in baseline_hrv if positive(value)]
     recent = [log(value) for value in recent_hrv if positive(value)]
-    rhr = [value for value in baseline_rhr if positive(value)]
+    rhr = [value for value in baseline_rhr if resting_hr(value, age) is not None]
+    rejected = {'hrv_baseline': sum(not positive(v) for v in baseline_hrv),
+                'hrv_recent': sum(not positive(v) for v in recent_hrv),
+                'hrv_today': int(today_hrv is not None and not positive(today_hrv)),
+                'rhr_baseline': len(baseline_rhr) - len(rhr),
+                'rhr_today': int(today_rhr is not None and resting_hr(today_rhr, age) is None)}
     sleep_min = sleep_min if positive(sleep_min) and sleep_min >= MIN_SLEEP_MIN else None
     need_min = need_min if positive(need_min) else None
     performance = min(sleep_min / need_min, 1.0) if sleep_min is not None and need_min is not None else None
@@ -75,7 +80,8 @@ def calculate_recovery(
     sleep_adj = (-SLEEP_MAX_PENALTY * clamp((SLEEP_OK_THRESHOLD - performance) / SLEEP_RANGE, 0, 1)
                  if performance is not None else 0.0)
     counts = dict(baseline_days=len(baseline), recent_nights=len(recent),
-                  rhr_baseline_days=len(rhr), illness_flag=illness_flag)
+                  rhr_baseline_days=len(rhr), illness_flag=illness_flag,
+                  rejected_readings=rejected, data_quality_flag=any(rejected.values()))
     if len(baseline) < MIN_BASELINE_DAYS or len(recent) < MIN_RECENT_NIGHTS:
         return RecoveryEstimate("building_reference", None, None, None, None,
                                 {"z_hrv": None, "z_rhr": None, "sleep_adj": sleep_adj}, context, **counts)
@@ -85,7 +91,7 @@ def calculate_recovery(
     signal = W_RECENT * recent_mean + W_TODAY * log(today_hrv) if positive(today_hrv) else recent_mean
     z_hrv = (signal - mu) / sigma
     z_rhr = None
-    if positive(today_rhr) and len(rhr) >= MIN_BASELINE_DAYS:
+    if resting_hr(today_rhr, age) is not None and len(rhr) >= MIN_BASELINE_DAYS:
         rmed, rsd = robust(rhr, RHR_SD_FLOOR)
         z_rhr = -(today_rhr - rmed) / rsd
     z_base = W_HRV * z_hrv + W_RHR * z_rhr if z_rhr is not None else z_hrv
@@ -111,7 +117,8 @@ def baseline_bounds(day: date) -> tuple[date, date]:
 
 
 def recovery_from_history(history: dict[str, list[dict]], day: date,
-                          sleep_min: float | None = None, need_min: float | None = None) -> RecoveryEstimate:
+                          sleep_min: float | None = None, need_min: float | None = None,
+                          age: int | None = None) -> RecoveryEstimate:
     """Join reconciled local-date daily records without imputing or counting dates twice.
 
     The 180-minute exclusion applies to the supplied sleep modifier; daily RMSSD
@@ -141,9 +148,13 @@ def recovery_from_history(history: dict[str, list[dict]], day: date,
             center, spread = robust(reference, 0.0)
             # Flat or insufficient references remain unassessed, as requested.
             illness_flag |= spread > 0 and abs(current - center) > ILLNESS_SD_MULTIPLIER * spread
-    return calculate_recovery(
+    result = calculate_recovery(
         [point["value"] for when, point in hrv.items() if start <= when <= end],
         [point["value"] for when, point in hrv.items() if recent_start <= when < day],
         today_hrv, baseline_rhr, today_rhr if known_method else None,
-        sleep_min, need_min, illness_flag,
+        sleep_min, need_min, illness_flag, age,
     )
+    rejected = dict(result.rejected_readings)
+    rejected['rhr_method'] = sum(start <= when <= end or when == day for when, point in rhr.items()
+        if not known_method or point.get('method') != method)
+    return replace(result, rejected_readings=rejected, data_quality_flag=any(rejected.values()))

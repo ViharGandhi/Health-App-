@@ -18,6 +18,7 @@ Modifications:
 from __future__ import annotations
 
 import math
+from backend.validity import positive, resting_hr
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, date, time
 from typing import List, Optional, Tuple
@@ -73,7 +74,7 @@ def log_hrv_stats(values: List[float]) -> Optional[Tuple[float, float]]:
     Returns (mean_ln, sd_ln) or None if fewer than MIN_DAYS_REQUIRED positive
     samples.  *values* must be ordered oldest → newest.
     """
-    positives = [v for v in values if math.isfinite(v) and v > 0]
+    positives = [v for v in values if positive(v)]
     if len(positives) < MIN_DAYS_REQUIRED:
         return None
 
@@ -97,7 +98,7 @@ def hrv_z_score(today: float, values: List[float]) -> Optional[float]:
     Z-score of today's HRV against the personal log-domain baseline.
     Positive = HRV above personal norm (better recovery).
     """
-    if not math.isfinite(today) or today <= 0:
+    if not positive(today):
         return None
     stats = log_hrv_stats(values)
     if stats is None or stats[1] <= 0:
@@ -213,7 +214,7 @@ class SleepCalculator:
         baseline: Optional[float] = None,
     ) -> float:
         """HRV during sleep (higher = better; ratio vs baseline)."""
-        if sleeping_hrv is None or baseline is None or baseline <= 0:
+        if not positive(sleeping_hrv) or not positive(baseline):
             return 50.0
         # ratio in [0.7, 1.3] → score [0, 100]
         return normalize_ratio(sleeping_hrv / baseline, low=0.7, high=1.3)
@@ -224,7 +225,7 @@ class SleepCalculator:
         baseline: Optional[float] = None,
     ) -> float:
         """Heart rate during sleep (lower = better; inverted ratio vs baseline)."""
-        if sleeping_hr is None or baseline is None or baseline <= 0:
+        if resting_hr(sleeping_hr) is None or resting_hr(baseline) is None:
             return 50.0
         # ratio in [0.7, 1.3] → score [100, 0] (inverted)
         ratio = sleeping_hr / baseline
@@ -269,7 +270,7 @@ class SleepCalculator:
         Measures the percentage drop from average waking HR to average sleeping HR.
         Maps dip  0 % → score 0,  25 % → score 100.
         """
-        if sleeping_hr is None or waking_hr is None or waking_hr <= 0:
+        if resting_hr(sleeping_hr) is None or resting_hr(waking_hr) is None:
             return 50.0
         dip_pct = (waking_hr - sleeping_hr) / waking_hr * 100.0
         return normalize_ratio(dip_pct, low=0.0, high=25.0)

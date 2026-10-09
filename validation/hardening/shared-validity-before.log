@@ -1,0 +1,124 @@
+FFFFFFFFFF                                                               [100%]
+================================== FAILURES ===================================
+____ test_rejected_rhr_does_not_enter_recovery_or_legacy_components[29.0] _____
+backend\test_shared_validity.py:20: in test_rejected_rhr_does_not_enter_recovery_or_legacy_components
+    assert estimate.components['z_rhr'] is None
+E   assert 26.0 is None
+____ test_rejected_rhr_does_not_enter_recovery_or_legacy_components[231.0] ____
+backend\test_shared_validity.py:20: in test_rejected_rhr_does_not_enter_recovery_or_legacy_components
+    assert estimate.components['z_rhr'] is None
+E   assert -176.0 is None
+___ test_rejected_rhr_does_not_enter_recovery_or_legacy_components[1000.0] ____
+backend\test_shared_validity.py:20: in test_rejected_rhr_does_not_enter_recovery_or_legacy_components
+    assert estimate.components['z_rhr'] is None
+E   assert -945.0 is None
+_____ test_rejected_rhr_does_not_enter_recovery_or_legacy_components[inf] _____
+backend\test_shared_validity.py:22: in test_rejected_rhr_does_not_enter_recovery_or_legacy_components
+    assert estimate.rejected_readings['rhr_today'] == 1
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'RecoveryEstimate' object has no attribute 'rejected_readings'
+_____ test_rejected_rhr_does_not_enter_recovery_or_legacy_components[nan] _____
+backend\test_shared_validity.py:22: in test_rejected_rhr_does_not_enter_recovery_or_legacy_components
+    assert estimate.rejected_readings['rhr_today'] == 1
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'RecoveryEstimate' object has no attribute 'rejected_readings'
+_____ test_rejected_rhr_does_not_enter_recovery_or_legacy_components[55] ______
+backend\test_shared_validity.py:19: in test_rejected_rhr_does_not_enter_recovery_or_legacy_components
+    estimate = calculate_recovery([40.] * 60, [40.] * 7, 40., [55.] * 60, rhr, 450., 450.)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\recovery_score.py:88: in calculate_recovery
+    if positive(today_rhr) and len(rhr) >= MIN_BASELINE_DAYS:
+       ^^^^^^^^^^^^^^^^^^^
+backend\recovery_score.py:34: in positive
+    return value is not None and isfinite(value) and value > 0
+                                 ^^^^^^^^^^^^^^^
+E   TypeError: must be real number, not str
+___ test_invalid_reference_rhr_is_counted_and_cannot_create_high_confidence ___
+backend\test_shared_validity.py:29: in test_invalid_reference_rhr_is_counted_and_cannot_create_high_confidence
+    assert estimate.rhr_baseline_days == 0
+E   AssertionError: assert 60 == 0
+E    +  where 60 = RecoveryEstimate(status='ok', z=3.0, percent=100, zone='above_normal', confidence='high', components={'z_hrv': -8.8817...50.0, 'performance': 1.0}, baseline_days=60, recent_nights=7, rhr_baseline_days=60, illness_flag=False, estimated=True).rhr_baseline_days
+_____________ test_known_age_applies_hrmax_in_connected_reference _____________
+backend\test_shared_validity.py:38: in test_known_age_applies_hrmax_in_connected_reference
+    result = recovery_from_history(history, DAY, 450., 450., age=70)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: recovery_from_history() got an unexpected keyword argument 'age'
+___________________ test_rhr_acceptance_agrees_without_age ____________________
+backend\test_shared_validity.py:44: in test_rhr_acceptance_agrees_without_age
+    @given(st.floats(allow_nan=True, allow_infinity=True))
+                   ^^^
+backend\test_shared_validity.py:49: in test_rhr_acceptance_agrees_without_age
+    assert (estimate.components['z_rhr'] is not None) == accepted
+E   assert (54.0 is not None) == False
+E   Failing test case: test_rhr_acceptance_agrees_without_age(
+E       value=1.0,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\health_trends.py:21
+E           E:\Projects\Health-App-\backend\recovery_score.py:89
+E           E:\Projects\Health-App-\backend\recovery_score.py:90
+__________________ test_hrv_acceptance_agrees_across_layers ___________________
+  + Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_shared_validity.py", line 56, in test_hrv_acceptance_agrees_across_layers
+  |     @given(st.one_of(st.none(), st.booleans(), st.text(max_size=12), st.floats(allow_nan=True, allow_infinity=True)))
+  |                    ^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 3 distinct failures. (3 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_shared_validity.py", line 60, in test_hrv_acceptance_agrees_across_layers
+    |     result = calculate_recovery([40.] * 60, [40.] * 7, value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\recovery_score.py", line 85, in calculate_recovery
+    |     signal = W_RECENT * recent_mean + W_TODAY * log(today_hrv) if positive(today_hrv) else recent_mean
+    |                                                                   ^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\recovery_score.py", line 34, in positive
+    |     return value is not None and isfinite(value) and value > 0
+    |                                  ^^^^^^^^^^^^^^^
+    | TypeError: must be real number, not str
+    | Failing test case: test_hrv_acceptance_agrees_across_layers(
+    |     value='',  # or any other generated value
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_shared_validity.py", line 59, in test_hrv_acceptance_agrees_across_layers
+    |     assert valid_health_value('hrv', value) == accepted
+    | AssertionError: assert True == False
+    |  +  where True = valid_health_value('hrv', True)
+    | Failing test case: test_hrv_acceptance_agrees_across_layers(
+    |     value=True,
+    | )
+    +---------------- 3 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_shared_validity.py", line 61, in test_hrv_acceptance_agrees_across_layers
+    |     assert result.rejected_readings['hrv_today'] == int(value is not None and not accepted)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+    | AttributeError: 'RecoveryEstimate' object has no attribute 'rejected_readings'
+    | Failing test case: test_hrv_acceptance_agrees_across_layers(
+    |     value=None,  # or any other generated value
+    | )
+    +------------------------------------
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\cacheprovider.py:469
+  E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path E:\Projects\Health-App-\.pytest_cache\v\cache\nodeids: [WinError 5] Access is denied: 'E:\\Projects\\Health-App-\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+.venv\Lib\site-packages\_pytest\cacheprovider.py:423
+  E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\cacheprovider.py:423: PytestCacheWarning: could not create cache path E:\Projects\Health-App-\.pytest_cache\v\cache\lastfailed: [WinError 5] Access is denied: 'E:\\Projects\\Health-App-\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend/test_shared_validity.py::test_rejected_rhr_does_not_enter_recovery_or_legacy_components[29.0]
+FAILED backend/test_shared_validity.py::test_rejected_rhr_does_not_enter_recovery_or_legacy_components[231.0]
+FAILED backend/test_shared_validity.py::test_rejected_rhr_does_not_enter_recovery_or_legacy_components[1000.0]
+FAILED backend/test_shared_validity.py::test_rejected_rhr_does_not_enter_recovery_or_legacy_components[inf]
+FAILED backend/test_shared_validity.py::test_rejected_rhr_does_not_enter_recovery_or_legacy_components[nan]
+FAILED backend/test_shared_validity.py::test_rejected_rhr_does_not_enter_recovery_or_legacy_components[55]
+FAILED backend/test_shared_validity.py::test_invalid_reference_rhr_is_counted_and_cannot_create_high_confidence
+FAILED backend/test_shared_validity.py::test_known_age_applies_hrmax_in_connected_reference
+FAILED backend/test_shared_validity.py::test_rhr_acceptance_agrees_without_age
+FAILED backend/test_shared_validity.py::test_hrv_acceptance_agrees_across_layers
+10 failed, 2 warnings in 11.15s
