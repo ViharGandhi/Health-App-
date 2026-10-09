@@ -1,0 +1,353 @@
+FE                                                                       [100%]
+=================================== ERRORS ====================================
+__ ERROR at teardown of test_callback_malformed_token_response_fails_closed ___
+  + Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\runner.py", line 361, in from_call
+  |     result: TResult | None = func()
+  |                              ^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\runner.py", line 250, in <lambda>
+  |     lambda: runtest_hook(item=item, **kwds),
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+  |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+  |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_callers.py", line 167, in _multicall
+  |     raise exception
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+  |     teardown.throw(exception)
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\logging.py", line 873, in pytest_runtest_teardown
+  |     yield
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+  |     teardown.throw(exception)
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\capture.py", line 905, in pytest_runtest_teardown
+  |     return (yield)
+  |             ^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+  |     res = hook_impl.function(*args)
+  |           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 188, in pytest_runtest_teardown
+  |     collect_unraisable(item.config)
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 81, in collect_unraisable
+  |     raise ExceptionGroup("multiple unraisable exception warnings", errors)
+  | ExceptionGroup: multiple unraisable exception warnings (21 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba782f3b0>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba78e8080>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 3 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba8bf4f80>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 4 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba8cd2120>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 5 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba8e533b0>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 6 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba8bf78c0>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 7 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba79e0fe0>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 8 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba7717f50>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 9 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba709e690>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 10 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba700a8a0>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 11 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba7001850>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 12 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba8d8f9e0>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 13 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba8d8c530>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 14 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba8bf4cb0>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 15 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba7a71c70>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+    | Enable tracemalloc to get traceback where the object was allocated.
+    | See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- ... ----------------
+    | and 6 more exceptions
+    +------------------------------------
+================================== FAILURES ===================================
+_____________ test_callback_malformed_token_response_fails_closed _____________
+backend\test_auth_payload_fuzz.py:36: in test_callback_malformed_token_response_fails_closed
+    @given(payload)
+                   ^
+backend\test_auth_payload_fuzz.py:45: in test_callback_malformed_token_response_fails_closed
+    assert response.status_code == 307
+E   assert 500 == 307
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+E   Failing test case: test_callback_malformed_token_response_fails_closed(
+E       value=None,  # or any other generated value
+E   )
+=========================== short test summary info ===========================
+FAILED backend/test_auth_payload_fuzz.py::test_callback_malformed_token_response_fails_closed
+ERROR backend/test_auth_payload_fuzz.py::test_callback_malformed_token_response_fails_closed
+1 failed, 7 deselected, 1 error in 2.40s
+  + Exception Group Traceback (most recent call last):
+  |   File "<frozen runpy>", line 198, in _run_module_as_main
+  |   File "<frozen runpy>", line 88, in _run_code
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pytest\__main__.py", line 9, in <module>
+  |     raise SystemExit(_console_main())
+  |                      ^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\config\__init__.py", line 253, in _console_main
+  |     code = _main(prog=_get_prog_name(sys.argv))
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\config\__init__.py", line 229, in _main
+  |     ret: ExitCode | int = config.hook.pytest_cmdline_main(config=config)
+  |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+  |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+  |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_callers.py", line 167, in _multicall
+  |     raise exception
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+  |     res = hook_impl.function(*args)
+  |           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\main.py", line 377, in pytest_cmdline_main
+  |     return wrap_session(config, _main)
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\main.py", line 372, in wrap_session
+  |     config._ensure_unconfigure()
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\config\__init__.py", line 1212, in _ensure_unconfigure
+  |     self.hook.pytest_unconfigure(config=self)
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+  |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+  |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_callers.py", line 167, in _multicall
+  |     raise exception
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+  |     res = hook_impl.function(*args)
+  |           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 173, in pytest_unconfigure
+  |     collect_unraisable(config)
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 81, in collect_unraisable
+  |     raise ExceptionGroup("multiple unraisable exception warnings", errors)
+  | ExceptionGroup: multiple unraisable exception warnings (3 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba79e3710>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+Enable tracemalloc to get traceback where the object was allocated.
+See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba6f9e6c0>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+Enable tracemalloc to get traceback where the object was allocated.
+See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +---------------- 3 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\streams\memory.py", line 190, in __del__
+    |     warnings.warn(
+    | ResourceWarning: Unclosed <MemoryObjectReceiveStream at 23ba8fb8200>
+    | 
+    | The above exception was the direct cause of the following exception:
+    | 
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\_pytest\unraisableexception.py", line 67, in collect_unraisable
+    |     warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+    | pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000023BA2B402C0>
+Enable tracemalloc to get traceback where the object was allocated.
+See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    +------------------------------------

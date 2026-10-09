@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="7" time="8.294" timestamp="2026-10-09T19:48:58.277177+02:00" hostname="Zangetsu"><properties><property name="hypothesis-statistics-backend/test_auth_payload_fuzz.py::test_session_and_refresh_payloads_fail_closed[session]" value="YmFja2VuZC90ZXN0X2F1dGhfcGF5bG9hZF9mdXp6LnB5Ojp0ZXN0X3Nlc3Npb25fYW5kX3JlZnJlc2hfcGF5bG9hZHNfZmFpbF9jbG9zZWRbc2Vzc2lvbl06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgxLjAyIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDEtOSBtcywgb2Ygd2hpY2ggfiAwLTQgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDIwMCBwYXNzaW5nLCAwIGZhaWxpbmcsIGFuZCAzNyBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRXZlbnRzOgogICAgICAqIDIuNTMlLCBEcmF3IGZvciByZWN1cnNpdmUob25lX29mKG5vbmUoKSwgYm9vbGVhbnMoKSwgaW50ZWdlcnMoKSwgZmxvYXRzKCksIHRleHQobWF4X3NpemU9NDApKSwgbGFtYmRhIGNoaWxkOiBzdC5vbmVfb2Yoc3QubGlzdHMoY2hpbGQsIG1heF9zaXplPTQpLCBzdC5kaWN0aW9uYXJpZXMoc3Quc2FtcGxlZF9mcm9tKFsnc2xlZXAnLCAnaW50ZXJ2YWwnLCAnc3RhcnRUaW1lJywgJ2VuZFRpbWUnLCAnc2FtcGxlVGltZScsICdwaHlzaWNhbFRpbWUnLCAnaGVhcnRSYXRlJywgJ2hlYXJ0UmF0ZVZhcmlhYmlsaXR5JywgJ3llYXInLCAnbW9udGgnLCAnZGF5JywgJ3N0YWdlcycsICdtZXRhZGF0YSddKSwgY2hpbGQsIG1heF9zaXplPTUpKSwgbWluX2xlYXZlcz1Ob25lLCBtYXhfbGVhdmVzPTE1KSBleGNlZWRlZCBtYXhfbGVhdmVzPTE1IGFuZCBoYWQgdG8gYmUgcmV0cmllZAoKICAtIFN0b3BwZWQgYmVjYXVzZSBzZXR0aW5ncy5tYXhfZXhhbXBsZXM9MjAw" /><property name="hypothesis-statistics-backend/test_auth_payload_fuzz.py::test_session_and_refresh_payloads_fail_closed[refresh_payload]" value="YmFja2VuZC90ZXN0X2F1dGhfcGF5bG9hZF9mdXp6LnB5Ojp0ZXN0X3Nlc3Npb25fYW5kX3JlZnJlc2hfcGF5bG9hZHNfZmFpbF9jbG9zZWRbcmVmcmVzaF9wYXlsb2FkXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuNTkgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMS0xMDMgbXMsIG9mIHdoaWNoIH4gMC04IG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSA0IHBhc3NpbmcsIDggZmFpbGluZywgYW5kIDIgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDIgZGlzdGluY3QgZXJyb3JzIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjg5IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDEtNzIgbXMsIG9mIHdoaWNoIH4gMC0xIG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSA2IHBhc3NpbmcsIDE0IGZhaWxpbmcsIGFuZCAzIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAyMyBzaHJpbmtzIG9mIHdoaWNoIDEwIHdlcmUgc3VjY2Vzc2Z1bAoKICAtIGR1cmluZyBleHBsYWluIHBoYXNlICg0LjU5IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDQ2LTk5IG1zLCBvZiB3aGljaCB+IDAtMyBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCA2NyBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /></properties><testcase classname="backend.test_auth_payload_fuzz" name="test_session_and_refresh_payloads_fail_closed[session]" time="1.041" /><testcase classname="backend.test_auth_payload_fuzz" name="test_session_and_refresh_payloads_fail_closed[refresh_payload]" time="6.280"><failure message="ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)">+ Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_auth_payload_fuzz.py", line 11, in test_session_and_refresh_payloads_fail_closed
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_auth_payload_fuzz.py", line 20, in test_session_and_refresh_payloads_fail_closed
+    |     asyncio.run(run())
+    |   File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py", line 195, in run
+    |     return runner.run(main)
+    |            ^^^^^^^^^^^^^^^^
+    |   File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py", line 118, in run
+    |     return self._loop.run_until_complete(task)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    |     return future.result()
+    |            ^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_auth_payload_fuzz.py", line 18, in run
+    |     result = await get_valid_access_token(session)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\auth.py", line 145, in get_valid_access_token
+    |     session["access_token"] = new_tokens["access_token"]
+    |                               ~~~~~~~~~~^^^^^^^^^^^^^^^^
+    | KeyError: 'access_token'
+    | Failing test case: test_session_and_refresh_payloads_fail_closed(
+    |     kind='refresh_payload',
+    |     value={'sleep': None},
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         E:\Projects\Health-App-\backend\auth.py:145
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_auth_payload_fuzz.py", line 20, in test_session_and_refresh_payloads_fail_closed
+    |     asyncio.run(run())
+    |   File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py", line 195, in run
+    |     return runner.run(main)
+    |            ^^^^^^^^^^^^^^^^
+    |   File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py", line 118, in run
+    |     return self._loop.run_until_complete(task)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    |     return future.result()
+    |            ^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_auth_payload_fuzz.py", line 18, in run
+    |     result = await get_valid_access_token(session)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\auth.py", line 145, in get_valid_access_token
+    |     session["access_token"] = new_tokens["access_token"]
+    |                               ~~~~~~~~~~^^^^^^^^^^^^^^^^
+    | TypeError: 'int' object is not subscriptable
+    | Failing test case: test_session_and_refresh_payloads_fail_closed(
+    |     kind='refresh_payload',
+    |     value=1,
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         E:\Projects\Health-App-\backend\auth.py:145
+    +------------------------------------</failure></testcase><testcase classname="backend.test_auth_payload_fuzz" name="test_huge_expiry_fails_closed" time="0.004"><failure message="OverflowError: int too large to convert to float">backend\test_auth_payload_fuzz.py:24: in test_huge_expiry_fails_closed
+    assert asyncio.run(get_valid_access_token({'expires_at': 10**1000, 'access_token': 'synthetic'})) is None
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\auth.py:134: in get_valid_access_token
+    if type(expires_at) not in (int, float) or not math.isfinite(expires_at):
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   OverflowError: int too large to convert to float</failure></testcase><testcase classname="backend.test_auth_payload_fuzz" name="test_nonstring_access_token_fails_closed[True]" time="0.005"><failure message="AssertionError: assert True is None&#10; +  where True = &lt;function run at 0x0000022DAED38A40&gt;(&lt;coroutine object get_valid_access_token at 0x0000022DB1A7D030&gt;)&#10; +    where &lt;function run at 0x0000022DAED38A40&gt; = asyncio.run&#10; +    and   &lt;coroutine object get_valid_access_token at 0x0000022DB1A7D030&gt; = get_valid_access_token({'expires_at': 1791571746.5293732, 'access_token': True})">backend\test_auth_payload_fuzz.py:29: in test_nonstring_access_token_fails_closed
+    assert asyncio.run(get_valid_access_token({'expires_at': time.time() + 3600, 'access_token': value})) is None
+E   AssertionError: assert True is None
+E    +  where True = &lt;function run at 0x0000022DAED38A40&gt;(&lt;coroutine object get_valid_access_token at 0x0000022DB1A7D030&gt;)
+E    +    where &lt;function run at 0x0000022DAED38A40&gt; = asyncio.run
+E    +    and   &lt;coroutine object get_valid_access_token at 0x0000022DB1A7D030&gt; = get_valid_access_token({'expires_at': 1791571746.5293732, 'access_token': True})</failure></testcase><testcase classname="backend.test_auth_payload_fuzz" name="test_nonstring_access_token_fails_closed[7]" time="0.005"><failure message="AssertionError: assert 7 is None&#10; +  where 7 = &lt;function run at 0x0000022DAED38A40&gt;(&lt;coroutine object get_valid_access_token at 0x0000022DB1A7FF10&gt;)&#10; +    where &lt;function run at 0x0000022DAED38A40&gt; = asyncio.run&#10; +    and   &lt;coroutine object get_valid_access_token at 0x0000022DB1A7FF10&gt; = get_valid_access_token({'expires_at': 1791571746.5399506, 'access_token': 7})">backend\test_auth_payload_fuzz.py:29: in test_nonstring_access_token_fails_closed
+    assert asyncio.run(get_valid_access_token({'expires_at': time.time() + 3600, 'access_token': value})) is None
+E   AssertionError: assert 7 is None
+E    +  where 7 = &lt;function run at 0x0000022DAED38A40&gt;(&lt;coroutine object get_valid_access_token at 0x0000022DB1A7FF10&gt;)
+E    +    where &lt;function run at 0x0000022DAED38A40&gt; = asyncio.run
+E    +    and   &lt;coroutine object get_valid_access_token at 0x0000022DB1A7FF10&gt; = get_valid_access_token({'expires_at': 1791571746.5399506, 'access_token': 7})</failure></testcase><testcase classname="backend.test_auth_payload_fuzz" name="test_nonstring_access_token_fails_closed[value2]" time="0.004"><failure message="AssertionError: assert ['synthetic'] is None&#10; +  where ['synthetic'] = &lt;function run at 0x0000022DAED38A40&gt;(&lt;coroutine object get_valid_access_token at 0x0000022DB332C040&gt;)&#10; +    where &lt;function run at 0x0000022DAED38A40&gt; = asyncio.run&#10; +    and   &lt;coroutine object get_valid_access_token at 0x0000022DB332C040&gt; = get_valid_access_token({'expires_at': 1791571746.5503702, 'access_token': ['synthetic']})">backend\test_auth_payload_fuzz.py:29: in test_nonstring_access_token_fails_closed
+    assert asyncio.run(get_valid_access_token({'expires_at': time.time() + 3600, 'access_token': value})) is None
+E   AssertionError: assert ['synthetic'] is None
+E    +  where ['synthetic'] = &lt;function run at 0x0000022DAED38A40&gt;(&lt;coroutine object get_valid_access_token at 0x0000022DB332C040&gt;)
+E    +    where &lt;function run at 0x0000022DAED38A40&gt; = asyncio.run
+E    +    and   &lt;coroutine object get_valid_access_token at 0x0000022DB332C040&gt; = get_valid_access_token({'expires_at': 1791571746.5503702, 'access_token': ['synthetic']})</failure></testcase><testcase classname="backend.test_auth_payload_fuzz" name="test_nonstring_access_token_fails_closed[value3]" time="0.004"><failure message="AssertionError: assert {'unexpected': 'synthetic'} is None&#10; +  where {'unexpected': 'synthetic'} = &lt;function run at 0x0000022DAED38A40&gt;(&lt;coroutine object get_valid_access_token at 0x0000022DB332C4F0&gt;)&#10; +    where &lt;function run at 0x0000022DAED38A40&gt; = asyncio.run&#10; +    and   &lt;coroutine object get_valid_access_token at 0x0000022DB332C4F0&gt; = get_valid_access_token({'expires_at': 1791571746.558372, 'access_token': {'unexpected': 'synthetic'}})">backend\test_auth_payload_fuzz.py:29: in test_nonstring_access_token_fails_closed
+    assert asyncio.run(get_valid_access_token({'expires_at': time.time() + 3600, 'access_token': value})) is None
+E   AssertionError: assert {'unexpected': 'synthetic'} is None
+E    +  where {'unexpected': 'synthetic'} = &lt;function run at 0x0000022DAED38A40&gt;(&lt;coroutine object get_valid_access_token at 0x0000022DB332C4F0&gt;)
+E    +    where &lt;function run at 0x0000022DAED38A40&gt; = asyncio.run
+E    +    and   &lt;coroutine object get_valid_access_token at 0x0000022DB332C4F0&gt; = get_valid_access_token({'expires_at': 1791571746.558372, 'access_token': {'unexpected': 'synthetic'}})</failure></testcase></testsuite></testsuites>
