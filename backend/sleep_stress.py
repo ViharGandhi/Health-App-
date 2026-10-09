@@ -31,7 +31,7 @@ class StressConfig:
 
 
 DEFAULT_CONFIG = StressConfig()
-ALGO_VERSION = "sleep-stress-8"
+ALGO_VERSION = "sleep-stress-9"
 
 
 @dataclass(frozen=True)
@@ -85,6 +85,7 @@ class NightWindows:
     windows: tuple[ValidWindow, ...]
     asleep_minutes: float
     coverage: float
+    withheld_reason: str | None = None
 
 
 @dataclass(frozen=True)
@@ -215,6 +216,16 @@ def prepare_night(
     night: SleepNight, hrv_windows: list[HrvWindow], hr_samples: list[HrSample],
     config: StressConfig = DEFAULT_CONFIG,
 ) -> NightWindows:
+    duration = (night.end_utc - night.start_utc).total_seconds()
+    cursor = night.start_utc
+    allowed = ('ASLEEP', 'AWAKE', 'RESTLESS') if night.type == 'CLASSIC' else ('LIGHT', 'REM', 'DEEP', 'AWAKE')
+    for segment in sorted(night.stages, key=lambda item: item.start_utc):
+        if (segment.start_utc != cursor or segment.end_utc <= segment.start_utc
+                or segment.end_utc > night.end_utc or segment.stage not in allowed):
+            return NightWindows(night, (), 0.0, 0.0, 'invalid_stage_partition')
+        cursor = segment.end_utc
+    if not 0 < duration <= 86400 or cursor != night.end_utc:
+        return NightWindows(night, (), 0.0, 0.0, 'invalid_stage_partition')
     asleep = asleep_minutes(night)
     if (night.nap or not night.processed or
             (night.end_utc - night.start_utc).total_seconds() < config.min_sleep_hours * 3600):
@@ -315,6 +326,10 @@ def score_night(current: NightWindows, history: list[NightWindows],
         "episodes": [], "type_fallback": night.type == "CLASSIC",
         "config_snapshot": asdict(config),
     }
+    if current.withheld_reason:
+        result['status'] = current.withheld_reason
+        result['withheld_reason'] = current.withheld_reason
+        return result
     if night.nap or (night.end_utc - night.start_utc).total_seconds() < config.min_sleep_hours * 3600:
         result["status"] = "short_sleep"
         result['withheld_reason'] = result['status']

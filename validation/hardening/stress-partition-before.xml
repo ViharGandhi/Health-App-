@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="6" time="0.170" timestamp="2026-10-09T17:01:34.845565+02:00" hostname="Zangetsu"><testcase classname="backend.test_stress_partition_hardening" name="test_invalid_stage_partition_never_enters_stress_baseline[duplicate]" time="0.002"><failure message="AssertionError: assert (ValidWindow(...minutes=5.0),) == ()&#10;  &#10;  Left contains one more item: ValidWindow(start_utc=datetime.datetime(2026, 10, 7, 0, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 7, 0, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=3.6888794541139363, hr=60.0, minutes=5.0)&#10;  Use -v to get more diff">backend\test_stress_partition_hardening.py:32: in test_invalid_stage_partition_never_enters_stress_baseline
+    assert prepared.windows == ()
+E   AssertionError: assert (ValidWindow(...minutes=5.0),) == ()
+E     
+E     Left contains one more item: ValidWindow(start_utc=datetime.datetime(2026, 10, 7, 0, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 7, 0, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=3.6888794541139363, hr=60.0, minutes=5.0)
+E     Use -v to get more diff</failure></testcase><testcase classname="backend.test_stress_partition_hardening" name="test_invalid_stage_partition_never_enters_stress_baseline[overlap]" time="0.002"><failure message="AssertionError: assert (ValidWindow(...minutes=5.0),) == ()&#10;  &#10;  Left contains one more item: ValidWindow(start_utc=datetime.datetime(2026, 10, 7, 0, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 7, 0, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=3.6888794541139363, hr=60.0, minutes=5.0)&#10;  Use -v to get more diff">backend\test_stress_partition_hardening.py:32: in test_invalid_stage_partition_never_enters_stress_baseline
+    assert prepared.windows == ()
+E   AssertionError: assert (ValidWindow(...minutes=5.0),) == ()
+E     
+E     Left contains one more item: ValidWindow(start_utc=datetime.datetime(2026, 10, 7, 0, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 7, 0, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=3.6888794541139363, hr=60.0, minutes=5.0)
+E     Use -v to get more diff</failure></testcase><testcase classname="backend.test_stress_partition_hardening" name="test_invalid_stage_partition_never_enters_stress_baseline[outside]" time="0.003"><failure message="AssertionError: assert (ValidWindow(...minutes=5.0),) == ()&#10;  &#10;  Left contains one more item: ValidWindow(start_utc=datetime.datetime(2026, 10, 7, 0, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 7, 0, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=3.6888794541139363, hr=60.0, minutes=5.0)&#10;  Use -v to get more diff">backend\test_stress_partition_hardening.py:32: in test_invalid_stage_partition_never_enters_stress_baseline
+    assert prepared.windows == ()
+E   AssertionError: assert (ValidWindow(...minutes=5.0),) == ()
+E     
+E     Left contains one more item: ValidWindow(start_utc=datetime.datetime(2026, 10, 7, 0, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 7, 0, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=3.6888794541139363, hr=60.0, minutes=5.0)
+E     Use -v to get more diff</failure></testcase><testcase classname="backend.test_stress_partition_hardening" name="test_invalid_stage_partition_never_enters_stress_baseline[negative]" time="0.004"><failure message="AssertionError: assert 'insufficient_baseline' == 'invalid_stage_partition'&#10;  &#10;  - invalid_stage_partition&#10;  + insufficient_baseline">backend\test_stress_partition_hardening.py:36: in test_invalid_stage_partition_never_enters_stress_baseline
+    assert result['withheld_reason'] == 'invalid_stage_partition'
+E   AssertionError: assert 'insufficient_baseline' == 'invalid_stage_partition'
+E     
+E     - invalid_stage_partition
+E     + insufficient_baseline</failure></testcase><testcase classname="backend.test_stress_partition_hardening" name="test_invalid_stage_partition_never_enters_stress_baseline[unknown]" time="0.002"><failure message="AssertionError: assert 'insufficient_baseline' == 'invalid_stage_partition'&#10;  &#10;  - invalid_stage_partition&#10;  + insufficient_baseline">backend\test_stress_partition_hardening.py:36: in test_invalid_stage_partition_never_enters_stress_baseline
+    assert result['withheld_reason'] == 'invalid_stage_partition'
+E   AssertionError: assert 'insufficient_baseline' == 'invalid_stage_partition'
+E     
+E     - invalid_stage_partition
+E     + insufficient_baseline</failure></testcase><testcase classname="backend.test_stress_partition_hardening" name="test_invalid_stage_partition_never_enters_stress_baseline[too_long]" time="0.002"><failure message="AssertionError: assert (ValidWindow(...minutes=5.0),) == ()&#10;  &#10;  Left contains one more item: ValidWindow(start_utc=datetime.datetime(2026, 10, 7, 0, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 7, 0, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=3.6888794541139363, hr=60.0, minutes=5.0)&#10;  Use -v to get more diff">backend\test_stress_partition_hardening.py:32: in test_invalid_stage_partition_never_enters_stress_baseline
+    assert prepared.windows == ()
+E   AssertionError: assert (ValidWindow(...minutes=5.0),) == ()
+E     
+E     Left contains one more item: ValidWindow(start_utc=datetime.datetime(2026, 10, 7, 0, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 7, 0, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=3.6888794541139363, hr=60.0, minutes=5.0)
+E     Use -v to get more diff</failure></testcase></testsuite></testsuites>
