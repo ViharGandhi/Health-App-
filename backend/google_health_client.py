@@ -337,7 +337,7 @@ class GoogleHealthClient:
                 day = _google_date(metric["date"])
                 if start <= day <= end:
                     dated[day.isoformat()] = {
-                        "date": day.isoformat(), "value": float(value),
+                        "date": day.isoformat(), "value": value if isinstance(value, bool) else float(value),
                         "estimated": metric.get("estimated") if key == "vo2_max" else None,
                         "method": metric.get("dailyRestingHeartRateMetadata", {}).get("calculationMethod") if key == "rhr" else None,
                     }
