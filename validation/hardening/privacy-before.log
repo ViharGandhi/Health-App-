@@ -1,0 +1,14 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+__________ test_invalid_partition_logs_reason_without_raw_identifier __________
+backend\test_private_stage_logging.py:15: in test_invalid_partition_logs_reason_without_raw_identifier
+    assert point['name'] not in caplog.text
+E   AssertionError: assert 'private-dev...n-identifier' not in 'WARNING  ro...identifier\n'
+E     
+E     'private-device-session-identifier' is contained here:
+E       ition for private-device-session-identifier
+------------------------------ Captured log call ------------------------------
+WARNING  root:sleep_stage_ranges.py:114 Skipping invalid stage partition for private-device-session-identifier
+=========================== short test summary info ===========================
+FAILED backend/test_private_stage_logging.py::test_invalid_partition_logs_reason_without_raw_identifier
+1 failed in 0.32s

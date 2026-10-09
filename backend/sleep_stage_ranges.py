@@ -111,12 +111,12 @@ def stage_stats(night: SleepNight, config: StageRangeConfig = DEFAULT_CONFIG) ->
     for segment in sorted(night.segments, key=lambda s: s.start_utc):
         if (segment.stage not in STAGES or segment.start_utc != cursor
                 or segment.end_utc <= segment.start_utc or segment.end_utc > night.end_utc):
-            logging.warning("Skipping invalid stage partition for %s", night.sleep_id)
+            logging.warning("Skipping invalid stage partition")
             return None, "invalid_stage_partition"
         minutes[segment.stage] += (segment.end_utc - segment.start_utc).total_seconds() / 60
         cursor = segment.end_utc
     if cursor != night.end_utc or not night.segments:
-        logging.warning("Skipping incomplete stage partition for %s", night.sleep_id)
+        logging.warning("Skipping incomplete stage partition")
         return None, "invalid_stage_partition"
     asleep = sum(minutes[s] for s in ("light", "deep", "rem"))
     if asleep < config.min_sleep_hours * 60:
@@ -126,7 +126,7 @@ def stage_stats(night: SleepNight, config: StageRangeConfig = DEFAULT_CONFIG) ->
     pct = {s: (None if s == "awake" and config.denominator == "time_asleep"
                else 100 * minutes[s] / total) for s in METRICS}
     if config.denominator == "time_in_bed" and abs(sum(pct[s] for s in STAGES) - 100) > 0.5:
-        logging.warning("Skipping invalid stage percentages for %s", night.sleep_id)
+        logging.warning("Skipping invalid stage percentages")
         return None, "invalid_stage_percentages"
     return NightStageStats(night.sleep_id, night.night_date, night.start_utc, night.end_utc,
                            total, minutes, pct, config.denominator), "ok"
