@@ -230,6 +230,8 @@ class SleepConsistencyScoreResponse(BaseModel):
 
 
 class SleepStressNightResponse(BaseModel):
+    withheld_reason: Optional[str] = None
+    anchor_verification: str = 'synthetic_or_caller_asserted'
     main_sleep_explicit: bool = True
     physical_duration_minutes: float = 0.
     alignment_verified: bool = True

@@ -30,7 +30,7 @@ class StressConfig:
 
 
 DEFAULT_CONFIG = StressConfig()
-ALGO_VERSION = "sleep-stress-7"
+ALGO_VERSION = "sleep-stress-8"
 
 
 @dataclass(frozen=True)
@@ -305,6 +305,7 @@ def score_night(current: NightWindows, history: list[NightWindows],
         "stress_pct": None, "valid_minutes": round(valid_minutes, 2),
         "asleep_minutes": round(current.asleep_minutes, 2), "coverage": round(current.coverage, 3),
         "confidence": "low", "status": "ok", "nights_available": 0,
+        "withheld_reason": None, "anchor_verification": "synthetic_or_caller_asserted",
         "baseline": {"nights_used": 0, "fallback_used": False, "per_stage": {}},
         "peak_level": None, "mean_level": None, "hrv_only_minutes": None,
         "episodes": [], "type_fallback": night.type == "CLASSIC",
@@ -312,9 +313,11 @@ def score_night(current: NightWindows, history: list[NightWindows],
     }
     if night.nap or (night.end_utc - night.start_utc).total_seconds() < config.min_sleep_hours * 3600:
         result["status"] = "short_sleep"
+        result['withheld_reason'] = result['status']
         return result
     if not night.processed:
         result["status"] = "pending_processing"
+        result['withheld_reason'] = result['status']
         return result
     baselines, nights_used, fallback_used = build_baseline(current, history, config)
     result["nights_available"] = nights_used
@@ -322,9 +325,11 @@ def score_night(current: NightWindows, history: list[NightWindows],
                           "per_stage": {stage: asdict(value) for stage, value in baselines.items()}}
     if not baselines:
         result["status"] = "insufficient_baseline"
+        result['withheld_reason'] = result['status']
         return result
     if not current.windows:
         result["status"] = "no_valid_windows"
+        result['withheld_reason'] = result['status']
         return result
     result["confidence"] = ("high" if current.coverage >= 0.75 and not fallback_used
                             and night.type != "CLASSIC" else
