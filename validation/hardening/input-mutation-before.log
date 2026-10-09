@@ -1,0 +1,13 @@
+F...                                                                     [100%]
+================================== FAILURES ===================================
+_______________ test_build_does_not_mutate_callers_observations _______________
+backend\test_sleep_analytics_inputs.py:13: in test_build_does_not_mutate_callers_observations
+    assert inputs == before
+E   AssertionError: assert [{'date': '20...+02:00', ...}] == [{'date': '20...+02:00', ...}]
+E     
+E     At index 0 diff: {'date': '2026-09-30', 'sleep_id': 'users/demo/dataTypes/sleep/dataPoints/demo-2026-09-30', 'status': 'ok', 'bed_time': '2026-09-29T23:21:00+02:00', 'wake_time': '2026-09-30T05:25:00+02:00', 'onset_time': '2026-09-29T23:24:00+02:00', 'sleep_wake_time': '2026-09-30T05:25:00+02:00', 'period_minutes': 364.0, 'asleep_minutes': 354.0, 'awake_minutes': 10.0, 'deep_minutes': 55.0, 'rem_minutes': 67.0, 'efficiency': 97.25274725274726, 'wake_events': 5, 'segments': [{'stage': 'awake', 'start': '2026-09-29T21:21:00+00:00', 'end': '2026-09-29T21:24:00+00:00'}, {'s...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show
+=========================== short test summary info ===========================
+FAILED backend/test_sleep_analytics_inputs.py::test_build_does_not_mutate_callers_observations
+1 failed, 3 passed in 0.73s

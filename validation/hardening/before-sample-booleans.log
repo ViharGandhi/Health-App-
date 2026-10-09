@@ -1,0 +1,69 @@
+FFFF.FF                                                                  [100%]
+================================== FAILURES ===================================
+______ test_sample_adapters_never_coerce_booleans_to_numbers[stress_hr] _______
+backend\test_sample_boolean_coercion.py:18: in test_sample_adapters_never_coerce_booleans_to_numbers
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_sample_boolean_coercion.py:24: in test_sample_adapters_never_coerce_booleans_to_numbers
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+E   Failing test case: test_sample_adapters_never_coerce_booleans_to_numbers(
+E       # The test always failed when commented parts were varied together.
+E       adapter='stress_hr',
+E       value=False,  # or any other generated value
+E       seconds=0,  # or any other generated value
+E   )
+______ test_sample_adapters_never_coerce_booleans_to_numbers[stress_hrv] ______
+backend\test_sample_boolean_coercion.py:18: in test_sample_adapters_never_coerce_booleans_to_numbers
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_sample_boolean_coercion.py:24: in test_sample_adapters_never_coerce_booleans_to_numbers
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+E   Failing test case: test_sample_adapters_never_coerce_booleans_to_numbers(
+E       # The test always failed when commented parts were varied together.
+E       adapter='stress_hrv',
+E       value=False,  # or any other generated value
+E       seconds=0,  # or any other generated value
+E   )
+_____ test_sample_adapters_never_coerce_booleans_to_numbers[intraday_hr] ______
+backend\test_sample_boolean_coercion.py:18: in test_sample_adapters_never_coerce_booleans_to_numbers
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_sample_boolean_coercion.py:24: in test_sample_adapters_never_coerce_booleans_to_numbers
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+E   Failing test case: test_sample_adapters_never_coerce_booleans_to_numbers(
+E       # The test always failed when commented parts were varied together.
+E       adapter='intraday_hr',
+E       value=False,  # or any other generated value
+E       seconds=0,  # or any other generated value
+E   )
+______________ test_sleep_hr_chart_drops_boolean_readings[True] _______________
+backend\test_sample_boolean_coercion.py:45: in test_sleep_hr_chart_drops_boolean_readings
+    assert result['samples'] == []
+E   AssertionError: assert [{'timestamp'...0', 'bpm': 1}] == []
+E     
+E     Left contains one more item: {'timestamp': '2026-10-06T21:32:00+00:00', 'local_time': '2026-10-06T23:32:00+02:00', 'bpm': 1}
+E     Use -v to get more diff
+_______________ test_summary_stage_count_rejects_boolean[True] ________________
+backend\test_sample_boolean_coercion.py:51: in test_summary_stage_count_rejects_boolean
+    assert not _valid_sleep_summary({'minutesAsleep': 470, 'stagesSummary': [
+E   AssertionError: assert not True
+E    +  where True = _valid_sleep_summary({'minutesAsleep': 470, 'stagesSummary': [{'type': 'DEEP', 'minutes': 90, 'count': True}]})
+_______________ test_summary_stage_count_rejects_boolean[False] _______________
+backend\test_sample_boolean_coercion.py:51: in test_summary_stage_count_rejects_boolean
+    assert not _valid_sleep_summary({'minutesAsleep': 470, 'stagesSummary': [
+E   AssertionError: assert not True
+E    +  where True = _valid_sleep_summary({'minutesAsleep': 470, 'stagesSummary': [{'type': 'DEEP', 'minutes': 90, 'count': False}]})
+=========================== short test summary info ===========================
+FAILED backend/test_sample_boolean_coercion.py::test_sample_adapters_never_coerce_booleans_to_numbers[stress_hr]
+FAILED backend/test_sample_boolean_coercion.py::test_sample_adapters_never_coerce_booleans_to_numbers[stress_hrv]
+FAILED backend/test_sample_boolean_coercion.py::test_sample_adapters_never_coerce_booleans_to_numbers[intraday_hr]
+FAILED backend/test_sample_boolean_coercion.py::test_sleep_hr_chart_drops_boolean_readings[True]
+FAILED backend/test_sample_boolean_coercion.py::test_summary_stage_count_rejects_boolean[True]
+FAILED backend/test_sample_boolean_coercion.py::test_summary_stage_count_rejects_boolean[False]
+6 failed, 1 passed in 4.45s

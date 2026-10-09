@@ -3,8 +3,10 @@
 from datetime import date, datetime, timedelta, timezone
 
 from sleep_stage_ranges import DEFAULT_CONFIG, adapt_google_sleep, stage_stats
+from provider_payload import payload_boundary
 
 
+@payload_boundary
 async def sync_stage_ranges(client, user_id, store, start: date, end: date, config=DEFAULT_CONFIG):
     # First sync retrieves complete history, so missing calendar days cannot shrink
     # the previous-N-qualifying-night baseline. Subsequent jobs refresh late syncs.

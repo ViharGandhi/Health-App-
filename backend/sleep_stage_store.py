@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import sqlite3
 import time
+from sleep_selection import main_sleep_key
 
 from sleep_stage_ranges import (
     DEFAULT_CONFIG, ALGO_VERSION, STAGES, METRICS, score_stages, stats_from_dict, stats_to_dict,
@@ -49,10 +50,11 @@ class SleepStageStore:
                     by_date.setdefault(row[1], []).append(row)
             selected = []
             for sessions in by_date.values():
-                main = [r for r in sessions if r[4] == 1]
-                candidates = main or [r for r in sessions if r[4] is None]
+                candidates = [(main_sleep_key(None if r[4] is None else bool(r[4]),
+                    datetime.fromisoformat(r[2]), datetime.fromisoformat(r[3]), r[0]), r) for r in sessions]
+                candidates = [(key, row) for key, row in candidates if key is not None]
                 if candidates:
-                    selected.append(max(candidates, key=lambda r: (datetime.fromisoformat(r[3]) - datetime.fromisoformat(r[2]), r[0])))
+                    selected.append(max(candidates, key=lambda item: item[0])[1])
             stats = []
             for row in selected:
                 if row[6]:

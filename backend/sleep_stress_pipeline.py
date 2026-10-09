@@ -25,8 +25,9 @@ async def compute_connected_sleep_stress(
         if start <= item.night.night_date <= end and not item.night.nap:
             scored = score_night(item, prepared)
             scored["alignment_verified"] = anchor is not None
+            scored['anchor_verification'] = 'operator_configured' if anchor else 'unconfigured'
             if anchor:
-                store.upsert(scored, item)
+                store.upsert(scored, item, account=getattr(client, 'account_key', None))
             else:
                 other = next(n for n in candidates["end"] if n.night.sleep_id == item.night.sleep_id)
                 alternative = score_night(other, candidates["end"])
@@ -42,5 +43,6 @@ async def compute_connected_sleep_stress(
                     scored[key] = None
                 scored["episodes"] = []
                 scored["confidence"] = "low"
+                scored['withheld_reason'] = 'hrv_anchor_unconfigured'
             nights.append(scored)
     return nights

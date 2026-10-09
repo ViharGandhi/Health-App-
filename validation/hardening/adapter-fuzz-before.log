@@ -1,0 +1,311 @@
+FF...FFFFF.                                                              [100%]
+================================== FAILURES ===================================
+_ test_adapters_return_valid_data_or_explicit_validation_error[local_datetime] _
+backend\test_adapter_fuzz.py:53: in test_adapters_return_valid_data_or_explicit_validation_error
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_adapter_fuzz.py:57: in test_adapters_return_valid_data_or_explicit_validation_error
+    result = RECIPES[adapter](value)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend\test_adapter_fuzz.py:38: in <lambda>
+    'local_datetime': lambda p: _local_datetime(p, '0s', preserve_offset=True),
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:48: in _local_datetime
+    instant = datetime.fromisoformat(value.replace("Z", "+00:00"))
+                                     ^^^^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'replace'
+E   Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+E       adapter='local_datetime',
+E       value=None,
+E   )
+__ test_adapters_return_valid_data_or_explicit_validation_error[google_date] __
+  + Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 53, in test_adapters_return_valid_data_or_explicit_validation_error
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\google_health_client.py", line 55, in _google_date
+    |     return date(value["year"], value["month"], value["day"])
+    |                 ~~~~~^^^^^^^^
+    | KeyError: 'year'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='google_date',
+    |     value={},  # or any other generated value
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\google_health_client.py", line 55, in _google_date
+    |     return date(value["year"], value["month"], value["day"])
+    |                 ~~~~~^^^^^^^^
+    | TypeError: 'NoneType' object is not subscriptable
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='google_date',
+    |     value=None,  # or any other generated value
+    | )
+    +------------------------------------
+___ test_adapters_return_valid_data_or_explicit_validation_error[stress_hr] ___
+  + Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 53, in test_adapters_return_valid_data_or_explicit_validation_error
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 4 distinct failures. (4 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_stress.py", line 141, in adapt_google_hr
+    |     return HrSample(_instant(metric["sampleTime"]["physicalTime"]), float(metric["beatsPerMinute"]))
+    |                              ~~~~~~^^^^^^^^^^^^^^
+    | KeyError: 'sampleTime'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='stress_hr',
+    |     value={'heartRate': {}},
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_stress.py", line 141, in adapt_google_hr
+    |     return HrSample(_instant(metric["sampleTime"]["physicalTime"]), float(metric["beatsPerMinute"]))
+    |                              ~~~~~~^^^^^^^^^^^^^^
+    | TypeError: 'NoneType' object is not subscriptable
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='stress_hr',
+    |     value={'heartRate': None},
+    | )
+    +---------------- 3 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_stress.py", line 140, in adapt_google_hr
+    |     metric = point["heartRate"]
+    |              ~~~~~^^^^^^^^^^^^^
+    | KeyError: 'heartRate'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='stress_hr',
+    |     value={},  # or any other generated value
+    | )
+    +---------------- 4 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_stress.py", line 140, in adapt_google_hr
+    |     metric = point["heartRate"]
+    |              ~~~~~^^^^^^^^^^^^^
+    | TypeError: 'NoneType' object is not subscriptable
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='stress_hr',
+    |     value=None,  # or any other generated value
+    | )
+    +------------------------------------
+__ test_adapters_return_valid_data_or_explicit_validation_error[stress_hrv] ___
+backend\test_adapter_fuzz.py:53: in test_adapters_return_valid_data_or_explicit_validation_error
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_adapter_fuzz.py:57: in test_adapters_return_valid_data_or_explicit_validation_error
+    result = RECIPES[adapter](value)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend\test_adapter_fuzz.py:44: in <lambda>
+    'stress_hrv': lambda p: adapt_google_hrv([p], 'start'),
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_stress.py:153: in adapt_google_hrv
+    samples = sorted((
+backend\sleep_stress.py:157: in <genexpr>
+    if "heartRateVariability" in item and item["heartRateVariability"].get("sampleTime", {}).get("physicalTime")
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: argument of type 'NoneType' is not iterable
+E   Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+E       adapter='stress_hrv',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_adapter_fuzz.py:58
+_ test_adapters_return_valid_data_or_explicit_validation_error[stats_from_dict] _
+  + Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 53, in test_adapters_return_valid_data_or_explicit_validation_error
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_stage_ranges.py", line 199, in stats_from_dict
+    |     return NightStageStats(**{**value, "night_date": date.fromisoformat(value["night_date"]),
+    |                                                                         ~~~~~^^^^^^^^^^^^^^
+    | KeyError: 'night_date'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='stats_from_dict',
+    |     value={},  # or any other generated value
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_stage_ranges.py", line 199, in stats_from_dict
+    |     return NightStageStats(**{**value, "night_date": date.fromisoformat(value["night_date"]),
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    | TypeError: 'NoneType' object is not a mapping
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='stats_from_dict',
+    |     value=None,  # or any other generated value
+    | )
+    +------------------------------------
+_ test_adapters_return_valid_data_or_explicit_validation_error[main_sleep_selector] _
+  + Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 53, in test_adapters_return_valid_data_or_explicit_validation_error
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 6 distinct failures. (6 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 46, in <lambda>
+    |     'main_sleep_selector': lambda p: select_sleep([p], date(2026, 10, 7)),
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 23, in select_sleep
+    |     if meta.get("nap") or meta.get("mainSleep") is False:
+    |        ^^^^^^^^
+    | AttributeError: 'NoneType' object has no attribute 'get'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     # The test always failed when commented parts were varied together.
+    |     adapter='main_sleep_selector',
+    |     value={'sleep': {'sleep': None, 'interval': None, 'startTime': None, 'endTime': None, 'metadata': None}},
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 46, in <lambda>
+    |     'main_sleep_selector': lambda p: select_sleep([p], date(2026, 10, 7)),
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 25, in select_sleep
+    |     start, end = instant(interval["startTime"]), instant(interval["endTime"])
+    |                          ~~~~~~~~^^^^^^^^^^^^^
+    | TypeError: 'NoneType' object is not subscriptable
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     # The test always failed when commented parts were varied together.
+    |     adapter='main_sleep_selector',
+    |     value={'sleep': {'sleep': None, 'interval': None}},
+    | )
+    +---------------- 3 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 46, in <lambda>
+    |     'main_sleep_selector': lambda p: select_sleep([p], date(2026, 10, 7)),
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 22, in select_sleep
+    |     meta, interval = sleep.get("metadata", {}), sleep["interval"]
+    |                                                 ~~~~~^^^^^^^^^^^^
+    | KeyError: 'interval'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='main_sleep_selector',
+    |     value={'sleep': {}},
+    | )
+    +---------------- 4 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 46, in <lambda>
+    |     'main_sleep_selector': lambda p: select_sleep([p], date(2026, 10, 7)),
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 22, in select_sleep
+    |     meta, interval = sleep.get("metadata", {}), sleep["interval"]
+    |                      ^^^^^^^^^
+    | AttributeError: 'NoneType' object has no attribute 'get'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='main_sleep_selector',
+    |     value={'sleep': None},
+    | )
+    +---------------- 5 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 46, in <lambda>
+    |     'main_sleep_selector': lambda p: select_sleep([p], date(2026, 10, 7)),
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 21, in select_sleep
+    |     sleep = point["sleep"]
+    |             ~~~~~^^^^^^^^^
+    | KeyError: 'sleep'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='main_sleep_selector',
+    |     value={},  # or any other generated value
+    | )
+    +---------------- 6 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 46, in <lambda>
+    |     'main_sleep_selector': lambda p: select_sleep([p], date(2026, 10, 7)),
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 19, in select_sleep
+    |     if point.get("dataSource", {}).get("platform") not in (None, "FITBIT"):
+    |        ^^^^^^^^^
+    | AttributeError: 'NoneType' object has no attribute 'get'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='main_sleep_selector',
+    |     value=None,  # or any other generated value
+    | )
+    +------------------------------------
+_ test_adapters_return_valid_data_or_explicit_validation_error[strain_sleep_windows] _
+backend\test_adapter_fuzz.py:53: in test_adapters_return_valid_data_or_explicit_validation_error
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_adapter_fuzz.py:57: in test_adapters_return_valid_data_or_explicit_validation_error
+    result = RECIPES[adapter](value)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend\test_adapter_fuzz.py:47: in <lambda>
+    'strain_sleep_windows': lambda p: sleep_windows([p]),
+                                      ^^^^^^^^^^^^^^^^^^
+backend\strain_service.py:83: in sleep_windows
+    sleep = point.get('sleep', {})
+            ^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+E   Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+E       adapter='strain_sleep_windows',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_adapter_fuzz.py:58
+=========================== short test summary info ===========================
+FAILED backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[local_datetime]
+FAILED backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[google_date]
+FAILED backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stress_hr]
+FAILED backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stress_hrv]
+FAILED backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stats_from_dict]
+FAILED backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[main_sleep_selector]
+FAILED backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[strain_sleep_windows]
+7 failed, 4 passed in 41.02s

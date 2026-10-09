@@ -6,7 +6,8 @@ Shared between main.py, google_health_client.py, and mock_data.py.
 """
 
 from __future__ import annotations
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, PrivateAttr, field_serializer
+from math import floor
 from typing import Optional, List, Dict, Literal
 from datetime import datetime
 
@@ -35,6 +36,7 @@ class ZoneMinutes(BaseModel):
 
 
 class WorkoutDetail(BaseModel):
+    _raw_strain: Optional[float] = PrivateAttr(default=None)
     activity_name: str
     name: str
     exercise_type: Optional[str] = None
@@ -47,8 +49,14 @@ class WorkoutDetail(BaseModel):
     max_hr: Optional[float] = None
     zone_minutes: ZoneMinutes
 
+    @field_serializer('strain', when_used='json')
+    def display_strain(self, value):
+        raw = self._raw_strain if self._raw_strain is not None else value
+        return floor(raw * 10) / 10
+
 
 class StrainResponse(BaseModel):
+    _raw_strain: Optional[float] = PrivateAttr(default=None)
     date: str
     mode: Literal["connected", "demo"]
     day_window: dict
@@ -78,12 +86,20 @@ class StrainResponse(BaseModel):
     is_calibrating: bool = False
     is_mock: bool = True
 
+    @field_serializer('strain', 'score_21', when_used='json')
+    def display_strain(self, value):
+        raw = self._raw_strain if self._raw_strain is not None else value
+        return floor(raw * 10) / 10 if raw is not None else None
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Recovery
 # ──────────────────────────────────────────────────────────────────────────────
 
 class RecoveryResponse(BaseModel):
+    estimator: str = 'legacy_prototype'
+    rejected_readings: Dict[str, int] = Field(default_factory=dict)
+    data_quality_flag: bool = False
     score: Optional[float] = Field(description="Demo score or connected estimated percent; null when confidence is low or reference is insufficient")
     status: str = Field(description="Demo: green/yellow/red; dashboard comparisons: signals/calibrating; connected Recovery: building_reference/ok")
     z: Optional[float] = None
@@ -116,7 +132,6 @@ class RecoveryResponse(BaseModel):
     is_calibrating: bool = False
     is_mock: bool = True
 
-
 # ──────────────────────────────────────────────────────────────────────────────
 # Sleep
 # ──────────────────────────────────────────────────────────────────────────────
@@ -130,6 +145,12 @@ class SleepStages(BaseModel):
 
 
 class SleepResponse(BaseModel):
+    estimator: str = 'legacy_composite_sleep'
+    components_available: Dict[str, bool] = Field(default_factory=dict)
+    defaulted_components: Dict[str, float] = Field(default_factory=dict)
+    component_coverage: float = 0.
+    partial: bool = False
+    status_reason: Optional[str] = None
     score: Optional[float] = Field(description="Sleep score 0–100; absent without a sleep-need estimate")
     sleep_need_hours: Optional[float]
     sleep_need: Optional[Dict[str, float]] = None
@@ -165,6 +186,7 @@ class SleepTrendDay(BaseModel):
 
 
 class SleepTrendResponse(BaseModel):
+    estimator: str = 'pooled_sleep_efficiency'
     is_mock: bool
     timeframe: str
     range_start: str
@@ -185,6 +207,7 @@ class SleepConsistencyScorePoint(BaseModel):
 
 
 class SleepConsistencyScoreResponse(BaseModel):
+    estimator: str = 'four_night_clock_consistency'
     is_mock: bool
     timeframe: str
     range_start: str
@@ -207,6 +230,10 @@ class SleepConsistencyScoreResponse(BaseModel):
 
 
 class SleepStressNightResponse(BaseModel):
+    withheld_reason: Optional[str] = None
+    anchor_verification: str = 'synthetic_or_caller_asserted'
+    main_sleep_explicit: bool = True
+    physical_duration_minutes: float = 0.
     alignment_verified: bool = True
     sleep_id: str
     night_date: str
@@ -232,6 +259,7 @@ class SleepStressNightResponse(BaseModel):
 
 
 class SleepStressHistoryResponse(BaseModel):
+    estimator: str = 'windowed_sleep_stress'
     is_mock: bool
     range_start: str
     range_end: str

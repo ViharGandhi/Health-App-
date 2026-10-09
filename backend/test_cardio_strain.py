@@ -172,7 +172,7 @@ def test_connected_api_contract_error_and_demo_use_same_renderer():
         response = TestClient(app).get('/api/strain?date=2026-10-05', headers={'X-User-Age': '30', 'X-User-Sex': 'm'})
         assert response.status_code == 200
         payload = response.json()
-        assert payload['mode'] == 'connected' and payload['strain'] == round(calc()['strain'], 1)
+        assert payload['mode'] == 'connected' and payload['strain'] == math.floor(calc()['strain'] * 10) / 10
         assert payload['params']['hr_max'] == 187 and payload['max_hr'] == 160
         assert payload['analytics']['strain_target']['status'] == 'on'
         client.get_intraday_heart_rate.side_effect = httpx.RequestError('offline')

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="1.805" timestamp="2026-10-09T19:42:46.189010+02:00" hostname="Zangetsu"><properties><property name="hypothesis-statistics-backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[latency]" value="YmFja2VuZC90ZXN0X3B1YmxpY19oZWxwZXJfZnV6ei5weTo6dGVzdF9wdWJsaWNfaGVscGVyc192YWxpZGF0ZV9tYWxmb3JtZWRfc2NhbGFyc1tsYXRlbmN5XToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMTggc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC04NCBtcywgb2Ygd2hpY2ggfiAwLTMgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDUgcGFzc2luZywgNSBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMiBkaXN0aW5jdCBlcnJvcnMgaW4gdGhpcyBwaGFzZQoKICAtIGR1cmluZyBzaHJpbmsgcGhhc2UgKDAuMjQgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC02IG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMzMgcGFzc2luZywgMzIgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDY1IHNocmlua3Mgb2Ygd2hpY2ggMjcgd2VyZSBzdWNjZXNzZnVsCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /><property name="hypothesis-statistics-backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[interruption]" value="YmFja2VuZC90ZXN0X3B1YmxpY19oZWxwZXJfZnV6ei5weTo6dGVzdF9wdWJsaWNfaGVscGVyc192YWxpZGF0ZV9tYWxmb3JtZWRfc2NhbGFyc1tpbnRlcnJ1cHRpb25dOgoKICAtIGR1cmluZyBnZW5lcmF0ZSBwaGFzZSAoMC4wNCBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAxLTE4IG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gNiBwYXNzaW5nLCA0IGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAyIGRpc3RpbmN0IGVycm9ycyBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wNiBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAwLTE2IG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMTIgcGFzc2luZywgNCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gVHJpZWQgMTYgc2hyaW5rcyBvZiB3aGljaCAxIHdlcmUgc3VjY2Vzc2Z1bAoKICAtIFN0b3BwZWQgYmVjYXVzZSBub3RoaW5nIGxlZnQgdG8gZG8=" /><property name="hypothesis-statistics-backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[age_target]" value="YmFja2VuZC90ZXN0X3B1YmxpY19oZWxwZXJfZnV6ei5weTo6dGVzdF9wdWJsaWNfaGVscGVyc192YWxpZGF0ZV9tYWxmb3JtZWRfc2NhbGFyc1thZ2VfdGFyZ2V0XToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMDYgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC0yMCBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDcgcGFzc2luZywgMyBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wNCBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAwLTE3IG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gOCBwYXNzaW5nLCAyIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxMCBzaHJpbmtzIG9mIHdoaWNoIDAgd2VyZSBzdWNjZXNzZnVsCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /><property name="hypothesis-statistics-backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[baseline]" value="YmFja2VuZC90ZXN0X3B1YmxpY19oZWxwZXJfZnV6ei5weTo6dGVzdF9wdWJsaWNfaGVscGVyc192YWxpZGF0ZV9tYWxmb3JtZWRfc2NhbGFyc1tiYXNlbGluZV06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjI0IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtNDQgbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSA1IHBhc3NpbmcsIDEzIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAyIGRpc3RpbmN0IGVycm9ycyBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wNiBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAwLTIyIG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMTAgcGFzc2luZywgNCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gVHJpZWQgMTQgc2hyaW5rcyBvZiB3aGljaCAzIHdlcmUgc3VjY2Vzc2Z1bAoKICAtIFN0b3BwZWQgYmVjYXVzZSBub3RoaW5nIGxlZnQgdG8gZG8=" /></properties><testcase classname="backend.test_public_helper_fuzz" name="test_public_helpers_validate_malformed_scalars[latency]" time="0.470"><failure message="ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)">+ Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 19, in test_public_helpers_validate_malformed_scalars
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 23, in test_public_helpers_validate_malformed_scalars
+    |     result = RECIPES[helper](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\sleepscore.py", line 320, in compute_sleep_latency_score
+    |     lat_min = latency_seconds / 60.0
+    |               ~~~~~~~~~~~~~~~~^~~~~~
+    | TypeError: unsupported operand type(s) for /: 'str' and 'float'
+    | Failing test case: test_public_helpers_validate_malformed_scalars(
+    |     helper='latency',
+    |     value='',
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 28, in test_public_helpers_validate_malformed_scalars
+    |     assert result &gt;= 0
+    | AssertionError: assert -0.0833333333333357 &gt;= 0
+    | Failing test case: test_public_helpers_validate_malformed_scalars(
+    |     helper='latency',
+    |     value=-601.0,
+    | )
+    +------------------------------------</failure></testcase><testcase classname="backend.test_public_helper_fuzz" name="test_public_helpers_validate_malformed_scalars[interruption]" time="0.147"><failure message="ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)">+ Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 19, in test_public_helpers_validate_malformed_scalars
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 30, in test_public_helpers_validate_malformed_scalars
+    |     assert result &lt;= 100
+    | AssertionError: assert 115.0 &lt;= 100
+    | Failing test case: test_public_helpers_validate_malformed_scalars(
+    |     helper='interruption',
+    |     value=-1,
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 23, in test_public_helpers_validate_malformed_scalars
+    |     result = RECIPES[helper](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\sleepscore.py", line 267, in compute_interruption_score
+    |     return max(0.0, 100.0 - count * 15.0)
+    |                             ~~~~~~^~~~~~
+    | TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+    | Failing test case: test_public_helpers_validate_malformed_scalars(
+    |     helper='interruption',
+    |     value=None,
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         E:\Projects\Health-App-\backend\test_public_helper_fuzz.py:24
+    +------------------------------------</failure></testcase><testcase classname="backend.test_public_helper_fuzz" name="test_public_helpers_validate_malformed_scalars[age_target]" time="0.128"><failure message="TypeError: '&lt;=' not supported between instances of 'str' and 'int'&#10;Failing test case: test_public_helpers_validate_malformed_scalars(&#10;    helper='age_target',&#10;    value='',&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_public_helper_fuzz.py:24">backend\test_public_helper_fuzz.py:19: in test_public_helpers_validate_malformed_scalars
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^
+backend\test_public_helper_fuzz.py:23: in test_public_helpers_validate_malformed_scalars
+    result = RECIPES[helper](value)
+             ^^^^^^^^^^^^^^^^^^^^^^
+sleepscore.py:234: in optimal_deep_ratio
+    if age is None or age &lt;= 30:
+                      ^^^^^^^^^
+E   TypeError: '&lt;=' not supported between instances of 'str' and 'int'
+E   Failing test case: test_public_helpers_validate_malformed_scalars(
+E       helper='age_target',
+E       value='',
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_public_helper_fuzz.py:24</failure></testcase><testcase classname="backend.test_public_helper_fuzz" name="test_public_helpers_validate_malformed_scalars[baseline]" time="0.320"><failure message="ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)">+ Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 19, in test_public_helpers_validate_malformed_scalars
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 28, in test_public_helpers_validate_malformed_scalars
+    |     assert result &gt;= 0
+    | AssertionError: assert -1.0 &gt;= 0
+    | Failing test case: test_public_helpers_validate_malformed_scalars(
+    |     helper='baseline',
+    |     value=-1.0,
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 23, in test_public_helpers_validate_malformed_scalars
+    |     result = RECIPES[helper](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_public_helper_fuzz.py", line 14, in &lt;lambda&gt;
+    |     'baseline': lambda x: compute_baseline([(datetime(2026, 10, 7), x)] * 7),
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\sleepscore.py", line 74, in compute_baseline
+    |     return sum(values) / len(values)
+    |            ^^^^^^^^^^^
+    | TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
+    | Failing test case: test_public_helpers_validate_malformed_scalars(
+    |     helper='baseline',
+    |     value=None,
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         E:\Projects\Health-App-\backend\test_public_helper_fuzz.py:24
+    +------------------------------------</failure></testcase></testsuite></testsuites>

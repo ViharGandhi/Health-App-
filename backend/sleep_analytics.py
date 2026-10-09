@@ -9,6 +9,7 @@ from sleep_trends import range_start
 from sleep_consistency import SleepNight, score_main_sleep
 from sleepscore import SleepCalculator, SleepData
 from sleep_need_inputs import SleepNeedInputs, need_components
+from provider_payload import payload_boundary
 
 
 def demo_sleep_need_inputs(observations: list[dict], today: date, today_strain_pct: float | None = None) -> SleepNeedInputs:
@@ -21,6 +22,7 @@ def demo_sleep_need_inputs(observations: list[dict], today: date, today_strain_p
     return SleepNeedInputs(sleep, strain, {})
 
 
+@payload_boundary
 def sleep_observations(points: list[dict], today: date, *, is_mock: bool = False) -> list[dict]:
     # Select one completed main sleep per historical local wake date, as the HR chart does.
     now = datetime.fromisoformat(f"{today}T23:59:59+00:00") if is_mock else datetime.now(timezone.utc)
@@ -99,13 +101,14 @@ def sleep_observations(points: list[dict], today: date, *, is_mock: bool = False
 
 def timing_records(observations: list[dict]) -> list[dict]:
     return [{"date": date.fromisoformat(n["date"]),
-             "bed_time": datetime.fromisoformat(n["onset_time"]).replace(tzinfo=None),
-             "wake_time": datetime.fromisoformat(n["sleep_wake_time"]).replace(tzinfo=None),
+             "bed_time": datetime.fromisoformat(n["onset_time"]),
+             "wake_time": datetime.fromisoformat(n["sleep_wake_time"]),
              "time_asleep_minutes": n["asleep_minutes"], "time_in_bed_minutes": n["period_minutes"]}
-            for n in observations if n["onset_time"] < n["sleep_wake_time"]]
+            for n in observations if datetime.fromisoformat(n["onset_time"]) < datetime.fromisoformat(n["sleep_wake_time"])]
 
 
 def build_sleep_analytics(observations: list[dict], today: date, timeframe: str, is_mock: bool) -> dict:
+    observations = [dict(night) for night in observations]
     start = range_start(today, timeframe)
     previous_end = start - timedelta(days=1)
     previous_start = range_start(previous_end, timeframe)
@@ -128,7 +131,7 @@ def build_sleep_analytics(observations: list[dict], today: date, timeframe: str,
         nights = [n for n in observations if first.isoformat() <= n["date"] <= last.isoformat()]
         return {key: (sum(values) / len(values) if values else None)
                 for key in metrics for values in [[n[key] for n in nights if n.get(key) is not None]]}
-    return {"is_mock": is_mock, "timeframe": timeframe, "range_start": start.isoformat(), "range_end": today.isoformat(),
+    return {"is_mock": is_mock, 'estimator': 'legacy_composite_sleep', "timeframe": timeframe, "range_start": start.isoformat(), "range_end": today.isoformat(),
             "days": days, "averages": averages(start, today), "previous_averages": averages(previous_start, previous_end),
             "prior_30_averages": averages(today - timedelta(days=30), today - timedelta(days=1)),
             "notes": {"period": "Fitbit-recorded sleep period; not measured physical time in bed.",

@@ -1,0 +1,697 @@
+[
+  {
+    "id": "H01",
+    "source": "backend/validity.py",
+    "callable": "resting_hr",
+    "line": 31,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "fix: unify inconsistent vital gates and flag Recovery rejections (test_shared_validity.py)",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_shared_validity.py"
+    ],
+    "commit": "79f5eb3",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "shared-validity-before.log"
+    ]
+  },
+  {
+    "id": "H02",
+    "source": "backend/main.py",
+    "callable": "_compute_real_sleep",
+    "line": 362,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "fix: disclose defaulted connected sleep components without retuning (test_score_transparency.py)",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_score_transparency.py"
+    ],
+    "commit": "32ee23d",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "transparency-before.log"
+    ]
+  },
+  {
+    "id": "H03",
+    "source": "backend/validity.py",
+    "callable": "valid_metric",
+    "line": 44,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "fix: enforce provider sample HRV and daily VO2 ceilings (test_provider_validity.py)",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_health_validity.py",
+      "backend/test_provider_validity.py"
+    ],
+    "commit": "c968fce",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "provider-before.log"
+    ]
+  },
+  {
+    "id": "H04",
+    "source": "backend/sleep_selection.py",
+    "callable": "main_sleep_key",
+    "line": 10,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "fix: replace inconsistent main-sleep rankings with UTC duration and ID (test_main_selection_inventory.py)",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_main_selection_inventory.py"
+    ],
+    "commit": "623fc73",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "selection-before.log"
+    ]
+  },
+  {
+    "id": "H05",
+    "source": "backend/models.py",
+    "callable": "RecoveryResponse",
+    "line": 99,
+    "severity": "low",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix unnamed score estimators: expose actual algorithm identity and invalidate page-v12; backend/test_estimator_identity.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_estimator_identity.py"
+    ],
+    "commit": "a47cfcb",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "estimator-before.log",
+      "transparency-before.log"
+    ]
+  },
+  {
+    "id": "H06",
+    "source": "backend/models.py",
+    "callable": "StrainResponse",
+    "line": 58,
+    "severity": "low",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix rounded strain JSON reaching 21: floor raw values only in JSON and invalidate page-v13; backend/test_strain_serialization.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_cardio_strain.py",
+      "backend/test_strain_serialization.py"
+    ],
+    "commit": "b578a51",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "serialization-before.log"
+    ]
+  },
+  {
+    "id": "H07",
+    "source": "backend/sleep_stress_pipeline.py",
+    "callable": "compute_connected_sleep_stress",
+    "line": 12,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix opaque sleep-stress nulls: expose withholding reasons and operator anchor provenance; backend/test_stress_withheld_reasons.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_stress_withheld_reasons.py"
+    ],
+    "commit": "d37a4ad",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "stress-reasons-before.log"
+    ]
+  },
+  {
+    "id": "H08",
+    "source": "backend/sleep_analytics.py",
+    "callable": "build_sleep_analytics",
+    "line": 110,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix caller mutation in sleep analytics: copy observations before derived fields; backend/test_sleep_analytics_inputs.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_sleep_analytics_inputs.py"
+    ],
+    "commit": "341979e",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "input-mutation-before.log"
+    ]
+  },
+  {
+    "id": "H09",
+    "source": "backend/sleep_stage_ranges.py",
+    "callable": "stage_stats",
+    "line": 104,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix session identifier disclosure in stage warnings: log rejection reason only; backend/test_private_stage_logging.py",
+    "tests": [
+      "backend/test_private_stage_logging.py"
+    ],
+    "commit": "b30f21e",
+    "failing_outputs": [
+      "privacy-before.log"
+    ]
+  },
+  {
+    "id": "H10",
+    "source": "backend/main.py",
+    "callable": "data_timings",
+    "line": 120,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix inconsistent profile header validation and timezone ValueError crashes: reject before data access; backend/test_request_header_validation.py",
+    "tests": [
+      "backend/test_request_header_validation.py"
+    ],
+    "commit": "656ed78",
+    "failing_outputs": [
+      "headers-before.log"
+    ]
+  },
+  {
+    "id": "H11",
+    "source": "backend/main.py",
+    "callable": "_client_day",
+    "line": 206,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix server-local fallback day: derive missing client date in request timezone and invalidate snapshots; backend/test_request_day_fallback.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_request_day_fallback.py"
+    ],
+    "commit": "0959afe",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "headers-before.log"
+    ]
+  },
+  {
+    "id": "H12",
+    "source": "backend/google_health_client.py",
+    "callable": "_valid_sleep_summary",
+    "line": 62,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix invalid sleep summaries producing scores or crashes: validate finite nonnegative day-bounded inputs; backend/test_sleep_summary_hardening.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_sleep_summary_hardening.py"
+    ],
+    "commit": "f3696c3",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "sleep-summary-before.log"
+    ]
+  },
+  {
+    "id": "H13",
+    "source": "backend/google_health_client.py",
+    "callable": "_sleep_records",
+    "line": 481,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix DST sessions lost by wall-clock and text ordering: compare physical timestamps and retain offsets; backend/test_sleep_dst_elapsed.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_sleep_dst_elapsed.py"
+    ],
+    "commit": "3d8157f",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "dst-before.log"
+    ]
+  },
+  {
+    "id": "H14",
+    "source": "backend/main.py",
+    "callable": "_cached_data_page",
+    "line": 258,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix explicit demo touching connected token/cache paths: bypass account wrapper for demo; backend/test_explicit_demo_isolation.py",
+    "tests": [
+      "backend/test_explicit_demo_isolation.py"
+    ],
+    "commit": "269d5c2",
+    "failing_outputs": [
+      "demo-isolation-before.log"
+    ]
+  },
+  {
+    "id": "H15",
+    "source": "backend/main.py",
+    "callable": "_get_token",
+    "line": 186,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix expired and invalid sessions silently yielding demos or crashing: reject centrally with 401; backend/test_expired_session_consistency.py",
+    "tests": [
+      "backend/test_expired_session_consistency.py"
+    ],
+    "commit": "462437e",
+    "failing_outputs": [
+      "expired-session-before.log",
+      "invalid-session-before.log"
+    ]
+  },
+  {
+    "id": "H16",
+    "source": "backend/validity.py",
+    "callable": "finite_number",
+    "line": 18,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix comparison-only validation accepting NaN or overflowing integers: enforce finite inputs and stable saturation; backend/test_numeric_missingness_hardening.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_numeric_missingness_hardening.py"
+    ],
+    "commit": "bf33b64",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "numeric-missingness-before.log"
+    ]
+  },
+  {
+    "id": "H17",
+    "source": "backend/provider_payload.py",
+    "callable": "payload_boundary",
+    "line": 10,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix malformed provider parsing causing 500s: expose privacy-safe 502 payload errors; backend/test_provider_error_boundaries.py",
+    "tests": [
+      "backend/test_provider_error_boundaries.py"
+    ],
+    "commit": "2bd38e3",
+    "failing_outputs": [
+      "provider-boundary-before.log"
+    ]
+  },
+  {
+    "id": "H18",
+    "source": "backend/provider_payload.py",
+    "callable": "payload_boundary",
+    "line": 10,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix raw adapter type errors under malformed payloads: preserve explicit validation errors; backend/test_adapter_fuzz.py",
+    "tests": [
+      "backend/test_adapter_fuzz.py"
+    ],
+    "commit": "626641d",
+    "failing_outputs": [
+      "adapter-fuzz-before.log",
+      "median-boolean-before.log",
+      "range-overflow-before.log"
+    ]
+  },
+  {
+    "id": "H19",
+    "source": "backend/sleep_stress.py",
+    "callable": "prepare_night",
+    "line": 219,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix invalid stress stage partitions: withhold before baseline entry; backend/test_stress_partition_hardening.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_stress_partition_hardening.py"
+    ],
+    "commit": "70ede57",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "stress-partition-before.log"
+    ]
+  },
+  {
+    "id": "H20",
+    "source": "backend/google_health_client.py",
+    "callable": "get_daily_hrv",
+    "line": 265,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix malformed daily provider adapters: validate scalar values and physical clocks; backend/test_daily_adapter_fuzz.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_daily_adapter_fuzz.py"
+    ],
+    "commit": "b873319",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "daily-public-fuzz-before.log"
+    ]
+  },
+  {
+    "id": "H21",
+    "source": "strain.py",
+    "callable": "strain_score",
+    "line": 102,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix scalar type errors in public calculators: validate finite numbers before arithmetic; backend/test_public_calculator_fuzz.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_public_calculator_fuzz.py"
+    ],
+    "commit": "eb7f98e",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "daily-public-fuzz-before.log"
+    ]
+  },
+  {
+    "id": "H22",
+    "source": "backend/sleep_stress_store.py",
+    "callable": "_key",
+    "line": 26,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix cross-account stress record collisions: namespace stored keys by account; backend/test_stress_account_isolation.py",
+    "tests": [
+      "backend/test_stress_account_isolation.py"
+    ],
+    "commit": "925213f",
+    "failing_outputs": [
+      "stress-account-before.log"
+    ]
+  },
+  {
+    "id": "H23",
+    "source": "backend/sleep_heart_rate.py",
+    "callable": "build_sleep_heart_rate",
+    "line": 40,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix malformed sleep HR chart parser crashes: explicit provider boundary; backend/test_sleep_chart_fuzz.py",
+    "tests": [
+      "backend/test_sleep_chart_fuzz.py"
+    ],
+    "commit": "7225925",
+    "failing_outputs": [
+      "extended-hardening-before.log"
+    ]
+  },
+  {
+    "id": "H24",
+    "source": "backend/sleep_stage_ranges.py",
+    "callable": "stage_stats",
+    "line": 104,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix overlong stage nights: reject partitions beyond one day; backend/test_stage_day_limit.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_stage_day_limit.py"
+    ],
+    "commit": "af85696",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "extended-hardening-before.log"
+    ]
+  },
+  {
+    "id": "H25",
+    "source": "sleepscore.py",
+    "callable": "compute_duration_score",
+    "line": 206,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix overflow in custom sleep duration sigmoid: stable log-space fallback; backend/test_sigmoid_overflow.py",
+    "tests": [
+      "backend/test_sigmoid_overflow.py"
+    ],
+    "commit": "45f57d0",
+    "failing_outputs": [
+      "extended-hardening-before.log"
+    ]
+  },
+  {
+    "id": "H26",
+    "source": "backend/recovery_analytics.py",
+    "callable": "typical_ranges",
+    "line": 17,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix infinite personal Recovery ranges: withhold and expose overflow reasons; backend/test_range_overflow.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_range_overflow.py"
+    ],
+    "commit": "97833bd",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "range-overflow-before.log"
+    ]
+  },
+  {
+    "id": "H27",
+    "source": "sleepscore.py",
+    "callable": "compute_baseline",
+    "line": 67,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix unvalidated sleep helper scalars: finite means, counts and latency gates; backend/test_public_helper_fuzz.py",
+    "tests": [
+      "backend/test_public_helper_fuzz.py"
+    ],
+    "commit": "489fd3d",
+    "failing_outputs": [
+      "public-helper-before.log"
+    ]
+  },
+  {
+    "id": "H28",
+    "source": "backend/validity.py",
+    "callable": "finite_median",
+    "line": 6,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix overflowing even medians on finite vitals: stable midpoint fallback; backend/test_unbounded_median.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_unbounded_median.py"
+    ],
+    "commit": "9909e5f",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "median-boolean-before.log"
+    ]
+  },
+  {
+    "id": "H29",
+    "source": "backend/google_health_client.py",
+    "callable": "get_health_history",
+    "line": 322,
+    "severity": "medium",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix boolean vitals coerced to valid numbers: preserve rejected-reading diagnostics; backend/test_provider_boolean.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_provider_boolean.py"
+    ],
+    "commit": "b5d96aa",
+    "failing_outputs": [
+      "cache-validity-before.log",
+      "median-boolean-before.log"
+    ]
+  },
+  {
+    "id": "H30",
+    "source": "backend/auth.py",
+    "callable": "get_valid_access_token",
+    "line": 138,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix malformed auth tokens and OAuth responses: fail closed with validated payloads; backend/test_auth_payload_fuzz.py",
+    "tests": [
+      "backend/test_auth_payload_fuzz.py"
+    ],
+    "commit": "0f410b5",
+    "failing_outputs": [
+      "auth-callback-before.log",
+      "auth-payload-after.log",
+      "auth-payload-before.log"
+    ]
+  },
+  {
+    "id": "H31",
+    "source": "backend/google_health_client.py",
+    "callable": "_fetch_points",
+    "line": 205,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix unchecked provider pages: validate parser types and pagination progress; backend/test_provider_transport_fuzz.py",
+    "tests": [
+      "backend/test_provider_transport_fuzz.py"
+    ],
+    "commit": "2125b38",
+    "failing_outputs": [
+      "repeated-pagination-before.log",
+      "transport-fuzz-before.log"
+    ]
+  },
+  {
+    "id": "H32",
+    "source": "backend/main.py",
+    "callable": "unrepresentable_range",
+    "line": 155,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix date arithmetic overflow at API boundaries: clear client range errors; backend/test_extreme_request_dates.py",
+    "tests": [
+      "backend/test_extreme_request_dates.py"
+    ],
+    "commit": "08e988a",
+    "failing_outputs": [
+      "extreme-date-before.log"
+    ]
+  },
+  {
+    "id": "H33",
+    "source": "backend/sleep_trends.py",
+    "callable": "build_sleep_trend",
+    "line": 38,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix arithmetic on missing sleep durations: withhold trend values; backend/test_sleep_trend_missing_duration.py",
+    "tests": [
+      "backend/test_adapter_fuzz.py",
+      "backend/test_audit_cache_versions.py",
+      "backend/test_sleep_trend_missing_duration.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "commit": "2f05440",
+    "failing_outputs": [
+      "adapter-fuzz-before.log",
+      "before-missing-trend.log",
+      "cache-validity-before.log",
+      "median-boolean-before.log",
+      "range-overflow-before.log",
+      "structured-fuzz-after.log",
+      "structured-fuzz.log"
+    ]
+  },
+  {
+    "id": "H34",
+    "source": "backend/google_health_client.py",
+    "callable": "_fetch_daily_steps",
+    "line": 434,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix silently coerced step counts and stale rollups: reject invalid counts; backend/test_provider_step_counts.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_provider_step_counts.py"
+    ],
+    "commit": "206f2dd",
+    "failing_outputs": [
+      "before-step-cache.log",
+      "before-step-counts-unrestricted.log",
+      "before-stored-step-count.log",
+      "cache-validity-before.log"
+    ]
+  },
+  {
+    "id": "H35",
+    "source": "backend/sleep_stage_webhooks.py",
+    "callable": "enqueue_sleep_notifications",
+    "line": 53,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix webhook interval parser crashes: explicit invalid-payload rejection; backend/test_webhook_payload_fuzz.py",
+    "tests": [
+      "backend/test_webhook_payload_fuzz.py"
+    ],
+    "commit": "b1e11d0",
+    "failing_outputs": [
+      "before-webhook-payload.log"
+    ]
+  },
+  {
+    "id": "H36",
+    "source": "backend/strain_analytics.py",
+    "callable": "build_strain_analytics",
+    "line": 59,
+    "severity": "low",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix historical strain rows bypassing JSON flooring: preserve aggregate inputs; backend/test_strain_history_serialization.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_history_serialization.py"
+    ],
+    "commit": "4688814",
+    "failing_outputs": [
+      "after-history-display.log",
+      "before-history-display.log",
+      "cache-validity-before.log"
+    ]
+  },
+  {
+    "id": "H37",
+    "source": "backend/sleep_stress.py",
+    "callable": "adapt_google_hrv",
+    "line": 149,
+    "severity": "high",
+    "reproduced": true,
+    "status": "fixed",
+    "root_cause_and_fix": "Fix boolean samples becoming numeric HRV and chart readings: reject before coercion; backend/test_sample_boolean_coercion.py",
+    "tests": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_sample_boolean_coercion.py"
+    ],
+    "commit": "2f43686",
+    "failing_outputs": [
+      "before-sample-booleans.log",
+      "cache-validity-before.log"
+    ]
+  }
+]

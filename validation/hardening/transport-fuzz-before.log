@@ -1,0 +1,122 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+__ test_provider_response_and_pipeline_types_are_validated[points_response] ___
+backend\test_provider_transport_fuzz.py:18: in test_provider_response_and_pipeline_types_are_validated
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_provider_transport_fuzz.py:40: in test_provider_response_and_pipeline_types_are_validated
+    result = asyncio.run(run())
+             ^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_provider_transport_fuzz.py:29: in run
+    return await client._fetch_points('sleep', '')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:224: in _fetch_points
+    points.extend(payload.get("dataPoints", []))
+                  ^^^^^^^^^^^
+E   AttributeError: 'list' object has no attribute 'get'
+E   Failing test case: test_provider_response_and_pipeline_types_are_validated(
+E       adapter='points_response',
+E       value=[],
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_provider_transport_fuzz.py:41
+___ test_provider_response_and_pipeline_types_are_validated[steps_response] ___
+backend\test_provider_transport_fuzz.py:18: in test_provider_response_and_pipeline_types_are_validated
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_provider_transport_fuzz.py:40: in test_provider_response_and_pipeline_types_are_validated
+    result = asyncio.run(run())
+             ^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_provider_transport_fuzz.py:31: in run
+    return await client._fetch_daily_steps(date(2026, 10, 7), date(2026, 10, 7))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:445: in _fetch_daily_steps
+    for point in payload.get("rollupDataPoints", []):
+                 ^^^^^^^^^^^
+E   AttributeError: 'list' object has no attribute 'get'
+E   Failing test case: test_provider_response_and_pipeline_types_are_validated(
+E       adapter='steps_response',
+E       value=[],
+E   )
+___ test_provider_response_and_pipeline_types_are_validated[stage_pipeline] ___
+backend\test_provider_transport_fuzz.py:18: in test_provider_response_and_pipeline_types_are_validated
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_provider_transport_fuzz.py:40: in test_provider_response_and_pipeline_types_are_validated
+    result = asyncio.run(run())
+             ^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_provider_transport_fuzz.py:35: in run
+    return await sync_stage_ranges(client, 'synthetic', store, date(2026, 10, 7), date(2026, 10, 7))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_stage_pipeline.py:15: in sync_stage_ranges
+    platform = point.get("dataSource", {}).get("platform")
+               ^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+E   Failing test case: test_provider_response_and_pipeline_types_are_validated(
+E       adapter='stage_pipeline',
+E       value=None,
+E   )
+___ test_provider_response_and_pipeline_types_are_validated[sleep_summary] ____
+backend\test_provider_transport_fuzz.py:18: in test_provider_response_and_pipeline_types_are_validated
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_provider_transport_fuzz.py:40: in test_provider_response_and_pipeline_types_are_validated
+    result = asyncio.run(run())
+             ^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_provider_transport_fuzz.py:38: in run
+    return sleep_observations([point], date(2026, 10, 7))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_analytics.py:50: in sleep_observations
+    if "minutesToFallAsleep" in summary else sleeping_segments[0].start_utc.astimezone(datetime.fromisoformat(start_local).tzinfo)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: argument of type 'NoneType' is not iterable
+E   Failing test case: test_provider_response_and_pipeline_types_are_validated(
+E       adapter='sleep_summary',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_provider_transport_fuzz.py:41
+=========================== short test summary info ===========================
+FAILED backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[points_response]
+FAILED backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[steps_response]
+FAILED backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[stage_pipeline]
+FAILED backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[sleep_summary]
+4 failed in 3.48s

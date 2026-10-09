@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.106" timestamp="2026-10-09T15:49:52.219404+02:00" hostname="Zangetsu"><testcase classname="backend.test_private_stage_logging" name="test_invalid_partition_logs_reason_without_raw_identifier" time="0.002"><failure message="AssertionError: assert 'private-dev...n-identifier' not in 'WARNING  ro...identifier\n'&#10;  &#10;  'private-device-session-identifier' is contained here:&#10;    ition for private-device-session-identifier">backend\test_private_stage_logging.py:15: in test_invalid_partition_logs_reason_without_raw_identifier
+    assert point['name'] not in caplog.text
+E   AssertionError: assert 'private-dev...n-identifier' not in 'WARNING  ro...identifier\n'
+E     
+E     'private-device-session-identifier' is contained here:
+E       ition for private-device-session-identifier</failure></testcase></testsuite></testsuites>

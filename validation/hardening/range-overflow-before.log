@@ -1,0 +1,26 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+__ test_extreme_finite_references_never_produce_infinite_ranges[hrv-values0] __
+backend\test_extended_hardening.py:26: in test_extreme_finite_references_never_produce_infinite_ranges
+    finite_tree(typical_ranges(history, DAY))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\recovery_analytics.py:36: in typical_ranges
+    low, high = math.exp(low), math.exp(high)
+                               ^^^^^^^^^^^^^^
+E   OverflowError: math range error
+_ test_extreme_finite_references_never_produce_infinite_ranges[respiratory_rate-values1] _
+backend\test_extended_hardening.py:26: in test_extreme_finite_references_never_produce_infinite_ranges
+    finite_tree(typical_ranges(history, DAY))
+backend\test_adapter_fuzz.py:31: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:31: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:28: in finite_tree
+    assert math.isfinite(value)
+E   assert False
+E    +  where False = <built-in function isfinite>(inf)
+E    +    where <built-in function isfinite> = math.isfinite
+=========================== short test summary info ===========================
+FAILED backend/test_extended_hardening.py::test_extreme_finite_references_never_produce_infinite_ranges[hrv-values0]
+FAILED backend/test_extended_hardening.py::test_extreme_finite_references_never_produce_infinite_ranges[respiratory_rate-values1]
+2 failed, 4 deselected in 0.91s

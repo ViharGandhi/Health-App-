@@ -10,6 +10,7 @@ import json
 
 from google_health_client import _local_datetime
 from models import StrainResponse
+from provider_payload import payload_boundary
 from strain import StrainConfig, calculate_strain, day_window, strain_analytics
 
 
@@ -77,6 +78,7 @@ async def load_strain_days(client, start, end, now, age, config=StrainConfig()):
         return {day: values[day] for day in days}, list(sessions.values())
 
 
+@payload_boundary
 def sleep_windows(points: list[dict]) -> list[dict]:
     sleeps = {}
     for point in points:
@@ -142,7 +144,7 @@ def strain_response(current, history, mode, age, recovery=None, config=StrainCon
     def rounded(value, places=1):
         return round(value, places) if value is not None else None
     score = current['strain']
-    return StrainResponse(
+    response = StrainResponse(
         date=current['date'].isoformat(), mode=mode, day_window=current['day_window'],
         strain=rounded(score), label=current['label'], load=rounded(current['load']),
         coverage=current['coverage'], low_coverage=current['low_coverage'], calibrating=current['calibrating'],
@@ -157,6 +159,10 @@ def strain_response(current, history, mode, age, recovery=None, config=StrainCon
         age_is_default=current['age_missing'], is_calibrating=current['calibrating'], is_mock=mode == 'demo',
         sample_count=current['sample_count'], counted_minutes=current['counted_minutes'],
     )
+    response._raw_strain = score
+    for workout, raw in zip(response.workouts, current['workouts']):
+        workout._raw_strain = raw['strain']
+    return response
 
 
 def demo_inputs(start: date, end: date, tz):

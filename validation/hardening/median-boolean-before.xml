@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="1.287" timestamp="2026-10-09T19:46:15.307577+02:00" hostname="Zangetsu"><testcase classname="backend.test_unbounded_median" name="test_large_finite_even_medians_do_not_overflow[robust_reference]" time="0.001"><failure message="assert False&#10; +  where False = &lt;built-in function isfinite&gt;(inf)&#10; +    where &lt;built-in function isfinite&gt; = math.isfinite">backend\test_unbounded_median.py:20: in test_large_finite_even_medians_do_not_overflow
+    finite_tree(result)
+backend\test_adapter_fuzz.py:34: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:28: in finite_tree
+    assert math.isfinite(value)
+E   assert False
+E    +  where False = &lt;built-in function isfinite&gt;(inf)
+E    +    where &lt;built-in function isfinite&gt; = math.isfinite</failure></testcase><testcase classname="backend.test_unbounded_median" name="test_large_finite_even_medians_do_not_overflow[health]" time="0.001"><failure message="assert False&#10; +  where False = &lt;built-in function isfinite&gt;(inf)&#10; +    where &lt;built-in function isfinite&gt; = math.isfinite">backend\test_unbounded_median.py:20: in test_large_finite_even_medians_do_not_overflow
+    finite_tree(result)
+backend\test_adapter_fuzz.py:31: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:31: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:34: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:31: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:28: in finite_tree
+    assert math.isfinite(value)
+E   assert False
+E    +  where False = &lt;built-in function isfinite&gt;(inf)
+E    +    where &lt;built-in function isfinite&gt; = math.isfinite</failure></testcase><testcase classname="backend.test_unbounded_median" name="test_large_finite_even_medians_do_not_overflow[descriptive_recovery]" time="0.002"><failure message="assert False&#10; +  where False = &lt;built-in function isfinite&gt;(inf)&#10; +    where &lt;built-in function isfinite&gt; = math.isfinite">backend\test_unbounded_median.py:20: in test_large_finite_even_medians_do_not_overflow
+    finite_tree(result)
+backend\test_adapter_fuzz.py:31: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:28: in finite_tree
+    assert math.isfinite(value)
+E   assert False
+E    +  where False = &lt;built-in function isfinite&gt;(inf)
+E    +    where &lt;built-in function isfinite&gt; = math.isfinite</failure></testcase><testcase classname="backend.test_provider_boolean" name="test_boolean_provider_vitals_are_counted_as_rejected_not_converted_to_one" time="0.003"><failure message="assert 0 == 1">backend\test_provider_boolean.py:19: in test_boolean_provider_vitals_are_counted_as_rejected_not_converted_to_one
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_provider_boolean.py:17: in run
+    assert result.rejected_readings['hrv_today'] == 1
+E   assert 0 == 1</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,9 @@
+........F.................................                               [100%]
+================================== FAILURES ===================================
+_ StrainAnalyticsTests.test_endpoint_reuses_samples_and_keeps_missing_days_and_client_date _
+backend\test_strain_analytics.py:99: in test_endpoint_reuses_samples_and_keeps_missing_days_and_client_date
+    self.assertEqual(result["days"][-1]["score"], self.snapshot(samples, [self.session()]).score_21)
+E   AssertionError: 0.2 != 0.3
+=========================== short test summary info ===========================
+FAILED backend/test_strain_analytics.py::StrainAnalyticsTests::test_endpoint_reuses_samples_and_keeps_missing_days_and_client_date
+1 failed, 41 passed in 37.87s

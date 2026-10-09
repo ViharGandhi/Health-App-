@@ -1,0 +1,24 @@
+..F                                                                      [100%]
+================================== FAILURES ===================================
+______ test_updated_algorithms_use_new_page_snapshot_namespace[page-v8] _______
+backend\test_audit_cache_versions.py:55: in test_updated_algorithms_use_new_page_snapshot_namespace
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_audit_cache_versions.py:54: in run
+    assert result == {'score': 84.7}
+E   AssertionError: assert {'score': 81.5} == {'score': 84.7}
+E     
+E     Differing items:
+E     {'score': 81.5} != {'score': 84.7}
+E     Use -v to get more diff
+=========================== short test summary info ===========================
+FAILED backend/test_audit_cache_versions.py::test_updated_algorithms_use_new_page_snapshot_namespace[page-v8]
+1 failed, 2 passed in 1.58s

@@ -1,0 +1,21 @@
+{
+  "tests": {
+    "runtime_s": 120.03484839999874,
+    "exit_code": 0,
+    "junit_written": true,
+    "tests": 712,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "callable_count": 326,
+  "numeric_literals": 1906,
+  "property_batches": 74,
+  "passing_property_examples": 14900,
+  "simulation_checks": 1295,
+  "unchanged_formula_cases": 1295,
+  "changed_leaves": 122,
+  "profiles": 9,
+  "live_access_exists": false,
+  "live_run_performed": false
+}

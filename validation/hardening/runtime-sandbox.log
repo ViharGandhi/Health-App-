@@ -1,0 +1,7 @@
+exit_code=1; runtime_s=3.255
+socketpair
+Timeout (0:00:03)!
+Thread 0x00004128 (most recent call first):
+  File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\socket.py", line 295 in accept
+  File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\socket.py", line 627 in _fallback_socketpair
+  File "<string>", line 1 in <module>

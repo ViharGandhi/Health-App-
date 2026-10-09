@@ -1,0 +1,89 @@
+FFFFFFFFFFFF                                                             [100%]
+================================== FAILURES ===================================
+___________ test_connected_sleep_reports_defaulted_vital_components ___________
+backend\test_score_transparency.py:26: in test_connected_sleep_reports_defaulted_vital_components
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_score_transparency.py:19: in run
+    assert sleep.partial is True
+           ^^^^^^^^^^^^^
+.venv\Lib\site-packages\pydantic\main.py:856: in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+E   AttributeError: 'SleepResponse' object has no attribute 'partial'
+__________ test_each_score_route_names_its_estimator[/api/recovery] ___________
+backend\test_score_transparency.py:36: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+___ test_each_score_route_names_its_estimator[/api/recovery?demo=estimate] ____
+backend\test_score_transparency.py:36: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+_____ test_each_score_route_names_its_estimator[/api/recovery/analytics] ______
+backend\test_score_transparency.py:36: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+____________ test_each_score_route_names_its_estimator[/api/sleep] ____________
+backend\test_score_transparency.py:36: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+_______ test_each_score_route_names_its_estimator[/api/sleep/analytics] _______
+backend\test_score_transparency.py:36: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+______ test_each_score_route_names_its_estimator[/api/sleep/consistency] ______
+backend\test_score_transparency.py:36: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+___ test_each_score_route_names_its_estimator[/api/sleep/consistency-score] ___
+backend\test_score_transparency.py:35: in test_each_score_route_names_its_estimator
+    assert result.status_code == 200
+E   assert 404 == 200
+E    +  where 404 = <Response [404 Not Found]>.status_code
+______ test_each_score_route_names_its_estimator[/api/sleep/efficiency] _______
+backend\test_score_transparency.py:36: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+_________ test_each_score_route_names_its_estimator[/api/sleep/need] __________
+backend\test_score_transparency.py:36: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+________ test_each_score_route_names_its_estimator[/api/sleep/stress] _________
+backend\test_score_transparency.py:36: in test_each_score_route_names_its_estimator
+    assert result.json()['estimator']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'estimator'
+_____ test_each_score_route_names_its_estimator[/api/sleep/stage-ranges] ______
+backend\test_score_transparency.py:35: in test_each_score_route_names_its_estimator
+    assert result.status_code == 200
+E   assert 404 == 200
+E    +  where 404 = <Response [404 Not Found]>.status_code
+=========================== short test summary info ===========================
+FAILED backend/test_score_transparency.py::test_connected_sleep_reports_defaulted_vital_components
+FAILED backend/test_score_transparency.py::test_each_score_route_names_its_estimator[/api/recovery]
+FAILED backend/test_score_transparency.py::test_each_score_route_names_its_estimator[/api/recovery?demo=estimate]
+FAILED backend/test_score_transparency.py::test_each_score_route_names_its_estimator[/api/recovery/analytics]
+FAILED backend/test_score_transparency.py::test_each_score_route_names_its_estimator[/api/sleep]
+FAILED backend/test_score_transparency.py::test_each_score_route_names_its_estimator[/api/sleep/analytics]
+FAILED backend/test_score_transparency.py::test_each_score_route_names_its_estimator[/api/sleep/consistency]
+FAILED backend/test_score_transparency.py::test_each_score_route_names_its_estimator[/api/sleep/consistency-score]
+FAILED backend/test_score_transparency.py::test_each_score_route_names_its_estimator[/api/sleep/efficiency]
+FAILED backend/test_score_transparency.py::test_each_score_route_names_its_estimator[/api/sleep/need]
+FAILED backend/test_score_transparency.py::test_each_score_route_names_its_estimator[/api/sleep/stress]
+FAILED backend/test_score_transparency.py::test_each_score_route_names_its_estimator[/api/sleep/stage-ranges]
+12 failed in 4.14s

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import math
+from backend.validity import finite_number
 from typing import Optional
 
 
@@ -13,7 +13,7 @@ class SleepEfficiencyCalculator:
         time_in_bed_seconds: float,
     ) -> Optional[float]:
         """Return None when the device did not provide a valid denominator."""
-        if not all(math.isfinite(value) for value in (time_asleep_seconds, time_in_bed_seconds)):
+        if not all(finite_number(value) for value in (time_asleep_seconds, time_in_bed_seconds)):
             return None
         if not 0 < time_asleep_seconds <= time_in_bed_seconds <= 24 * 3600:
             return None

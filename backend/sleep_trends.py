@@ -13,6 +13,11 @@ from sleep_consistency import (
     SleepConsistencyCalculator, SleepNight, consistency_label, score_main_sleep,
 )
 from sleep_efficiency import SleepEfficiencyCalculator
+from validity import sleep_duration
+
+
+class DateRangeError(ValueError):
+    pass
 
 
 def range_start(end: date, timeframe: str) -> date:
@@ -23,6 +28,8 @@ def range_start(end: date, timeframe: str) -> date:
     months = 6 if timeframe == "6M" else 12
     month_index = end.year * 12 + end.month - 1 - months
     year, month_zero = divmod(month_index, 12)
+    if not 1 <= year <= 9999:
+        raise DateRangeError('Calendar window cannot be represented')
     month = month_zero + 1
     prior = date(year, month, min(end.day, calendar.monthrange(year, month)[1]))
     return prior + timedelta(days=1)
@@ -36,6 +43,7 @@ def build_sleep_trend(
         bedtime, wake = record["bed_time"], record["wake_time"]
         asleep, period = record["time_asleep_minutes"], record["time_in_bed_minutes"]
         return (bedtime < wake and 0 < (wake - bedtime).total_seconds() <= 24 * 3600
+                and sleep_duration(asleep, unit='minutes') and sleep_duration(period, unit='minutes')
                 and SleepEfficiencyCalculator.calculate_single_night(asleep * 60, period * 60) is not None)
 
     by_date = {record["date"]: record for record in records if usable(record)}
@@ -76,6 +84,7 @@ def build_sleep_trend(
     else:
         average = round(sum(values) / len(values), 1) if values else None
     return SleepTrendResponse(
+        estimator='pooled_sleep_efficiency' if metric == 'efficiency' else 'seven_night_clock_variability',
         is_mock=is_mock, timeframe=timeframe,
         range_start=start.isoformat(), range_end=end.isoformat(),
         average_value=average,

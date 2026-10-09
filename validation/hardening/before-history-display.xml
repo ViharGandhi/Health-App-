@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="1.145" timestamp="2026-10-09T20:23:16.179285+02:00" hostname="Zangetsu"><testcase classname="backend.test_strain_history_serialization" name="test_historical_json_uses_floor_without_changing_aggregate_inputs[16.86-16.8]" time="0.002"><failure message="assert 16.9 == 16.8">backend\test_strain_history_serialization.py:24: in test_historical_json_uses_floor_without_changing_aggregate_inputs
+    assert result['days'][0]['score'] == display
+E   assert 16.9 == 16.8</failure></testcase><testcase classname="backend.test_strain_history_serialization" name="test_historical_json_uses_floor_without_changing_aggregate_inputs[20.999999999999996-20.9]" time="0.003"><failure message="assert 21.0 == 20.9">backend\test_strain_history_serialization.py:24: in test_historical_json_uses_floor_without_changing_aggregate_inputs
+    assert result['days'][0]['score'] == display
+E   assert 21.0 == 20.9</failure></testcase></testsuite></testsuites>

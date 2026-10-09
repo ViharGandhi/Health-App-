@@ -1,0 +1,40 @@
+...F..FFF...FF.                                                          [100%]
+================================== FAILURES ===================================
+_____ test_expired_connected_session_never_falls_back_to_demo[/api/sleep] _____
+backend\test_expired_session_consistency.py:17: in test_expired_connected_session_never_falls_back_to_demo
+    assert result.status_code == 401
+E   assert 200 == 401
+E    +  where 200 = <Response [200 OK]>.status_code
+_ test_expired_connected_session_never_falls_back_to_demo[/api/sleep/efficiency] _
+backend\test_expired_session_consistency.py:17: in test_expired_connected_session_never_falls_back_to_demo
+    assert result.status_code == 401
+E   assert 200 == 401
+E    +  where 200 = <Response [200 OK]>.status_code
+_ test_expired_connected_session_never_falls_back_to_demo[/api/sleep/consistency] _
+backend\test_expired_session_consistency.py:17: in test_expired_connected_session_never_falls_back_to_demo
+    assert result.status_code == 401
+E   assert 200 == 401
+E    +  where 200 = <Response [200 OK]>.status_code
+_ test_expired_connected_session_never_falls_back_to_demo[/api/sleep/consistency/score] _
+backend\test_expired_session_consistency.py:17: in test_expired_connected_session_never_falls_back_to_demo
+    assert result.status_code == 401
+E   assert 200 == 401
+E    +  where 200 = <Response [200 OK]>.status_code
+____ test_expired_connected_session_never_falls_back_to_demo[/api/health] _____
+backend\test_expired_session_consistency.py:17: in test_expired_connected_session_never_falls_back_to_demo
+    assert result.status_code == 401
+E   assert 200 == 401
+E    +  where 200 = <Response [200 OK]>.status_code
+_ test_expired_connected_session_never_falls_back_to_demo[/api/health/heart-rate] _
+backend\test_expired_session_consistency.py:17: in test_expired_connected_session_never_falls_back_to_demo
+    assert result.status_code == 401
+E   assert 200 == 401
+E    +  where 200 = <Response [200 OK]>.status_code
+=========================== short test summary info ===========================
+FAILED backend/test_expired_session_consistency.py::test_expired_connected_session_never_falls_back_to_demo[/api/sleep]
+FAILED backend/test_expired_session_consistency.py::test_expired_connected_session_never_falls_back_to_demo[/api/sleep/efficiency]
+FAILED backend/test_expired_session_consistency.py::test_expired_connected_session_never_falls_back_to_demo[/api/sleep/consistency]
+FAILED backend/test_expired_session_consistency.py::test_expired_connected_session_never_falls_back_to_demo[/api/sleep/consistency/score]
+FAILED backend/test_expired_session_consistency.py::test_expired_connected_session_never_falls_back_to_demo[/api/health]
+FAILED backend/test_expired_session_consistency.py::test_expired_connected_session_never_falls_back_to_demo[/api/health/heart-rate]
+6 failed, 9 passed in 1.81s

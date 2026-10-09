@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 import math
+from validity import finite_number
 from typing import Sequence
 
 
@@ -34,7 +35,7 @@ class SleepNeedResult:
 
 
 def strain_sleep_add(strain_21: float) -> float:
-    if not math.isfinite(strain_21):
+    if not finite_number(strain_21):
         raise ValueError("Strain must be finite")
     strain = max(0.0, min(21.0, strain_21))
     def logistic(value):
@@ -63,6 +64,8 @@ def calculate_sleep_need(
     strain_pct: float, history: Sequence[SleepNeedNight | None] = (),
     nap_min_today: float = 0.0, baseline_need_min: float | None = None,
 ) -> SleepNeedResult:
+    if not finite_number(strain_pct):
+        raise ValueError('Strain must be a finite number')
     baseline = BASELINE_NEED_MIN if baseline_need_min is None else float(baseline_need_min)
     if not math.isfinite(nap_min_today) or nap_min_today < 0:
         raise ValueError("Nap minutes must be nonnegative and finite")

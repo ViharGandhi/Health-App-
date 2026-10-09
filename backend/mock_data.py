@@ -177,6 +177,8 @@ def compute_mock_sleep(today: date | None = None, age: int = USER_AGE,
     ])
 
     return SleepResponse(
+        components_available={name: True for name in ('duration', 'stages', 'efficiency', 'sleeping_hrv', 'sleeping_hr', 'hr_dip', 'restfulness')},
+        component_coverage=1.,
         score=round(score, 1),
         sleep_need_hours=sleep_need,
         sleep_need=asdict(need),

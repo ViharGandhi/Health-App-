@@ -6,11 +6,13 @@ from dataclasses import asdict, dataclass
 from datetime import date, datetime, timedelta, timezone
 from statistics import median
 import logging
+from validity import finite_number
+from provider_payload import payload_boundary
 
 
 STAGES = ("awake", "light", "deep", "rem")
 METRICS = STAGES + ("restorative",)
-ALGO_VERSION = "sleep-stage-ranges-1"
+ALGO_VERSION = "sleep-stage-ranges-3"
 
 
 @dataclass(frozen=True)
@@ -27,7 +29,8 @@ class StageRangeConfig:
             raise ValueError("Require 1 <= min_nights <= window_nights")
         if self.denominator not in ("time_in_bed", "time_asleep"):
             raise ValueError("Unknown denominator")
-        if self.spread_scale <= 0 or self.spread_floor_pct <= 0 or self.min_sleep_hours <= 0:
+        if any(not finite_number(value) or value <= 0
+               for value in (self.spread_scale, self.spread_floor_pct, self.min_sleep_hours)):
             raise ValueError("Spread and sleep limits must be positive")
 
 
@@ -74,6 +77,7 @@ def instant(value: str) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
+@payload_boundary
 def adapt_google_sleep(point: dict) -> SleepNight:
     """Documented v4 DataPoint, not yet checked against a live Fitbit Air response.
 
@@ -106,17 +110,19 @@ def stage_stats(night: SleepNight, config: StageRangeConfig = DEFAULT_CONFIG) ->
         return None, "stages_pending" if not night.processed or night.stages_status in ("", "STAGES_STATE_UNSPECIFIED") else "stages_unavailable"
     if night.nap:
         return None, "nap_excluded"
+    if not 0 < (night.end_utc - night.start_utc).total_seconds() <= 86400:
+        return None, 'invalid_stage_partition'
     minutes = {s: 0.0 for s in STAGES}
     cursor = night.start_utc
     for segment in sorted(night.segments, key=lambda s: s.start_utc):
         if (segment.stage not in STAGES or segment.start_utc != cursor
                 or segment.end_utc <= segment.start_utc or segment.end_utc > night.end_utc):
-            logging.warning("Skipping invalid stage partition for %s", night.sleep_id)
+            logging.warning("Skipping invalid stage partition")
             return None, "invalid_stage_partition"
         minutes[segment.stage] += (segment.end_utc - segment.start_utc).total_seconds() / 60
         cursor = segment.end_utc
     if cursor != night.end_utc or not night.segments:
-        logging.warning("Skipping incomplete stage partition for %s", night.sleep_id)
+        logging.warning("Skipping incomplete stage partition")
         return None, "invalid_stage_partition"
     asleep = sum(minutes[s] for s in ("light", "deep", "rem"))
     if asleep < config.min_sleep_hours * 60:
@@ -126,7 +132,7 @@ def stage_stats(night: SleepNight, config: StageRangeConfig = DEFAULT_CONFIG) ->
     pct = {s: (None if s == "awake" and config.denominator == "time_asleep"
                else 100 * minutes[s] / total) for s in METRICS}
     if config.denominator == "time_in_bed" and abs(sum(pct[s] for s in STAGES) - 100) > 0.5:
-        logging.warning("Skipping invalid stage percentages for %s", night.sleep_id)
+        logging.warning("Skipping invalid stage percentages")
         return None, "invalid_stage_percentages"
     return NightStageStats(night.sleep_id, night.night_date, night.start_utc, night.end_utc,
                            total, minutes, pct, config.denominator), "ok"
@@ -191,6 +197,7 @@ def stats_to_dict(stats: NightStageStats) -> dict:
     return result
 
 
+@payload_boundary
 def stats_from_dict(value: dict) -> NightStageStats:
     return NightStageStats(**{**value, "night_date": date.fromisoformat(value["night_date"]),
                              "start_utc": instant(value["start_utc"]), "end_utc": instant(value["end_utc"])})

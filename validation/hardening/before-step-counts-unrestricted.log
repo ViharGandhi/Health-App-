@@ -1,0 +1,16 @@
+F....                                                                    [100%]
+================================== FAILURES ===================================
+__________ test_invalid_step_count_is_rejected_instead_of_truncated ___________
+backend\test_provider_step_counts.py:13: in test_invalid_step_count_is_rejected_instead_of_truncated
+    @given(st.one_of(st.booleans(), st.integers(max_value=-1),
+                   ^^^
+backend\test_provider_step_counts.py:22: in test_invalid_step_count_is_rejected_instead_of_truncated
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+E   Failing test case: test_invalid_step_count_is_rejected_instead_of_truncated(
+E       value=False,  # or any other generated value
+E   )
+=========================== short test summary info ===========================
+FAILED backend/test_provider_step_counts.py::test_invalid_step_count_is_rejected_instead_of_truncated
+1 failed, 4 passed in 1.00s

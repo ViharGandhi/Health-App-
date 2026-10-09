@@ -1,0 +1,52 @@
+FFFFFF                                                                   [100%]
+================================== FAILURES ===================================
+____ test_invalid_stage_partition_never_enters_stress_baseline[duplicate] _____
+backend\test_stress_partition_hardening.py:32: in test_invalid_stage_partition_never_enters_stress_baseline
+    assert prepared.windows == ()
+E   AssertionError: assert (ValidWindow(...minutes=5.0),) == ()
+E     
+E     Left contains one more item: ValidWindow(start_utc=datetime.datetime(2026, 10, 7, 0, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 7, 0, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=3.6888794541139363, hr=60.0, minutes=5.0)
+E     Use -v to get more diff
+_____ test_invalid_stage_partition_never_enters_stress_baseline[overlap] ______
+backend\test_stress_partition_hardening.py:32: in test_invalid_stage_partition_never_enters_stress_baseline
+    assert prepared.windows == ()
+E   AssertionError: assert (ValidWindow(...minutes=5.0),) == ()
+E     
+E     Left contains one more item: ValidWindow(start_utc=datetime.datetime(2026, 10, 7, 0, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 7, 0, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=3.6888794541139363, hr=60.0, minutes=5.0)
+E     Use -v to get more diff
+_____ test_invalid_stage_partition_never_enters_stress_baseline[outside] ______
+backend\test_stress_partition_hardening.py:32: in test_invalid_stage_partition_never_enters_stress_baseline
+    assert prepared.windows == ()
+E   AssertionError: assert (ValidWindow(...minutes=5.0),) == ()
+E     
+E     Left contains one more item: ValidWindow(start_utc=datetime.datetime(2026, 10, 7, 0, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 7, 0, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=3.6888794541139363, hr=60.0, minutes=5.0)
+E     Use -v to get more diff
+_____ test_invalid_stage_partition_never_enters_stress_baseline[negative] _____
+backend\test_stress_partition_hardening.py:36: in test_invalid_stage_partition_never_enters_stress_baseline
+    assert result['withheld_reason'] == 'invalid_stage_partition'
+E   AssertionError: assert 'insufficient_baseline' == 'invalid_stage_partition'
+E     
+E     - invalid_stage_partition
+E     + insufficient_baseline
+_____ test_invalid_stage_partition_never_enters_stress_baseline[unknown] ______
+backend\test_stress_partition_hardening.py:36: in test_invalid_stage_partition_never_enters_stress_baseline
+    assert result['withheld_reason'] == 'invalid_stage_partition'
+E   AssertionError: assert 'insufficient_baseline' == 'invalid_stage_partition'
+E     
+E     - invalid_stage_partition
+E     + insufficient_baseline
+_____ test_invalid_stage_partition_never_enters_stress_baseline[too_long] _____
+backend\test_stress_partition_hardening.py:32: in test_invalid_stage_partition_never_enters_stress_baseline
+    assert prepared.windows == ()
+E   AssertionError: assert (ValidWindow(...minutes=5.0),) == ()
+E     
+E     Left contains one more item: ValidWindow(start_utc=datetime.datetime(2026, 10, 7, 0, 0, tzinfo=datetime.timezone.utc), end_utc=datetime.datetime(2026, 10, 7, 0, 5, tzinfo=datetime.timezone.utc), stage='LIGHT', ln_hrv=3.6888794541139363, hr=60.0, minutes=5.0)
+E     Use -v to get more diff
+=========================== short test summary info ===========================
+FAILED backend/test_stress_partition_hardening.py::test_invalid_stage_partition_never_enters_stress_baseline[duplicate]
+FAILED backend/test_stress_partition_hardening.py::test_invalid_stage_partition_never_enters_stress_baseline[overlap]
+FAILED backend/test_stress_partition_hardening.py::test_invalid_stage_partition_never_enters_stress_baseline[outside]
+FAILED backend/test_stress_partition_hardening.py::test_invalid_stage_partition_never_enters_stress_baseline[negative]
+FAILED backend/test_stress_partition_hardening.py::test_invalid_stage_partition_never_enters_stress_baseline[unknown]
+FAILED backend/test_stress_partition_hardening.py::test_invalid_stage_partition_never_enters_stress_baseline[too_long]
+6 failed in 0.55s

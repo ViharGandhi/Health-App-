@@ -1,0 +1,40 @@
+FFFFFF                                                                   [100%]
+================================== FAILURES ===================================
+__________ test_each_null_stress_has_a_reason[insufficient_baseline] __________
+backend\test_stress_withheld_reasons.py:30: in test_each_null_stress_has_a_reason
+    assert result['withheld_reason'] == failure
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'withheld_reason'
+____________ test_each_null_stress_has_a_reason[no_valid_windows] _____________
+backend\test_stress_withheld_reasons.py:30: in test_each_null_stress_has_a_reason
+    assert result['withheld_reason'] == failure
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'withheld_reason'
+___________ test_each_null_stress_has_a_reason[pending_processing] ____________
+backend\test_stress_withheld_reasons.py:30: in test_each_null_stress_has_a_reason
+    assert result['withheld_reason'] == failure
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'withheld_reason'
+_______________ test_each_null_stress_has_a_reason[short_sleep] _______________
+backend\test_stress_withheld_reasons.py:30: in test_each_null_stress_has_a_reason
+    assert result['withheld_reason'] == failure
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'withheld_reason'
+_____________ test_missing_anchor_is_named_even_without_baseline ______________
+backend\test_stress_withheld_reasons.py:39: in test_missing_anchor_is_named_even_without_baseline
+    assert results[0]['withheld_reason'] == 'hrv_anchor_unconfigured'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'withheld_reason'
+________________ test_configured_anchor_is_operator_assertion _________________
+backend\test_stress_withheld_reasons.py:48: in test_configured_anchor_is_operator_assertion
+    assert result['anchor_verification'] == 'operator_configured'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'anchor_verification'
+=========================== short test summary info ===========================
+FAILED backend/test_stress_withheld_reasons.py::test_each_null_stress_has_a_reason[insufficient_baseline]
+FAILED backend/test_stress_withheld_reasons.py::test_each_null_stress_has_a_reason[no_valid_windows]
+FAILED backend/test_stress_withheld_reasons.py::test_each_null_stress_has_a_reason[pending_processing]
+FAILED backend/test_stress_withheld_reasons.py::test_each_null_stress_has_a_reason[short_sleep]
+FAILED backend/test_stress_withheld_reasons.py::test_missing_anchor_is_named_even_without_baseline
+FAILED backend/test_stress_withheld_reasons.py::test_configured_anchor_is_operator_assertion
+6 failed in 1.23s

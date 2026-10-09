@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="6" time="0.926" timestamp="2026-10-09T15:44:36.066603+02:00" hostname="Zangetsu"><testcase classname="backend.test_stress_withheld_reasons" name="test_each_null_stress_has_a_reason[insufficient_baseline]" time="0.002"><failure message="KeyError: 'withheld_reason'">backend\test_stress_withheld_reasons.py:30: in test_each_null_stress_has_a_reason
+    assert result['withheld_reason'] == failure
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'withheld_reason'</failure></testcase><testcase classname="backend.test_stress_withheld_reasons" name="test_each_null_stress_has_a_reason[no_valid_windows]" time="0.002"><failure message="KeyError: 'withheld_reason'">backend\test_stress_withheld_reasons.py:30: in test_each_null_stress_has_a_reason
+    assert result['withheld_reason'] == failure
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'withheld_reason'</failure></testcase><testcase classname="backend.test_stress_withheld_reasons" name="test_each_null_stress_has_a_reason[pending_processing]" time="0.002"><failure message="KeyError: 'withheld_reason'">backend\test_stress_withheld_reasons.py:30: in test_each_null_stress_has_a_reason
+    assert result['withheld_reason'] == failure
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'withheld_reason'</failure></testcase><testcase classname="backend.test_stress_withheld_reasons" name="test_each_null_stress_has_a_reason[short_sleep]" time="0.002"><failure message="KeyError: 'withheld_reason'">backend\test_stress_withheld_reasons.py:30: in test_each_null_stress_has_a_reason
+    assert result['withheld_reason'] == failure
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'withheld_reason'</failure></testcase><testcase classname="backend.test_stress_withheld_reasons" name="test_missing_anchor_is_named_even_without_baseline" time="0.056"><failure message="KeyError: 'withheld_reason'">backend\test_stress_withheld_reasons.py:39: in test_missing_anchor_is_named_even_without_baseline
+    assert results[0]['withheld_reason'] == 'hrv_anchor_unconfigured'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'withheld_reason'</failure></testcase><testcase classname="backend.test_stress_withheld_reasons" name="test_configured_anchor_is_operator_assertion" time="0.040"><failure message="KeyError: 'anchor_verification'">backend\test_stress_withheld_reasons.py:48: in test_configured_anchor_is_operator_assertion
+    assert result['anchor_verification'] == 'operator_configured'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'anchor_verification'</failure></testcase></testsuite></testsuites>

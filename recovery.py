@@ -7,6 +7,7 @@ Python port of:
 """
 
 import math
+from backend.validity import positive, resting_hr, finite_number
 from typing import Optional
 
 MIN_DAYS_REQUIRED = 7
@@ -20,8 +21,16 @@ def normalize_ratio(value: float, low: float, high: float) -> float:
     if low == high:
         return 50.0
     if high > low:
+        if value <= low:
+            return 0.
+        if value >= high:
+            return 100.
         return clamp((value - low) / (high - low) * 100.0, 0.0, 100.0)
     else:
+        if value >= low:
+            return 0.
+        if value <= high:
+            return 100.
         return clamp((low - value) / (low - high) * 100.0, 0.0, 100.0)
 
 
@@ -32,7 +41,7 @@ def log_hrv_stats(values: list) -> Optional[tuple]:
     Returns (mean_ln, sd_ln), or None if fewer than MIN_DAYS_REQUIRED samples.
     'values' must be ordered oldest -> newest.
     """
-    positives = [v for v in values if math.isfinite(v) and v > 0]
+    positives = [v for v in values if positive(v)]
     if len(positives) < MIN_DAYS_REQUIRED:
         return None
     lns = [math.log(v) for v in positives]
@@ -49,7 +58,7 @@ def log_hrv_stats(values: list) -> Optional[tuple]:
 
 def hrv_z_score(today: float, values: list) -> Optional[float]:
     """Z-score of today's HRV against personal log-domain baseline. Positive = above norm = better."""
-    if not math.isfinite(today) or today <= 0:
+    if not positive(today):
         return None
     stats = log_hrv_stats(values)
     if stats is None or stats[1] == 0:
@@ -96,6 +105,9 @@ class RecoveryCalculator:
 
     @staticmethod
     def calculate(inp: RecoveryInput) -> dict:
+        required = (inp.sleep_score, inp.yesterday_strain, inp.recovery_adjustment)
+        if not all(finite_number(value) for value in required) or (inp.acr is not None and not finite_number(inp.acr)):
+            raise ValueError('Recovery inputs must be finite numbers')
         hrv_comp    = RecoveryCalculator._hrv_component(inp.today_hrv, inp.hrv_baseline, inp.hrv_history)
         rhr_comp    = RecoveryCalculator._rhr_component(inp.today_rhr, inp.rhr_baseline)
         sleep_comp  = clamp(inp.sleep_score, 0.0, 100.0)
@@ -147,13 +159,13 @@ class RecoveryCalculator:
           Formula: clamp(50 + z * 25, 0, 100)
         Fallback (no/short history): ratio vs scalar baseline clamped [0.5x, 1.5x] -> [0, 100].
         """
-        if today_hrv is None or not math.isfinite(today_hrv) or today_hrv <= 0:
+        if not positive(today_hrv):
             return 50.0
         if history is not None:
             z = hrv_z_score(today_hrv, history)
             if z is not None:
                 return clamp(50.0 + z * 25.0, 0.0, 100.0)
-        if baseline is None or not math.isfinite(baseline) or baseline <= 0:
+        if not positive(baseline):
             return 50.0
         ratio = today_hrv / baseline
         return normalize_ratio(ratio, low=0.5, high=1.5)
@@ -165,8 +177,7 @@ class RecoveryCalculator:
         deviation = baseline - today_rhr  (positive = RHR dropped = good).
         Band: [-10 bpm, +10 bpm] -> [0, 100].
         """
-        if (today_rhr is None or baseline is None or not math.isfinite(today_rhr)
-                or not math.isfinite(baseline) or today_rhr <= 0 or baseline <= 0):
+        if resting_hr(today_rhr) is None or resting_hr(baseline) is None:
             return 50.0
         deviation = baseline - today_rhr
         return normalize_ratio(deviation, low=-10.0, high=10.0)

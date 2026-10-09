@@ -1,0 +1,450 @@
+{
+  "batches": [
+    {
+      "test": "backend/test_auth_payload_fuzz.py::test_session_and_refresh_payloads_fail_closed[session]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 37
+    },
+    {
+      "test": "backend/test_auth_payload_fuzz.py::test_session_and_refresh_payloads_fail_closed[refresh_payload]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 28
+    },
+    {
+      "test": "backend/test_auth_payload_fuzz.py::test_callback_malformed_token_response_fails_closed",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 22
+    },
+    {
+      "test": "backend/test_analytics_properties.py::test_constant_hr_strain_monotonic_and_bounded",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_analytics_properties.py::test_strain_monotonic_in_observed_duration",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_analytics_properties.py::test_strain_mapping_never_returns_twenty_one",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_analytics_properties.py::test_sleep_duration_monotonic_until_oversleep_penalty",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_analytics_properties.py::test_sleep_component_directions_and_total_bounds",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_analytics_properties.py::test_recovery_percent_monotonic_in_hrv_signal",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_analytics_properties.py::test_sleep_need_limits",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_analytics_properties.py::test_stage_partition_and_efficiency_limits",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 9
+    },
+    {
+      "test": "backend/test_analytics_properties.py::test_unique_hr_sample_permutations_do_not_change_strain",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_analytics_properties.py::test_daily_join_permutations_with_unique_dates",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[local_datetime]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 20
+    },
+    {
+      "test": "backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[google_date]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 41
+    },
+    {
+      "test": "backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[summary_gate]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 19
+    },
+    {
+      "test": "backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stage_sleep]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 26
+    },
+    {
+      "test": "backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stress_sleep]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 20
+    },
+    {
+      "test": "backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stress_hr]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 29
+    },
+    {
+      "test": "backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stress_hrv]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 27
+    },
+    {
+      "test": "backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stats_from_dict]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 32
+    },
+    {
+      "test": "backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[main_sleep_selector]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 22
+    },
+    {
+      "test": "backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[strain_sleep_windows]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 26
+    },
+    {
+      "test": "backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[store_point_clock]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 25
+    },
+    {
+      "test": "backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[daily_hrv]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 26
+    },
+    {
+      "test": "backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[deep_hrv]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 22
+    },
+    {
+      "test": "backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[rhr]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 24
+    },
+    {
+      "test": "backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[hrv_history]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 25
+    },
+    {
+      "test": "backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[health_history]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 20
+    },
+    {
+      "test": "backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[intraday_hr]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 26
+    },
+    {
+      "test": "backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[workouts]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 21
+    },
+    {
+      "test": "backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[naps]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 23
+    },
+    {
+      "test": "backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[sleep_records]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 24
+    },
+    {
+      "test": "backend/test_daily_adapter_fuzz.py::test_daily_scalar_outputs_are_finite_and_not_boolean[daily_hrv-dailyHeartRateVariability-averageHeartRateVariabilityMilliseconds]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_daily_adapter_fuzz.py::test_daily_scalar_outputs_are_finite_and_not_boolean[deep_hrv-dailyHeartRateVariability-deepSleepRootMeanSquareOfSuccessiveDifferencesMilliseconds]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_daily_adapter_fuzz.py::test_daily_scalar_outputs_are_finite_and_not_boolean[rhr-dailyRestingHeartRate-beatsPerMinute]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[points_response]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 28
+    },
+    {
+      "test": "backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[steps_response]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 29
+    },
+    {
+      "test": "backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[stage_pipeline]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 22
+    },
+    {
+      "test": "backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[sleep_summary]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 31
+    },
+    {
+      "test": "backend/test_provider_step_counts.py::test_invalid_step_count_is_rejected_instead_of_truncated",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_shared_validity.py::test_rhr_acceptance_agrees_without_age",
+      "passing_examples": 250,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_shared_validity.py::test_hrv_acceptance_agrees_across_layers",
+      "passing_examples": 250,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_sample_boolean_coercion.py::test_sample_adapters_never_coerce_booleans_to_numbers[stress_hr]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_sample_boolean_coercion.py::test_sample_adapters_never_coerce_booleans_to_numbers[stress_hrv]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_sample_boolean_coercion.py::test_sample_adapters_never_coerce_booleans_to_numbers[intraday_hr]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[latency]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[interruption]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[age_target]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[baseline]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_sleep_chart_fuzz.py::test_additional_sleep_adapters_validate_payload[sleep_observations]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 24
+    },
+    {
+      "test": "backend/test_sleep_chart_fuzz.py::test_additional_sleep_adapters_validate_payload[sleep_hr_chart]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 18
+    },
+    {
+      "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[strain_mapping]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_duration]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_score]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_hrv]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_hr]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_hr_dip]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_need_legacy]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_debt_legacy]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[efficiency]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[recovery_legacy]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[recovery_connected]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_need_connected]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_webhook_payload_fuzz.py::test_notification_adapter_rejects_malformed_payload_explicitly",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 33
+    },
+    {
+      "test": "backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[strain]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[composite_legacy]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[sleep_need]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[recovery]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[stage_ranges]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[sleep_stress]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[sleep_trends]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[health_analytics]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    },
+    {
+      "test": "backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[legacy_clock]",
+      "passing_examples": 200,
+      "failing_examples": 0,
+      "generator_retries": 0
+    }
+  ],
+  "passing_examples": 14900,
+  "interpretation": "Passing means valid bounded output or an allowed explicit validation/withholding result. Generator retries are not skipped pytest tests."
+}

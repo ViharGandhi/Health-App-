@@ -1,0 +1,118 @@
+.FFFFFF                                                                  [100%]
+================================== FAILURES ===================================
+_______ test_session_and_refresh_payloads_fail_closed[refresh_payload] ________
+  + Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_auth_payload_fuzz.py", line 11, in test_session_and_refresh_payloads_fail_closed
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_auth_payload_fuzz.py", line 20, in test_session_and_refresh_payloads_fail_closed
+    |     asyncio.run(run())
+    |   File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py", line 195, in run
+    |     return runner.run(main)
+    |            ^^^^^^^^^^^^^^^^
+    |   File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py", line 118, in run
+    |     return self._loop.run_until_complete(task)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    |     return future.result()
+    |            ^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_auth_payload_fuzz.py", line 18, in run
+    |     result = await get_valid_access_token(session)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\auth.py", line 145, in get_valid_access_token
+    |     session["access_token"] = new_tokens["access_token"]
+    |                               ~~~~~~~~~~^^^^^^^^^^^^^^^^
+    | KeyError: 'access_token'
+    | Failing test case: test_session_and_refresh_payloads_fail_closed(
+    |     kind='refresh_payload',
+    |     value={'sleep': None},
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         E:\Projects\Health-App-\backend\auth.py:145
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_auth_payload_fuzz.py", line 20, in test_session_and_refresh_payloads_fail_closed
+    |     asyncio.run(run())
+    |   File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py", line 195, in run
+    |     return runner.run(main)
+    |            ^^^^^^^^^^^^^^^^
+    |   File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py", line 118, in run
+    |     return self._loop.run_until_complete(task)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    |     return future.result()
+    |            ^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_auth_payload_fuzz.py", line 18, in run
+    |     result = await get_valid_access_token(session)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\auth.py", line 145, in get_valid_access_token
+    |     session["access_token"] = new_tokens["access_token"]
+    |                               ~~~~~~~~~~^^^^^^^^^^^^^^^^
+    | TypeError: 'int' object is not subscriptable
+    | Failing test case: test_session_and_refresh_payloads_fail_closed(
+    |     kind='refresh_payload',
+    |     value=1,
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         E:\Projects\Health-App-\backend\auth.py:145
+    +------------------------------------
+________________________ test_huge_expiry_fails_closed ________________________
+backend\test_auth_payload_fuzz.py:24: in test_huge_expiry_fails_closed
+    assert asyncio.run(get_valid_access_token({'expires_at': 10**1000, 'access_token': 'synthetic'})) is None
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\auth.py:134: in get_valid_access_token
+    if type(expires_at) not in (int, float) or not math.isfinite(expires_at):
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   OverflowError: int too large to convert to float
+_______________ test_nonstring_access_token_fails_closed[True] ________________
+backend\test_auth_payload_fuzz.py:29: in test_nonstring_access_token_fails_closed
+    assert asyncio.run(get_valid_access_token({'expires_at': time.time() + 3600, 'access_token': value})) is None
+E   AssertionError: assert True is None
+E    +  where True = <function run at 0x0000022DAED38A40>(<coroutine object get_valid_access_token at 0x0000022DB1A7D030>)
+E    +    where <function run at 0x0000022DAED38A40> = asyncio.run
+E    +    and   <coroutine object get_valid_access_token at 0x0000022DB1A7D030> = get_valid_access_token({'expires_at': 1791571746.5293732, 'access_token': True})
+_________________ test_nonstring_access_token_fails_closed[7] _________________
+backend\test_auth_payload_fuzz.py:29: in test_nonstring_access_token_fails_closed
+    assert asyncio.run(get_valid_access_token({'expires_at': time.time() + 3600, 'access_token': value})) is None
+E   AssertionError: assert 7 is None
+E    +  where 7 = <function run at 0x0000022DAED38A40>(<coroutine object get_valid_access_token at 0x0000022DB1A7FF10>)
+E    +    where <function run at 0x0000022DAED38A40> = asyncio.run
+E    +    and   <coroutine object get_valid_access_token at 0x0000022DB1A7FF10> = get_valid_access_token({'expires_at': 1791571746.5399506, 'access_token': 7})
+______________ test_nonstring_access_token_fails_closed[value2] _______________
+backend\test_auth_payload_fuzz.py:29: in test_nonstring_access_token_fails_closed
+    assert asyncio.run(get_valid_access_token({'expires_at': time.time() + 3600, 'access_token': value})) is None
+E   AssertionError: assert ['synthetic'] is None
+E    +  where ['synthetic'] = <function run at 0x0000022DAED38A40>(<coroutine object get_valid_access_token at 0x0000022DB332C040>)
+E    +    where <function run at 0x0000022DAED38A40> = asyncio.run
+E    +    and   <coroutine object get_valid_access_token at 0x0000022DB332C040> = get_valid_access_token({'expires_at': 1791571746.5503702, 'access_token': ['synthetic']})
+______________ test_nonstring_access_token_fails_closed[value3] _______________
+backend\test_auth_payload_fuzz.py:29: in test_nonstring_access_token_fails_closed
+    assert asyncio.run(get_valid_access_token({'expires_at': time.time() + 3600, 'access_token': value})) is None
+E   AssertionError: assert {'unexpected': 'synthetic'} is None
+E    +  where {'unexpected': 'synthetic'} = <function run at 0x0000022DAED38A40>(<coroutine object get_valid_access_token at 0x0000022DB332C4F0>)
+E    +    where <function run at 0x0000022DAED38A40> = asyncio.run
+E    +    and   <coroutine object get_valid_access_token at 0x0000022DB332C4F0> = get_valid_access_token({'expires_at': 1791571746.558372, 'access_token': {'unexpected': 'synthetic'}})
+=========================== short test summary info ===========================
+FAILED backend/test_auth_payload_fuzz.py::test_session_and_refresh_payloads_fail_closed[refresh_payload]
+FAILED backend/test_auth_payload_fuzz.py::test_huge_expiry_fails_closed - Ove...
+FAILED backend/test_auth_payload_fuzz.py::test_nonstring_access_token_fails_closed[True]
+FAILED backend/test_auth_payload_fuzz.py::test_nonstring_access_token_fails_closed[7]
+FAILED backend/test_auth_payload_fuzz.py::test_nonstring_access_token_fails_closed[value2]
+FAILED backend/test_auth_payload_fuzz.py::test_nonstring_access_token_fails_closed[value3]
+6 failed, 1 passed in 8.29s

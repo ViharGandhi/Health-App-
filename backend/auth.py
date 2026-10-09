@@ -27,6 +27,7 @@ import urllib.parse
 from typing import Optional
 
 import httpx
+from validity import finite_number
 from fastapi import APIRouter, Request, Response
 from fastapi.responses import RedirectResponse, JSONResponse
 from itsdangerous import URLSafeTimedSerializer, BadSignature
@@ -76,7 +77,8 @@ def _sign(data: dict) -> str:
 
 def _unsign(token: str) -> Optional[dict]:
     try:
-        return _signer.loads(token, max_age=COOKIE_MAX_AGE)
+        value = _signer.loads(token, max_age=COOKIE_MAX_AGE)
+        return value if isinstance(value, dict) else None
     except Exception:
         return None
 
@@ -118,7 +120,19 @@ async def refresh_access_token(refresh_token: str) -> Optional[dict]:
         })
     if resp.status_code != 200:
         return None
-    return resp.json()
+    try:
+        return resp.json()
+    except ValueError:
+        return None
+
+
+def _valid_tokens(tokens) -> bool:
+    if not isinstance(tokens, dict):
+        return False
+    expires = tokens.get('expires_in', 3600)
+    return (isinstance(tokens.get('access_token'), str) and bool(tokens['access_token'])
+            and finite_number(expires) and expires > 0
+            and isinstance(tokens.get('refresh_token', ''), str))
 
 
 async def get_valid_access_token(session: dict) -> Optional[str]:
@@ -126,17 +140,20 @@ async def get_valid_access_token(session: dict) -> Optional[str]:
     Returns a valid access token from the session, refreshing if needed.
     Updates session in-place with new token data.
     """
-    if not session:
+    if not isinstance(session, dict) or not session:
         return None
     expires_at = session.get("expires_at", 0)
+    if not finite_number(expires_at):
+        return None
     if time.time() < expires_at - 60:  # 60s buffer
-        return session.get("access_token")
+        token = session.get('access_token')
+        return token if isinstance(token, str) and token else None
     # Token expired — refresh
     refresh = session.get("refresh_token")
-    if not refresh:
+    if not isinstance(refresh, str) or not refresh:
         return None
     new_tokens = await refresh_access_token(refresh)
-    if not new_tokens:
+    if not _valid_tokens(new_tokens):
         return None
     session["access_token"] = new_tokens["access_token"]
     session["refresh_token"] = new_tokens.get("refresh_token", refresh)
@@ -207,7 +224,12 @@ async def callback(request: Request, code: str = "", error: str = "", state: str
     if token_resp.status_code != 200:
         return RedirectResponse(f"{FRONTEND_URL}/connect?error=token_exchange_failed")
 
-    tokens = token_resp.json()
+    try:
+        tokens = token_resp.json()
+    except ValueError:
+        return RedirectResponse(f"{FRONTEND_URL}/connect?error=token_exchange_failed")
+    if not _valid_tokens(tokens):
+        return RedirectResponse(f"{FRONTEND_URL}/connect?error=token_exchange_failed")
 
     # OAuth can succeed for a Google account with no Google Health profile.
     async with httpx.AsyncClient() as client:

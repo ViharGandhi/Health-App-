@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="7" time="4.446" timestamp="2026-10-09T20:42:13.243430+02:00" hostname="Zangetsu"><properties><property name="hypothesis-statistics-backend/test_sample_boolean_coercion.py::test_sample_adapters_never_coerce_booleans_to_numbers[stress_hr]" value="YmFja2VuZC90ZXN0X3NhbXBsZV9ib29sZWFuX2NvZXJjaW9uLnB5Ojp0ZXN0X3NhbXBsZV9hZGFwdGVyc19uZXZlcl9jb2VyY2VfYm9vbGVhbnNfdG9fbnVtYmVyc1tzdHJlc3NfaHJdOgoKICAtIGR1cmluZyBnZW5lcmF0ZSBwaGFzZSAoMC4xNiBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA0LTkxIG1zLCBvZiB3aGljaCB+IDAtNSBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxMCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wMSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAzbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDEgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDEgc2hyaW5rcyBvZiB3aGljaCAwIHdlcmUgc3VjY2Vzc2Z1bAoKICAtIGR1cmluZyBleHBsYWluIHBoYXNlICgwLjc1IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDMtNyBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgMTMzIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwoKICAtIFN0b3BwZWQgYmVjYXVzZSBub3RoaW5nIGxlZnQgdG8gZG8=" /><property name="hypothesis-statistics-backend/test_sample_boolean_coercion.py::test_sample_adapters_never_coerce_booleans_to_numbers[stress_hrv]" value="YmFja2VuZC90ZXN0X3NhbXBsZV9ib29sZWFuX2NvZXJjaW9uLnB5Ojp0ZXN0X3NhbXBsZV9hZGFwdGVyc19uZXZlcl9jb2VyY2VfYm9vbGVhbnNfdG9fbnVtYmVyc1tzdHJlc3NfaHJ2XToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMDYgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMy03IG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxMCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wMSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA2bXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDEgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDEgc2hyaW5rcyBvZiB3aGljaCAwIHdlcmUgc3VjY2Vzc2Z1bAoKICAtIGR1cmluZyBleHBsYWluIHBoYXNlICgwLjk1IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDMtNyBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgMTQxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwoKICAtIFN0b3BwZWQgYmVjYXVzZSBub3RoaW5nIGxlZnQgdG8gZG8=" /><property name="hypothesis-statistics-backend/test_sample_boolean_coercion.py::test_sample_adapters_never_coerce_booleans_to_numbers[intraday_hr]" value="YmFja2VuZC90ZXN0X3NhbXBsZV9ib29sZWFuX2NvZXJjaW9uLnB5Ojp0ZXN0X3NhbXBsZV9hZGFwdGVyc19uZXZlcl9jb2VyY2VfYm9vbGVhbnNfdG9fbnVtYmVyc1tpbnRyYWRheV9ocl06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjA5IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDYtMTEgbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDEwIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAxIGRpc3RpbmN0IGVycm9yIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjAxIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDdtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgMSBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gVHJpZWQgMSBzaHJpbmtzIG9mIHdoaWNoIDAgd2VyZSBzdWNjZXNzZnVsCgogIC0gZHVyaW5nIGV4cGxhaW4gcGhhc2UgKDEuNTUgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gNS0yMSBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgMTMzIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwoKICAtIFN0b3BwZWQgYmVjYXVzZSBub3RoaW5nIGxlZnQgdG8gZG8=" /></properties><testcase classname="backend.test_sample_boolean_coercion" name="test_sample_adapters_never_coerce_booleans_to_numbers[stress_hr]" time="0.933"><failure message="Failed: DID NOT RAISE ValueError&#10;Failing test case: test_sample_adapters_never_coerce_booleans_to_numbers(&#10;    # The test always failed when commented parts were varied together.&#10;    adapter='stress_hr',&#10;    value=False,  # or any other generated value&#10;    seconds=0,  # or any other generated value&#10;)">backend\test_sample_boolean_coercion.py:18: in test_sample_adapters_never_coerce_booleans_to_numbers
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_sample_boolean_coercion.py:24: in test_sample_adapters_never_coerce_booleans_to_numbers
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+E   Failing test case: test_sample_adapters_never_coerce_booleans_to_numbers(
+E       # The test always failed when commented parts were varied together.
+E       adapter='stress_hr',
+E       value=False,  # or any other generated value
+E       seconds=0,  # or any other generated value
+E   )</failure></testcase><testcase classname="backend.test_sample_boolean_coercion" name="test_sample_adapters_never_coerce_booleans_to_numbers[stress_hrv]" time="1.025"><failure message="Failed: DID NOT RAISE ValueError&#10;Failing test case: test_sample_adapters_never_coerce_booleans_to_numbers(&#10;    # The test always failed when commented parts were varied together.&#10;    adapter='stress_hrv',&#10;    value=False,  # or any other generated value&#10;    seconds=0,  # or any other generated value&#10;)">backend\test_sample_boolean_coercion.py:18: in test_sample_adapters_never_coerce_booleans_to_numbers
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_sample_boolean_coercion.py:24: in test_sample_adapters_never_coerce_booleans_to_numbers
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+E   Failing test case: test_sample_adapters_never_coerce_booleans_to_numbers(
+E       # The test always failed when commented parts were varied together.
+E       adapter='stress_hrv',
+E       value=False,  # or any other generated value
+E       seconds=0,  # or any other generated value
+E   )</failure></testcase><testcase classname="backend.test_sample_boolean_coercion" name="test_sample_adapters_never_coerce_booleans_to_numbers[intraday_hr]" time="1.671"><failure message="Failed: DID NOT RAISE ValueError&#10;Failing test case: test_sample_adapters_never_coerce_booleans_to_numbers(&#10;    # The test always failed when commented parts were varied together.&#10;    adapter='intraday_hr',&#10;    value=False,  # or any other generated value&#10;    seconds=0,  # or any other generated value&#10;)">backend\test_sample_boolean_coercion.py:18: in test_sample_adapters_never_coerce_booleans_to_numbers
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_sample_boolean_coercion.py:24: in test_sample_adapters_never_coerce_booleans_to_numbers
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+E   Failing test case: test_sample_adapters_never_coerce_booleans_to_numbers(
+E       # The test always failed when commented parts were varied together.
+E       adapter='intraday_hr',
+E       value=False,  # or any other generated value
+E       seconds=0,  # or any other generated value
+E   )</failure></testcase><testcase classname="backend.test_sample_boolean_coercion" name="test_sleep_hr_chart_drops_boolean_readings[True]" time="0.004"><failure message="AssertionError: assert [{'timestamp'...0', 'bpm': 1}] == []&#10;  &#10;  Left contains one more item: {'timestamp': '2026-10-06T21:32:00+00:00', 'local_time': '2026-10-06T23:32:00+02:00', 'bpm': 1}&#10;  Use -v to get more diff">backend\test_sample_boolean_coercion.py:45: in test_sleep_hr_chart_drops_boolean_readings
+    assert result['samples'] == []
+E   AssertionError: assert [{'timestamp'...0', 'bpm': 1}] == []
+E     
+E     Left contains one more item: {'timestamp': '2026-10-06T21:32:00+00:00', 'local_time': '2026-10-06T23:32:00+02:00', 'bpm': 1}
+E     Use -v to get more diff</failure></testcase><testcase classname="backend.test_sample_boolean_coercion" name="test_sleep_hr_chart_drops_boolean_readings[False]" time="0.003" /><testcase classname="backend.test_sample_boolean_coercion" name="test_summary_stage_count_rejects_boolean[True]" time="0.002"><failure message="AssertionError: assert not True&#10; +  where True = _valid_sleep_summary({'minutesAsleep': 470, 'stagesSummary': [{'type': 'DEEP', 'minutes': 90, 'count': True}]})">backend\test_sample_boolean_coercion.py:51: in test_summary_stage_count_rejects_boolean
+    assert not _valid_sleep_summary({'minutesAsleep': 470, 'stagesSummary': [
+E   AssertionError: assert not True
+E    +  where True = _valid_sleep_summary({'minutesAsleep': 470, 'stagesSummary': [{'type': 'DEEP', 'minutes': 90, 'count': True}]})</failure></testcase><testcase classname="backend.test_sample_boolean_coercion" name="test_summary_stage_count_rejects_boolean[False]" time="0.002"><failure message="AssertionError: assert not True&#10; +  where True = _valid_sleep_summary({'minutesAsleep': 470, 'stagesSummary': [{'type': 'DEEP', 'minutes': 90, 'count': False}]})">backend\test_sample_boolean_coercion.py:51: in test_summary_stage_count_rejects_boolean
+    assert not _valid_sleep_summary({'minutesAsleep': 470, 'stagesSummary': [
+E   AssertionError: assert not True
+E    +  where True = _valid_sleep_summary({'minutesAsleep': 470, 'stagesSummary': [{'type': 'DEEP', 'minutes': 90, 'count': False}]})</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,163 @@
+[
+  {
+    "profile": "fit",
+    "legacy": {
+      "score": 52.71,
+      "hrv_component": 50.0,
+      "rhr_component": 50.0,
+      "sleep_component": 69.1,
+      "strain_component": 29.32,
+      "acr_penalty": 0.0,
+      "adjustment": 0.0
+    },
+    "connected": {
+      "percent": 50,
+      "z": -0.01,
+      "status": "ok",
+      "components": {
+        "z_hrv": -0.013163455610598618,
+        "z_rhr": -0.0,
+        "sleep_adj": -0.0
+      }
+    },
+    "interpretation": "Same current vitals; legacy uses scalar fallback on this flat prior series and composite sleep/strain; connected uses robust long reference and duration modifier."
+  },
+  {
+    "profile": "older",
+    "legacy": {
+      "score": 50.83,
+      "hrv_component": 50.0,
+      "rhr_component": 50.0,
+      "sleep_component": 69.1,
+      "strain_component": 10.6,
+      "acr_penalty": 0.0,
+      "adjustment": 0.0
+    },
+    "connected": {
+      "percent": 50,
+      "z": -0.01,
+      "status": "ok",
+      "components": {
+        "z_hrv": -0.013163455610616381,
+        "z_rhr": -0.0,
+        "sleep_adj": -0.0
+      }
+    },
+    "interpretation": "Same current vitals; legacy uses scalar fallback on this flat prior series and composite sleep/strain; connected uses robust long reference and duration modifier."
+  },
+  {
+    "profile": "sedentary",
+    "legacy": {
+      "score": 53.23,
+      "hrv_component": 50.0,
+      "rhr_component": 50.0,
+      "sleep_component": 69.1,
+      "strain_component": 34.5,
+      "acr_penalty": 0.0,
+      "adjustment": 0.0
+    },
+    "connected": {
+      "percent": 50,
+      "z": -0.01,
+      "status": "ok",
+      "components": {
+        "z_hrv": -0.0131634556106075,
+        "z_rhr": -0.0,
+        "sleep_adj": -0.0
+      }
+    },
+    "interpretation": "Same current vitals; legacy uses scalar fallback on this flat prior series and composite sleep/strain; connected uses robust long reference and duration modifier."
+  },
+  {
+    "profile": "sleep_deprived",
+    "legacy": {
+      "score": 43.22,
+      "hrv_component": 50.0,
+      "rhr_component": 50.0,
+      "sleep_component": 30.5,
+      "strain_component": 30.96,
+      "acr_penalty": 0.0,
+      "adjustment": 0.0
+    },
+    "connected": {
+      "percent": 31,
+      "z": -0.51,
+      "status": "ok",
+      "components": {
+        "z_hrv": -0.013163455610616381,
+        "z_rhr": -0.0,
+        "sleep_adj": -0.5
+      }
+    },
+    "interpretation": "Same current vitals; legacy uses scalar fallback on this flat prior series and composite sleep/strain; connected uses robust long reference and duration modifier."
+  },
+  {
+    "profile": "illness",
+    "legacy": {
+      "score": 38.62,
+      "hrv_component": 30.0,
+      "rhr_component": 25.0,
+      "sleep_component": 69.1,
+      "strain_component": 30.96,
+      "acr_penalty": 0.0,
+      "adjustment": 0.0
+    },
+    "connected": {
+      "percent": 0,
+      "z": -3.0,
+      "status": "ok",
+      "components": {
+        "z_hrv": -4.476034481894802,
+        "z_rhr": -3.3724537973829762,
+        "sleep_adj": -0.0
+      }
+    },
+    "interpretation": "Same current vitals; legacy uses scalar fallback on this flat prior series and composite sleep/strain; connected uses robust long reference and duration modifier."
+  },
+  {
+    "profile": "new_user",
+    "legacy": {
+      "score": 52.87,
+      "hrv_component": 50.0,
+      "rhr_component": 50.0,
+      "sleep_component": 69.1,
+      "strain_component": 30.96,
+      "acr_penalty": 0.0,
+      "adjustment": 0.0
+    },
+    "connected": {
+      "percent": null,
+      "z": null,
+      "status": "building_reference",
+      "components": {
+        "z_hrv": null,
+        "z_rhr": null,
+        "sleep_adj": -0.0
+      }
+    },
+    "interpretation": "Same current vitals; legacy uses scalar fallback on this flat prior series and composite sleep/strain; connected uses robust long reference and duration modifier."
+  },
+  {
+    "profile": "irregular_schedule",
+    "legacy": {
+      "score": 52.87,
+      "hrv_component": 50.0,
+      "rhr_component": 50.0,
+      "sleep_component": 69.1,
+      "strain_component": 30.96,
+      "acr_penalty": 0.0,
+      "adjustment": 0.0
+    },
+    "connected": {
+      "percent": 50,
+      "z": -0.01,
+      "status": "ok",
+      "components": {
+        "z_hrv": -0.013163455610616381,
+        "z_rhr": -0.0,
+        "sleep_adj": -0.0
+      }
+    },
+    "interpretation": "Same current vitals; legacy uses scalar fallback on this flat prior series and composite sleep/strain; connected uses robust long reference and duration modifier."
+  }
+]

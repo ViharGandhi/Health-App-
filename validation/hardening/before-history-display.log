@@ -1,0 +1,14 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+_ test_historical_json_uses_floor_without_changing_aggregate_inputs[16.86-16.8] _
+backend\test_strain_history_serialization.py:24: in test_historical_json_uses_floor_without_changing_aggregate_inputs
+    assert result['days'][0]['score'] == display
+E   assert 16.9 == 16.8
+_ test_historical_json_uses_floor_without_changing_aggregate_inputs[20.999999999999996-20.9] _
+backend\test_strain_history_serialization.py:24: in test_historical_json_uses_floor_without_changing_aggregate_inputs
+    assert result['days'][0]['score'] == display
+E   assert 21.0 == 20.9
+=========================== short test summary info ===========================
+FAILED backend/test_strain_history_serialization.py::test_historical_json_uses_floor_without_changing_aggregate_inputs[16.86-16.8]
+FAILED backend/test_strain_history_serialization.py::test_historical_json_uses_floor_without_changing_aggregate_inputs[20.999999999999996-20.9]
+2 failed in 1.65s

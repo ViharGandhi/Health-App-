@@ -18,7 +18,9 @@ Modifications:
 from __future__ import annotations
 
 import math
+from backend.validity import positive, resting_hr, finite_number, sleep_duration
 from dataclasses import dataclass, field
+from statistics import mean
 from datetime import datetime, timedelta, date, time
 from typing import List, Optional, Tuple
 
@@ -29,6 +31,8 @@ from typing import List, Optional, Tuple
 
 def clamp(value: float, min_val: float, max_val: float) -> float:
     """Clamp *value* into [min_val, max_val]."""
+    if not all(finite_number(v) for v in (value, min_val, max_val)):
+        raise ValueError('Clamp inputs must be finite numbers')
     return max(min_val, min(max_val, value))
 
 
@@ -42,9 +46,17 @@ def normalize_ratio(value: float, low: float, high: float) -> float:
         return 50.0  # Default to neutral if range is invalid
 
     if high > low:
+        if value <= low:
+            return 0.
+        if value >= high:
+            return 100.
         # Standard range: low maps to 0, high maps to 100
         return clamp((value - low) / (high - low) * 100.0, 0.0, 100.0)
     else:
+        if value >= low:
+            return 0.
+        if value <= high:
+            return 100.
         # Inverted range: low maps to 100, high maps to 0 (lower is better)
         return clamp((low - value) / (low - high) * 100.0, 0.0, 100.0)
 
@@ -60,7 +72,9 @@ def compute_baseline(history: List[Tuple[datetime, float]]) -> Optional[float]:
     if not history:
         return None
     values = [v for _, v in history]
-    return sum(values) / len(values)
+    if not all(finite_number(value) for value in values):
+        raise ValueError('Baseline values must be finite numbers')
+    return mean(values)
 
 
 def log_hrv_stats(values: List[float]) -> Optional[Tuple[float, float]]:
@@ -73,7 +87,7 @@ def log_hrv_stats(values: List[float]) -> Optional[Tuple[float, float]]:
     Returns (mean_ln, sd_ln) or None if fewer than MIN_DAYS_REQUIRED positive
     samples.  *values* must be ordered oldest → newest.
     """
-    positives = [v for v in values if math.isfinite(v) and v > 0]
+    positives = [v for v in values if positive(v)]
     if len(positives) < MIN_DAYS_REQUIRED:
         return None
 
@@ -97,7 +111,7 @@ def hrv_z_score(today: float, values: List[float]) -> Optional[float]:
     Z-score of today's HRV against the personal log-domain baseline.
     Positive = HRV above personal norm (better recovery).
     """
-    if not math.isfinite(today) or today <= 0:
+    if not positive(today):
         return None
     stats = log_hrv_stats(values)
     if stats is None or stats[1] <= 0:
@@ -130,6 +144,18 @@ class SleepData:
 
     # Sleep onset latency
     sleep_latency_seconds: Optional[float] = None  # seconds from in-bed to first sleep onset
+
+    def __post_init__(self):
+        durations = (self.total_duration, self.deep_sleep_duration, self.rem_sleep_duration,
+                     self.core_sleep_duration, self.awake_duration, self.in_bed_duration,
+                     self.nap_duration_seconds)
+        if not all(sleep_duration(value) for value in durations):
+            raise ValueError('Sleep durations must be finite and between zero and 24 hours')
+        if (not finite_number(self.interruption_count) or self.interruption_count < 0
+                or self.interruption_count != int(self.interruption_count)):
+            raise ValueError('Interruption count must be a nonnegative integer')
+        if self.sleep_latency_seconds is not None and not sleep_duration(self.sleep_latency_seconds):
+            raise ValueError('Sleep latency must be a valid duration')
 
     # — convenience properties —
 
@@ -180,12 +206,20 @@ class SleepCalculator:
     def compute_duration_score(total_hours: float, sleep_need: float,
                                steepness: float = 8.0, midpoint: float = 0.75) -> float:
         """Approved rescaling: the original sigmoid reaches 100 at need."""
+        if not all(finite_number(v) for v in (total_hours, sleep_need, steepness, midpoint)):
+            raise ValueError('Duration inputs must be finite numbers')
         if total_hours <= 0 or sleep_need <= 0:
             return 0.0
         ratio = total_hours / sleep_need
         if ratio <= 1.0:
-            raw = 100.0 / (1.0 + math.exp(-steepness * (ratio - midpoint)))
-            at_need = 100.0 / (1.0 + math.exp(-steepness * (1.0 - midpoint)))
+            try:
+                raw = 100.0 / (1.0 + math.exp(-steepness * (ratio - midpoint)))
+                at_need = 100.0 / (1.0 + math.exp(-steepness * (1.0 - midpoint)))
+            except OverflowError:
+                # Evaluate the same ratio in log space only when direct exponentiation overflows.
+                log_sigmoid = lambda x: -math.log1p(math.exp(-x)) if x >= 0 else x - math.log1p(math.exp(x))
+                return 100.0 * math.exp(log_sigmoid(steepness * (ratio - midpoint))
+                                        - log_sigmoid(steepness * (1.0 - midpoint)))
             return raw / at_need * 100.0
         if ratio <= 1.10:
             return 100.0
@@ -200,6 +234,8 @@ class SleepCalculator:
         Targets 20 % up to age 30, then eases ~0.2 pp/yr, floored at 10 %.
         Returns the baseline 20 % when age is unknown.
         """
+        if age is not None and not finite_number(age):
+            raise ValueError('Age must be a finite number')
         if age is None or age <= 30:
             return SleepCalculator.OPTIMAL_DEEP_RATIO
         reduced = SleepCalculator.OPTIMAL_DEEP_RATIO - (age - 30) * 0.002
@@ -213,7 +249,7 @@ class SleepCalculator:
         baseline: Optional[float] = None,
     ) -> float:
         """HRV during sleep (higher = better; ratio vs baseline)."""
-        if sleeping_hrv is None or baseline is None or baseline <= 0:
+        if not positive(sleeping_hrv) or not positive(baseline):
             return 50.0
         # ratio in [0.7, 1.3] → score [0, 100]
         return normalize_ratio(sleeping_hrv / baseline, low=0.7, high=1.3)
@@ -224,7 +260,7 @@ class SleepCalculator:
         baseline: Optional[float] = None,
     ) -> float:
         """Heart rate during sleep (lower = better; inverted ratio vs baseline)."""
-        if sleeping_hr is None or baseline is None or baseline <= 0:
+        if resting_hr(sleeping_hr) is None or resting_hr(baseline) is None:
             return 50.0
         # ratio in [0.7, 1.3] → score [100, 0] (inverted)
         ratio = sleeping_hr / baseline
@@ -233,6 +269,8 @@ class SleepCalculator:
     @staticmethod
     def compute_interruption_score(count: int) -> float:
         """Each interruption costs 15 points; floor at 0."""
+        if not finite_number(count) or count < 0 or count != int(count):
+            raise ValueError('Interruption count must be a nonnegative integer')
         return max(0.0, 100.0 - count * 15.0)
 
     @staticmethod
@@ -269,7 +307,7 @@ class SleepCalculator:
         Measures the percentage drop from average waking HR to average sleeping HR.
         Maps dip  0 % → score 0,  25 % → score 100.
         """
-        if sleeping_hr is None or waking_hr is None or waking_hr <= 0:
+        if resting_hr(sleeping_hr) is None or resting_hr(waking_hr) is None:
             return 50.0
         dip_pct = (waking_hr - sleeping_hr) / waking_hr * 100.0
         return normalize_ratio(dip_pct, low=0.0, high=25.0)
@@ -286,6 +324,8 @@ class SleepCalculator:
         """
         if latency_seconds is None:
             return 50.0
+        if not sleep_duration(latency_seconds):
+            raise ValueError('Latency must be a valid duration')
         lat_min = latency_seconds / 60.0
 
         if 10.0 <= lat_min <= 20.0:
@@ -339,6 +379,8 @@ class SleepCalculator:
             The ratio (actual / need) at which the sigmoid's inflection
             point sits.  Default 0.75 (75 % of sleep need).
         """
+        if not finite_number(sleep_need):
+            raise ValueError('Sleep need must be a finite number')
         night_hours = sleep.total_duration / 3600.0
         nap_hours = sleep.nap_duration_seconds / 3600.0
         total_hours = night_hours + nap_hours
@@ -405,6 +447,11 @@ class SleepCalculator:
         if recent_need_vs_actual is None:
             recent_need_vs_actual = []
 
+        if not all(finite_number(v) for v in (baseline_sleep, yesterday_strain)):
+            raise ValueError('Sleep need inputs must be finite numbers')
+        if any(not finite_number(actual) for _, actual in recent_need_vs_actual):
+            raise ValueError('Actual sleep must be a finite number')
+
         if not recent_need_vs_actual:
             debt_per_night = 0.0
         else:
@@ -420,6 +467,8 @@ class SleepCalculator:
     @staticmethod
     def compute_sleep_debt(need_vs_actual: List[Tuple[float, float]]) -> float:
         """Total sleep debt from the last N days (hours)."""
+        if any(not finite_number(value) for pair in need_vs_actual for value in pair):
+            raise ValueError('Sleep debt inputs must be finite numbers')
         return sum(max(0.0, need - actual) for need, actual in need_vs_actual)
 
     # ── bedtime recommendation ──

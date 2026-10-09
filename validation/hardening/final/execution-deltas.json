@@ -1,0 +1,822 @@
+[
+  {
+    "path": "/demo/api_demo//api/dashboard/body/recovery/data_quality_flag",
+    "before": null,
+    "after": false,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/recovery/estimator",
+    "before": null,
+    "after": "legacy_prototype",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/recovery/rejected_readings",
+    "before": null,
+    "after": {},
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/component_coverage",
+    "before": null,
+    "after": 1.0,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/components_available/duration",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/components_available/stages",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/components_available/efficiency",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/components_available/sleeping_hrv",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/components_available/sleeping_hr",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/components_available/hr_dip",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/components_available/restfulness",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/defaulted_components",
+    "before": null,
+    "after": {},
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/estimator",
+    "before": null,
+    "after": "legacy_composite_sleep",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/partial",
+    "before": null,
+    "after": false,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/sleep/status_reason",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/dashboard/body/strain/workouts/0/strain",
+    "before": 9.2,
+    "after": 9.1,
+    "reason": "Approved JSON-only flooring of the unchanged raw workout strain (b578a51)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/data_quality_flag",
+    "before": null,
+    "after": false,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/estimator",
+    "before": null,
+    "after": "connected_recovery",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/rejected_readings/hrv_baseline",
+    "before": null,
+    "after": 0,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/rejected_readings/hrv_recent",
+    "before": null,
+    "after": 0,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/rejected_readings/hrv_today",
+    "before": null,
+    "after": 0,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/rejected_readings/rhr_baseline",
+    "before": null,
+    "after": 0,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/rejected_readings/rhr_today",
+    "before": null,
+    "after": 0,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/current/rejected_readings/rhr_method",
+    "before": null,
+    "after": 0,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/estimator",
+    "before": null,
+    "after": "connected_recovery",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/typical_range_reasons/hrv",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Personal-range withholding diagnostics schema (97833bd)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/typical_range_reasons/rhr",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Personal-range withholding diagnostics schema (97833bd)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/typical_range_reasons/respiratory_rate",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Personal-range withholding diagnostics schema (97833bd)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/typical_range_reasons/skin_temperature",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Personal-range withholding diagnostics schema (97833bd)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery/analytics?demo=estimate/body/typical_range_reasons/spo2",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Personal-range withholding diagnostics schema (97833bd)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/data_quality_flag",
+    "before": null,
+    "after": false,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/estimator",
+    "before": null,
+    "after": "connected_recovery",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/rejected_readings/hrv_baseline",
+    "before": null,
+    "after": 0,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/rejected_readings/hrv_recent",
+    "before": null,
+    "after": 0,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/rejected_readings/hrv_today",
+    "before": null,
+    "after": 0,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/rejected_readings/rhr_baseline",
+    "before": null,
+    "after": 0,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/rejected_readings/rhr_today",
+    "before": null,
+    "after": 0,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=estimate/body/rejected_readings/rhr_method",
+    "before": null,
+    "after": 0,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=legacy/body/data_quality_flag",
+    "before": null,
+    "after": false,
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=legacy/body/estimator",
+    "before": null,
+    "after": "legacy_prototype",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/recovery?demo=legacy/body/rejected_readings",
+    "before": null,
+    "after": {},
+    "key_added": true,
+    "reason": "Shared validity/rejection diagnostics schema (79f5eb3)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/component_coverage",
+    "before": null,
+    "after": 1.0,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/components_available/duration",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/components_available/stages",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/components_available/efficiency",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/components_available/sleeping_hrv",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/components_available/sleeping_hr",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/components_available/hr_dip",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/components_available/restfulness",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/defaulted_components",
+    "before": null,
+    "after": {},
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/estimator",
+    "before": null,
+    "after": "legacy_composite_sleep",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/partial",
+    "before": null,
+    "after": false,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/body/status_reason",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Approved component availability schema (32ee23d)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/analytics/body/estimator",
+    "before": null,
+    "after": "legacy_composite_sleep",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/body/estimator",
+    "before": null,
+    "after": "seven_night_clock_variability",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/consistency/score/body/estimator",
+    "before": null,
+    "after": "four_night_clock_consistency",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/efficiency/body/estimator",
+    "before": null,
+    "after": "pooled_sleep_efficiency",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/heart-rate/body/estimator",
+    "before": null,
+    "after": "observed_sleep_heart_rate",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/need/body/estimator",
+    "before": null,
+    "after": "bounded_sleep_need",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stages/typical-ranges/body/estimator",
+    "before": null,
+    "after": "personal_stage_ranges",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stages/typical-ranges/body/nights/0/algo_version",
+    "before": "sleep-stage-ranges-1",
+    "after": "sleep-stage-ranges-3",
+    "reason": "Main selection and overlong-stage cache namespace (623fc73, af85696)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stages/typical-ranges/body/nights/1/algo_version",
+    "before": "sleep-stage-ranges-1",
+    "after": "sleep-stage-ranges-3",
+    "reason": "Main selection and overlong-stage cache namespace (623fc73, af85696)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stages/typical-ranges/body/nights/2/algo_version",
+    "before": "sleep-stage-ranges-1",
+    "after": "sleep-stage-ranges-3",
+    "reason": "Main selection and overlong-stage cache namespace (623fc73, af85696)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stages/typical-ranges/body/nights/3/algo_version",
+    "before": "sleep-stage-ranges-1",
+    "after": "sleep-stage-ranges-3",
+    "reason": "Main selection and overlong-stage cache namespace (623fc73, af85696)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stages/typical-ranges/body/nights/5/algo_version",
+    "before": "sleep-stage-ranges-1",
+    "after": "sleep-stage-ranges-3",
+    "reason": "Main selection and overlong-stage cache namespace (623fc73, af85696)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stages/typical-ranges/body/nights/6/algo_version",
+    "before": "sleep-stage-ranges-1",
+    "after": "sleep-stage-ranges-3",
+    "reason": "Main selection and overlong-stage cache namespace (623fc73, af85696)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stages/typical-ranges/body/nights/7/algo_version",
+    "before": "sleep-stage-ranges-1",
+    "after": "sleep-stage-ranges-3",
+    "reason": "Main selection and overlong-stage cache namespace (623fc73, af85696)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stages/typical-ranges/body/nights/8/algo_version",
+    "before": "sleep-stage-ranges-1",
+    "after": "sleep-stage-ranges-3",
+    "reason": "Main selection and overlong-stage cache namespace (623fc73, af85696)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/estimator",
+    "before": null,
+    "after": "windowed_sleep_stress",
+    "key_added": true,
+    "reason": "Estimator identity schema (a47cfcb)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/0/algo_version",
+    "before": "sleep-stress-5",
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/0/anchor_verification",
+    "before": null,
+    "after": "synthetic_or_caller_asserted",
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/0/main_sleep_explicit",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/0/physical_duration_minutes",
+    "before": null,
+    "after": 440.0,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/0/withheld_reason",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/1/algo_version",
+    "before": "sleep-stress-5",
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/1/anchor_verification",
+    "before": null,
+    "after": "synthetic_or_caller_asserted",
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/1/main_sleep_explicit",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/1/physical_duration_minutes",
+    "before": null,
+    "after": 460.0,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/1/withheld_reason",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/2/algo_version",
+    "before": "sleep-stress-5",
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/2/anchor_verification",
+    "before": null,
+    "after": "synthetic_or_caller_asserted",
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/2/main_sleep_explicit",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/2/physical_duration_minutes",
+    "before": null,
+    "after": 425.0,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/2/withheld_reason",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/3/algo_version",
+    "before": "sleep-stress-5",
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/3/anchor_verification",
+    "before": null,
+    "after": "synthetic_or_caller_asserted",
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/3/main_sleep_explicit",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/3/physical_duration_minutes",
+    "before": null,
+    "after": 495.0,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/3/withheld_reason",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/4/algo_version",
+    "before": "sleep-stress-5",
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/4/anchor_verification",
+    "before": null,
+    "after": "synthetic_or_caller_asserted",
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/4/main_sleep_explicit",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/4/physical_duration_minutes",
+    "before": null,
+    "after": 470.0,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/4/withheld_reason",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/5/algo_version",
+    "before": "sleep-stress-5",
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/5/anchor_verification",
+    "before": null,
+    "after": "synthetic_or_caller_asserted",
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/5/main_sleep_explicit",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/5/physical_duration_minutes",
+    "before": null,
+    "after": 505.0,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/5/withheld_reason",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/6/algo_version",
+    "before": "sleep-stress-5",
+    "after": "sleep-stress-10",
+    "reason": "Provider bounds, main selection, reasons, partition and sample-type cache namespace (c968fce, 623fc73, d37a4ad, 70ede57, 2f43686)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/6/anchor_verification",
+    "before": null,
+    "after": "synthetic_or_caller_asserted",
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/6/main_sleep_explicit",
+    "before": null,
+    "after": true,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/6/physical_duration_minutes",
+    "before": null,
+    "after": 470.0,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/sleep/stress/body/nights/6/withheld_reason",
+    "before": null,
+    "after": null,
+    "key_added": true,
+    "reason": "Stress reason/anchor/selection provenance schema (d37a4ad, 623fc73)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/current/workouts/0/strain",
+    "before": 9.2,
+    "after": 9.1,
+    "reason": "Approved JSON-only flooring of the unchanged raw workout strain (b578a51)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/days/0/activities/0/strain",
+    "before": 13.9,
+    "after": 13.8,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/days/0/activities/1/strain",
+    "before": 6.4,
+    "after": 6.3,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/days/1/score",
+    "before": 3.6,
+    "after": 3.5,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/days/2/activities/0/strain",
+    "before": 9.2,
+    "after": 9.1,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/days/3/activities/0/strain",
+    "before": 13.9,
+    "after": 13.8,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/days/4/activities/1/strain",
+    "before": 6.4,
+    "after": 6.3,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/days/5/activities/0/strain",
+    "before": 13.9,
+    "after": 13.8,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/days/6/activities/0/strain",
+    "before": 9.2,
+    "after": 9.1,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/previous_days/0/activities/0/strain",
+    "before": 13.9,
+    "after": 13.8,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/previous_days/0/activities/1/strain",
+    "before": 6.4,
+    "after": 6.3,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/previous_days/1/score",
+    "before": 3.6,
+    "after": 3.5,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/previous_days/2/activities/0/strain",
+    "before": 9.2,
+    "after": 9.1,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/previous_days/3/activities/0/strain",
+    "before": 13.9,
+    "after": 13.8,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/previous_days/4/activities/1/strain",
+    "before": 6.4,
+    "after": 6.3,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/previous_days/5/activities/0/strain",
+    "before": 13.9,
+    "after": 13.8,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain/analytics?demo=true/body/previous_days/6/activities/0/strain",
+    "before": 9.2,
+    "after": 9.1,
+    "reason": "Approved JSON-only historical display flooring; aggregate/model inputs unchanged (4688814)"
+  },
+  {
+    "path": "/demo/api_demo//api/strain?demo=true/body/workouts/0/strain",
+    "before": 9.2,
+    "after": 9.1,
+    "reason": "Approved JSON-only flooring of the unchanged raw workout strain (b578a51)"
+  }
+]

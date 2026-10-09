@@ -17,6 +17,9 @@ from typing import Optional
 import httpx
 from health_read_store import HealthReadStore, ReadRange, read_range, exact_key, CacheInvalidated
 from read_metrics import count
+from sleep_selection import main_sleep_key
+from validity import sleep_duration, valid_metric
+from provider_payload import payload_boundary
 
 
 BASE_URL = "https://health.googleapis.com/v4/users/me/dataTypes"
@@ -40,16 +43,47 @@ def _day_filter(field: str, start: date, end: date) -> str:
             f'{field} < "{(end + timedelta(days=1)).isoformat()}"')
 
 
+@payload_boundary
 def _local_datetime(value: str, offset: str, *, preserve_offset: bool = False) -> datetime:
     """Return wall-clock time in the offset supplied by Google."""
     instant = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if instant.tzinfo is None:
+        raise ValueError('Physical timestamps must include a UTC offset')
     seconds = float(offset.removesuffix("s")) if offset else 0.0
     local = instant.astimezone(timezone(timedelta(seconds=seconds)))
     return local if preserve_offset else local.replace(tzinfo=None)
 
 
+@payload_boundary
 def _google_date(value: dict) -> date:
     return date(value["year"], value["month"], value["day"])
+
+
+def _valid_sleep_summary(summary) -> bool:
+    if not isinstance(summary, dict):
+        return False
+    try:
+        for key in ('minutesAsleep', 'minutesAwake', 'minutesInSleepPeriod',
+                    'minutesToFallAsleep', 'minutesAfterWakeUp'):
+            if key in summary and not (key == 'minutesAsleep' and summary[key] is None):
+                if isinstance(summary[key], bool) or not sleep_duration(float(summary[key]), unit='minutes'):
+                    return False
+        stages = summary.get('stagesSummary', [])
+        if not isinstance(stages, list):
+            return False
+        for stage in stages:
+            if not isinstance(stage, dict) or not isinstance(stage.get('type'), str):
+                return False
+            if isinstance(stage.get('minutes'), bool) or not sleep_duration(float(stage['minutes']), unit='minutes'):
+                return False
+            if isinstance(stage.get('count'), bool):
+                return False
+            count = float(stage.get('count', 0))
+            if not math.isfinite(count) or count < 0 or not count.is_integer():
+                return False
+    except (ValueError, TypeError, KeyError, OverflowError):
+        return False
+    return True
 
 
 class GoogleHealthClient:
@@ -167,6 +201,7 @@ class GoogleHealthClient:
                 await asyncio.sleep(delay)
             lane[1] = time.monotonic() + 0.5
 
+    @payload_boundary
     async def _fetch_points(self, data_type: str, filter_expr: str, *, reconcile: bool = True) -> list[dict]:
         """Fetch every page; reconcile wearable data by default, or list raw sessions."""
         url = f"{BASE_URL}/{data_type}/dataPoints" + (":reconcile" if reconcile else "")
@@ -174,6 +209,7 @@ class GoogleHealthClient:
         if reconcile:
             params["dataSourceFamily"] = WEARABLES
         points: list[dict] = []
+        seen_tokens = set()
         async with httpx.AsyncClient(timeout=20.0) as client:
             while True:
                 for attempt in range(4):
@@ -189,10 +225,16 @@ class GoogleHealthClient:
                     await asyncio.sleep(min(delay, 30))
                 response.raise_for_status()
                 payload = response.json()
-                points.extend(payload.get("dataPoints", []))
+                page = payload.get('dataPoints', [])
+                if not isinstance(page, list) or any(not isinstance(point, dict) for point in page):
+                    raise ValueError('Invalid provider page')
+                points.extend(page)
                 token = payload.get("nextPageToken")
                 if not token:
                     return points
+                if not isinstance(token, str) or token in seen_tokens:
+                    raise ValueError('Invalid pagination progress')
+                seen_tokens.add(token)
                 params["pageToken"] = token
 
     async def get_sleep_stage_points(self, start: date | None, end: date) -> list[dict]:
@@ -219,6 +261,7 @@ class GoogleHealthClient:
             f'heart_rate.sample_time.physical_time < "{end_text}"'
         ))
 
+    @payload_boundary
     async def get_daily_hrv(self, target_date: date) -> Optional[float]:
         points = await self._points(
             "daily-heart-rate-variability",
@@ -227,9 +270,11 @@ class GoogleHealthClient:
         for point in points:
             metric = point.get("dailyHeartRateVariability", {})
             if "averageHeartRateVariabilityMilliseconds" in metric:
-                return float(metric["averageHeartRateVariabilityMilliseconds"])
+                value = metric["averageHeartRateVariabilityMilliseconds"]
+                return float(value) if not isinstance(value, bool) and valid_metric('hrv', float(value)) else None
         return None
 
+    @payload_boundary
     async def get_deep_sleep_hrv(self, target_date: date) -> Optional[float]:
         points = await self._points(
             "daily-heart-rate-variability",
@@ -240,9 +285,10 @@ class GoogleHealthClient:
                 "deepSleepRootMeanSquareOfSuccessiveDifferencesMilliseconds"
             )
             if value is not None:
-                return float(value)
+                return float(value) if not isinstance(value, bool) and valid_metric('deep_sleep_hrv', float(value)) else None
         return None
 
+    @payload_boundary
     async def get_resting_heart_rate(self, target_date: date) -> Optional[float]:
         points = await self._points(
             "daily-resting-heart-rate",
@@ -251,9 +297,11 @@ class GoogleHealthClient:
         for point in points:
             metric = point.get("dailyRestingHeartRate", {})
             if "beatsPerMinute" in metric:
-                return float(metric["beatsPerMinute"])
+                value = metric["beatsPerMinute"]
+                return float(value) if not isinstance(value, bool) and valid_metric('rhr', float(value)) else None
         return None
 
+    @payload_boundary
     async def get_hrv_history(self, days: int = 14) -> list[float]:
         # Exclude today: the observation being scored cannot set its own baseline.
         end = date.today() - timedelta(days=1)
@@ -266,10 +314,11 @@ class GoogleHealthClient:
         for point in points:
             metric = point.get("dailyHeartRateVariability", {})
             value = metric.get("averageHeartRateVariabilityMilliseconds")
-            if value is not None and float(value) > 0:
+            if value is not None and not isinstance(value, bool) and valid_metric('hrv', float(value)):
                 dated.append((_google_date(metric["date"]), float(value)))
         return [value for _, value in sorted(dated)]
 
+    @payload_boundary
     async def get_health_history(self, start: date, end: date, metrics: tuple[str, ...] | None = None) -> dict[str, list[dict]]:
         """Fetch dated Fitbit Air summaries; optional API fields stay absent."""
         specs = {
@@ -298,13 +347,14 @@ class GoogleHealthClient:
                 day = _google_date(metric["date"])
                 if start <= day <= end:
                     dated[day.isoformat()] = {
-                        "date": day.isoformat(), "value": float(value),
+                        "date": day.isoformat(), "value": value if isinstance(value, bool) else float(value),
                         "estimated": metric.get("estimated") if key == "vo2_max" else None,
                         "method": metric.get("dailyRestingHeartRateMetadata", {}).get("calculationMethod") if key == "rhr" else None,
                     }
             history[key] = [dated[day] for day in sorted(dated)]
         return history
 
+    @payload_boundary
     async def get_intraday_heart_rate(self, target_date: date, end_date: date | None = None, *, preserve_offset: bool = False) -> list[tuple[datetime, float]]:
         points = await self._points(
             "heart-rate",
@@ -315,6 +365,8 @@ class GoogleHealthClient:
             metric = point.get("heartRate", {})
             clock = metric.get("sampleTime", {})
             if clock.get("physicalTime") and metric.get("beatsPerMinute") is not None:
+                if isinstance(metric['beatsPerMinute'], bool):
+                    raise ValueError('Heart rate must be numeric')
                 samples.append((
                     _local_datetime(clock["physicalTime"], clock.get("utcOffset", "0s"), preserve_offset=preserve_offset),
                     float(metric["beatsPerMinute"]),
@@ -334,6 +386,7 @@ class GoogleHealthClient:
         hr = await self._points("heart-rate", sample_filter("heart_rate.sample_time.physical_time"))
         return sleep, hrv, hr
 
+    @payload_boundary
     async def get_workout_sessions(self, target_date: date, end_date: date | None = None, *, preserve_offset: bool = False) -> list[dict]:
         points = await self._points(
             "exercise",
@@ -361,7 +414,7 @@ class GoogleHealthClient:
             return {date.fromisoformat(day): value for day, value in values.items()}
         if not self.store:
             return await self._fetch_daily_steps(start, end)
-        key = exact_key('steps-rollup', f'{start}/{end}', True)
+        key = exact_key('steps-rollup-v2', f'{start}/{end}', True)
         lane_key = (asyncio.get_running_loop(), self.account_key, key)
         async with _range_locks.setdefault(lane_key, asyncio.Lock()):
             epoch = await asyncio.to_thread(self.store.epoch, self.account_key)
@@ -377,12 +430,14 @@ class GoogleHealthClient:
                 pass
             return values
 
+    @payload_boundary
     async def _fetch_daily_steps(self, start: date, end: date) -> dict[date, int]:
         """Wearable daily rollups preserve absent readings separately from true zeros."""
         values = {}
         lower = start
         async with httpx.AsyncClient(timeout=20.0) as client:
             while lower <= end:
+                seen_tokens = set()
                 upper = min(end + timedelta(days=1), lower + timedelta(days=90))
                 body = {"range": {"start": {"date": {"year": lower.year, "month": lower.month, "day": lower.day}},
                                   "end": {"date": {"year": upper.year, "month": upper.month, "day": upper.day}}},
@@ -404,15 +459,25 @@ class GoogleHealthClient:
                     for point in payload.get("rollupDataPoints", []):
                         step_count = point.get("steps", {}).get("countSum")
                         if step_count is not None:
+                            if isinstance(step_count, bool):
+                                raise ValueError('Step count must be a nonnegative integer')
+                            integer_count = int(step_count)
+                            if integer_count < 0 or (not isinstance(step_count, str) and integer_count != step_count):
+                                raise ValueError('Step count must be a nonnegative integer')
                             day = _google_date(point["civilStartTime"]["date"])
                             if start <= day <= end:
-                                values[day] = int(step_count)
+                                values[day] = integer_count
                     if not payload.get("nextPageToken"):
                         break
-                    body["pageToken"] = payload["nextPageToken"]
+                    token = payload['nextPageToken']
+                    if not isinstance(token, str) or token in seen_tokens:
+                        raise ValueError('Invalid pagination progress')
+                    seen_tokens.add(token)
+                    body["pageToken"] = token
                 lower = upper
         return values
 
+    @payload_boundary
     async def _sleep_records(self, start: date, end: date) -> list[dict]:
         points = await self._points(
             "sleep", _day_filter("sleep.interval.civil_end_time", start, end)
@@ -427,25 +492,34 @@ class GoogleHealthClient:
             start_dt = _local_datetime(interval["startTime"], interval.get("startUtcOffset", "0s"))
             end_dt = _local_datetime(interval["endTime"], interval.get("endUtcOffset", "0s"))
             summary = sleep.get("summary", {})
+            summary_valid = _valid_sleep_summary(summary)
+            if not summary_valid:
+                summary = {}
             onset = start_dt + timedelta(minutes=float(summary.get("minutesToFallAsleep", 0)))
             wake = end_dt - timedelta(minutes=float(summary.get("minutesAfterWakeUp", 0)))
-            if onset >= wake:
+            physical_start = datetime.fromisoformat(interval["startTime"].replace("Z", "+00:00"))
+            physical_end = datetime.fromisoformat(interval["endTime"].replace("Z", "+00:00"))
+            if (physical_start + timedelta(minutes=float(summary.get('minutesToFallAsleep', 0)))
+                    >= physical_end - timedelta(minutes=float(summary.get('minutesAfterWakeUp', 0)))):
                 continue
             stage_totals = {s["type"]: float(s["minutes"]) * 60 for s in summary.get("stagesSummary", [])}
             awake_count = sum(int(s.get("count", 0)) for s in summary.get("stagesSummary", []) if s.get("type") == "AWAKE")
             asleep_minutes = float(summary.get("minutesAsleep") or 0)
-            physical_start = datetime.fromisoformat(interval["startTime"].replace("Z", "+00:00"))
-            physical_end = datetime.fromisoformat(interval["endTime"].replace("Z", "+00:00"))
-            duration_available = (summary.get("minutesAsleep") is not None and metadata.get("processed") is not False
+            duration_available = (summary_valid and summary.get("minutesAsleep") is not None and metadata.get("processed") is not False
                                   and physical_start.tzinfo is not None and physical_end.tzinfo is not None
                                   and physical_end <= datetime.now(timezone.utc) and math.isfinite(asleep_minutes)
+                                  and sleep_duration((physical_end - physical_start).total_seconds())
                                   and 0 <= asleep_minutes <= (physical_end - physical_start).total_seconds() / 60)
             records.append({
+                'sleep_id': point.get('name') or metadata.get('externalId') or f'sleep-{physical_end.isoformat()}',
+                'physical_start': physical_start, 'physical_end': physical_end,
                 "date": end_dt.date(), "sleep_start_time": start_dt, "sleep_end_time": end_dt,
                 "sleep_onset_time": onset, "wake_up_time": wake,
                 "main_sleep": metadata.get("mainSleep"),
                 "total_duration": asleep_minutes * 60,
                 "sleep_duration_available": duration_available,
+                "stage_breakdown_available": bool(summary.get('stagesSummary')),
+                "restfulness_available": summary.get('minutesAwake') is not None,
                 "deep_sleep_duration": stage_totals.get("DEEP", 0.0),
                 "rem_sleep_duration": stage_totals.get("REM", 0.0),
                 "core_sleep_duration": stage_totals.get("LIGHT", 0.0),
@@ -464,10 +538,11 @@ class GoogleHealthClient:
         selected = []
         for day in sorted(by_date):
             sessions = by_date[day]
-            main = [record for record in sessions if record["main_sleep"] is True]
-            if not main and any(record["main_sleep"] is not None for record in sessions):
-                continue
-            selected.append(max(main or sessions, key=lambda record: record["total_duration"]))
+            candidates = [(main_sleep_key(record['main_sleep'], record['physical_start'], record['physical_end'], record['sleep_id']), record)
+                          for record in sessions]
+            candidates = [(key, record) for key, record in candidates if key is not None]
+            if candidates:
+                selected.append(max(candidates, key=lambda item: item[0])[1])
         return selected
 
     async def get_sleep_need_history(self, start: date, end: date) -> dict[date, float | None]:
@@ -475,6 +550,7 @@ class GoogleHealthClient:
         return {record["date"]: record["total_duration"] / 60 if record["sleep_duration_available"] else None
                 for record in records if start <= record["date"] <= end}
 
+    @payload_boundary
     async def get_nap_minutes_history(self, start: date, end: date) -> dict[date, float]:
         points = await self._points("sleep", _day_filter("sleep.interval.civil_end_time", start, end))
         naps = {}

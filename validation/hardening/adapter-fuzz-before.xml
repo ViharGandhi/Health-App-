@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="11" time="41.015" timestamp="2026-10-09T16:48:34.620826+02:00" hostname="Zangetsu"><properties><property name="hypothesis-statistics-backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[local_datetime]" value="YmFja2VuZC90ZXN0X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9hZGFwdGVyc19yZXR1cm5fdmFsaWRfZGF0YV9vcl9leHBsaWNpdF92YWxpZGF0aW9uX2Vycm9yW2xvY2FsX2RhdGV0aW1lXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuNDcgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMjEtMTYyIG1zLCBvZiB3aGljaCB+IDAtMzMgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgMTAgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDEgZGlzdGluY3QgZXJyb3IgaW4gdGhpcyBwaGFzZQogICAgLSBFdmVudHM6CiAgICAgICogMjAuMDAlLCBEcmF3IGZvciByZWN1cnNpdmUob25lX29mKG5vbmUoKSwgYm9vbGVhbnMoKSwgaW50ZWdlcnMoKSwgZmxvYXRzKCksIHRleHQobWF4X3NpemU9NDApKSwgbGFtYmRhIGNoaWxkOiBzdC5vbmVfb2Yoc3QubGlzdHMoY2hpbGQsIG1heF9zaXplPTQpLCBzdC5kaWN0aW9uYXJpZXMoc3Quc2FtcGxlZF9mcm9tKFsnc2xlZXAnLCAnaW50ZXJ2YWwnLCAnc3RhcnRUaW1lJywgJ2VuZFRpbWUnLCAnc2FtcGxlVGltZScsICdwaHlzaWNhbFRpbWUnLCAnaGVhcnRSYXRlJywgJ2hlYXJ0UmF0ZVZhcmlhYmlsaXR5JywgJ3llYXInLCAnbW9udGgnLCAnZGF5JywgJ3N0YWdlcycsICdtZXRhZGF0YSddKSwgY2hpbGQsIG1heF9zaXplPTUpKSwgbWluX2xlYXZlcz1Ob25lLCBtYXhfbGVhdmVzPTE1KSBleGNlZWRlZCBtYXhfbGVhdmVzPTE1IGFuZCBoYWQgdG8gYmUgcmV0cmllZAoKICAtIGR1cmluZyBzaHJpbmsgcGhhc2UgKDAuMDIgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMjJtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgMSBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gVHJpZWQgMSBzaHJpbmtzIG9mIHdoaWNoIDAgd2VyZSBzdWNjZXNzZnVsCgogIC0gZHVyaW5nIGV4cGxhaW4gcGhhc2UgKDAuMzEgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMS0zNyBtcywgb2Ygd2hpY2ggfiAwLTIgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDEgcGFzc2luZywgMTEgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /><property name="hypothesis-statistics-backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[google_date]" value="YmFja2VuZC90ZXN0X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9hZGFwdGVyc19yZXR1cm5fdmFsaWRfZGF0YV9vcl9leHBsaWNpdF92YWxpZGF0aW9uX2Vycm9yW2dvb2dsZV9kYXRlXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuNDIgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMTctMzYgbXMsIG9mIHdoaWNoIH4gMC05IG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDE2IGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAyIGRpc3RpbmN0IGVycm9ycyBpbiB0aGlzIHBoYXNlCiAgICAtIEV2ZW50czoKICAgICAgKiAyNS4wMCUsIERyYXcgZm9yIHJlY3Vyc2l2ZShvbmVfb2Yobm9uZSgpLCBib29sZWFucygpLCBpbnRlZ2VycygpLCBmbG9hdHMoKSwgdGV4dChtYXhfc2l6ZT00MCkpLCBsYW1iZGEgY2hpbGQ6IHN0Lm9uZV9vZihzdC5saXN0cyhjaGlsZCwgbWF4X3NpemU9NCksIHN0LmRpY3Rpb25hcmllcyhzdC5zYW1wbGVkX2Zyb20oWydzbGVlcCcsICdpbnRlcnZhbCcsICdzdGFydFRpbWUnLCAnZW5kVGltZScsICdzYW1wbGVUaW1lJywgJ3BoeXNpY2FsVGltZScsICdoZWFydFJhdGUnLCAnaGVhcnRSYXRlVmFyaWFiaWxpdHknLCAneWVhcicsICdtb250aCcsICdkYXknLCAnc3RhZ2VzJywgJ21ldGFkYXRhJ10pLCBjaGlsZCwgbWF4X3NpemU9NSkpLCBtaW5fbGVhdmVzPU5vbmUsIG1heF9sZWF2ZXM9MTUpIGV4Y2VlZGVkIG1heF9sZWF2ZXM9MTUgYW5kIGhhZCB0byBiZSByZXRyaWVkCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4yMCBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAyNS02NiBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgNSBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gVHJpZWQgNSBzaHJpbmtzIG9mIHdoaWNoIDIgd2VyZSBzdWNjZXNzZnVsCgogIC0gZHVyaW5nIGV4cGxhaW4gcGhhc2UgKDUuMDkgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMTgtNDEgbXMsIG9mIHdoaWNoIH4gMC0xMSBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxNzUgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /><property name="hypothesis-statistics-backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[summary_gate]" value="YmFja2VuZC90ZXN0X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9hZGFwdGVyc19yZXR1cm5fdmFsaWRfZGF0YV9vcl9leHBsaWNpdF92YWxpZGF0aW9uX2Vycm9yW3N1bW1hcnlfZ2F0ZV06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjczIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtNyBtcywgb2Ygd2hpY2ggfiAwLTYgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDIwMCBwYXNzaW5nLCAwIGZhaWxpbmcsIGFuZCAxMSBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRXZlbnRzOgogICAgICAqIDMuNzklLCBEcmF3IGZvciByZWN1cnNpdmUob25lX29mKG5vbmUoKSwgYm9vbGVhbnMoKSwgaW50ZWdlcnMoKSwgZmxvYXRzKCksIHRleHQobWF4X3NpemU9NDApKSwgbGFtYmRhIGNoaWxkOiBzdC5vbmVfb2Yoc3QubGlzdHMoY2hpbGQsIG1heF9zaXplPTQpLCBzdC5kaWN0aW9uYXJpZXMoc3Quc2FtcGxlZF9mcm9tKFsnc2xlZXAnLCAnaW50ZXJ2YWwnLCAnc3RhcnRUaW1lJywgJ2VuZFRpbWUnLCAnc2FtcGxlVGltZScsICdwaHlzaWNhbFRpbWUnLCAnaGVhcnRSYXRlJywgJ2hlYXJ0UmF0ZVZhcmlhYmlsaXR5JywgJ3llYXInLCAnbW9udGgnLCAnZGF5JywgJ3N0YWdlcycsICdtZXRhZGF0YSddKSwgY2hpbGQsIG1heF9zaXplPTUpKSwgbWluX2xlYXZlcz1Ob25lLCBtYXhfbGVhdmVzPTE1KSBleGNlZWRlZCBtYXhfbGVhdmVzPTE1IGFuZCBoYWQgdG8gYmUgcmV0cmllZAoKICAtIFN0b3BwZWQgYmVjYXVzZSBzZXR0aW5ncy5tYXhfZXhhbXBsZXM9MjAw" /><property name="hypothesis-statistics-backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stage_sleep]" value="YmFja2VuZC90ZXN0X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9hZGFwdGVyc19yZXR1cm5fdmFsaWRfZGF0YV9vcl9leHBsaWNpdF92YWxpZGF0aW9uX2Vycm9yW3N0YWdlX3NsZWVwXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDEuMDEgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC04IG1zLCBvZiB3aGljaCB+IDAtNyBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMjAwIHBhc3NpbmcsIDAgZmFpbGluZywgYW5kIDIwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBFdmVudHM6CiAgICAgICogNS45MSUsIERyYXcgZm9yIHJlY3Vyc2l2ZShvbmVfb2Yobm9uZSgpLCBib29sZWFucygpLCBpbnRlZ2VycygpLCBmbG9hdHMoKSwgdGV4dChtYXhfc2l6ZT00MCkpLCBsYW1iZGEgY2hpbGQ6IHN0Lm9uZV9vZihzdC5saXN0cyhjaGlsZCwgbWF4X3NpemU9NCksIHN0LmRpY3Rpb25hcmllcyhzdC5zYW1wbGVkX2Zyb20oWydzbGVlcCcsICdpbnRlcnZhbCcsICdzdGFydFRpbWUnLCAnZW5kVGltZScsICdzYW1wbGVUaW1lJywgJ3BoeXNpY2FsVGltZScsICdoZWFydFJhdGUnLCAnaGVhcnRSYXRlVmFyaWFiaWxpdHknLCAneWVhcicsICdtb250aCcsICdkYXknLCAnc3RhZ2VzJywgJ21ldGFkYXRhJ10pLCBjaGlsZCwgbWF4X3NpemU9NSkpLCBtaW5fbGVhdmVzPU5vbmUsIG1heF9sZWF2ZXM9MTUpIGV4Y2VlZGVkIG1heF9sZWF2ZXM9MTUgYW5kIGhhZCB0byBiZSByZXRyaWVkCgogIC0gU3RvcHBlZCBiZWNhdXNlIHNldHRpbmdzLm1heF9leGFtcGxlcz0yMDA=" /><property name="hypothesis-statistics-backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stress_sleep]" value="YmFja2VuZC90ZXN0X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9hZGFwdGVyc19yZXR1cm5fdmFsaWRfZGF0YV9vcl9leHBsaWNpdF92YWxpZGF0aW9uX2Vycm9yW3N0cmVzc19zbGVlcF06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjg1IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtOCBtcywgb2Ygd2hpY2ggfiAwLTcgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDIwMCBwYXNzaW5nLCAwIGZhaWxpbmcsIGFuZCAyMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRXZlbnRzOgogICAgICAqIDIuMjclLCBEcmF3IGZvciByZWN1cnNpdmUob25lX29mKG5vbmUoKSwgYm9vbGVhbnMoKSwgaW50ZWdlcnMoKSwgZmxvYXRzKCksIHRleHQobWF4X3NpemU9NDApKSwgbGFtYmRhIGNoaWxkOiBzdC5vbmVfb2Yoc3QubGlzdHMoY2hpbGQsIG1heF9zaXplPTQpLCBzdC5kaWN0aW9uYXJpZXMoc3Quc2FtcGxlZF9mcm9tKFsnc2xlZXAnLCAnaW50ZXJ2YWwnLCAnc3RhcnRUaW1lJywgJ2VuZFRpbWUnLCAnc2FtcGxlVGltZScsICdwaHlzaWNhbFRpbWUnLCAnaGVhcnRSYXRlJywgJ2hlYXJ0UmF0ZVZhcmlhYmlsaXR5JywgJ3llYXInLCAnbW9udGgnLCAnZGF5JywgJ3N0YWdlcycsICdtZXRhZGF0YSddKSwgY2hpbGQsIG1heF9zaXplPTUpKSwgbWluX2xlYXZlcz1Ob25lLCBtYXhfbGVhdmVzPTE1KSBleGNlZWRlZCBtYXhfbGVhdmVzPTE1IGFuZCBoYWQgdG8gYmUgcmV0cmllZAoKICAtIFN0b3BwZWQgYmVjYXVzZSBzZXR0aW5ncy5tYXhfZXhhbXBsZXM9MjAw" /><property name="hypothesis-statistics-backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stress_hr]" value="YmFja2VuZC90ZXN0X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9hZGFwdGVyc19yZXR1cm5fdmFsaWRfZGF0YV9vcl9leHBsaWNpdF92YWxpZGF0aW9uX2Vycm9yW3N0cmVzc19ocl06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjE2IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDEtMjMgbXMsIG9mIHdoaWNoIH4gMC0xIG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDkgZmFpbGluZywgYW5kIDEgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDMgZGlzdGluY3QgZXJyb3JzIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgxLjA4IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDItMjUgbXMsIG9mIHdoaWNoIH4gMC0yIG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDQ3IGZhaWxpbmcsIGFuZCAxMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBtb3JlIGRpc3RpbmN0IGVycm9yIGluIHRoaXMgcGhhc2UKICAgIC0gVHJpZWQgNTcgc2hyaW5rcyBvZiB3aGljaCAxMSB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBkdXJpbmcgZXhwbGFpbiBwaGFzZSAoMTIuNTUgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMTMtMzMgbXMsIG9mIHdoaWNoIH4gMC0xMCBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCA1MzEgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /><property name="hypothesis-statistics-backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stress_hrv]" value="YmFja2VuZC90ZXN0X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9hZGFwdGVyc19yZXR1cm5fdmFsaWRfZGF0YV9vcl9leHBsaWNpdF92YWxpZGF0aW9uX2Vycm9yW3N0cmVzc19ocnZdOgoKICAtIGR1cmluZyBnZW5lcmF0ZSBwaGFzZSAoMC4wNCBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAwLTIxIG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gOSBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAxIGRpc3RpbmN0IGVycm9yIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjAyIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDIybXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDEgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDEgc2hyaW5rcyBvZiB3aGljaCAwIHdlcmUgc3VjY2Vzc2Z1bAoKICAtIFN0b3BwZWQgYmVjYXVzZSBub3RoaW5nIGxlZnQgdG8gZG8=" /><property name="hypothesis-statistics-backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stats_from_dict]" value="YmFja2VuZC90ZXN0X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9hZGFwdGVyc19yZXR1cm5fdmFsaWRfZGF0YV9vcl9leHBsaWNpdF92YWxpZGF0aW9uX2Vycm9yW3N0YXRzX2Zyb21fZGljdF06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjEyIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDItMTkgbXMsIG9mIHdoaWNoIH4gMC01IG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDYgZmFpbGluZywgYW5kIDQgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDIgZGlzdGluY3QgZXJyb3JzIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjA2IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMTAgbXMsIG9mIHdoaWNoIH4gMC0xIG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDYgZmFpbGluZywgYW5kIDEgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDcgc2hyaW5rcyBvZiB3aGljaCAyIHdlcmUgc3VjY2Vzc2Z1bAoKICAtIGR1cmluZyBleHBsYWluIHBoYXNlICgyLjcxIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDgtMjMgbXMsIG9mIHdoaWNoIH4gMC05IG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDE4NCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[main_sleep_selector]" value="YmFja2VuZC90ZXN0X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9hZGFwdGVyc19yZXR1cm5fdmFsaWRfZGF0YV9vcl9leHBsaWNpdF92YWxpZGF0aW9uX2Vycm9yW21haW5fc2xlZXBfc2VsZWN0b3JdOgoKICAtIGR1cmluZyBnZW5lcmF0ZSBwaGFzZSAoMC4xMSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA4LTE0IG1zLCBvZiB3aGljaCB+IDAtMSBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxMCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMS40NiBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAxLTE0IG1zLCBvZiB3aGljaCB+IDAtMiBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCA4OSBmYWlsaW5nLCBhbmQgMjkgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDUgbW9yZSBkaXN0aW5jdCBlcnJvcnMgaW4gdGhpcyBwaGFzZQogICAgLSBUcmllZCAxMTggc2hyaW5rcyBvZiB3aGljaCAyMyB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBkdXJpbmcgZXhwbGFpbiBwaGFzZSAoMTEuMjUgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gNy0xNyBtcywgb2Ygd2hpY2ggfiAwLTYgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgODUzIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwoKICAtIFN0b3BwZWQgYmVjYXVzZSBub3RoaW5nIGxlZnQgdG8gZG8=" /><property name="hypothesis-statistics-backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[strain_sleep_windows]" value="YmFja2VuZC90ZXN0X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9hZGFwdGVyc19yZXR1cm5fdmFsaWRfZGF0YV9vcl9leHBsaWNpdF92YWxpZGF0aW9uX2Vycm9yW3N0cmFpbl9zbGVlcF93aW5kb3dzXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMTEgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMS0xNSBtcywgb2Ygd2hpY2ggfiAwLTQgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgOCBmYWlsaW5nLCBhbmQgMiBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wMSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAxMG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBkdXJpbmcgZXhwbGFpbiBwaGFzZSAoMC4wMCBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAxbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAxIHBhc3NpbmcsIDAgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /><property name="hypothesis-statistics-backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[store_point_clock]" value="YmFja2VuZC90ZXN0X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9hZGFwdGVyc19yZXR1cm5fdmFsaWRfZGF0YV9vcl9leHBsaWNpdF92YWxpZGF0aW9uX2Vycm9yW3N0b3JlX3BvaW50X2Nsb2NrXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuNTkgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC02IG1zLCBvZiB3aGljaCB+IDAtNSBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMjAwIHBhc3NpbmcsIDAgZmFpbGluZywgYW5kIDI4IGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBFdmVudHM6CiAgICAgICogNC44MiUsIERyYXcgZm9yIHJlY3Vyc2l2ZShvbmVfb2Yobm9uZSgpLCBib29sZWFucygpLCBpbnRlZ2VycygpLCBmbG9hdHMoKSwgdGV4dChtYXhfc2l6ZT00MCkpLCBsYW1iZGEgY2hpbGQ6IHN0Lm9uZV9vZihzdC5saXN0cyhjaGlsZCwgbWF4X3NpemU9NCksIHN0LmRpY3Rpb25hcmllcyhzdC5zYW1wbGVkX2Zyb20oWydzbGVlcCcsICdpbnRlcnZhbCcsICdzdGFydFRpbWUnLCAnZW5kVGltZScsICdzYW1wbGVUaW1lJywgJ3BoeXNpY2FsVGltZScsICdoZWFydFJhdGUnLCAnaGVhcnRSYXRlVmFyaWFiaWxpdHknLCAneWVhcicsICdtb250aCcsICdkYXknLCAnc3RhZ2VzJywgJ21ldGFkYXRhJ10pLCBjaGlsZCwgbWF4X3NpemU9NSkpLCBtaW5fbGVhdmVzPU5vbmUsIG1heF9sZWF2ZXM9MTUpIGV4Y2VlZGVkIG1heF9sZWF2ZXM9MTUgYW5kIGhhZCB0byBiZSByZXRyaWVkCgogIC0gU3RvcHBlZCBiZWNhdXNlIHNldHRpbmdzLm1heF9leGFtcGxlcz0yMDA=" /></properties><testcase classname="backend.test_adapter_fuzz" name="test_adapters_return_valid_data_or_explicit_validation_error[local_datetime]" time="0.860"><failure message="AttributeError: 'NoneType' object has no attribute 'replace'&#10;Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(&#10;    adapter='local_datetime',&#10;    value=None,&#10;)">backend\test_adapter_fuzz.py:53: in test_adapters_return_valid_data_or_explicit_validation_error
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_adapter_fuzz.py:57: in test_adapters_return_valid_data_or_explicit_validation_error
+    result = RECIPES[adapter](value)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend\test_adapter_fuzz.py:38: in &lt;lambda&gt;
+    'local_datetime': lambda p: _local_datetime(p, '0s', preserve_offset=True),
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:48: in _local_datetime
+    instant = datetime.fromisoformat(value.replace("Z", "+00:00"))
+                                     ^^^^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'replace'
+E   Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+E       adapter='local_datetime',
+E       value=None,
+E   )</failure></testcase><testcase classname="backend.test_adapter_fuzz" name="test_adapters_return_valid_data_or_explicit_validation_error[google_date]" time="5.770"><failure message="ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)">+ Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 53, in test_adapters_return_valid_data_or_explicit_validation_error
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\google_health_client.py", line 55, in _google_date
+    |     return date(value["year"], value["month"], value["day"])
+    |                 ~~~~~^^^^^^^^
+    | KeyError: 'year'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='google_date',
+    |     value={},  # or any other generated value
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\google_health_client.py", line 55, in _google_date
+    |     return date(value["year"], value["month"], value["day"])
+    |                 ~~~~~^^^^^^^^
+    | TypeError: 'NoneType' object is not subscriptable
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='google_date',
+    |     value=None,  # or any other generated value
+    | )
+    +------------------------------------</failure></testcase><testcase classname="backend.test_adapter_fuzz" name="test_adapters_return_valid_data_or_explicit_validation_error[summary_gate]" time="0.739" /><testcase classname="backend.test_adapter_fuzz" name="test_adapters_return_valid_data_or_explicit_validation_error[stage_sleep]" time="1.019" /><testcase classname="backend.test_adapter_fuzz" name="test_adapters_return_valid_data_or_explicit_validation_error[stress_sleep]" time="0.852" /><testcase classname="backend.test_adapter_fuzz" name="test_adapters_return_valid_data_or_explicit_validation_error[stress_hr]" time="13.899"><failure message="ExceptionGroup: Hypothesis found 4 distinct failures. (4 sub-exceptions)">+ Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 53, in test_adapters_return_valid_data_or_explicit_validation_error
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 4 distinct failures. (4 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_stress.py", line 141, in adapt_google_hr
+    |     return HrSample(_instant(metric["sampleTime"]["physicalTime"]), float(metric["beatsPerMinute"]))
+    |                              ~~~~~~^^^^^^^^^^^^^^
+    | KeyError: 'sampleTime'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='stress_hr',
+    |     value={'heartRate': {}},
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_stress.py", line 141, in adapt_google_hr
+    |     return HrSample(_instant(metric["sampleTime"]["physicalTime"]), float(metric["beatsPerMinute"]))
+    |                              ~~~~~~^^^^^^^^^^^^^^
+    | TypeError: 'NoneType' object is not subscriptable
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='stress_hr',
+    |     value={'heartRate': None},
+    | )
+    +---------------- 3 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_stress.py", line 140, in adapt_google_hr
+    |     metric = point["heartRate"]
+    |              ~~~~~^^^^^^^^^^^^^
+    | KeyError: 'heartRate'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='stress_hr',
+    |     value={},  # or any other generated value
+    | )
+    +---------------- 4 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_stress.py", line 140, in adapt_google_hr
+    |     metric = point["heartRate"]
+    |              ~~~~~^^^^^^^^^^^^^
+    | TypeError: 'NoneType' object is not subscriptable
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='stress_hr',
+    |     value=None,  # or any other generated value
+    | )
+    +------------------------------------</failure></testcase><testcase classname="backend.test_adapter_fuzz" name="test_adapters_return_valid_data_or_explicit_validation_error[stress_hrv]" time="0.088"><failure message="TypeError: argument of type 'NoneType' is not iterable&#10;Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(&#10;    adapter='stress_hrv',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_adapter_fuzz.py:58">backend\test_adapter_fuzz.py:53: in test_adapters_return_valid_data_or_explicit_validation_error
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_adapter_fuzz.py:57: in test_adapters_return_valid_data_or_explicit_validation_error
+    result = RECIPES[adapter](value)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend\test_adapter_fuzz.py:44: in &lt;lambda&gt;
+    'stress_hrv': lambda p: adapt_google_hrv([p], 'start'),
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_stress.py:153: in adapt_google_hrv
+    samples = sorted((
+backend\sleep_stress.py:157: in &lt;genexpr&gt;
+    if "heartRateVariability" in item and item["heartRateVariability"].get("sampleTime", {}).get("physicalTime")
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: argument of type 'NoneType' is not iterable
+E   Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+E       adapter='stress_hrv',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_adapter_fuzz.py:58</failure></testcase><testcase classname="backend.test_adapter_fuzz" name="test_adapters_return_valid_data_or_explicit_validation_error[stats_from_dict]" time="2.930"><failure message="ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)">+ Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 53, in test_adapters_return_valid_data_or_explicit_validation_error
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_stage_ranges.py", line 199, in stats_from_dict
+    |     return NightStageStats(**{**value, "night_date": date.fromisoformat(value["night_date"]),
+    |                                                                         ~~~~~^^^^^^^^^^^^^^
+    | KeyError: 'night_date'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='stats_from_dict',
+    |     value={},  # or any other generated value
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_stage_ranges.py", line 199, in stats_from_dict
+    |     return NightStageStats(**{**value, "night_date": date.fromisoformat(value["night_date"]),
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    | TypeError: 'NoneType' object is not a mapping
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='stats_from_dict',
+    |     value=None,  # or any other generated value
+    | )
+    +------------------------------------</failure></testcase><testcase classname="backend.test_adapter_fuzz" name="test_adapters_return_valid_data_or_explicit_validation_error[main_sleep_selector]" time="12.904"><failure message="ExceptionGroup: Hypothesis found 6 distinct failures. (6 sub-exceptions)">+ Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 53, in test_adapters_return_valid_data_or_explicit_validation_error
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 6 distinct failures. (6 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 46, in &lt;lambda&gt;
+    |     'main_sleep_selector': lambda p: select_sleep([p], date(2026, 10, 7)),
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 23, in select_sleep
+    |     if meta.get("nap") or meta.get("mainSleep") is False:
+    |        ^^^^^^^^
+    | AttributeError: 'NoneType' object has no attribute 'get'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     # The test always failed when commented parts were varied together.
+    |     adapter='main_sleep_selector',
+    |     value={'sleep': {'sleep': None, 'interval': None, 'startTime': None, 'endTime': None, 'metadata': None}},
+    | )
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 46, in &lt;lambda&gt;
+    |     'main_sleep_selector': lambda p: select_sleep([p], date(2026, 10, 7)),
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 25, in select_sleep
+    |     start, end = instant(interval["startTime"]), instant(interval["endTime"])
+    |                          ~~~~~~~~^^^^^^^^^^^^^
+    | TypeError: 'NoneType' object is not subscriptable
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     # The test always failed when commented parts were varied together.
+    |     adapter='main_sleep_selector',
+    |     value={'sleep': {'sleep': None, 'interval': None}},
+    | )
+    +---------------- 3 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 46, in &lt;lambda&gt;
+    |     'main_sleep_selector': lambda p: select_sleep([p], date(2026, 10, 7)),
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 22, in select_sleep
+    |     meta, interval = sleep.get("metadata", {}), sleep["interval"]
+    |                                                 ~~~~~^^^^^^^^^^^^
+    | KeyError: 'interval'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='main_sleep_selector',
+    |     value={'sleep': {}},
+    | )
+    +---------------- 4 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 46, in &lt;lambda&gt;
+    |     'main_sleep_selector': lambda p: select_sleep([p], date(2026, 10, 7)),
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 22, in select_sleep
+    |     meta, interval = sleep.get("metadata", {}), sleep["interval"]
+    |                      ^^^^^^^^^
+    | AttributeError: 'NoneType' object has no attribute 'get'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='main_sleep_selector',
+    |     value={'sleep': None},
+    | )
+    +---------------- 5 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 46, in &lt;lambda&gt;
+    |     'main_sleep_selector': lambda p: select_sleep([p], date(2026, 10, 7)),
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 21, in select_sleep
+    |     sleep = point["sleep"]
+    |             ~~~~~^^^^^^^^^
+    | KeyError: 'sleep'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='main_sleep_selector',
+    |     value={},  # or any other generated value
+    | )
+    +---------------- 6 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 57, in test_adapters_return_valid_data_or_explicit_validation_error
+    |     result = RECIPES[adapter](value)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\test_adapter_fuzz.py", line 46, in &lt;lambda&gt;
+    |     'main_sleep_selector': lambda p: select_sleep([p], date(2026, 10, 7)),
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 19, in select_sleep
+    |     if point.get("dataSource", {}).get("platform") not in (None, "FITBIT"):
+    |        ^^^^^^^^^
+    | AttributeError: 'NoneType' object has no attribute 'get'
+    | Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+    |     adapter='main_sleep_selector',
+    |     value=None,  # or any other generated value
+    | )
+    +------------------------------------</failure></testcase><testcase classname="backend.test_adapter_fuzz" name="test_adapters_return_valid_data_or_explicit_validation_error[strain_sleep_windows]" time="0.136"><failure message="AttributeError: 'NoneType' object has no attribute 'get'&#10;Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(&#10;    adapter='strain_sleep_windows',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_adapter_fuzz.py:58">backend\test_adapter_fuzz.py:53: in test_adapters_return_valid_data_or_explicit_validation_error
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_adapter_fuzz.py:57: in test_adapters_return_valid_data_or_explicit_validation_error
+    result = RECIPES[adapter](value)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+backend\test_adapter_fuzz.py:47: in &lt;lambda&gt;
+    'strain_sleep_windows': lambda p: sleep_windows([p]),
+                                      ^^^^^^^^^^^^^^^^^^
+backend\strain_service.py:83: in sleep_windows
+    sleep = point.get('sleep', {})
+            ^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+E   Failing test case: test_adapters_return_valid_data_or_explicit_validation_error(
+E       adapter='strain_sleep_windows',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_adapter_fuzz.py:58</failure></testcase><testcase classname="backend.test_adapter_fuzz" name="test_adapters_return_valid_data_or_explicit_validation_error[store_point_clock]" time="0.589" /></testsuite></testsuites>

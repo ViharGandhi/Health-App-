@@ -246,12 +246,12 @@ class HealthReadStore:
         with self.connection() as conn:
             rows = conn.execute('SELECT day,count FROM dynamic_steps WHERE account=? AND day>=? AND day<=?', (account, str(start), str(end))).fetchall()
             old = conn.execute('SELECT payload FROM exact_reads WHERE account=? ORDER BY fetched DESC', (account,)).fetchall()
-        values = dict(rows)
+        values = {day: count for day, count in rows if type(count) is int and count >= 0}
         for (payload,) in old:
             item = json.loads(payload)
             if isinstance(item, dict):
                 for day, count in item.items():
-                    if re.fullmatch(r'\d{4}-\d{2}-\d{2}', day) and isinstance(count, int) and str(start) <= day <= str(end):
+                    if re.fullmatch(r'\d{4}-\d{2}-\d{2}', day) and type(count) is int and count >= 0 and str(start) <= day <= str(end):
                         values.setdefault(day, count)
         return values
 

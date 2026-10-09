@@ -5,12 +5,15 @@ import math
 import random
 
 from sleep_stage_ranges import instant, adapt_google_sleep, stage_stats
+from sleep_selection import main_sleep_key
+from provider_payload import payload_boundary
 
 
 def local_time(value: str, offset: str) -> str:
     return instant(value).astimezone(timezone(timedelta(seconds=float(offset.removesuffix("s"))))).isoformat()
 
 
+@payload_boundary
 def select_sleep(points: list[dict], today: date, sleep_id: str | None = None, *, now: datetime | None = None) -> dict | None:
     now = now or datetime.now(timezone.utc)
     candidates = []
@@ -27,13 +30,16 @@ def select_sleep(points: list[dict], today: date, sleep_id: str | None = None, *
             continue
         if sleep_id is not None and point["name"] != sleep_id:
             continue
-        candidates.append((wake_date, meta.get("mainSleep") is True, end - start, point["name"], point))
-    return max(candidates, key=lambda item: item[:4])[-1] if candidates else None
+        key = main_sleep_key(meta.get('mainSleep'), start, end, point['name'])
+        if key is not None:
+            candidates.append((wake_date, key, point))
+    return max(candidates, key=lambda item: item[:2])[-1] if candidates else None
 
 
+@payload_boundary
 def build_sleep_heart_rate(point: dict | None, readings: list[dict], is_mock: bool) -> dict:
     if point is None:
-        return {"is_mock": is_mock, "status": "no_sleep", "samples": [], "stage_intervals": []}
+        return {"is_mock": is_mock, 'estimator': 'observed_sleep_heart_rate', "status": "no_sleep", "samples": [], "stage_intervals": []}
     interval = point["sleep"]["interval"]
     start, end = instant(interval["startTime"]), instant(interval["endTime"])
     samples, conflicts = {}, set()
@@ -42,6 +48,8 @@ def build_sleep_heart_rate(point: dict | None, readings: list[dict], is_mock: bo
         try:
             clock = metric["sampleTime"]
             timestamp = instant(clock["physicalTime"])
+            if isinstance(metric['beatsPerMinute'], bool):
+                continue
             bpm = float(metric["beatsPerMinute"])
             if not start <= timestamp < end or not 1 <= bpm <= 300 or not bpm.is_integer():
                 continue
@@ -59,7 +67,7 @@ def build_sleep_heart_rate(point: dict | None, readings: list[dict], is_mock: bo
     stats, _ = stage_stats(night)
     stage_intervals = [{"stage": s.stage, "start": s.start_utc.isoformat(), "end": s.end_utc.isoformat()}
                        for s in night.segments] if stats else []
-    return {"is_mock": is_mock, "status": "ok" if ordered else "no_readings",
+    return {"is_mock": is_mock, 'estimator': 'observed_sleep_heart_rate', "status": "ok" if ordered else "no_readings",
             "sleep_id": point["name"], "night_date": end_local[:10],
             "start": start.isoformat(), "end": end.isoformat(),
             "start_local": start_local, "end_local": end_local, "samples": ordered,

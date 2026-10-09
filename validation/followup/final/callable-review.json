@@ -1,0 +1,4127 @@
+[
+  {
+    "source": "backend/auth.py",
+    "line": 74,
+    "callable": "_sign",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_auth.py",
+      "backend/test_expired_session_consistency.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/auth.py",
+    "line": 78,
+    "callable": "_unsign",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_auth.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/auth.py",
+    "line": 86,
+    "callable": "get_session",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/auth.py",
+    "line": 93,
+    "callable": "set_session",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/auth.py",
+    "line": 104,
+    "callable": "clear_session",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/auth.py",
+    "line": 112,
+    "callable": "refresh_access_token",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/auth.py",
+    "line": 129,
+    "callable": "_valid_tokens",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/auth.py",
+    "line": 138,
+    "callable": "get_valid_access_token",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_auth_payload_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/auth.py",
+    "line": 172,
+    "callable": "login",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/auth.py",
+    "line": 204,
+    "callable": "callback",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/auth.py",
+    "line": 268,
+    "callable": "status",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/auth.py",
+    "line": 289,
+    "callable": "disconnect",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/backfill_sleep_stage_ranges.py",
+    "line": 18,
+    "callable": "run",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/backfill_sleep_stress.py",
+    "line": 18,
+    "callable": "_run",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/backfill_sleep_stress.py",
+    "line": 26,
+    "callable": "main",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/calibrate_sleep_stress.py",
+    "line": 13,
+    "callable": "main",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/dynamic_sync.py",
+    "line": 14,
+    "callable": "utc_text",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/dynamic_sync.py",
+    "line": 18,
+    "callable": "sync_dynamic",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_sleep_sync.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 36,
+    "callable": "read_store",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 40,
+    "callable": "_day_filter",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 47,
+    "callable": "_local_datetime",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_adapter_fuzz.py",
+      "backend/test_daily_adapter_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 58,
+    "callable": "_google_date",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_adapter_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 62,
+    "callable": "_valid_sleep_summary",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_adapter_fuzz.py",
+      "backend/test_sample_boolean_coercion.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 90,
+    "callable": "GoogleHealthClient.__init__",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 100,
+    "callable": "GoogleHealthClient._points",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 127,
+    "callable": "GoogleHealthClient._cache_points",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 138,
+    "callable": "GoogleHealthClient._stored_points",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 146,
+    "callable": "GoogleHealthClient._read_stored_points",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 180,
+    "callable": "GoogleHealthClient._invalidate_calculations",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 188,
+    "callable": "GoogleHealthClient._pace_request",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 205,
+    "callable": "GoogleHealthClient._fetch_points",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 240,
+    "callable": "GoogleHealthClient.get_sleep_stage_points",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 247,
+    "callable": "GoogleHealthClient.get_health_user_id",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 253,
+    "callable": "GoogleHealthClient.get_sleep_heart_rate_points",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 265,
+    "callable": "GoogleHealthClient.get_daily_hrv",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 278,
+    "callable": "GoogleHealthClient.get_deep_sleep_hrv",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 292,
+    "callable": "GoogleHealthClient.get_resting_heart_rate",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 305,
+    "callable": "GoogleHealthClient.get_hrv_history",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 322,
+    "callable": "GoogleHealthClient.get_health_history",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 358,
+    "callable": "GoogleHealthClient.get_intraday_heart_rate",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 376,
+    "callable": "GoogleHealthClient.get_sleep_stress_points",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 380,
+    "callable": "GoogleHealthClient.get_sleep_stress_points.sample_filter",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 390,
+    "callable": "GoogleHealthClient.get_workout_sessions",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 411,
+    "callable": "GoogleHealthClient.get_daily_steps",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 434,
+    "callable": "GoogleHealthClient._fetch_daily_steps",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 481,
+    "callable": "GoogleHealthClient._sleep_records",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 548,
+    "callable": "GoogleHealthClient.get_sleep_need_history",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 554,
+    "callable": "GoogleHealthClient.get_nap_minutes_history",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 579,
+    "callable": "GoogleHealthClient.get_sleep_session",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 583,
+    "callable": "GoogleHealthClient.get_sleep_history_nights",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 589,
+    "callable": "GoogleHealthClient.get_sleep_efficiency_history",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 599,
+    "callable": "GoogleHealthClient.get_sleep_trend_history",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/google_health_client.py",
+    "line": 609,
+    "callable": "GoogleHealthClient.get_main_sleep_timing_history",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_daily_adapter_fuzz.py",
+      "backend/test_dynamic_sync.py",
+      "backend/test_google_health_client.py",
+      "backend/test_health.py",
+      "backend/test_health_heart_rate.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_provider_error_boundaries.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 27,
+    "callable": "clock",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 40,
+    "callable": "ReadRange.expression",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_health_read_store.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 41,
+    "callable": "ReadRange.expression.bound",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_health_read_store.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 50,
+    "callable": "read_range",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_sleep_sync.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 61,
+    "callable": "_camel",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 66,
+    "callable": "point_clock",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_adapter_fuzz.py",
+      "backend/test_health_read_store.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 92,
+    "callable": "HealthReadStore.__init__",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 143,
+    "callable": "HealthReadStore._index_slice",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 155,
+    "callable": "HealthReadStore.connection",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 158,
+    "callable": "HealthReadStore.local_read",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 188,
+    "callable": "HealthReadStore.dynamic_status",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 199,
+    "callable": "HealthReadStore.remember_home_visit",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 204,
+    "callable": "HealthReadStore.sleep_day_saved",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 208,
+    "callable": "HealthReadStore.finish_sleep_day",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 214,
+    "callable": "HealthReadStore.sleep_day_prepared",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 219,
+    "callable": "HealthReadStore.finish_sleep_preparation",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 225,
+    "callable": "HealthReadStore.dynamic_finish",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 236,
+    "callable": "HealthReadStore._remember_session",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 241,
+    "callable": "HealthReadStore.remember_session",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 245,
+    "callable": "HealthReadStore.stored_steps",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 259,
+    "callable": "HealthReadStore.cutoff",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 263,
+    "callable": "HealthReadStore.range_read",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 297,
+    "callable": "HealthReadStore.range_write",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 338,
+    "callable": "HealthReadStore.exact_read",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 345,
+    "callable": "HealthReadStore.exact_write",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 352,
+    "callable": "HealthReadStore.expire_recent",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 361,
+    "callable": "HealthReadStore._invalidate_days",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 368,
+    "callable": "HealthReadStore.calculation_version",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 373,
+    "callable": "HealthReadStore.days_read",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 383,
+    "callable": "HealthReadStore.days_write",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 393,
+    "callable": "HealthReadStore.epoch",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 398,
+    "callable": "HealthReadStore.snapshot_read",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 407,
+    "callable": "HealthReadStore.snapshot_write",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 415,
+    "callable": "HealthReadStore._check_epoch",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 420,
+    "callable": "HealthReadStore.status",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_dynamic_sync.py",
+      "backend/test_health_read_store.py",
+      "backend/test_page_profile_isolation.py",
+      "backend/test_page_snapshots.py",
+      "backend/test_provider_step_counts.py",
+      "backend/test_sleep_preparation.py",
+      "backend/test_strain_storage.py",
+      "backend/test_vo2_cache_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_read_store.py",
+    "line": 431,
+    "callable": "exact_key",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_provider_step_counts.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_trends.py",
+    "line": 17,
+    "callable": "valid_health_value",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_provider_validity.py",
+      "backend/test_shared_validity.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_trends.py",
+    "line": 22,
+    "callable": "build_heart_rate_response",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_health_heart_rate.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/health_trends.py",
+    "line": 41,
+    "callable": "build_health_response",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_health.py",
+      "backend/test_health_validity.py",
+      "backend/test_structured_calculator_fuzz.py",
+      "backend/test_unbounded_median.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 120,
+    "callable": "data_timings",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 148,
+    "callable": "provider_payload_error",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 155,
+    "callable": "unrepresentable_range",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 161,
+    "callable": "google_status_error",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 172,
+    "callable": "google_network_error",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 186,
+    "callable": "_get_token",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 206,
+    "callable": "_client_day",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_request_day_fallback.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 217,
+    "callable": "_client_timezone",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 224,
+    "callable": "_client_age",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 244,
+    "callable": "_google_client",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 258,
+    "callable": "_cached_data_page",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_page_profile_isolation.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 260,
+    "callable": "_cached_data_page.wrapped",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_page_profile_isolation.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 287,
+    "callable": "_demo_dashboard",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 294,
+    "callable": "data_status",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 305,
+    "callable": "refresh_data",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 323,
+    "callable": "sync_data",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 336,
+    "callable": "_compute_real_strain",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_health.py",
+      "backend/test_recovery_integration.py",
+      "backend/test_strain_analytics.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 348,
+    "callable": "_load_sleep_need_inputs",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_score_transparency.py",
+      "backend/test_sleep_need_integration.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 362,
+    "callable": "_compute_real_sleep",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_estimator_identity.py",
+      "backend/test_recovery_analytics.py",
+      "backend/test_score_transparency.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_summary_hardening.py",
+      "backend/test_sleep_summary_validity.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 476,
+    "callable": "_compute_real_recovery",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_health.py",
+      "backend/test_unbounded_median.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 514,
+    "callable": "_recovery_sleep_need",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_recovery_analytics.py",
+      "backend/test_recovery_integration.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 520,
+    "callable": "_compute_connected_recovery",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_estimator_identity.py",
+      "backend/test_recovery_analytics.py",
+      "backend/test_recovery_integration.py",
+      "backend/test_score_transparency.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 531,
+    "callable": "_recovery_response",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 555,
+    "callable": "_demo_recovery_analytics",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_recovery_analytics.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 576,
+    "callable": "root",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 582,
+    "callable": "dashboard",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 617,
+    "callable": "recovery_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_sleep_preparation.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 634,
+    "callable": "recovery_analytics_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 678,
+    "callable": "sleep_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 697,
+    "callable": "sleep_need_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 718,
+    "callable": "sleep_analytics_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 754,
+    "callable": "sleep_heart_rate_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 789,
+    "callable": "sleep_stage_ranges_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 812,
+    "callable": "sleep_stress_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 848,
+    "callable": "strain_analytics_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 887,
+    "callable": "strain_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 909,
+    "callable": "health_heart_rate_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 925,
+    "callable": "health_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 941,
+    "callable": "sleep_consistency_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 956,
+    "callable": "sleep_consistency_score_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_sleep_preparation.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 976,
+    "callable": "sleep_efficiency_endpoint",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/main.py",
+    "line": 993,
+    "callable": "_prepare_sleep_pages",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_sleep_preparation.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_data.py",
+    "line": 41,
+    "callable": "_build_mock_hr_samples",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_data.py",
+    "line": 71,
+    "callable": "_build_mock_sleep_data",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_sleep_trends.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_data.py",
+    "line": 108,
+    "callable": "compute_mock_strain",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_data.py",
+    "line": 119,
+    "callable": "compute_mock_sleep",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_data.py",
+    "line": 206,
+    "callable": "compute_mock_recovery",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_data.py",
+    "line": 254,
+    "callable": "get_mock_dashboard",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_recovery_analytics.py",
+      "backend/test_recovery_integration.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_data.py",
+    "line": 274,
+    "callable": "_build_sample_sleep_records",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_sleep_trends.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_data.py",
+    "line": 305,
+    "callable": "get_mock_sleep_consistency_trend",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_data.py",
+    "line": 312,
+    "callable": "get_mock_sleep_consistency_score",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_data.py",
+    "line": 319,
+    "callable": "get_mock_sleep_efficiency_trend",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_data.py",
+    "line": 326,
+    "callable": "get_mock_health",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_health.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_recovery.py",
+    "line": 21,
+    "callable": "mock_recovery_points",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "validation/followup/test_live_script.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_recovery.py",
+    "line": 90,
+    "callable": "MockRecoveryClient.__init__",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_estimator_identity.py",
+      "backend/test_recovery_analytics.py",
+      "backend/test_recovery_integration.py",
+      "backend/test_score_transparency.py",
+      "backend/test_sleep_dst_elapsed.py",
+      "backend/test_sleep_summary_hardening.py",
+      "backend/test_sleep_summary_validity.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_recovery.py",
+    "line": 97,
+    "callable": "MockRecoveryClient._points",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_estimator_identity.py",
+      "backend/test_recovery_analytics.py",
+      "backend/test_recovery_integration.py",
+      "backend/test_score_transparency.py",
+      "backend/test_sleep_dst_elapsed.py",
+      "backend/test_sleep_summary_hardening.py",
+      "backend/test_sleep_summary_validity.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_recovery.py",
+    "line": 117,
+    "callable": "preview",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_sleep_stage_ranges.py",
+    "line": 9,
+    "callable": "mock_stage_points",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_private_stage_logging.py",
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_analytics.py",
+      "backend/test_sleep_analytics_inputs.py",
+      "backend/test_sleep_heart_rate.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_sleep_stage_ranges.py",
+    "line": 49,
+    "callable": "mock_stage_ranges",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_sleep_stress.py",
+    "line": 14,
+    "callable": "_timestamp",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_sleep_stress.py",
+    "line": 18,
+    "callable": "_raw_night",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_sleep_stress.py",
+      "backend/test_stress_withheld_reasons.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_sleep_stress.py",
+    "line": 88,
+    "callable": "prepared_mock_nights",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/mock_sleep_stress.py",
+    "line": 102,
+    "callable": "mock_sleep_stress_history",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_sleep_stress.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/models.py",
+    "line": 53,
+    "callable": "WorkoutDetail.display_strain",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/models.py",
+    "line": 90,
+    "callable": "StrainResponse.display_strain",
+    "source_review_focus": "Auth/session states; profile headers; demo isolation; serialization; reasons; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/page_snapshots.py",
+    "line": 15,
+    "callable": "cached_page_result",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_page_snapshots.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/page_snapshots.py",
+    "line": 20,
+    "callable": "cached_page_result.rebuild",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_page_snapshots.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/page_snapshots.py",
+    "line": 31,
+    "callable": "cached_page_result.complete",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_page_snapshots.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/provider_payload.py",
+    "line": 10,
+    "callable": "payload_boundary",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/provider_payload.py",
+    "line": 15,
+    "callable": "payload_boundary.asynchronous",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/provider_payload.py",
+    "line": 22,
+    "callable": "payload_boundary.synchronous",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/read_metrics.py",
+    "line": 7,
+    "callable": "count",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/recovery_analytics.py",
+    "line": 17,
+    "callable": "typical_ranges",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_range_overflow.py",
+      "backend/test_recovery_analytics.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/recovery_analytics.py",
+    "line": 55,
+    "callable": "build_recovery_analytics",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_recovery_analytics.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/recovery_analytics.py",
+    "line": 86,
+    "callable": "build_recovery_analytics.averages",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_recovery_analytics.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/recovery_analytics.py",
+    "line": 126,
+    "callable": "_months_back",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/recovery_analytics.py",
+    "line": 134,
+    "callable": "mock_recovery_history",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_recovery_analytics.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/recovery_score.py",
+    "line": 34,
+    "callable": "robust",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_recovery_score.py",
+      "backend/test_unbounded_median.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/recovery_score.py",
+    "line": 39,
+    "callable": "clamp",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/recovery_score.py",
+    "line": 61,
+    "callable": "calculate_recovery",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_recovery_score.py",
+      "backend/test_shared_validity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/recovery_score.py",
+    "line": 114,
+    "callable": "baseline_bounds",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/recovery_score.py",
+    "line": 119,
+    "callable": "recovery_from_history",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_audit_timezones_missingness.py",
+      "backend/test_provider_boolean.py",
+      "backend/test_recovery_analytics.py",
+      "backend/test_recovery_score.py",
+      "backend/test_recovery_today_weight.py",
+      "backend/test_shared_validity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_analytics.py",
+    "line": 15,
+    "callable": "demo_sleep_need_inputs",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_analytics.py",
+    "line": 26,
+    "callable": "sleep_observations",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_sleep_analytics.py",
+      "backend/test_sleep_analytics_inputs.py",
+      "backend/test_sleep_chart_fuzz.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_analytics.py",
+    "line": 102,
+    "callable": "timing_records",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_sleep_dst_elapsed.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_analytics.py",
+    "line": 110,
+    "callable": "build_sleep_analytics",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_sleep_analytics.py",
+      "backend/test_sleep_analytics_inputs.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_analytics.py",
+    "line": 130,
+    "callable": "build_sleep_analytics.averages",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_sleep_analytics.py",
+      "backend/test_sleep_analytics_inputs.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_heart_rate.py",
+    "line": 12,
+    "callable": "local_time",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_heart_rate.py",
+    "line": 17,
+    "callable": "select_sleep",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_adapter_fuzz.py",
+      "backend/test_audit_timezones_missingness.py",
+      "backend/test_main_selection_inventory.py",
+      "backend/test_sleep_heart_rate.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_heart_rate.py",
+    "line": 40,
+    "callable": "build_sleep_heart_rate",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_revision_policies.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_chart_fuzz.py",
+      "backend/test_sleep_heart_rate.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_heart_rate.py",
+    "line": 77,
+    "callable": "mock_sleep_heart_rate_points",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [
+      "backend/test_sleep_heart_rate.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_need.py",
+    "line": 37,
+    "callable": "strain_sleep_add",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_sleep_need.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_need.py",
+    "line": 41,
+    "callable": "strain_sleep_add.logistic",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_sleep_need.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_need.py",
+    "line": 47,
+    "callable": "sleep_debt",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_sleep_need.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_need.py",
+    "line": 63,
+    "callable": "calculate_sleep_need",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_sleep_need.py",
+      "backend/test_sleep_need_integration.py",
+      "backend/test_sleep_summary_hardening.py",
+      "backend/test_sleep_summary_validity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_need.py",
+    "line": 79,
+    "callable": "format_sleep_minutes",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_sleep_need.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_need_inputs.py",
+    "line": 10,
+    "callable": "need_components",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_need_inputs.py",
+    "line": 21,
+    "callable": "SleepNeedInputs.for_tonight",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_recovery_integration.py",
+      "backend/test_sleep_analytics.py",
+      "backend/test_sleep_need_integration.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_selection.py",
+    "line": 10,
+    "callable": "main_sleep_key",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_pipeline.py",
+    "line": 10,
+    "callable": "sync_stage_ranges",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_provider_transport_fuzz.py",
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_pipeline.py",
+    "line": 31,
+    "callable": "run_stage_jobs",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_ranges.py",
+    "line": 27,
+    "callable": "StageRangeConfig.__post_init__",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_ranges.py",
+    "line": 73,
+    "callable": "instant",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_ranges.py",
+    "line": 81,
+    "callable": "adapt_google_sleep",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_adapter_fuzz.py",
+      "backend/test_audit_timezones_missingness.py",
+      "backend/test_private_stage_logging.py",
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_ranges.py",
+    "line": 104,
+    "callable": "stage_stats",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_audit_timezones_missingness.py",
+      "backend/test_private_stage_logging.py",
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_stage_day_limit.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_ranges.py",
+    "line": 141,
+    "callable": "personal_ranges",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_ranges.py",
+    "line": 166,
+    "callable": "score_stages",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_ranges.py",
+    "line": 193,
+    "callable": "stats_to_dict",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_ranges.py",
+    "line": 201,
+    "callable": "stats_from_dict",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_adapter_fuzz.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_store.py",
+    "line": 18,
+    "callable": "SleepStageStore.__init__",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_store.py",
+    "line": 24,
+    "callable": "SleepStageStore.has_sessions",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_store.py",
+    "line": 28,
+    "callable": "SleepStageStore.sync",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_store.py",
+    "line": 86,
+    "callable": "SleepStageStore.results",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_store.py",
+    "line": 92,
+    "callable": "SleepStageStore.enqueue",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_store.py",
+    "line": 99,
+    "callable": "SleepStageStore.jobs",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_store.py",
+    "line": 104,
+    "callable": "SleepStageStore.finish_job",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_webhooks.py",
+    "line": 26,
+    "callable": "stage_store",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_webhooks.py",
+    "line": 30,
+    "callable": "verify_notification",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_webhooks.py",
+    "line": 53,
+    "callable": "enqueue_sleep_notifications",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_webhook_payload_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_webhooks.py",
+    "line": 69,
+    "callable": "enqueue_sleep_notifications.civil_date",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stage_ranges.py",
+      "backend/test_webhook_payload_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stage_webhooks.py",
+    "line": 82,
+    "callable": "sleep_stage_webhook",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 101,
+    "callable": "_instant",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 108,
+    "callable": "_overlap",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 113,
+    "callable": "adapt_google_sleep",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_adapter_fuzz.py",
+      "backend/test_audit_timezones_missingness.py",
+      "backend/test_sleep_stress.py",
+      "backend/test_stress_baseline_uniqueness.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 141,
+    "callable": "adapt_google_hr",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_adapter_fuzz.py",
+      "backend/test_sample_boolean_coercion.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 149,
+    "callable": "adapt_google_hrv",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_adapter_fuzz.py",
+      "backend/test_sample_boolean_coercion.py",
+      "backend/test_sleep_stress.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 186,
+    "callable": "_merged_minutes",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 201,
+    "callable": "asleep_minutes",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 210,
+    "callable": "infer_hr_interval_seconds",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 219,
+    "callable": "prepare_night",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_provider_validity.py",
+      "backend/test_sleep_stress.py",
+      "backend/test_stress_numerical_validity.py",
+      "backend/test_stress_partition_hardening.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 269,
+    "callable": "_stage_baseline",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 278,
+    "callable": "build_baseline",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stress.py",
+      "backend/test_stress_baseline_uniqueness.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 313,
+    "callable": "score_night",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stress.py",
+      "backend/test_stress_partition_hardening.py",
+      "backend/test_stress_withheld_reasons.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress.py",
+    "line": 414,
+    "callable": "summarize_nights",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stress.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress_pipeline.py",
+    "line": 12,
+    "callable": "compute_connected_sleep_stress",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stress.py",
+      "backend/test_stress_account_isolation.py",
+      "backend/test_stress_withheld_reasons.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress_store.py",
+    "line": 18,
+    "callable": "SleepStressStore.__init__",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stress.py",
+      "backend/test_stress_account_isolation.py",
+      "backend/test_stress_withheld_reasons.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress_store.py",
+    "line": 26,
+    "callable": "SleepStressStore._key",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stress.py",
+      "backend/test_stress_account_isolation.py",
+      "backend/test_stress_withheld_reasons.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress_store.py",
+    "line": 29,
+    "callable": "SleepStressStore.upsert",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stress.py",
+      "backend/test_stress_account_isolation.py",
+      "backend/test_stress_withheld_reasons.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_stress_store.py",
+    "line": 49,
+    "callable": "SleepStressStore.get",
+    "source_review_focus": "Main selection; UTC stage partition; coverage; anchor provenance; unique references; account-scoped upserts",
+    "explicit_test_imports": [
+      "backend/test_sleep_stress.py",
+      "backend/test_stress_account_isolation.py",
+      "backend/test_stress_withheld_reasons.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_sync.py",
+    "line": 9,
+    "callable": "sync_sleep_day",
+    "source_review_focus": "Account/range keys; epochs; transactions; idempotent sync; concurrent reads; stale-cache bypass",
+    "explicit_test_imports": [
+      "backend/test_sleep_sync.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_trends.py",
+    "line": 23,
+    "callable": "range_start",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [
+      "backend/test_sleep_trends.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_trends.py",
+    "line": 38,
+    "callable": "build_sleep_trend",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [
+      "backend/test_sleep_trend_missing_duration.py",
+      "backend/test_sleep_trends.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_trends.py",
+    "line": 42,
+    "callable": "build_sleep_trend.usable",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [
+      "backend/test_sleep_trend_missing_duration.py",
+      "backend/test_sleep_trends.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_trends.py",
+    "line": 96,
+    "callable": "build_consistency_scores",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [
+      "backend/test_sleep_trends.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_trends.py",
+    "line": 109,
+    "callable": "build_consistency_scores.values_between",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [
+      "backend/test_sleep_trends.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_trends.py",
+    "line": 113,
+    "callable": "build_consistency_scores.mean_score",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [
+      "backend/test_sleep_trends.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/sleep_trends.py",
+    "line": 128,
+    "callable": "build_consistency_scores.month_back",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [
+      "backend/test_sleep_trends.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_analytics.py",
+    "line": 15,
+    "callable": "strain_range_start",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_strain_analytics.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_analytics.py",
+    "line": 21,
+    "callable": "metric_value",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_analytics.py",
+    "line": 33,
+    "callable": "strain_day",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_strain_analytics.py",
+      "backend/test_strain_history_serialization.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_analytics.py",
+    "line": 59,
+    "callable": "build_strain_analytics",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_strain_history_serialization.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_analytics.py",
+    "line": 70,
+    "callable": "build_strain_analytics.json_day",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_strain_history_serialization.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_service.py",
+    "line": 21,
+    "callable": "_encode_day",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_audit_cache_versions.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_service.py",
+    "line": 29,
+    "callable": "_decode_day",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_service.py",
+    "line": 37,
+    "callable": "load_strain_days",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_strain_storage.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_service.py",
+    "line": 82,
+    "callable": "sleep_windows",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_adapter_fuzz.py",
+      "backend/test_cardio_strain.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_service.py",
+    "line": 99,
+    "callable": "fetch_strain_inputs",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_service.py",
+    "line": 111,
+    "callable": "calculate_days",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_service.py",
+    "line": 143,
+    "callable": "strain_response",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_strain_history_serialization.py",
+      "backend/test_strain_serialization.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_service.py",
+    "line": 144,
+    "callable": "strain_response.rounded",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_strain_history_serialization.py",
+      "backend/test_strain_serialization.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/strain_service.py",
+    "line": 168,
+    "callable": "demo_inputs",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_strain_storage.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/validity.py",
+    "line": 6,
+    "callable": "finite_median",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/validity.py",
+    "line": 18,
+    "callable": "finite_number",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/validity.py",
+    "line": 27,
+    "callable": "positive",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [
+      "backend/test_numeric_missingness_hardening.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/validity.py",
+    "line": 31,
+    "callable": "resting_hr",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/validity.py",
+    "line": 44,
+    "callable": "valid_metric",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "backend/validity.py",
+    "line": 58,
+    "callable": "sleep_duration",
+    "source_review_focus": "Provider types; finite/unit gates; pagination progress; duplicate policy; privacy-safe failures",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "conftest.py",
+    "line": 7,
+    "callable": "block_real_http",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "conftest.py",
+    "line": 8,
+    "callable": "block_real_http.blocked",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "conftest.py",
+    "line": 10,
+    "callable": "block_real_http.async_blocked",
+    "source_review_focus": "Reviewed demo/CLI/telemetry support; explicit dates where applicable; fixtures separated from empirical calibration",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "recovery.py",
+    "line": 16,
+    "callable": "clamp",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "recovery.py",
+    "line": 20,
+    "callable": "normalize_ratio",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "recovery.py",
+    "line": 37,
+    "callable": "log_hrv_stats",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "recovery.py",
+    "line": 59,
+    "callable": "hrv_z_score",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "recovery.py",
+    "line": 83,
+    "callable": "RecoveryInput.__init__",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "recovery.py",
+    "line": 107,
+    "callable": "RecoveryCalculator.calculate",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "recovery.py",
+    "line": 138,
+    "callable": "RecoveryCalculator.training_recommendation",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "recovery.py",
+    "line": 155,
+    "callable": "RecoveryCalculator._hrv_component",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "recovery.py",
+    "line": 174,
+    "callable": "RecoveryCalculator._rhr_component",
+    "source_review_focus": "Prior-only joins; finite robust statistics; method/count gates; bounded CDF; missing context; estimator identity",
+    "explicit_test_imports": [
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleep_consistency.py",
+    "line": 40,
+    "callable": "_circular_difference",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleep_consistency.py",
+    "line": 45,
+    "callable": "_drift_score",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [
+      "backend/test_sleep_trends.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleep_consistency.py",
+    "line": 52,
+    "callable": "consistency_label",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [
+      "backend/test_sleep_trends.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleep_consistency.py",
+    "line": 62,
+    "callable": "score_main_sleep",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [
+      "backend/test_sleep_trends.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleep_consistency.py",
+    "line": 90,
+    "callable": "_clock_minutes",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleep_consistency.py",
+    "line": 94,
+    "callable": "_clock_sd",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleep_consistency.py",
+    "line": 106,
+    "callable": "_format_clock",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleep_consistency.py",
+    "line": 115,
+    "callable": "SleepConsistencyCalculator.calculate",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [
+      "backend/test_sleep_trends.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleep_efficiency.py",
+    "line": 11,
+    "callable": "SleepEfficiencyCalculator.calculate_single_night",
+    "source_review_focus": "Clock circularity; physical durations; missing dates/durations; pooled ratios; calendar limits",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_sleep_trends.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 32,
+    "callable": "clamp",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 39,
+    "callable": "normalize_ratio",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 67,
+    "callable": "compute_baseline",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_public_helper_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 80,
+    "callable": "log_hrv_stats",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 109,
+    "callable": "hrv_z_score",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 148,
+    "callable": "SleepData.__post_init__",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 163,
+    "callable": "SleepData.total_duration_hours",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 167,
+    "callable": "SleepData.deep_percentage",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 171,
+    "callable": "SleepData.rem_percentage",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 175,
+    "callable": "SleepData.core_percentage",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 179,
+    "callable": "SleepData.empty",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 206,
+    "callable": "SleepCalculator.compute_duration_score",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 231,
+    "callable": "SleepCalculator.optimal_deep_ratio",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 247,
+    "callable": "SleepCalculator.compute_sleeping_hrv_score",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 258,
+    "callable": "SleepCalculator.compute_sleeping_hr_score",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 270,
+    "callable": "SleepCalculator.compute_interruption_score",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 277,
+    "callable": "SleepCalculator.compute_restfulness_score",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 290,
+    "callable": "SleepCalculator.compute_sleep_efficiency_score",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 301,
+    "callable": "SleepCalculator.compute_hr_dip_score",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 316,
+    "callable": "SleepCalculator.compute_sleep_latency_score",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 343,
+    "callable": "SleepCalculator.calculate_score",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 441,
+    "callable": "SleepCalculator.calculate_sleep_need",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 468,
+    "callable": "SleepCalculator.compute_sleep_debt",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 477,
+    "callable": "SleepCalculator.bedtime_target",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_numeric_missingness_hardening.py",
+      "backend/test_public_calculator_fuzz.py",
+      "backend/test_public_helper_fuzz.py",
+      "backend/test_shared_validity.py",
+      "backend/test_sigmoid_overflow.py",
+      "backend/test_sleep_duration_continuity.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 495,
+    "callable": "SleepConsistencyCalculator.calculate",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 524,
+    "callable": "SleepConsistencyCalculator._minutes_from_midnight",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 535,
+    "callable": "SleepConsistencyCalculator._stddev",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 569,
+    "callable": "AyurvedicSleepCalculator.build_windows",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 585,
+    "callable": "AyurvedicSleepCalculator.raw_points",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 598,
+    "callable": "AyurvedicSleepCalculator.calculate",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 612,
+    "callable": "AyurvedicSleepCalculator.breakdown",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 635,
+    "callable": "AyurvedicSleepCalculator.guidance_text",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 646,
+    "callable": "AyurvedicSleepCalculator.guidance_hex",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "sleepscore.py",
+    "line": 657,
+    "callable": "AyurvedicSleepCalculator.improvement_tip",
+    "source_review_focus": "Seconds/hours/minutes; availability; debt windows; defaults; bounded components; caller mutation",
+    "explicit_test_imports": [
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "strain.py",
+    "line": 32,
+    "callable": "StrainConfig.from_env",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_audit_cache_versions.py",
+      "backend/test_cardio_strain.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "strain.py",
+    "line": 60,
+    "callable": "HeartRateZone.zone_for",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "strain.py",
+    "line": 64,
+    "callable": "seconds",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "strain.py",
+    "line": 71,
+    "callable": "day_window",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_audit_timezones_missingness.py",
+      "backend/test_cardio_strain.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "strain.py",
+    "line": 86,
+    "callable": "clean_samples",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_revision_policies.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "strain.py",
+    "line": 102,
+    "callable": "strain_score",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_cardio_strain.py",
+      "backend/test_public_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "strain.py",
+    "line": 108,
+    "callable": "strain_label",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "strain.py",
+    "line": 112,
+    "callable": "empty_zones",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "strain.py",
+    "line": 116,
+    "callable": "calculate_strain",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_analytics_properties.py",
+      "backend/test_audit_timezones_missingness.py",
+      "backend/test_cardio_strain.py",
+      "backend/test_shared_validity.py",
+      "backend/test_strain_history_serialization.py",
+      "backend/test_strain_rhr_validity.py",
+      "backend/test_strain_serialization.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "strain.py",
+    "line": 195,
+    "callable": "strain_analytics",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [
+      "backend/test_cardio_strain.py",
+      "backend/test_structured_calculator_fuzz.py"
+    ],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "strain.py",
+    "line": 211,
+    "callable": "detect_unlogged_workouts",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  },
+  {
+    "source": "strain.py",
+    "line": 213,
+    "callable": "detect_unlogged_workouts.finish",
+    "source_review_focus": "HRR/TRIMP units; UTC gaps; spike filter; workout conservation; raw vs display; profile/cache identity",
+    "explicit_test_imports": [],
+    "coverage_limit": "Source review and listed module/chain tests; no exhaustive branch claim."
+  }
+]

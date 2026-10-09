@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="2.153" timestamp="2026-10-09T20:07:41.623576+02:00" hostname="Zangetsu"><testcase classname="backend.test_sleep_trend_missing_duration" name="test_missing_duration_is_unusable_instead_of_raising[efficiency-time_asleep_minutes]" time="0.001"><failure message="TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'">backend\test_sleep_trend_missing_duration.py:15: in test_missing_duration_is_unusable_instead_of_raising
+    result = build_sleep_trend([record], day, day, 'W', metric, False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_trends.py:47: in build_sleep_trend
+    by_date = {record["date"]: record for record in records if usable(record)}
+                                                               ^^^^^^^^^^^^^^
+backend\sleep_trends.py:45: in usable
+    and SleepEfficiencyCalculator.calculate_single_night(asleep * 60, period * 60) is not None)
+                                                         ^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'</failure></testcase><testcase classname="backend.test_sleep_trend_missing_duration" name="test_missing_duration_is_unusable_instead_of_raising[efficiency-time_in_bed_minutes]" time="0.002"><failure message="TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'">backend\test_sleep_trend_missing_duration.py:15: in test_missing_duration_is_unusable_instead_of_raising
+    result = build_sleep_trend([record], day, day, 'W', metric, False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_trends.py:47: in build_sleep_trend
+    by_date = {record["date"]: record for record in records if usable(record)}
+                                                               ^^^^^^^^^^^^^^
+backend\sleep_trends.py:45: in usable
+    and SleepEfficiencyCalculator.calculate_single_night(asleep * 60, period * 60) is not None)
+                                                                      ^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'</failure></testcase><testcase classname="backend.test_sleep_trend_missing_duration" name="test_missing_duration_is_unusable_instead_of_raising[consistency-time_asleep_minutes]" time="0.002"><failure message="TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'">backend\test_sleep_trend_missing_duration.py:15: in test_missing_duration_is_unusable_instead_of_raising
+    result = build_sleep_trend([record], day, day, 'W', metric, False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_trends.py:47: in build_sleep_trend
+    by_date = {record["date"]: record for record in records if usable(record)}
+                                                               ^^^^^^^^^^^^^^
+backend\sleep_trends.py:45: in usable
+    and SleepEfficiencyCalculator.calculate_single_night(asleep * 60, period * 60) is not None)
+                                                         ^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'</failure></testcase><testcase classname="backend.test_sleep_trend_missing_duration" name="test_missing_duration_is_unusable_instead_of_raising[consistency-time_in_bed_minutes]" time="0.001"><failure message="TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'">backend\test_sleep_trend_missing_duration.py:15: in test_missing_duration_is_unusable_instead_of_raising
+    result = build_sleep_trend([record], day, day, 'W', metric, False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_trends.py:47: in build_sleep_trend
+    by_date = {record["date"]: record for record in records if usable(record)}
+                                                               ^^^^^^^^^^^^^^
+backend\sleep_trends.py:45: in usable
+    and SleepEfficiencyCalculator.calculate_single_night(asleep * 60, period * 60) is not None)
+                                                                      ^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'</failure></testcase></testsuite></testsuites>

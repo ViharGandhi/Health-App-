@@ -1,0 +1,701 @@
+........................................................................ [ 66%]
+....................................                                     [100%]
+============================ Hypothesis Statistics ============================
+backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[points_response]:
+
+  - during generate phase (0.97 seconds):
+    - Typical runtimes: ~ 0-16 ms, of which ~ 0-3 ms in data generation
+    - 200 passing, 0 failing, and 28 invalid test cases
+    - Events:
+      * 6.58%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[steps_response]:
+
+  - during generate phase (1.37 seconds):
+    - Typical runtimes: ~ 0-15 ms, of which ~ 0-7 ms in data generation
+    - 200 passing, 0 failing, and 29 invalid test cases
+    - Events:
+      * 8.30%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[stage_pipeline]:
+
+  - during generate phase (1.70 seconds):
+    - Typical runtimes: ~ 1-19 ms, of which ~ 0-8 ms in data generation
+    - 200 passing, 0 failing, and 22 invalid test cases
+    - Events:
+      * 6.31%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_provider_transport_fuzz.py::test_provider_response_and_pipeline_types_are_validated[sleep_summary]:
+
+  - during generate phase (1.65 seconds):
+    - Typical runtimes: ~ 1-20 ms, of which ~ 0-8 ms in data generation
+    - 200 passing, 0 failing, and 31 invalid test cases
+    - Events:
+      * 11.69%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_analytics_properties.py::test_constant_hr_strain_monotonic_and_bounded:
+
+  - during generate phase (0.57 seconds):
+    - Typical runtimes: ~ 0-4 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_analytics_properties.py::test_strain_monotonic_in_observed_duration:
+
+  - during generate phase (0.39 seconds):
+    - Typical runtimes: ~ 0-2 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_analytics_properties.py::test_strain_mapping_never_returns_twenty_one:
+
+  - during generate phase (0.12 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_analytics_properties.py::test_sleep_duration_monotonic_until_oversleep_penalty:
+
+  - during generate phase (0.16 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_analytics_properties.py::test_sleep_component_directions_and_total_bounds:
+
+  - during generate phase (0.27 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_analytics_properties.py::test_recovery_percent_monotonic_in_hrv_signal:
+
+  - during generate phase (0.25 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_analytics_properties.py::test_sleep_need_limits:
+
+  - during generate phase (0.19 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_analytics_properties.py::test_stage_partition_and_efficiency_limits:
+
+  - during generate phase (0.20 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 9 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_analytics_properties.py::test_unique_hr_sample_permutations_do_not_change_strain:
+
+  - during generate phase (0.18 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_analytics_properties.py::test_daily_join_permutations_with_unique_dates:
+
+  - during generate phase (0.30 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_webhook_payload_fuzz.py::test_notification_adapter_rejects_malformed_payload_explicitly:
+
+  - during generate phase (0.74 seconds):
+    - Typical runtimes: ~ 0-7 ms, of which ~ 0-6 ms in data generation
+    - 200 passing, 0 failing, and 33 invalid test cases
+    - Events:
+      * 12.02%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_auth_payload_fuzz.py::test_session_and_refresh_payloads_fail_closed[session]:
+
+  - during generate phase (1.34 seconds):
+    - Typical runtimes: ~ 0-16 ms, of which ~ 0-5 ms in data generation
+    - 200 passing, 0 failing, and 37 invalid test cases
+    - Events:
+      * 2.53%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_auth_payload_fuzz.py::test_session_and_refresh_payloads_fail_closed[refresh_payload]:
+
+  - during generate phase (1.02 seconds):
+    - Typical runtimes: ~ 1-9 ms, of which ~ 0-6 ms in data generation
+    - 200 passing, 0 failing, and 28 invalid test cases
+    - Events:
+      * 5.70%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_auth_payload_fuzz.py::test_callback_malformed_token_response_fails_closed:
+
+  - during generate phase (2.38 seconds):
+    - Typical runtimes: ~ 1-16 ms, of which ~ 0-6 ms in data generation
+    - 200 passing, 0 failing, and 22 invalid test cases
+    - Events:
+      * 8.11%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[local_datetime]:
+
+  - during generate phase (0.65 seconds):
+    - Typical runtimes: ~ 0-6 ms, of which ~ 0-5 ms in data generation
+    - 200 passing, 0 failing, and 20 invalid test cases
+    - Events:
+      * 4.09%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[google_date]:
+
+  - during generate phase (0.68 seconds):
+    - Typical runtimes: ~ 0-5 ms, of which ~ 0-4 ms in data generation
+    - 200 passing, 0 failing, and 41 invalid test cases
+    - Events:
+      * 5.39%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[summary_gate]:
+
+  - during generate phase (0.56 seconds):
+    - Typical runtimes: ~ 0-5 ms, of which ~ 0-4 ms in data generation
+    - 200 passing, 0 failing, and 19 invalid test cases
+    - Events:
+      * 3.20%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stage_sleep]:
+
+  - during generate phase (0.85 seconds):
+    - Typical runtimes: ~ 0-7 ms, of which ~ 0-6 ms in data generation
+    - 200 passing, 0 failing, and 26 invalid test cases
+    - Events:
+      * 2.21%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stress_sleep]:
+
+  - during generate phase (0.68 seconds):
+    - Typical runtimes: ~ 0-6 ms, of which ~ 0-5 ms in data generation
+    - 200 passing, 0 failing, and 20 invalid test cases
+    - Events:
+      * 2.27%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stress_hr]:
+
+  - during generate phase (0.74 seconds):
+    - Typical runtimes: ~ 0-8 ms, of which ~ 0-6 ms in data generation
+    - 200 passing, 0 failing, and 29 invalid test cases
+    - Events:
+      * 8.73%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stress_hrv]:
+
+  - during generate phase (0.71 seconds):
+    - Typical runtimes: ~ 0-7 ms, of which ~ 0-6 ms in data generation
+    - 200 passing, 0 failing, and 27 invalid test cases
+    - Events:
+      * 7.93%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[stats_from_dict]:
+
+  - during generate phase (0.60 seconds):
+    - Typical runtimes: ~ 0-4 ms, of which ~ 0-4 ms in data generation
+    - 200 passing, 0 failing, and 32 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[main_sleep_selector]:
+
+  - during generate phase (0.71 seconds):
+    - Typical runtimes: ~ 0-6 ms, of which ~ 0-5 ms in data generation
+    - 200 passing, 0 failing, and 22 invalid test cases
+    - Events:
+      * 4.95%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[strain_sleep_windows]:
+
+  - during generate phase (0.60 seconds):
+    - Typical runtimes: ~ 0-5 ms, of which ~ 0-4 ms in data generation
+    - 200 passing, 0 failing, and 26 invalid test cases
+    - Events:
+      * 5.75%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_adapter_fuzz.py::test_adapters_return_valid_data_or_explicit_validation_error[store_point_clock]:
+
+  - during generate phase (1.00 seconds):
+    - Typical runtimes: ~ 0-10 ms, of which ~ 0-9 ms in data generation
+    - 200 passing, 0 failing, and 25 invalid test cases
+    - Events:
+      * 8.00%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_provider_step_counts.py::test_invalid_step_count_is_rejected_instead_of_truncated:
+
+  - during generate phase (0.58 seconds):
+    - Typical runtimes: ~ 1-4 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[daily_hrv]:
+
+  - during generate phase (1.37 seconds):
+    - Typical runtimes: ~ 1-12 ms, of which ~ 0-7 ms in data generation
+    - 200 passing, 0 failing, and 26 invalid test cases
+    - Events:
+      * 5.31%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[deep_hrv]:
+
+  - during generate phase (1.24 seconds):
+    - Typical runtimes: ~ 1-10 ms, of which ~ 0-6 ms in data generation
+    - 200 passing, 0 failing, and 22 invalid test cases
+    - Events:
+      * 9.01%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[rhr]:
+
+  - during generate phase (1.52 seconds):
+    - Typical runtimes: ~ 1-12 ms, of which ~ 0-8 ms in data generation
+    - 200 passing, 0 failing, and 24 invalid test cases
+    - Events:
+      * 8.48%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[hrv_history]:
+
+  - during generate phase (1.76 seconds):
+    - Typical runtimes: ~ 1-19 ms, of which ~ 0-8 ms in data generation
+    - 200 passing, 0 failing, and 25 invalid test cases
+    - Events:
+      * 7.11%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[health_history]:
+
+  - during generate phase (1.56 seconds):
+    - Typical runtimes: ~ 1-18 ms, of which ~ 0-7 ms in data generation
+    - 200 passing, 0 failing, and 20 invalid test cases
+    - Events:
+      * 3.18%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[intraday_hr]:
+
+  - during generate phase (1.75 seconds):
+    - Typical runtimes: ~ 1-20 ms, of which ~ 0-9 ms in data generation
+    - 200 passing, 0 failing, and 26 invalid test cases
+    - Events:
+      * 8.85%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[workouts]:
+
+  - during generate phase (1.63 seconds):
+    - Typical runtimes: ~ 1-17 ms, of which ~ 0-7 ms in data generation
+    - 200 passing, 0 failing, and 21 invalid test cases
+    - Events:
+      * 6.33%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[naps]:
+
+  - during generate phase (1.93 seconds):
+    - Typical runtimes: ~ 1-19 ms, of which ~ 0-11 ms in data generation
+    - 200 passing, 0 failing, and 23 invalid test cases
+    - Events:
+      * 17.94%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[sleep_records]:
+
+  - during generate phase (1.61 seconds):
+    - Typical runtimes: ~ 1-18 ms, of which ~ 0-9 ms in data generation
+    - 200 passing, 0 failing, and 24 invalid test cases
+    - Events:
+      * 8.48%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_daily_adapter_fuzz.py::test_daily_scalar_outputs_are_finite_and_not_boolean[daily_hrv-dailyHeartRateVariability-averageHeartRateVariabilityMilliseconds]:
+
+  - during generate phase (0.85 seconds):
+    - Typical runtimes: ~ 1-16 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_daily_adapter_fuzz.py::test_daily_scalar_outputs_are_finite_and_not_boolean[deep_hrv-dailyHeartRateVariability-deepSleepRootMeanSquareOfSuccessiveDifferencesMilliseconds]:
+
+  - during generate phase (0.90 seconds):
+    - Typical runtimes: ~ 1-14 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_daily_adapter_fuzz.py::test_daily_scalar_outputs_are_finite_and_not_boolean[rhr-dailyRestingHeartRate-beatsPerMinute]:
+
+  - during generate phase (0.78 seconds):
+    - Typical runtimes: ~ 1-12 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[latency]:
+
+  - during generate phase (0.19 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[interruption]:
+
+  - during generate phase (0.16 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[age_target]:
+
+  - during generate phase (0.20 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_helper_fuzz.py::test_public_helpers_validate_malformed_scalars[baseline]:
+
+  - during generate phase (0.36 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[strain_mapping]:
+
+  - during generate phase (0.24 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_duration]:
+
+  - during generate phase (0.22 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_score]:
+
+  - during generate phase (0.33 seconds):
+    - Typical runtimes: ~ 0-2 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_hrv]:
+
+  - during generate phase (0.25 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_hr]:
+
+  - during generate phase (0.29 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_hr_dip]:
+
+  - during generate phase (0.21 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_need_legacy]:
+
+  - during generate phase (0.21 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_debt_legacy]:
+
+  - during generate phase (0.19 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[efficiency]:
+
+  - during generate phase (0.20 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[recovery_legacy]:
+
+  - during generate phase (0.25 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[recovery_connected]:
+
+  - during generate phase (0.26 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_need_connected]:
+
+  - during generate phase (0.20 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_shared_validity.py::test_rhr_acceptance_agrees_without_age:
+
+  - during generate phase (0.18 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 250 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=250
+
+
+backend/test_shared_validity.py::test_hrv_acceptance_agrees_across_layers:
+
+  - during generate phase (0.39 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 250 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=250
+
+
+backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[strain]:
+
+  - during generate phase (0.54 seconds):
+    - Typical runtimes: ~ 1-3 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[composite_legacy]:
+
+  - during generate phase (0.27 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[sleep_need]:
+
+  - during generate phase (0.26 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[recovery]:
+
+  - during generate phase (0.51 seconds):
+    - Typical runtimes: ~ 0-2 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[stage_ranges]:
+
+  - during generate phase (0.33 seconds):
+    - Typical runtimes: ~ 1-2 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[sleep_stress]:
+
+  - during generate phase (0.96 seconds):
+    - Typical runtimes: ~ 3-6 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[sleep_trends]:
+
+  - during generate phase (0.94 seconds):
+    - Typical runtimes: ~ 3-7 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[health_analytics]:
+
+  - during generate phase (1.68 seconds):
+    - Typical runtimes: ~ 5-12 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_structured_calculator_fuzz.py::test_typed_calculation_chains_are_finite_bounded_and_repeatable[legacy_clock]:
+
+  - during generate phase (0.30 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_sleep_chart_fuzz.py::test_additional_sleep_adapters_validate_payload[sleep_observations]:
+
+  - during generate phase (0.93 seconds):
+    - Typical runtimes: ~ 0-8 ms, of which ~ 0-7 ms in data generation
+    - 200 passing, 0 failing, and 24 invalid test cases
+    - Events:
+      * 5.36%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+backend/test_sleep_chart_fuzz.py::test_additional_sleep_adapters_validate_payload[sleep_hr_chart]:
+
+  - during generate phase (0.77 seconds):
+    - Typical runtimes: ~ 0-6 ms, of which ~ 0-5 ms in data generation
+    - 200 passing, 0 failing, and 18 invalid test cases
+    - Events:
+      * 0.92%, Draw for recursive(one_of(none(), booleans(), integers(), floats(), text(max_size=40)), lambda child: st.one_of(st.lists(child, max_size=4), st.dictionaries(st.sampled_from(['sleep', 'interval', 'startTime', 'endTime', 'sampleTime', 'physicalTime', 'heartRate', 'heartRateVariability', 'year', 'month', 'day', 'stages', 'metadata']), child, max_size=5)), min_leaves=None, max_leaves=15) exceeded max_leaves=15 and had to be retried
+
+  - Stopped because settings.max_examples=200
+
+
+108 passed in 52.58s

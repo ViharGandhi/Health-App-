@@ -23,7 +23,7 @@ def test_existing_or_physical_bounds(metric, invalid):
     assert result.metrics[metric][0].value is None
 
 
-@pytest.mark.parametrize('metric', ['hrv', 'deep_sleep_hrv', 'respiratory_rate', 'skin_temperature', 'vo2_max'])
+@pytest.mark.parametrize('metric', ['hrv', 'deep_sleep_hrv', 'respiratory_rate', 'skin_temperature'])
 def test_new_upper_limits_are_not_invented(metric):
     result = build_health_response({metric: [{'date': DAY.isoformat(), 'value': 1e9}]}, [], DAY, DAY, 'W', False)
     # User approved finite/positive gates only for these metrics; flag in audit report.

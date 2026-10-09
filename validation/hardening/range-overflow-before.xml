@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="0.906" timestamp="2026-10-09T19:36:32.742300+02:00" hostname="Zangetsu"><testcase classname="backend.test_extended_hardening" name="test_extreme_finite_references_never_produce_infinite_ranges[hrv-values0]" time="0.001"><failure message="OverflowError: math range error">backend\test_extended_hardening.py:26: in test_extreme_finite_references_never_produce_infinite_ranges
+    finite_tree(typical_ranges(history, DAY))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\recovery_analytics.py:36: in typical_ranges
+    low, high = math.exp(low), math.exp(high)
+                               ^^^^^^^^^^^^^^
+E   OverflowError: math range error</failure></testcase><testcase classname="backend.test_extended_hardening" name="test_extreme_finite_references_never_produce_infinite_ranges[respiratory_rate-values1]" time="0.002"><failure message="assert False&#10; +  where False = &lt;built-in function isfinite&gt;(inf)&#10; +    where &lt;built-in function isfinite&gt; = math.isfinite">backend\test_extended_hardening.py:26: in test_extreme_finite_references_never_produce_infinite_ranges
+    finite_tree(typical_ranges(history, DAY))
+backend\test_adapter_fuzz.py:31: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:31: in finite_tree
+    finite_tree(item)
+backend\test_adapter_fuzz.py:28: in finite_tree
+    assert math.isfinite(value)
+E   assert False
+E    +  where False = &lt;built-in function isfinite&gt;(inf)
+E    +    where &lt;built-in function isfinite&gt; = math.isfinite</failure></testcase></testsuite></testsuites>

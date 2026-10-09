@@ -6,39 +6,54 @@ from datetime import date, timedelta
 from statistics import mean
 
 from recovery_score import baseline_bounds, positive, recovery_from_history, robust, MIN_BASELINE_DAYS
-from sleep_trends import range_start
+from sleep_trends import range_start, DateRangeError
+from validity import valid_metric
 
 
 METRICS = ("recovery", "hrv", "rhr", "respiratory_rate", "sleep_performance")
 VITALS = ("hrv", "rhr", "respiratory_rate", "skin_temperature", "spo2")
 
 
-def typical_ranges(history: dict, day: date) -> dict:
+def typical_ranges(history: dict, day: date, age=None, *, diagnostics: dict | None = None) -> dict:
     start, end = baseline_bounds(day)
     today_rhr = next((p for p in history.get("rhr", []) if p["date"] == day.isoformat()), {})
     ranges = {}
     for metric in VITALS:
         values = [p["value"] for p in history.get(metric, [])
-                  if start.isoformat() <= p["date"] <= end.isoformat() and positive(p.get("value"))
+                  if start.isoformat() <= p["date"] <= end.isoformat() and valid_metric(metric, p.get("value"), age)
                   and (metric != "rhr" or today_rhr.get("method") in ("WITH_SLEEP", "ONLY_WITH_AWAKE_DATA")
                        and p.get("method") == today_rhr["method"])]
         if len(values) < MIN_BASELINE_DAYS:
             ranges[metric] = None
+            if diagnostics is not None:
+                diagnostics[metric] = 'insufficient_reference'
             continue
         transformed = [math.log(v) for v in values] if metric == "hrv" else values
         center, spread = robust(transformed, .05 if metric == "hrv" else 1.0 if metric == "rhr" else 0.0)
         if spread == 0:
             ranges[metric] = None
+            if diagnostics is not None:
+                diagnostics[metric] = 'flat_reference'
             continue
         low, high = center - spread, center + spread
         if metric == "hrv":
-            low, high = math.exp(low), math.exp(high)
+            try:
+                low, high = math.exp(low), math.exp(high)
+            except OverflowError:
+                low, high = math.nan, math.nan
+        if not all(math.isfinite(value) for value in (low, high)):
+            ranges[metric] = None
+            if diagnostics is not None:
+                diagnostics[metric] = 'numeric_range_overflow'
+            continue
         ranges[metric] = {"low": low, "high": high, "days": len(values)}
+        if diagnostics is not None:
+            diagnostics[metric] = None
     return ranges
 
 
 def build_recovery_analytics(history: dict, sleeps: list[dict], end: date, timeframe: str,
-                             current: dict, *, is_mock: bool, demo_mode: str = "estimate") -> dict:
+                             current: dict, *, is_mock: bool, demo_mode: str = "estimate", age=None) -> dict:
     start = range_start(end, timeframe)
     previous_end = start - timedelta(days=1)
     previous_start = range_start(previous_end, timeframe)
@@ -49,12 +64,12 @@ def build_recovery_analytics(history: dict, sleeps: list[dict], end: date, timef
     day = previous_start
     while day <= end:
         key = day.isoformat()
-        reading = recovery_from_history(history, day)
+        reading = recovery_from_history(history, day, age=age)
         sleep = sleep_by_date.get(key, {})
         row = {"date": key, "recovery": reading.percent, "zone": reading.zone,
                "confidence": reading.confidence, "sleep_context_missing": True,
                "sleep_performance": sleep.get("performance"),
-               **{metric: value if positive(value := dated.get(metric, {}).get(key, {}).get("value")) else None
+               **{metric: value if valid_metric(metric, value := dated.get(metric, {}).get(key, {}).get("value"), age) else None
                   for metric in VITALS}}
         if dated.get("rhr", {}).get(key, {}).get("method") != rhr_method or rhr_method not in ("WITH_SLEEP", "ONLY_WITH_AWAKE_DATA"):
             row["rhr"] = None
@@ -71,7 +86,8 @@ def build_recovery_analytics(history: dict, sleeps: list[dict], end: date, timef
     def averages(rows):
         return {metric: mean(values) if (values := [r[metric] for r in rows if positive(r[metric]) or r[metric] == 0]) else None
                 for metric in METRICS}
-    ranges = typical_ranges(history, end)
+    range_reasons = {}
+    ranges = typical_ranges(history, end, age, diagnostics=range_reasons)
     latest = days[-1]
     assessed = [metric for metric in VITALS if ranges[metric] is not None and positive(latest.get(metric))]
     within = sum(ranges[metric]["low"] <= latest[metric] <= ranges[metric]["high"] for metric in assessed)
@@ -83,7 +99,7 @@ def build_recovery_analytics(history: dict, sleeps: list[dict], end: date, timef
                       and s.get("performance") is not None]
         else:
             values = [p["value"] for p in history.get(metric, [])
-                      if (end - timedelta(days=30)).isoformat() <= p["date"] < end.isoformat() and positive(p.get("value"))
+                      if (end - timedelta(days=30)).isoformat() <= p["date"] < end.isoformat() and valid_metric(metric, p.get("value"), age)
                       and (metric != "rhr" or rhr_method in ("WITH_SLEEP", "ONLY_WITH_AWAKE_DATA") and p.get("method") == rhr_method)]
         comparisons[metric] = mean(values) if values else None
     buckets = []
@@ -93,11 +109,12 @@ def build_recovery_analytics(history: dict, sleeps: list[dict], end: date, timef
         rows = [d for d in days if left.isoformat() <= d["date"] <= right.isoformat()]
         buckets.append({"start_date": left.isoformat(), "end_date": right.isoformat(),
                         "averages": averages(rows), "counts": {m: sum(d[m] is not None for d in rows) for m in METRICS}})
-    return {"is_mock": is_mock, "demo_mode": demo_mode if is_mock else None, "timeframe": timeframe,
+    return {"is_mock": is_mock, 'estimator': current.get('estimator', 'connected_recovery'), "demo_mode": demo_mode if is_mock else None, "timeframe": timeframe,
             "range_start": start.isoformat(), "range_end": end.isoformat(),
             "previous_range_end": previous_end.isoformat(), "days": days,
             "averages": averages(days), "previous_averages": averages(previous),
-            "typical_ranges": ranges, "prior_30_day_averages": comparisons, "monthly_buckets": buckets,
+            "typical_ranges": ranges, 'typical_range_reasons': range_reasons,
+            "prior_30_day_averages": comparisons, "monthly_buckets": buckets,
             "current": current, "sleep": sleep_by_date.get(end.isoformat()),
             "health_monitor": {"within": within, "assessed": len(assessed), "expected": len(VITALS)},
             "notes": ("Older prototype demo: historical prototype scores are not stored; earlier bars remain blank. "
@@ -109,6 +126,8 @@ def build_recovery_analytics(history: dict, sleeps: list[dict], end: date, timef
 def _months_back(day: date, count: int) -> date:
     import calendar
     year, month = divmod(day.year * 12 + day.month - 1 - count, 12)
+    if not 1 <= year <= 9999:
+        raise DateRangeError('Calendar window cannot be represented')
     return date(year, month + 1, min(day.day, calendar.monthrange(year, month + 1)[1]))
 
 

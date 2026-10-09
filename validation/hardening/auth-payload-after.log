@@ -1,0 +1,58 @@
+.......FE........................                                        [100%]
+=================================== ERRORS ====================================
+__ ERROR at teardown of test_callback_malformed_token_response_fails_closed ___
+.venv\Lib\site-packages\anyio\streams\memory.py:190: in __del__
+    warnings.warn(
+E   ResourceWarning: Unclosed <MemoryObjectReceiveStream at 20e35aae7e0>
+
+The above exception was the direct cause of the following exception:
+.venv\Lib\site-packages\_pytest\runner.py:361: in from_call
+    result: TResult | None = func()
+                             ^^^^^^
+.venv\Lib\site-packages\_pytest\runner.py:250: in <lambda>
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_hooks.py:512: in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\logging.py:873: in pytest_runtest_teardown
+    yield
+.venv\Lib\site-packages\_pytest\capture.py:905: in pytest_runtest_teardown
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\unraisableexception.py:188: in pytest_runtest_teardown
+    collect_unraisable(item.config)
+.venv\Lib\site-packages\_pytest\unraisableexception.py:79: in collect_unraisable
+    raise errors[0]
+.venv\Lib\site-packages\_pytest\unraisableexception.py:67: in collect_unraisable
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+E   pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function MemoryObjectReceiveStream.__del__ at 0x0000020E30B70360>
+E   Enable tracemalloc to get traceback where the object was allocated.
+E   See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+================================== FAILURES ===================================
+_____________ test_callback_malformed_token_response_fails_closed _____________
+backend\test_auth_payload_fuzz.py:36: in test_callback_malformed_token_response_fails_closed
+    @given(payload)
+                   ^
+backend\test_auth_payload_fuzz.py:45: in test_callback_malformed_token_response_fails_closed
+    assert response.status_code == 307
+E   assert 500 == 307
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+E   Failing test case: test_callback_malformed_token_response_fails_closed(
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\_backends\_asyncio.py:556
+E           E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\_backends\_asyncio.py:567
+E           E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\_backends\_asyncio.py:568
+E           E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\_backends\_asyncio.py:592
+E           E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\_backends\_asyncio.py:609
+E           (and 22 more with settings.verbosity >= verbose)
+=========================== short test summary info ===========================
+FAILED backend/test_auth_payload_fuzz.py::test_callback_malformed_token_response_fails_closed
+ERROR backend/test_auth_payload_fuzz.py::test_callback_malformed_token_response_fails_closed
+1 failed, 31 passed, 1 error in 6.29s

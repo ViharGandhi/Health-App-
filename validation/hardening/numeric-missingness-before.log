@@ -1,0 +1,115 @@
+FFFFFFFFFFFFFFFFFF                                                       [100%]
+================================== FAILURES ===================================
+_______________ test_nonfinite_sleep_duration_is_rejected[nan] ________________
+backend\test_numeric_missingness_hardening.py:14: in test_nonfinite_sleep_duration_is_rejected
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_______________ test_nonfinite_sleep_duration_is_rejected[inf] ________________
+backend\test_numeric_missingness_hardening.py:14: in test_nonfinite_sleep_duration_is_rejected
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_______________ test_nonfinite_sleep_duration_is_rejected[-inf] _______________
+backend\test_numeric_missingness_hardening.py:14: in test_nonfinite_sleep_duration_is_rejected
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_nonfinite_sleep_data_cannot_turn_into_plausible_score[total_duration] __
+backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_nonfinite_sleep_data_cannot_turn_into_plausible_score[deep_sleep_duration] _
+backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_nonfinite_sleep_data_cannot_turn_into_plausible_score[rem_sleep_duration] _
+backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_nonfinite_sleep_data_cannot_turn_into_plausible_score[core_sleep_duration] _
+backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_nonfinite_sleep_data_cannot_turn_into_plausible_score[awake_duration] __
+backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_nonfinite_sleep_data_cannot_turn_into_plausible_score[in_bed_duration] _
+backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_ test_nonfinite_sleep_data_cannot_turn_into_plausible_score[nap_duration_seconds] _
+backend\test_numeric_missingness_hardening.py:21: in test_nonfinite_sleep_data_cannot_turn_into_plausible_score
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+______ test_legacy_required_numeric_inputs_reject_nonfinite[sleep_score] ______
+backend\test_numeric_missingness_hardening.py:27: in test_legacy_required_numeric_inputs_reject_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+___ test_legacy_required_numeric_inputs_reject_nonfinite[yesterday_strain] ____
+backend\test_numeric_missingness_hardening.py:27: in test_legacy_required_numeric_inputs_reject_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+__________ test_legacy_required_numeric_inputs_reject_nonfinite[acr] __________
+backend\test_numeric_missingness_hardening.py:27: in test_legacy_required_numeric_inputs_reject_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+__ test_legacy_required_numeric_inputs_reject_nonfinite[recovery_adjustment] __
+backend\test_numeric_missingness_hardening.py:27: in test_legacy_required_numeric_inputs_reject_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+__________ test_stage_configuration_rejects_nonfinite[spread_scale] ___________
+backend\test_numeric_missingness_hardening.py:33: in test_stage_configuration_rejects_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+________ test_stage_configuration_rejects_nonfinite[spread_floor_pct] _________
+backend\test_numeric_missingness_hardening.py:33: in test_stage_configuration_rejects_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_________ test_stage_configuration_rejects_nonfinite[min_sleep_hours] _________
+backend\test_numeric_missingness_hardening.py:33: in test_stage_configuration_rejects_nonfinite
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+__________ test_unrepresentable_integer_is_rejected_without_overflow __________
+backend\test_numeric_missingness_hardening.py:38: in test_unrepresentable_integer_is_rejected_without_overflow
+    assert positive(10 ** 400) is False
+           ^^^^^^^^^^^^^^^^^^^
+backend\validity.py:6: in positive
+    return type(value) in (int, float) and isfinite(value) and value > 0
+                                           ^^^^^^^^^^^^^^^
+E   OverflowError: int too large to convert to float
+=========================== short test summary info ===========================
+FAILED backend/test_numeric_missingness_hardening.py::test_nonfinite_sleep_duration_is_rejected[nan]
+FAILED backend/test_numeric_missingness_hardening.py::test_nonfinite_sleep_duration_is_rejected[inf]
+FAILED backend/test_numeric_missingness_hardening.py::test_nonfinite_sleep_duration_is_rejected[-inf]
+FAILED backend/test_numeric_missingness_hardening.py::test_nonfinite_sleep_data_cannot_turn_into_plausible_score[total_duration]
+FAILED backend/test_numeric_missingness_hardening.py::test_nonfinite_sleep_data_cannot_turn_into_plausible_score[deep_sleep_duration]
+FAILED backend/test_numeric_missingness_hardening.py::test_nonfinite_sleep_data_cannot_turn_into_plausible_score[rem_sleep_duration]
+FAILED backend/test_numeric_missingness_hardening.py::test_nonfinite_sleep_data_cannot_turn_into_plausible_score[core_sleep_duration]
+FAILED backend/test_numeric_missingness_hardening.py::test_nonfinite_sleep_data_cannot_turn_into_plausible_score[awake_duration]
+FAILED backend/test_numeric_missingness_hardening.py::test_nonfinite_sleep_data_cannot_turn_into_plausible_score[in_bed_duration]
+FAILED backend/test_numeric_missingness_hardening.py::test_nonfinite_sleep_data_cannot_turn_into_plausible_score[nap_duration_seconds]
+FAILED backend/test_numeric_missingness_hardening.py::test_legacy_required_numeric_inputs_reject_nonfinite[sleep_score]
+FAILED backend/test_numeric_missingness_hardening.py::test_legacy_required_numeric_inputs_reject_nonfinite[yesterday_strain]
+FAILED backend/test_numeric_missingness_hardening.py::test_legacy_required_numeric_inputs_reject_nonfinite[acr]
+FAILED backend/test_numeric_missingness_hardening.py::test_legacy_required_numeric_inputs_reject_nonfinite[recovery_adjustment]
+FAILED backend/test_numeric_missingness_hardening.py::test_stage_configuration_rejects_nonfinite[spread_scale]
+FAILED backend/test_numeric_missingness_hardening.py::test_stage_configuration_rejects_nonfinite[spread_floor_pct]
+FAILED backend/test_numeric_missingness_hardening.py::test_stage_configuration_rejects_nonfinite[min_sleep_hours]
+FAILED backend/test_numeric_missingness_hardening.py::test_unrepresentable_integer_is_rejected_without_overflow
+18 failed in 0.52s

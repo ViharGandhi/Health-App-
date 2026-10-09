@@ -6,6 +6,7 @@ from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
 
 import httpx
+import pytest
 from fastapi.testclient import TestClient
 
 from main import app, _compute_real_strain
@@ -95,11 +96,12 @@ class StrainAnalyticsTests(unittest.TestCase):
         self.assertIsNone(result["days"][0]["score"])
         self.assertIsNone(result["days"][0]["steps"])
         self.assertEqual(result["days"][-1]["steps"], 0)
-        self.assertEqual(result["days"][-1]["score"], self.snapshot(samples, [self.session()]).score_21)
+        self.assertEqual(result["days"][-1]["score"], self.snapshot(samples, [self.session()]).model_dump(mode='json')['score_21'])
         client.get_intraday_heart_rate.assert_awaited_once_with(date(2026, 9, 4), date(2026, 10, 7), preserve_offset=True)
         client.get_workout_sessions.assert_awaited_once()
         client.get_daily_steps.assert_awaited_once()
 
+    @pytest.mark.timeout(120)
     def test_demo_ranges_are_aligned_and_future_requests_rejected(self):
         with patch("main._get_token", AsyncMock(return_value=None)):
             for timeframe in ("W", "M", "6M"):

@@ -1,0 +1,15 @@
+{
+  "python": "3.12.14",
+  "environment": "fresh offline wheel installation",
+  "packages": {
+    "pytest": "9.1.1",
+    "hypothesis": "6.168.5",
+    "pytest-timeout": "2.4.0",
+    "pytest-socket": "0.8.1",
+    "fastapi": "0.115.0",
+    "pydantic": "2.9.2",
+    "starlette": "0.38.6",
+    "httpx": "0.27.2",
+    "anyio": "4.14.2"
+  }
+}

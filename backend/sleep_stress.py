@@ -7,6 +7,9 @@ from dataclasses import asdict, dataclass
 from datetime import date, datetime, timedelta, timezone
 from math import exp, isfinite, log
 from statistics import median
+from validity import valid_metric
+from sleep_selection import main_sleep_key
+from provider_payload import payload_boundary
 
 
 @dataclass(frozen=True)
@@ -28,7 +31,7 @@ class StressConfig:
 
 
 DEFAULT_CONFIG = StressConfig()
-ALGO_VERSION = "sleep-stress-5"
+ALGO_VERSION = "sleep-stress-10"
 
 
 @dataclass(frozen=True)
@@ -82,6 +85,7 @@ class NightWindows:
     windows: tuple[ValidWindow, ...]
     asleep_minutes: float
     coverage: float
+    withheld_reason: str | None = None
 
 
 @dataclass(frozen=True)
@@ -105,6 +109,7 @@ def _overlap(start: datetime, end: datetime, other_start: datetime, other_end: d
     return max(0.0, (min(end, other_end) - max(start, other_start)).total_seconds())
 
 
+@payload_boundary
 def adapt_google_sleep(point: dict) -> SleepNight:
     """Adapt the documented v4 sleep DataPoint; reject incomplete processing later."""
     sleep = point["sleep"]
@@ -132,11 +137,15 @@ def adapt_google_sleep(point: dict) -> SleepNight:
     )
 
 
+@payload_boundary
 def adapt_google_hr(point: dict) -> HrSample:
     metric = point["heartRate"]
+    if isinstance(metric['beatsPerMinute'], bool):
+        raise ValueError('Heart rate must be numeric')
     return HrSample(_instant(metric["sampleTime"]["physicalTime"]), float(metric["beatsPerMinute"]))
 
 
+@payload_boundary
 def adapt_google_hrv(points: list[dict], anchor: str) -> list[HrvWindow]:
     """Infer cadence from adjacent samples; anchor must be verified on a real device.
 
@@ -160,6 +169,8 @@ def adapt_google_hrv(points: list[dict], anchor: str) -> list[HrvWindow]:
     cadence = median(deltas)
     windows = []
     for index, (stamp, value) in enumerate(samples):
+        if isinstance(value, bool):
+            raise ValueError('RMSSD must be numeric')
         neighbor = samples[index + 1][0] if anchor == "start" and index + 1 < len(samples) else (
             samples[index - 1][0] if anchor == "end" and index else None
         )
@@ -209,6 +220,16 @@ def prepare_night(
     night: SleepNight, hrv_windows: list[HrvWindow], hr_samples: list[HrSample],
     config: StressConfig = DEFAULT_CONFIG,
 ) -> NightWindows:
+    duration = (night.end_utc - night.start_utc).total_seconds()
+    cursor = night.start_utc
+    allowed = ('ASLEEP', 'AWAKE', 'RESTLESS') if night.type == 'CLASSIC' else ('LIGHT', 'REM', 'DEEP', 'AWAKE')
+    for segment in sorted(night.stages, key=lambda item: item.start_utc):
+        if (segment.start_utc != cursor or segment.end_utc <= segment.start_utc
+                or segment.end_utc > night.end_utc or segment.stage not in allowed):
+            return NightWindows(night, (), 0.0, 0.0, 'invalid_stage_partition')
+        cursor = segment.end_utc
+    if not 0 < duration <= 86400 or cursor != night.end_utc:
+        return NightWindows(night, (), 0.0, 0.0, 'invalid_stage_partition')
     asleep = asleep_minutes(night)
     if (night.nap or not night.processed or
             (night.end_utc - night.start_utc).total_seconds() < config.min_sleep_hours * 3600):
@@ -221,7 +242,7 @@ def prepare_night(
         duration = (window.end_utc - window.start_utc).total_seconds()
         if (duration <= 0 or interval is None or window.start_utc < night.start_utc
                 or window.end_utc > night.end_utc or window.rmssd_ms is None
-                or not isfinite(window.rmssd_ms) or window.rmssd_ms <= 0
+                or not valid_metric('sample_hrv', window.rmssd_ms)
                 or (valid and window.start_utc < valid[-1].end_utc)):
             continue
         if any(_overlap(window.start_utc, window.end_utc, start, end) > 0
@@ -269,8 +290,8 @@ def build_baseline(current: NightWindows, history: list[NightWindows],
     for item in by_id.values():
         day = item.night.night_date
         previous_item = by_date.get(day)
-        key = lambda n: (n.night.main_sleep_explicit,
-                         n.night.end_utc - n.night.start_utc, n.night.sleep_id)
+        key = lambda n: main_sleep_key(True if n.night.main_sleep_explicit else None,
+            n.night.start_utc, n.night.end_utc, n.night.sleep_id)
         if previous_item is None or key(item) > key(previous_item):
             by_date[day] = item
     previous = [by_date[day] for day in sorted(by_date, reverse=True)][:config.baseline_nights_target]
@@ -295,22 +316,31 @@ def score_night(current: NightWindows, history: list[NightWindows],
     valid_minutes = sum(window.minutes for window in current.windows)
     result = {
         "sleep_id": night.sleep_id, "night_date": night.night_date.isoformat(),
+        'main_sleep_explicit': night.main_sleep_explicit,
+        'physical_duration_minutes': (night.end_utc - night.start_utc).total_seconds() / 60,
         "main_sleep": night.main_sleep,
         "computed_at": (computed_at or datetime.now(timezone.utc)).isoformat(),
         "algo_version": ALGO_VERSION, "stressed_minutes": None, "stressed_hours": None,
         "stress_pct": None, "valid_minutes": round(valid_minutes, 2),
         "asleep_minutes": round(current.asleep_minutes, 2), "coverage": round(current.coverage, 3),
         "confidence": "low", "status": "ok", "nights_available": 0,
+        "withheld_reason": None, "anchor_verification": "synthetic_or_caller_asserted",
         "baseline": {"nights_used": 0, "fallback_used": False, "per_stage": {}},
         "peak_level": None, "mean_level": None, "hrv_only_minutes": None,
         "episodes": [], "type_fallback": night.type == "CLASSIC",
         "config_snapshot": asdict(config),
     }
+    if current.withheld_reason:
+        result['status'] = current.withheld_reason
+        result['withheld_reason'] = current.withheld_reason
+        return result
     if night.nap or (night.end_utc - night.start_utc).total_seconds() < config.min_sleep_hours * 3600:
         result["status"] = "short_sleep"
+        result['withheld_reason'] = result['status']
         return result
     if not night.processed:
         result["status"] = "pending_processing"
+        result['withheld_reason'] = result['status']
         return result
     baselines, nights_used, fallback_used = build_baseline(current, history, config)
     result["nights_available"] = nights_used
@@ -318,9 +348,11 @@ def score_night(current: NightWindows, history: list[NightWindows],
                           "per_stage": {stage: asdict(value) for stage, value in baselines.items()}}
     if not baselines:
         result["status"] = "insufficient_baseline"
+        result['withheld_reason'] = result['status']
         return result
     if not current.windows:
         result["status"] = "no_valid_windows"
+        result['withheld_reason'] = result['status']
         return result
     result["confidence"] = ("high" if current.coverage >= 0.75 and not fallback_used
                             and night.type != "CLASSIC" else
@@ -386,7 +418,9 @@ def summarize_nights(results: list[dict] | tuple[dict, ...]) -> list[dict]:
         by_date.setdefault(item["night_date"], []).append(item)
     totals = []
     for day, sessions in sorted(by_date.items()):
-        main = next((item for item in sessions if item["main_sleep"]), None)
+        candidates = [item for item in sessions if item['main_sleep']]
+        main = max(candidates, key=lambda item: (item.get('main_sleep_explicit', True),
+            item.get('physical_duration_minutes', 0), item['sleep_id']), default=None)
         scored = [item for item in sessions if item["stressed_minutes"] is not None]
         stressed = sum(item["stressed_minutes"] for item in scored)
         valid = sum(item["valid_minutes"] for item in scored)

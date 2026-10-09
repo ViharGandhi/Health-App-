@@ -1,0 +1,140 @@
+F.FFFFFFFFFF                                                             [100%]
+================================== FAILURES ===================================
+__ test_invalid_summary_never_crashes_or_produces_score[minutesAsleep-junk] ___
+backend\test_sleep_summary_hardening.py:22: in test_invalid_summary_never_crashes_or_produces_score
+    result = asyncio.run(_compute_real_sleep(client, day, calculate_sleep_need(50), 30))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\main.py:346: in _compute_real_sleep
+    raw = await client.get_sleep_session(target_date)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:510: in get_sleep_session
+    records = await self._sleep_records(target_date, target_date)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:437: in _sleep_records
+    asleep_minutes = float(summary.get("minutesAsleep") or 0)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ValueError: could not convert string to float: 'junk'
+___ test_invalid_summary_never_crashes_or_produces_score[minutesAwake-None] ___
+backend\test_sleep_summary_hardening.py:22: in test_invalid_summary_never_crashes_or_produces_score
+    result = asyncio.run(_compute_real_sleep(client, day, calculate_sleep_need(50), 30))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\main.py:346: in _compute_real_sleep
+    raw = await client.get_sleep_session(target_date)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:510: in get_sleep_session
+    records = await self._sleep_records(target_date, target_date)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:457: in _sleep_records
+    "awake_duration": float(summary.get("minutesAwake", 0)) * 60,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: float() argument must be a string or a real number, not 'NoneType'
+_ test_invalid_summary_never_crashes_or_produces_score[minutesInSleepPeriod-nan] _
+backend\test_sleep_summary_hardening.py:23: in test_invalid_summary_never_crashes_or_produces_score
+    assert result.score is None
+E   AssertionError: assert 52.3 is None
+E    +  where 52.3 = SleepResponse(estimator='legacy_composite_sleep', components_available={'duration': True, 'stages': False, 'efficiency..., sleep_end='07:39 AM', duration_score=100.0, stage_score=0.0, restfulness_score=8.6, hr_dip_score=50.0, is_mock=False).score
+____ test_invalid_summary_never_crashes_or_produces_score[minutesAwake--1] ____
+backend\test_sleep_summary_hardening.py:23: in test_invalid_summary_never_crashes_or_produces_score
+    assert result.score is None
+E   AssertionError: assert 62.8 is None
+E    +  where 62.8 = SleepResponse(estimator='legacy_composite_sleep', components_available={'duration': True, 'stages': False, 'efficiency...sleep_end='07:39 AM', duration_score=100.0, stage_score=0.0, restfulness_score=100.0, hr_dip_score=50.0, is_mock=False).score
+_ test_invalid_summary_never_crashes_or_produces_score[minutesToFallAsleep-nan] _
+backend\test_sleep_summary_hardening.py:22: in test_invalid_summary_never_crashes_or_produces_score
+    result = asyncio.run(_compute_real_sleep(client, day, calculate_sleep_need(50), 30))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\main.py:346: in _compute_real_sleep
+    raw = await client.get_sleep_session(target_date)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:510: in get_sleep_session
+    records = await self._sleep_records(target_date, target_date)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:431: in _sleep_records
+    onset = start_dt + timedelta(minutes=float(summary.get("minutesToFallAsleep", 0)))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ValueError: cannot convert float NaN to integer
+__ test_invalid_summary_never_crashes_or_produces_score[stagesSummary-None] ___
+backend\test_sleep_summary_hardening.py:22: in test_invalid_summary_never_crashes_or_produces_score
+    result = asyncio.run(_compute_real_sleep(client, day, calculate_sleep_need(50), 30))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\main.py:346: in _compute_real_sleep
+    raw = await client.get_sleep_session(target_date)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:510: in get_sleep_session
+    records = await self._sleep_records(target_date, target_date)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:435: in _sleep_records
+    stage_totals = {s["type"]: float(s["minutes"]) * 60 for s in summary.get("stagesSummary", [])}
+                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not iterable
+_ test_invalid_summary_never_crashes_or_produces_score[stagesSummary-value7] __
+backend\test_sleep_summary_hardening.py:23: in test_invalid_summary_never_crashes_or_produces_score
+    assert result.score is None
+E   AssertionError: assert 57.1 is None
+E    +  where 57.1 = SleepResponse(estimator='legacy_composite_sleep', components_available={'duration': True, 'stages': True, 'efficiency'... sleep_end='07:39 AM', duration_score=100.0, stage_score=40.0, restfulness_score=8.6, hr_dip_score=50.0, is_mock=False).score
+_ test_invalid_summary_never_crashes_or_produces_score[stagesSummary-value8] __
+backend\test_sleep_summary_hardening.py:23: in test_invalid_summary_never_crashes_or_produces_score
+    assert result.score is None
+E   AssertionError: assert 49.0 is None
+E    +  where 49.0 = SleepResponse(estimator='legacy_composite_sleep', components_available={'duration': True, 'stages': True, 'efficiency'... sleep_end='07:39 AM', duration_score=100.0, stage_score=-0.4, restfulness_score=8.6, hr_dip_score=50.0, is_mock=False).score
+__________ test_physical_sleep_over_twenty_four_hours_is_unavailable __________
+backend\test_sleep_summary_hardening.py:34: in test_physical_sleep_over_twenty_four_hours_is_unavailable
+    assert result.score is None
+E   AssertionError: assert 33.4 is None
+E    +  where 33.4 = SleepResponse(estimator='legacy_composite_sleep', components_available={'duration': True, 'stages': False, 'efficiency...', sleep_end='07:39 AM', duration_score=30.0, stage_score=0.0, restfulness_score=8.6, hr_dip_score=50.0, is_mock=False).score
+_ test_repeated_clock_hour_does_not_discard_positive_physical_sleep[day0-2026-10-25T00:45:00Z-2026-10-25T01:15:00Z-7200s-3600s] _
+backend\test_sleep_summary_hardening.py:48: in test_repeated_clock_hour_does_not_discard_positive_physical_sleep
+    assert result is not None
+E   assert None is not None
+_ test_repeated_clock_hour_does_not_discard_positive_physical_sleep[day1-2027-10-31T00:45:00Z-2027-10-31T01:15:00Z-7200s-3600s] _
+backend\test_sleep_summary_hardening.py:48: in test_repeated_clock_hour_does_not_discard_positive_physical_sleep
+    assert result is not None
+E   assert None is not None
+=========================== short test summary info ===========================
+FAILED backend/test_sleep_summary_hardening.py::test_invalid_summary_never_crashes_or_produces_score[minutesAsleep-junk]
+FAILED backend/test_sleep_summary_hardening.py::test_invalid_summary_never_crashes_or_produces_score[minutesAwake-None]
+FAILED backend/test_sleep_summary_hardening.py::test_invalid_summary_never_crashes_or_produces_score[minutesInSleepPeriod-nan]
+FAILED backend/test_sleep_summary_hardening.py::test_invalid_summary_never_crashes_or_produces_score[minutesAwake--1]
+FAILED backend/test_sleep_summary_hardening.py::test_invalid_summary_never_crashes_or_produces_score[minutesToFallAsleep-nan]
+FAILED backend/test_sleep_summary_hardening.py::test_invalid_summary_never_crashes_or_produces_score[stagesSummary-None]
+FAILED backend/test_sleep_summary_hardening.py::test_invalid_summary_never_crashes_or_produces_score[stagesSummary-value7]
+FAILED backend/test_sleep_summary_hardening.py::test_invalid_summary_never_crashes_or_produces_score[stagesSummary-value8]
+FAILED backend/test_sleep_summary_hardening.py::test_physical_sleep_over_twenty_four_hours_is_unavailable
+FAILED backend/test_sleep_summary_hardening.py::test_repeated_clock_hour_does_not_discard_positive_physical_sleep[day0-2026-10-25T00:45:00Z-2026-10-25T01:15:00Z-7200s-3600s]
+FAILED backend/test_sleep_summary_hardening.py::test_repeated_clock_hour_does_not_discard_positive_physical_sleep[day1-2027-10-31T00:45:00Z-2027-10-31T01:15:00Z-7200s-3600s]
+11 failed, 1 passed in 1.77s

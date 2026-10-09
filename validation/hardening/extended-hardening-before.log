@@ -1,0 +1,60 @@
+..FF.F                                                                   [100%]
+================================== FAILURES ===================================
+__________________ test_25_hour_sleep_partition_is_rejected ___________________
+backend\test_extended_hardening.py:35: in test_25_hour_sleep_partition_is_rejected
+    assert stats is None and status == 'invalid_stage_partition'
+E   AssertionError: assert (NightStageStats(sleep_id='synthetic', night_date=datetime.date(2026, 10, 7), start_utc=datetime.datetime(2026, 10, 6, ...ive': 0.0}, pct={'awake': 0.0, 'light': 100.0, 'deep': 0.0, 'rem': 0.0, 'restorative': 0.0}, denominator='time_in_bed') is None)
+____________ test_duration_large_slope_remains_numerically_stable _____________
+backend\test_extended_hardening.py:39: in test_duration_large_slope_remains_numerically_stable
+    assert 0 <= SleepCalculator.compute_duration_score(.01, 7.5, 1000., .75) <= 100
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleepscore.py:212: in compute_duration_score
+    raw = 100.0 / (1.0 + math.exp(-steepness * (ratio - midpoint)))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   OverflowError: math range error
+_______ test_additional_sleep_adapters_validate_payload[sleep_hr_chart] _______
+  + Exception Group Traceback (most recent call last):
+  |   File "E:\Projects\Health-App-\backend\test_extended_hardening.py", line 43, in test_additional_sleep_adapters_validate_payload
+  |     @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+  |                    ^^^^^^^^^^
+  |   File "E:\Projects\Health-App-\.venv\Lib\site-packages\hypothesis\core.py", line 2295, in wrapped_test
+  |     raise the_error_hypothesis_found
+  | ExceptionGroup: Hypothesis found 2 distinct failures. (2 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_extended_hardening.py", line 47, in test_additional_sleep_adapters_validate_payload
+    |     result = sleep_observations([value], DAY) if adapter == 'sleep_observations' else build_sleep_heart_rate(value, [], False)
+    |                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 42, in build_sleep_heart_rate
+    |     interval = point["sleep"]["interval"]
+    |                ~~~~~^^^^^^^^^
+    | KeyError: 'sleep'
+    | Failing test case: test_additional_sleep_adapters_validate_payload(
+    |     adapter='sleep_hr_chart',
+    |     value={},
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         E:\Projects\Health-App-\backend\sleep_heart_rate.py:42
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "E:\Projects\Health-App-\backend\test_extended_hardening.py", line 47, in test_additional_sleep_adapters_validate_payload
+    |     result = sleep_observations([value], DAY) if adapter == 'sleep_observations' else build_sleep_heart_rate(value, [], False)
+    |                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "E:\Projects\Health-App-\backend\sleep_heart_rate.py", line 42, in build_sleep_heart_rate
+    |     interval = point["sleep"]["interval"]
+    |                ~~~~~^^^^^^^^^
+    | TypeError: list indices must be integers or slices, not str
+    | Failing test case: test_additional_sleep_adapters_validate_payload(
+    |     adapter='sleep_hr_chart',
+    |     value=[],
+    | )
+    | Explanation:
+    |     These lines were always and only run by failing test cases:
+    |         E:\Projects\Health-App-\backend\sleep_heart_rate.py:42
+    +------------------------------------
+=========================== short test summary info ===========================
+FAILED backend/test_extended_hardening.py::test_25_hour_sleep_partition_is_rejected
+FAILED backend/test_extended_hardening.py::test_duration_large_slope_remains_numerically_stable
+FAILED backend/test_extended_hardening.py::test_additional_sleep_adapters_validate_payload[sleep_hr_chart]
+3 failed, 3 passed in 1.88s

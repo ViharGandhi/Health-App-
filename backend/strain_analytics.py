@@ -46,11 +46,14 @@ def strain_day(day: date, samples: list, sessions: list, snapshot, steps: int | 
             strength[name] = strength.get(name, 0) + duration
         activities.append({"name": name, "start": session["start"].isoformat(), "end": session["end"].isoformat(),
                            "minutes": duration, "strain": next((workout.strain for workout in snapshot.workouts
+                               if workout.start == session["start"] and workout.end == session["end"]), None),
+                           "_json_strain": next((workout.model_dump(mode='json')['strain'] for workout in snapshot.workouts
                                if workout.start == session["start"] and workout.end == session["end"]), None)})
     return {"date": day.isoformat(), "score": snapshot.strain if snapshot.coverage > 0 and not snapshot.age_missing else None,
             "load": snapshot.load, "coverage": snapshot.coverage, "low_coverage": snapshot.low_coverage,
             "zones": zones, "strength_minutes": sum(strength.values()), "strength_activities": strength,
-            "steps": steps, "activities": activities}
+            "steps": steps, "activities": activities,
+            "_json_score": snapshot.model_dump(mode='json')['strain'] if snapshot.coverage > 0 and not snapshot.age_missing else None}
 
 
 def build_strain_analytics(history: list[dict], current, start: date, end: date, timeframe: str, metric: str, is_mock: bool, today: date) -> dict:
@@ -64,9 +67,16 @@ def build_strain_analytics(history: list[dict], current, start: date, end: date,
         values = [metric_value(day, key) for day in prior]
         valid = [value for value in values if value is not None]
         averages[key] = mean(valid) if valid else None
+    def json_day(day):
+        result = {key: value for key, value in day.items() if key != '_json_score'}
+        result['score'] = day.get('_json_score', day['score'])
+        if 'activities' in day:
+            result['activities'] = [{**{k: v for k, v in activity.items() if k != '_json_strain'},
+                'strain': activity.get('_json_strain', activity['strain'])} for activity in day['activities']]
+        return result
     return {"date": end.isoformat(), "today": today.isoformat(), "timeframe": timeframe, "range_start": start.isoformat(), "range_end": end.isoformat(),
             "previous_range_start": previous_start.isoformat(), "previous_range_end": previous_end.isoformat(),
-            "is_mock": is_mock, "current": current.model_dump(), "days": days, "previous_days": previous,
+            "is_mock": is_mock, "current": current.model_dump(mode='json'), "days": [json_day(day) for day in days], "previous_days": [json_day(day) for day in previous],
             "prior_30_day_averages": averages}
 
 
