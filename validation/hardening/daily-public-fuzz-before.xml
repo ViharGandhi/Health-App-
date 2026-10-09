@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="21" skipped="0" tests="32" time="13.230" timestamp="2026-10-09T17:05:04.854040+02:00" hostname="Zangetsu"><properties><property name="hypothesis-statistics-backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[daily_hrv]" value="YmFja2VuZC90ZXN0X2RhaWx5X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9kYWlseV9wcm92aWRlcl9hZGFwdGVyc192YWxpZGF0ZV90eXBlc1tkYWlseV9ocnZdOgoKICAtIGR1cmluZyBnZW5lcmF0ZSBwaGFzZSAoMC42NSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAxMi0xNTggbXMsIG9mIHdoaWNoIH4gMS0xMCBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gNCBwYXNzaW5nLCA2IGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAxIGRpc3RpbmN0IGVycm9yIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjA5IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDg3bXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDEgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDEgc2hyaW5rcyBvZiB3aGljaCAwIHdlcmUgc3VjY2Vzc2Z1bAoKICAtIFN0b3BwZWQgYmVjYXVzZSBub3RoaW5nIGxlZnQgdG8gZG8=" /><property name="hypothesis-statistics-backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[deep_hrv]" value="YmFja2VuZC90ZXN0X2RhaWx5X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9kYWlseV9wcm92aWRlcl9hZGFwdGVyc192YWxpZGF0ZV90eXBlc1tkZWVwX2hydl06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjY1IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDEtMTI0IG1zLCBvZiB3aGljaCB+IDAtMyBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMSBwYXNzaW5nLCA4IGZhaWxpbmcsIGFuZCAxIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAxIGRpc3RpbmN0IGVycm9yIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjA5IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDkwbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDEgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDEgc2hyaW5rcyBvZiB3aGljaCAwIHdlcmUgc3VjY2Vzc2Z1bAoKICAtIFN0b3BwZWQgYmVjYXVzZSBub3RoaW5nIGxlZnQgdG8gZG8=" /><property name="hypothesis-statistics-backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[rhr]" value="YmFja2VuZC90ZXN0X2RhaWx5X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9kYWlseV9wcm92aWRlcl9hZGFwdGVyc192YWxpZGF0ZV90eXBlc1tyaHJdOgoKICAtIGR1cmluZyBnZW5lcmF0ZSBwaGFzZSAoMC43NSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA1NC0xMzkgbXMsIG9mIHdoaWNoIH4gMC0yIG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDEwIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAxIGRpc3RpbmN0IGVycm9yIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjA4IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDgxbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDEgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDEgc2hyaW5rcyBvZiB3aGljaCAwIHdlcmUgc3VjY2Vzc2Z1bAoKICAtIGR1cmluZyBleHBsYWluIHBoYXNlICgwLjAxIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDVtcywgb2Ygd2hpY2ggfiAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDEgcGFzc2luZywgMCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[hrv_history]" value="YmFja2VuZC90ZXN0X2RhaWx5X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9kYWlseV9wcm92aWRlcl9hZGFwdGVyc192YWxpZGF0ZV90eXBlc1tocnZfaGlzdG9yeV06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjMzIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDQtODEgbXMsIG9mIHdoaWNoIH4gMC04IG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSA3IHBhc3NpbmcsIDMgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDEgZGlzdGluY3QgZXJyb3IgaW4gdGhpcyBwaGFzZQoKICAtIGR1cmluZyBzaHJpbmsgcGhhc2UgKDAuMDYgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gNTVtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgMSBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gVHJpZWQgMSBzaHJpbmtzIG9mIHdoaWNoIDAgd2VyZSBzdWNjZXNzZnVsCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /><property name="hypothesis-statistics-backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[health_history]" value="YmFja2VuZC90ZXN0X2RhaWx5X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9kYWlseV9wcm92aWRlcl9hZGFwdGVyc192YWxpZGF0ZV90eXBlc1toZWFsdGhfaGlzdG9yeV06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgxLjQ2IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDEtMTUgbXMsIG9mIHdoaWNoIH4gMC05IG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAyMDAgcGFzc2luZywgMCBmYWlsaW5nLCBhbmQgMjAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEV2ZW50czoKICAgICAgKiAzLjE4JSwgRHJhdyBmb3IgcmVjdXJzaXZlKG9uZV9vZihub25lKCksIGJvb2xlYW5zKCksIGludGVnZXJzKCksIGZsb2F0cygpLCB0ZXh0KG1heF9zaXplPTQwKSksIGxhbWJkYSBjaGlsZDogc3Qub25lX29mKHN0Lmxpc3RzKGNoaWxkLCBtYXhfc2l6ZT00KSwgc3QuZGljdGlvbmFyaWVzKHN0LnNhbXBsZWRfZnJvbShbJ3NsZWVwJywgJ2ludGVydmFsJywgJ3N0YXJ0VGltZScsICdlbmRUaW1lJywgJ3NhbXBsZVRpbWUnLCAncGh5c2ljYWxUaW1lJywgJ2hlYXJ0UmF0ZScsICdoZWFydFJhdGVWYXJpYWJpbGl0eScsICd5ZWFyJywgJ21vbnRoJywgJ2RheScsICdzdGFnZXMnLCAnbWV0YWRhdGEnXSksIGNoaWxkLCBtYXhfc2l6ZT01KSksIG1pbl9sZWF2ZXM9Tm9uZSwgbWF4X2xlYXZlcz0xNSkgZXhjZWVkZWQgbWF4X2xlYXZlcz0xNSBhbmQgaGFkIHRvIGJlIHJldHJpZWQKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugc2V0dGluZ3MubWF4X2V4YW1wbGVzPTIwMA==" /><property name="hypothesis-statistics-backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[intraday_hr]" value="YmFja2VuZC90ZXN0X2RhaWx5X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9kYWlseV9wcm92aWRlcl9hZGFwdGVyc192YWxpZGF0ZV90eXBlc1tpbnRyYWRheV9ocl06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjgyIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDY3LTkwIG1zLCBvZiB3aGljaCB+IDAtNCBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxMCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wOCBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA3N21zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBkdXJpbmcgZXhwbGFpbiBwaGFzZSAoMC4wMSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA2bXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAxIHBhc3NpbmcsIDAgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /><property name="hypothesis-statistics-backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[workouts]" value="YmFja2VuZC90ZXN0X2RhaWx5X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9kYWlseV9wcm92aWRlcl9hZGFwdGVyc192YWxpZGF0ZV90eXBlc1t3b3Jrb3V0c106CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjM4IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDEtMTA1IG1zLCBvZiB3aGljaCB+IDAtMTAgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDUgcGFzc2luZywgNCBmYWlsaW5nLCBhbmQgMSBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCiAgICAtIEV2ZW50czoKICAgICAgKiAxMC4wMCUsIERyYXcgZm9yIHJlY3Vyc2l2ZShvbmVfb2Yobm9uZSgpLCBib29sZWFucygpLCBpbnRlZ2VycygpLCBmbG9hdHMoKSwgdGV4dChtYXhfc2l6ZT00MCkpLCBsYW1iZGEgY2hpbGQ6IHN0Lm9uZV9vZihzdC5saXN0cyhjaGlsZCwgbWF4X3NpemU9NCksIHN0LmRpY3Rpb25hcmllcyhzdC5zYW1wbGVkX2Zyb20oWydzbGVlcCcsICdpbnRlcnZhbCcsICdzdGFydFRpbWUnLCAnZW5kVGltZScsICdzYW1wbGVUaW1lJywgJ3BoeXNpY2FsVGltZScsICdoZWFydFJhdGUnLCAnaGVhcnRSYXRlVmFyaWFiaWxpdHknLCAneWVhcicsICdtb250aCcsICdkYXknLCAnc3RhZ2VzJywgJ21ldGFkYXRhJ10pLCBjaGlsZCwgbWF4X3NpemU9NSkpLCBtaW5fbGVhdmVzPU5vbmUsIG1heF9sZWF2ZXM9MTUpIGV4Y2VlZGVkIG1heF9sZWF2ZXM9MTUgYW5kIGhhZCB0byBiZSByZXRyaWVkCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4xMSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAxMDltcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgMSBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gVHJpZWQgMSBzaHJpbmtzIG9mIHdoaWNoIDAgd2VyZSBzdWNjZXNzZnVsCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /><property name="hypothesis-statistics-backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[naps]" value="YmFja2VuZC90ZXN0X2RhaWx5X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9kYWlseV9wcm92aWRlcl9hZGFwdGVyc192YWxpZGF0ZV90eXBlc1tuYXBzXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuNjcgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMi05OCBtcywgb2Ygd2hpY2ggfiAwLTEgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDEgcGFzc2luZywgOCBmYWlsaW5nLCBhbmQgMSBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wOCBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA4Mm1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-backend/test_daily_adapter_fuzz.py::test_daily_provider_adapters_validate_types[sleep_records]" value="YmFja2VuZC90ZXN0X2RhaWx5X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9kYWlseV9wcm92aWRlcl9hZGFwdGVyc192YWxpZGF0ZV90eXBlc1tzbGVlcF9yZWNvcmRzXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDEuNjEgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMS0xOSBtcywgb2Ygd2hpY2ggfiAwLTkgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDIwMCBwYXNzaW5nLCAwIGZhaWxpbmcsIGFuZCAyNyBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRXZlbnRzOgogICAgICAqIDUuNzMlLCBEcmF3IGZvciByZWN1cnNpdmUob25lX29mKG5vbmUoKSwgYm9vbGVhbnMoKSwgaW50ZWdlcnMoKSwgZmxvYXRzKCksIHRleHQobWF4X3NpemU9NDApKSwgbGFtYmRhIGNoaWxkOiBzdC5vbmVfb2Yoc3QubGlzdHMoY2hpbGQsIG1heF9zaXplPTQpLCBzdC5kaWN0aW9uYXJpZXMoc3Quc2FtcGxlZF9mcm9tKFsnc2xlZXAnLCAnaW50ZXJ2YWwnLCAnc3RhcnRUaW1lJywgJ2VuZFRpbWUnLCAnc2FtcGxlVGltZScsICdwaHlzaWNhbFRpbWUnLCAnaGVhcnRSYXRlJywgJ2hlYXJ0UmF0ZVZhcmlhYmlsaXR5JywgJ3llYXInLCAnbW9udGgnLCAnZGF5JywgJ3N0YWdlcycsICdtZXRhZGF0YSddKSwgY2hpbGQsIG1heF9zaXplPTUpKSwgbWluX2xlYXZlcz1Ob25lLCBtYXhfbGVhdmVzPTE1KSBleGNlZWRlZCBtYXhfbGVhdmVzPTE1IGFuZCBoYWQgdG8gYmUgcmV0cmllZAoKICAtIFN0b3BwZWQgYmVjYXVzZSBzZXR0aW5ncy5tYXhfZXhhbXBsZXM9MjAw" /><property name="hypothesis-statistics-backend/test_daily_adapter_fuzz.py::test_daily_scalar_outputs_are_finite_and_not_boolean[daily_hrv-dailyHeartRateVariability-averageHeartRateVariabilityMilliseconds]" value="YmFja2VuZC90ZXN0X2RhaWx5X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9kYWlseV9zY2FsYXJfb3V0cHV0c19hcmVfZmluaXRlX2FuZF9ub3RfYm9vbGVhbltkYWlseV9ocnYtZGFpbHlIZWFydFJhdGVWYXJpYWJpbGl0eS1hdmVyYWdlSGVhcnRSYXRlVmFyaWFiaWxpdHlNaWxsaXNlY29uZHNdOgoKICAtIGR1cmluZyBnZW5lcmF0ZSBwaGFzZSAoMC4xNyBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA0LTU5IG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gOCBwYXNzaW5nLCAyIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAxIGRpc3RpbmN0IGVycm9yIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjA1IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDQ5bXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDEgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDEgc2hyaW5rcyBvZiB3aGljaCAwIHdlcmUgc3VjY2Vzc2Z1bAoKICAtIFN0b3BwZWQgYmVjYXVzZSBub3RoaW5nIGxlZnQgdG8gZG8=" /><property name="hypothesis-statistics-backend/test_daily_adapter_fuzz.py::test_daily_scalar_outputs_are_finite_and_not_boolean[deep_hrv-dailyHeartRateVariability-deepSleepRootMeanSquareOfSuccessiveDifferencesMilliseconds]" value="YmFja2VuZC90ZXN0X2RhaWx5X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9kYWlseV9zY2FsYXJfb3V0cHV0c19hcmVfZmluaXRlX2FuZF9ub3RfYm9vbGVhbltkZWVwX2hydi1kYWlseUhlYXJ0UmF0ZVZhcmlhYmlsaXR5LWRlZXBTbGVlcFJvb3RNZWFuU3F1YXJlT2ZTdWNjZXNzaXZlRGlmZmVyZW5jZXNNaWxsaXNlY29uZHNdOgoKICAtIGR1cmluZyBnZW5lcmF0ZSBwaGFzZSAoMC4yNSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA0LTEyNCBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDggcGFzc2luZywgMiBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wNiBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA1Nm1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-backend/test_daily_adapter_fuzz.py::test_daily_scalar_outputs_are_finite_and_not_boolean[rhr-dailyRestingHeartRate-beatsPerMinute]" value="YmFja2VuZC90ZXN0X2RhaWx5X2FkYXB0ZXJfZnV6ei5weTo6dGVzdF9kYWlseV9zY2FsYXJfb3V0cHV0c19hcmVfZmluaXRlX2FuZF9ub3RfYm9vbGVhbltyaHItZGFpbHlSZXN0aW5nSGVhcnRSYXRlLWJlYXRzUGVyTWludXRlXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMTYgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMy02NiBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDggcGFzc2luZywgMiBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wNCBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA0MG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[strain_mapping]" value="YmFja2VuZC90ZXN0X3B1YmxpY19jYWxjdWxhdG9yX2Z1enoucHk6OnRlc3RfcHVibGljX3NjYWxhcl9jYWxjdWxhdG9yc192YWxpZGF0ZV9vcl9yZXR1cm5fZmluaXRlW3N0cmFpbl9tYXBwaW5nXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMDUgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC0xMyBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDYgcGFzc2luZywgNCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wMiBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAxNW1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_duration]" value="YmFja2VuZC90ZXN0X3B1YmxpY19jYWxjdWxhdG9yX2Z1enoucHk6OnRlc3RfcHVibGljX3NjYWxhcl9jYWxjdWxhdG9yc192YWxpZGF0ZV9vcl9yZXR1cm5fZmluaXRlW3NsZWVwX2R1cmF0aW9uXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMjEgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC0xIG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMjAwIHBhc3NpbmcsIDAgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCgogIC0gU3RvcHBlZCBiZWNhdXNlIHNldHRpbmdzLm1heF9leGFtcGxlcz0yMDA=" /><property name="hypothesis-statistics-backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_score]" value="YmFja2VuZC90ZXN0X3B1YmxpY19jYWxjdWxhdG9yX2Z1enoucHk6OnRlc3RfcHVibGljX3NjYWxhcl9jYWxjdWxhdG9yc192YWxpZGF0ZV9vcl9yZXR1cm5fZmluaXRlW3NsZWVwX3Njb3JlXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMTEgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMS0zMyBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDggcGFzc2luZywgMiBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wMyBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAzMG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_hrv]" value="YmFja2VuZC90ZXN0X3B1YmxpY19jYWxjdWxhdG9yX2Z1enoucHk6OnRlc3RfcHVibGljX3NjYWxhcl9jYWxjdWxhdG9yc192YWxpZGF0ZV9vcl9yZXR1cm5fZmluaXRlW3NsZWVwX2hydl06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjE1IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiA8IDFtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDIwMCBwYXNzaW5nLCAwIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwoKICAtIFN0b3BwZWQgYmVjYXVzZSBzZXR0aW5ncy5tYXhfZXhhbXBsZXM9MjAw" /><property name="hypothesis-statistics-backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_hr]" value="YmFja2VuZC90ZXN0X3B1YmxpY19jYWxjdWxhdG9yX2Z1enoucHk6OnRlc3RfcHVibGljX3NjYWxhcl9jYWxjdWxhdG9yc192YWxpZGF0ZV9vcl9yZXR1cm5fZmluaXRlW3NsZWVwX2hyXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMTcgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IDwgMW1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMjAwIHBhc3NpbmcsIDAgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCgogIC0gU3RvcHBlZCBiZWNhdXNlIHNldHRpbmdzLm1heF9leGFtcGxlcz0yMDA=" /><property name="hypothesis-statistics-backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_hr_dip]" value="YmFja2VuZC90ZXN0X3B1YmxpY19jYWxjdWxhdG9yX2Z1enoucHk6OnRlc3RfcHVibGljX3NjYWxhcl9jYWxjdWxhdG9yc192YWxpZGF0ZV9vcl9yZXR1cm5fZmluaXRlW3NsZWVwX2hyX2RpcF06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjI0IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMSBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDIwMCBwYXNzaW5nLCAwIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwoKICAtIFN0b3BwZWQgYmVjYXVzZSBzZXR0aW5ncy5tYXhfZXhhbXBsZXM9MjAw" /><property name="hypothesis-statistics-backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_need_legacy]" value="YmFja2VuZC90ZXN0X3B1YmxpY19jYWxjdWxhdG9yX2Z1enoucHk6OnRlc3RfcHVibGljX3NjYWxhcl9jYWxjdWxhdG9yc192YWxpZGF0ZV9vcl9yZXR1cm5fZmluaXRlW3NsZWVwX25lZWRfbGVnYWN5XToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMTAgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMS0zMCBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDcgcGFzc2luZywgMyBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wMiBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAyMm1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_debt_legacy]" value="YmFja2VuZC90ZXN0X3B1YmxpY19jYWxjdWxhdG9yX2Z1enoucHk6OnRlc3RfcHVibGljX3NjYWxhcl9jYWxjdWxhdG9yc192YWxpZGF0ZV9vcl9yZXR1cm5fZmluaXRlW3NsZWVwX2RlYnRfbGVnYWN5XToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMTYgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC00MCBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDYgcGFzc2luZywgNCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wNSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA1Mm1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[efficiency]" value="YmFja2VuZC90ZXN0X3B1YmxpY19jYWxjdWxhdG9yX2Z1enoucHk6OnRlc3RfcHVibGljX3NjYWxhcl9jYWxjdWxhdG9yc192YWxpZGF0ZV9vcl9yZXR1cm5fZmluaXRlW2VmZmljaWVuY3ldOgoKICAtIGR1cmluZyBnZW5lcmF0ZSBwaGFzZSAoMC4wNCBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAwLTYgbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSA1IHBhc3NpbmcsIDUgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDEgZGlzdGluY3QgZXJyb3IgaW4gdGhpcyBwaGFzZQoKICAtIGR1cmluZyBzaHJpbmsgcGhhc2UgKDAuMDEgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gNW1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[recovery_legacy]" value="YmFja2VuZC90ZXN0X3B1YmxpY19jYWxjdWxhdG9yX2Z1enoucHk6OnRlc3RfcHVibGljX3NjYWxhcl9jYWxjdWxhdG9yc192YWxpZGF0ZV9vcl9yZXR1cm5fZmluaXRlW3JlY292ZXJ5X2xlZ2FjeV06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjE5IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMSBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDIwMCBwYXNzaW5nLCAwIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwoKICAtIFN0b3BwZWQgYmVjYXVzZSBzZXR0aW5ncy5tYXhfZXhhbXBsZXM9MjAw" /><property name="hypothesis-statistics-backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[recovery_connected]" value="YmFja2VuZC90ZXN0X3B1YmxpY19jYWxjdWxhdG9yX2Z1enoucHk6OnRlc3RfcHVibGljX3NjYWxhcl9jYWxjdWxhdG9yc192YWxpZGF0ZV9vcl9yZXR1cm5fZmluaXRlW3JlY292ZXJ5X2Nvbm5lY3RlZF06CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjIwIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMSBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDIwMCBwYXNzaW5nLCAwIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwoKICAtIFN0b3BwZWQgYmVjYXVzZSBzZXR0aW5ncy5tYXhfZXhhbXBsZXM9MjAw" /><property name="hypothesis-statistics-backend/test_public_calculator_fuzz.py::test_public_scalar_calculators_validate_or_return_finite[sleep_need_connected]" value="YmFja2VuZC90ZXN0X3B1YmxpY19jYWxjdWxhdG9yX2Z1enoucHk6OnRlc3RfcHVibGljX3NjYWxhcl9jYWxjdWxhdG9yc192YWxpZGF0ZV9vcl9yZXR1cm5fZmluaXRlW3NsZWVwX25lZWRfY29ubmVjdGVkXToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMDQgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMS0xMiBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDggcGFzc2luZywgMiBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wMSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiA3bXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDEgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDEgc2hyaW5rcyBvZiB3aGljaCAwIHdlcmUgc3VjY2Vzc2Z1bAoKICAtIFN0b3BwZWQgYmVjYXVzZSBub3RoaW5nIGxlZnQgdG8gZG8=" /></properties><testcase classname="backend.test_daily_adapter_fuzz" name="test_daily_provider_adapters_validate_types[daily_hrv]" time="0.825"><failure message="AttributeError: 'NoneType' object has no attribute 'get'&#10;Failing test case: test_daily_provider_adapters_validate_types(&#10;    adapter='daily_hrv',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36">backend\test_daily_adapter_fuzz.py:28: in test_daily_provider_adapters_validate_types
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:39: in test_daily_provider_adapters_validate_types
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:35: in run
+    result = await RECIPES[adapter](client)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:258: in get_daily_hrv
+    metric = point.get("dailyHeartRateVariability", {})
+             ^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+E   Failing test case: test_daily_provider_adapters_validate_types(
+E       adapter='daily_hrv',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36</failure></testcase><testcase classname="backend.test_daily_adapter_fuzz" name="test_daily_provider_adapters_validate_types[deep_hrv]" time="0.838"><failure message="AttributeError: 'NoneType' object has no attribute 'get'&#10;Failing test case: test_daily_provider_adapters_validate_types(&#10;    adapter='deep_hrv',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36">backend\test_daily_adapter_fuzz.py:28: in test_daily_provider_adapters_validate_types
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:39: in test_daily_provider_adapters_validate_types
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:35: in run
+    result = await RECIPES[adapter](client)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:269: in get_deep_sleep_hrv
+    value = point.get("dailyHeartRateVariability", {}).get(
+            ^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+E   Failing test case: test_daily_provider_adapters_validate_types(
+E       adapter='deep_hrv',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36</failure></testcase><testcase classname="backend.test_daily_adapter_fuzz" name="test_daily_provider_adapters_validate_types[rhr]" time="0.945"><failure message="AttributeError: 'NoneType' object has no attribute 'get'&#10;Failing test case: test_daily_provider_adapters_validate_types(&#10;    adapter='rhr',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36">backend\test_daily_adapter_fuzz.py:28: in test_daily_provider_adapters_validate_types
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:39: in test_daily_provider_adapters_validate_types
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:35: in run
+    result = await RECIPES[adapter](client)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:282: in get_resting_heart_rate
+    metric = point.get("dailyRestingHeartRate", {})
+             ^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+E   Failing test case: test_daily_provider_adapters_validate_types(
+E       adapter='rhr',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36</failure></testcase><testcase classname="backend.test_daily_adapter_fuzz" name="test_daily_provider_adapters_validate_types[hrv_history]" time="0.466"><failure message="AttributeError: 'NoneType' object has no attribute 'get'&#10;Failing test case: test_daily_provider_adapters_validate_types(&#10;    adapter='hrv_history',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36">backend\test_daily_adapter_fuzz.py:28: in test_daily_provider_adapters_validate_types
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:39: in test_daily_provider_adapters_validate_types
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:35: in run
+    result = await RECIPES[adapter](client)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:297: in get_hrv_history
+    metric = point.get("dailyHeartRateVariability", {})
+             ^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+E   Failing test case: test_daily_provider_adapters_validate_types(
+E       adapter='hrv_history',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36</failure></testcase><testcase classname="backend.test_daily_adapter_fuzz" name="test_daily_provider_adapters_validate_types[health_history]" time="1.466" /><testcase classname="backend.test_daily_adapter_fuzz" name="test_daily_provider_adapters_validate_types[intraday_hr]" time="0.989"><failure message="AttributeError: 'NoneType' object has no attribute 'get'&#10;Failing test case: test_daily_provider_adapters_validate_types(&#10;    adapter='intraday_hr',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36">backend\test_daily_adapter_fuzz.py:28: in test_daily_provider_adapters_validate_types
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:39: in test_daily_provider_adapters_validate_types
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:35: in run
+    result = await RECIPES[adapter](client)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:346: in get_intraday_heart_rate
+    metric = point.get("heartRate", {})
+             ^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+E   Failing test case: test_daily_provider_adapters_validate_types(
+E       adapter='intraday_hr',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36</failure></testcase><testcase classname="backend.test_daily_adapter_fuzz" name="test_daily_provider_adapters_validate_types[workouts]" time="0.598"><failure message="AttributeError: 'NoneType' object has no attribute 'get'&#10;Failing test case: test_daily_provider_adapters_validate_types(&#10;    adapter='workouts',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36">backend\test_daily_adapter_fuzz.py:28: in test_daily_provider_adapters_validate_types
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:39: in test_daily_provider_adapters_validate_types
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:35: in run
+    result = await RECIPES[adapter](client)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:375: in get_workout_sessions
+    exercise = point.get("exercise", {})
+               ^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+E   Failing test case: test_daily_provider_adapters_validate_types(
+E       adapter='workouts',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36</failure></testcase><testcase classname="backend.test_daily_adapter_fuzz" name="test_daily_provider_adapters_validate_types[naps]" time="0.864"><failure message="AttributeError: 'NoneType' object has no attribute 'get'&#10;Failing test case: test_daily_provider_adapters_validate_types(&#10;    adapter='naps',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36">backend\test_daily_adapter_fuzz.py:28: in test_daily_provider_adapters_validate_types
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:39: in test_daily_provider_adapters_validate_types
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:35: in run
+    result = await RECIPES[adapter](client)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\google_health_client.py:525: in get_nap_minutes_history
+    sleep = point.get("sleep", {})
+            ^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'get'
+E   Failing test case: test_daily_provider_adapters_validate_types(
+E       adapter='naps',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:36</failure></testcase><testcase classname="backend.test_daily_adapter_fuzz" name="test_daily_provider_adapters_validate_types[sleep_records]" time="1.618" /><testcase classname="backend.test_daily_adapter_fuzz" name="test_daily_scalar_outputs_are_finite_and_not_boolean[daily_hrv-dailyHeartRateVariability-averageHeartRateVariabilityMilliseconds]" time="0.279"><failure message="assert 0.0 is None&#10;Failing test case: test_daily_scalar_outputs_are_finite_and_not_boolean(&#10;    adapter='daily_hrv',&#10;    field='dailyHeartRateVariability',&#10;    key='averageHeartRateVariabilityMilliseconds',&#10;    value=False,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:58">backend\test_daily_adapter_fuzz.py:43: in test_daily_scalar_outputs_are_finite_and_not_boolean
+    ('daily_hrv', 'dailyHeartRateVariability', 'averageHeartRateVariabilityMilliseconds'),
+               ^^^^^^^^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:60: in test_daily_scalar_outputs_are_finite_and_not_boolean
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:58: in run
+    assert result is None
+E   assert 0.0 is None
+E   Failing test case: test_daily_scalar_outputs_are_finite_and_not_boolean(
+E       adapter='daily_hrv',
+E       field='dailyHeartRateVariability',
+E       key='averageHeartRateVariabilityMilliseconds',
+E       value=False,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:58</failure></testcase><testcase classname="backend.test_daily_adapter_fuzz" name="test_daily_scalar_outputs_are_finite_and_not_boolean[deep_hrv-dailyHeartRateVariability-deepSleepRootMeanSquareOfSuccessiveDifferencesMilliseconds]" time="0.364"><failure message="assert 0.0 is None&#10;Failing test case: test_daily_scalar_outputs_are_finite_and_not_boolean(&#10;    adapter='deep_hrv',&#10;    field='dailyHeartRateVariability',&#10;    key='deepSleepRootMeanSquareOfSuccessiveDifferencesMilliseconds',&#10;    value=False,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:58">backend\test_daily_adapter_fuzz.py:43: in test_daily_scalar_outputs_are_finite_and_not_boolean
+    ('daily_hrv', 'dailyHeartRateVariability', 'averageHeartRateVariabilityMilliseconds'),
+               ^^^^^^^^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:60: in test_daily_scalar_outputs_are_finite_and_not_boolean
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:58: in run
+    assert result is None
+E   assert 0.0 is None
+E   Failing test case: test_daily_scalar_outputs_are_finite_and_not_boolean(
+E       adapter='deep_hrv',
+E       field='dailyHeartRateVariability',
+E       key='deepSleepRootMeanSquareOfSuccessiveDifferencesMilliseconds',
+E       value=False,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:58</failure></testcase><testcase classname="backend.test_daily_adapter_fuzz" name="test_daily_scalar_outputs_are_finite_and_not_boolean[rhr-dailyRestingHeartRate-beatsPerMinute]" time="0.258"><failure message="assert 0.0 is None&#10;Failing test case: test_daily_scalar_outputs_are_finite_and_not_boolean(&#10;    adapter='rhr',&#10;    field='dailyRestingHeartRate',&#10;    key='beatsPerMinute',&#10;    value=False,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:58">backend\test_daily_adapter_fuzz.py:43: in test_daily_scalar_outputs_are_finite_and_not_boolean
+    ('daily_hrv', 'dailyHeartRateVariability', 'averageHeartRateVariabilityMilliseconds'),
+               ^^^^^^^^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:60: in test_daily_scalar_outputs_are_finite_and_not_boolean
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_daily_adapter_fuzz.py:58: in run
+    assert result is None
+E   assert 0.0 is None
+E   Failing test case: test_daily_scalar_outputs_are_finite_and_not_boolean(
+E       adapter='rhr',
+E       field='dailyRestingHeartRate',
+E       key='beatsPerMinute',
+E       value=False,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_daily_adapter_fuzz.py:58</failure></testcase><testcase classname="backend.test_public_calculator_fuzz" name="test_public_scalar_calculators_validate_or_return_finite[strain_mapping]" time="0.087"><failure message="TypeError: '&gt;' not supported between instances of 'NoneType' and 'float'&#10;Failing test case: test_public_scalar_calculators_validate_or_return_finite(&#10;    calculator='strain_mapping',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_public_calculator_fuzz.py:42">backend\test_public_calculator_fuzz.py:37: in test_public_scalar_calculators_validate_or_return_finite
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^^^^
+backend\test_public_calculator_fuzz.py:41: in test_public_scalar_calculators_validate_or_return_finite
+    result = RECIPES[calculator](value)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+strain.py:103: in strain_score
+    return min(math.nextafter(21., 0), -21 * math.expm1(-max(0., load) / config.strain_l))
+                                                         ^^^^^^^^^^^^^
+E   TypeError: '&gt;' not supported between instances of 'NoneType' and 'float'
+E   Failing test case: test_public_scalar_calculators_validate_or_return_finite(
+E       calculator='strain_mapping',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_public_calculator_fuzz.py:42</failure></testcase><testcase classname="backend.test_public_calculator_fuzz" name="test_public_scalar_calculators_validate_or_return_finite[sleep_duration]" time="0.210" /><testcase classname="backend.test_public_calculator_fuzz" name="test_public_scalar_calculators_validate_or_return_finite[sleep_score]" time="0.161"><failure message="TypeError: '&lt;=' not supported between instances of 'NoneType' and 'int'&#10;Failing test case: test_public_scalar_calculators_validate_or_return_finite(&#10;    calculator='sleep_score',&#10;    value=None,&#10;)">backend\test_public_calculator_fuzz.py:37: in test_public_scalar_calculators_validate_or_return_finite
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^^^^
+backend\test_public_calculator_fuzz.py:41: in test_public_scalar_calculators_validate_or_return_finite
+    result = RECIPES[calculator](value)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\test_public_calculator_fuzz.py:23: in &lt;lambda&gt;
+    'sleep_score': lambda x: SleepCalculator.calculate_score(SLEEP, x, 40, 60, 75, 40, 60, 30),
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleepscore.py:371: in calculate_score
+    if total_hours &lt;= 0 or sleep_need &lt;= 0:
+                           ^^^^^^^^^^^^^^^
+E   TypeError: '&lt;=' not supported between instances of 'NoneType' and 'int'
+E   Failing test case: test_public_scalar_calculators_validate_or_return_finite(
+E       calculator='sleep_score',
+E       value=None,
+E   )</failure></testcase><testcase classname="backend.test_public_calculator_fuzz" name="test_public_scalar_calculators_validate_or_return_finite[sleep_hrv]" time="0.155" /><testcase classname="backend.test_public_calculator_fuzz" name="test_public_scalar_calculators_validate_or_return_finite[sleep_hr]" time="0.176" /><testcase classname="backend.test_public_calculator_fuzz" name="test_public_scalar_calculators_validate_or_return_finite[sleep_hr_dip]" time="0.241" /><testcase classname="backend.test_public_calculator_fuzz" name="test_public_scalar_calculators_validate_or_return_finite[sleep_need_legacy]" time="0.154"><failure message="TypeError: unsupported operand type(s) for /: 'NoneType' and 'float'&#10;Failing test case: test_public_scalar_calculators_validate_or_return_finite(&#10;    calculator='sleep_need_legacy',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_public_calculator_fuzz.py:42">backend\test_public_calculator_fuzz.py:37: in test_public_scalar_calculators_validate_or_return_finite
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^^^^
+backend\test_public_calculator_fuzz.py:41: in test_public_scalar_calculators_validate_or_return_finite
+    result = RECIPES[calculator](value)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\test_public_calculator_fuzz.py:27: in &lt;lambda&gt;
+    'sleep_need_legacy': lambda x: SleepCalculator.calculate_sleep_need(yesterday_strain=x),
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleepscore.py:439: in calculate_sleep_need
+    strain_factor = (yesterday_strain / 21.0) * 0.5
+                     ^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for /: 'NoneType' and 'float'
+E   Failing test case: test_public_scalar_calculators_validate_or_return_finite(
+E       calculator='sleep_need_legacy',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_public_calculator_fuzz.py:42</failure></testcase><testcase classname="backend.test_public_calculator_fuzz" name="test_public_scalar_calculators_validate_or_return_finite[sleep_debt_legacy]" time="0.275"><failure message="TypeError: unsupported operand type(s) for -: 'float' and 'NoneType'&#10;Failing test case: test_public_scalar_calculators_validate_or_return_finite(&#10;    calculator='sleep_debt_legacy',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_public_calculator_fuzz.py:42">backend\test_public_calculator_fuzz.py:37: in test_public_scalar_calculators_validate_or_return_finite
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^^^^
+backend\test_public_calculator_fuzz.py:41: in test_public_scalar_calculators_validate_or_return_finite
+    result = RECIPES[calculator](value)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\test_public_calculator_fuzz.py:28: in &lt;lambda&gt;
+    'sleep_debt_legacy': lambda x: SleepCalculator.compute_sleep_debt([(7.5, x)]),
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleepscore.py:448: in compute_sleep_debt
+    return sum(max(0.0, need - actual) for need, actual in need_vs_actual)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleepscore.py:448: in &lt;genexpr&gt;
+    return sum(max(0.0, need - actual) for need, actual in need_vs_actual)
+                        ^^^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for -: 'float' and 'NoneType'
+E   Failing test case: test_public_scalar_calculators_validate_or_return_finite(
+E       calculator='sleep_debt_legacy',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_public_calculator_fuzz.py:42</failure></testcase><testcase classname="backend.test_public_calculator_fuzz" name="test_public_scalar_calculators_validate_or_return_finite[efficiency]" time="0.053"><failure message="TypeError: must be real number, not NoneType&#10;Failing test case: test_public_scalar_calculators_validate_or_return_finite(&#10;    calculator='efficiency',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_public_calculator_fuzz.py:42">backend\test_public_calculator_fuzz.py:37: in test_public_scalar_calculators_validate_or_return_finite
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^^^^
+backend\test_public_calculator_fuzz.py:41: in test_public_scalar_calculators_validate_or_return_finite
+    result = RECIPES[calculator](value)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\test_public_calculator_fuzz.py:29: in &lt;lambda&gt;
+    'efficiency': lambda x: SleepEfficiencyCalculator.calculate_single_night(x, 28200),
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleep_efficiency.py:16: in calculate_single_night
+    if not all(math.isfinite(value) for value in (time_asleep_seconds, time_in_bed_seconds)):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleep_efficiency.py:16: in &lt;genexpr&gt;
+    if not all(math.isfinite(value) for value in (time_asleep_seconds, time_in_bed_seconds)):
+               ^^^^^^^^^^^^^^^^^^^^
+E   TypeError: must be real number, not NoneType
+E   Failing test case: test_public_scalar_calculators_validate_or_return_finite(
+E       calculator='efficiency',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_public_calculator_fuzz.py:42</failure></testcase><testcase classname="backend.test_public_calculator_fuzz" name="test_public_scalar_calculators_validate_or_return_finite[recovery_legacy]" time="0.189" /><testcase classname="backend.test_public_calculator_fuzz" name="test_public_scalar_calculators_validate_or_return_finite[recovery_connected]" time="0.209" /><testcase classname="backend.test_public_calculator_fuzz" name="test_public_scalar_calculators_validate_or_return_finite[sleep_need_connected]" time="0.071"><failure message="TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'&#10;Failing test case: test_public_scalar_calculators_validate_or_return_finite(&#10;    calculator='sleep_need_connected',&#10;    value=None,&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;        E:\Projects\Health-App-\backend\test_public_calculator_fuzz.py:42">backend\test_public_calculator_fuzz.py:37: in test_public_scalar_calculators_validate_or_return_finite
+    @settings(max_examples=200, derandomize=True, deadline=None, database=None)
+                   ^^^^^^^^^^^^^
+backend\test_public_calculator_fuzz.py:41: in test_public_scalar_calculators_validate_or_return_finite
+    result = RECIPES[calculator](value)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\test_public_calculator_fuzz.py:32: in &lt;lambda&gt;
+    'sleep_need_connected': lambda x: calculate_sleep_need(x, []),
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\sleep_need.py:70: in calculate_sleep_need
+    strain_add = strain_sleep_add(strain_pct * 0.21)
+                                  ^^^^^^^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for *: 'NoneType' and 'float'
+E   Failing test case: test_public_scalar_calculators_validate_or_return_finite(
+E       calculator='sleep_need_connected',
+E       value=None,
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           E:\Projects\Health-App-\backend\test_public_calculator_fuzz.py:42</failure></testcase><testcase classname="backend.test_public_calculator_fuzz" name="test_efficiency_wrong_types_are_withheld[None]" time="0.002"><failure message="TypeError: must be real number, not NoneType">backend\test_public_calculator_fuzz.py:51: in test_efficiency_wrong_types_are_withheld
+    assert SleepEfficiencyCalculator.calculate_single_night(value, 28200) is None
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleep_efficiency.py:16: in calculate_single_night
+    if not all(math.isfinite(value) for value in (time_asleep_seconds, time_in_bed_seconds)):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleep_efficiency.py:16: in &lt;genexpr&gt;
+    if not all(math.isfinite(value) for value in (time_asleep_seconds, time_in_bed_seconds)):
+               ^^^^^^^^^^^^^^^^^^^^
+E   TypeError: must be real number, not NoneType</failure></testcase><testcase classname="backend.test_public_calculator_fuzz" name="test_efficiency_wrong_types_are_withheld[True]" time="0.002"><failure message="assert 0.0 is None&#10; +  where 0.0 = &lt;function SleepEfficiencyCalculator.calculate_single_night at 0x000001EF83FB9E40&gt;(True, 28200)&#10; +    where &lt;function SleepEfficiencyCalculator.calculate_single_night at 0x000001EF83FB9E40&gt; = SleepEfficiencyCalculator.calculate_single_night">backend\test_public_calculator_fuzz.py:51: in test_efficiency_wrong_types_are_withheld
+    assert SleepEfficiencyCalculator.calculate_single_night(value, 28200) is None
+E   assert 0.0 is None
+E    +  where 0.0 = &lt;function SleepEfficiencyCalculator.calculate_single_night at 0x000001EF83FB9E40&gt;(True, 28200)
+E    +    where &lt;function SleepEfficiencyCalculator.calculate_single_night at 0x000001EF83FB9E40&gt; = SleepEfficiencyCalculator.calculate_single_night</failure></testcase><testcase classname="backend.test_public_calculator_fuzz" name="test_efficiency_wrong_types_are_withheld[300]" time="0.002"><failure message="TypeError: must be real number, not str">backend\test_public_calculator_fuzz.py:51: in test_efficiency_wrong_types_are_withheld
+    assert SleepEfficiencyCalculator.calculate_single_night(value, 28200) is None
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleep_efficiency.py:16: in calculate_single_night
+    if not all(math.isfinite(value) for value in (time_asleep_seconds, time_in_bed_seconds)):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleep_efficiency.py:16: in &lt;genexpr&gt;
+    if not all(math.isfinite(value) for value in (time_asleep_seconds, time_in_bed_seconds)):
+               ^^^^^^^^^^^^^^^^^^^^
+E   TypeError: must be real number, not str</failure></testcase><testcase classname="backend.test_public_calculator_fuzz" name="test_efficiency_wrong_types_are_withheld[nan]" time="0.002" /><testcase classname="backend.test_public_calculator_fuzz" name="test_efficiency_wrong_types_are_withheld[inf]" time="0.001" /><testcase classname="backend.test_public_calculator_fuzz" name="test_efficiency_wrong_types_are_withheld[10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000]" time="0.001"><failure message="OverflowError: int too large to convert to float">backend\test_public_calculator_fuzz.py:51: in test_efficiency_wrong_types_are_withheld
+    assert SleepEfficiencyCalculator.calculate_single_night(value, 28200) is None
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleep_efficiency.py:16: in calculate_single_night
+    if not all(math.isfinite(value) for value in (time_asleep_seconds, time_in_bed_seconds)):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sleep_efficiency.py:16: in &lt;genexpr&gt;
+    if not all(math.isfinite(value) for value in (time_asleep_seconds, time_in_bed_seconds)):
+               ^^^^^^^^^^^^^^^^^^^^
+E   OverflowError: int too large to convert to float</failure></testcase><testcase classname="backend.test_public_calculator_fuzz" name="test_custom_duration_sigmoid_is_stable" time="0.001" /><testcase classname="backend.test_public_calculator_fuzz" name="test_physical_provider_timestamp_requires_offset" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">backend\test_public_calculator_fuzz.py:60: in test_physical_provider_timestamp_requires_offset
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase></testsuite></testsuites>

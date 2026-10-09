@@ -18,7 +18,7 @@ import httpx
 from health_read_store import HealthReadStore, ReadRange, read_range, exact_key, CacheInvalidated
 from read_metrics import count
 from sleep_selection import main_sleep_key
-from validity import sleep_duration
+from validity import sleep_duration, valid_metric
 from provider_payload import payload_boundary
 
 
@@ -47,6 +47,8 @@ def _day_filter(field: str, start: date, end: date) -> str:
 def _local_datetime(value: str, offset: str, *, preserve_offset: bool = False) -> datetime:
     """Return wall-clock time in the offset supplied by Google."""
     instant = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if instant.tzinfo is None:
+        raise ValueError('Physical timestamps must include a UTC offset')
     seconds = float(offset.removesuffix("s")) if offset else 0.0
     local = instant.astimezone(timezone(timedelta(seconds=seconds)))
     return local if preserve_offset else local.replace(tzinfo=None)
@@ -249,6 +251,7 @@ class GoogleHealthClient:
             f'heart_rate.sample_time.physical_time < "{end_text}"'
         ))
 
+    @payload_boundary
     async def get_daily_hrv(self, target_date: date) -> Optional[float]:
         points = await self._points(
             "daily-heart-rate-variability",
@@ -257,9 +260,11 @@ class GoogleHealthClient:
         for point in points:
             metric = point.get("dailyHeartRateVariability", {})
             if "averageHeartRateVariabilityMilliseconds" in metric:
-                return float(metric["averageHeartRateVariabilityMilliseconds"])
+                value = metric["averageHeartRateVariabilityMilliseconds"]
+                return float(value) if not isinstance(value, bool) and valid_metric('hrv', float(value)) else None
         return None
 
+    @payload_boundary
     async def get_deep_sleep_hrv(self, target_date: date) -> Optional[float]:
         points = await self._points(
             "daily-heart-rate-variability",
@@ -270,9 +275,10 @@ class GoogleHealthClient:
                 "deepSleepRootMeanSquareOfSuccessiveDifferencesMilliseconds"
             )
             if value is not None:
-                return float(value)
+                return float(value) if not isinstance(value, bool) and valid_metric('deep_sleep_hrv', float(value)) else None
         return None
 
+    @payload_boundary
     async def get_resting_heart_rate(self, target_date: date) -> Optional[float]:
         points = await self._points(
             "daily-resting-heart-rate",
@@ -281,9 +287,11 @@ class GoogleHealthClient:
         for point in points:
             metric = point.get("dailyRestingHeartRate", {})
             if "beatsPerMinute" in metric:
-                return float(metric["beatsPerMinute"])
+                value = metric["beatsPerMinute"]
+                return float(value) if not isinstance(value, bool) and valid_metric('rhr', float(value)) else None
         return None
 
+    @payload_boundary
     async def get_hrv_history(self, days: int = 14) -> list[float]:
         # Exclude today: the observation being scored cannot set its own baseline.
         end = date.today() - timedelta(days=1)
@@ -296,7 +304,7 @@ class GoogleHealthClient:
         for point in points:
             metric = point.get("dailyHeartRateVariability", {})
             value = metric.get("averageHeartRateVariabilityMilliseconds")
-            if value is not None and float(value) > 0:
+            if value is not None and not isinstance(value, bool) and valid_metric('hrv', float(value)):
                 dated.append((_google_date(metric["date"]), float(value)))
         return [value for _, value in sorted(dated)]
 
@@ -336,6 +344,7 @@ class GoogleHealthClient:
             history[key] = [dated[day] for day in sorted(dated)]
         return history
 
+    @payload_boundary
     async def get_intraday_heart_rate(self, target_date: date, end_date: date | None = None, *, preserve_offset: bool = False) -> list[tuple[datetime, float]]:
         points = await self._points(
             "heart-rate",
@@ -365,6 +374,7 @@ class GoogleHealthClient:
         hr = await self._points("heart-rate", sample_filter("heart_rate.sample_time.physical_time"))
         return sleep, hrv, hr
 
+    @payload_boundary
     async def get_workout_sessions(self, target_date: date, end_date: date | None = None, *, preserve_offset: bool = False) -> list[dict]:
         points = await self._points(
             "exercise",
@@ -517,6 +527,7 @@ class GoogleHealthClient:
         return {record["date"]: record["total_duration"] / 60 if record["sleep_duration_available"] else None
                 for record in records if start <= record["date"] <= end}
 
+    @payload_boundary
     async def get_nap_minutes_history(self, start: date, end: date) -> dict[date, float]:
         points = await self._points("sleep", _day_filter("sleep.interval.civil_end_time", start, end))
         naps = {}
