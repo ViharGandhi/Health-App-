@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="0.998" timestamp="2026-10-09T19:55:35.418674+02:00" hostname="Zangetsu"><testcase classname="backend.test_provider_transport_fuzz" name="test_repeated_pagination_token_stops_with_explicit_provider_error[points]" time="0.005"><failure message="AssertionError: Pagination did not detect lack of progress&#10;assert 4 &lt;= 3&#10; +  where 4 = len([&lt;Request('GET', 'https://health.googleapis.com/v4/users/me/dataTypes/sleep/dataPoints:reconcile?filter=&amp;pageSize=25&amp;d...?filter=&amp;pageSize=25&amp;dataSourceFamily=users%2Fme%2FdataSourceFamilies%2Fgoogle-wearables&amp;pageToken=synthetic-repeat')&gt;])">backend\test_provider_transport_fuzz.py:63: in test_repeated_pagination_token_stops_with_explicit_provider_error
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_provider_transport_fuzz.py:60: in run
+    await client._fetch_points('sleep', '')
+backend\google_health_client.py:214: in _fetch_points
+    response = await client.get(url, headers=self.headers, params=params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1814: in get
+    return await self.request(
+.venv\Lib\site-packages\httpx\_client.py:1585: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1674: in send
+    response = await self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:1702: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:1739: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1776: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_transports\mock.py:34: in handle_async_request
+    response = self.handler(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+backend\test_provider_transport_fuzz.py:54: in respond
+    assert len(calls) &lt;= 3, 'Pagination did not detect lack of progress'
+E   AssertionError: Pagination did not detect lack of progress
+E   assert 4 &lt;= 3
+E    +  where 4 = len([&lt;Request('GET', 'https://health.googleapis.com/v4/users/me/dataTypes/sleep/dataPoints:reconcile?filter=&amp;pageSize=25&amp;d...?filter=&amp;pageSize=25&amp;dataSourceFamily=users%2Fme%2FdataSourceFamilies%2Fgoogle-wearables&amp;pageToken=synthetic-repeat')&gt;])</failure></testcase><testcase classname="backend.test_provider_transport_fuzz" name="test_repeated_pagination_token_stops_with_explicit_provider_error[steps]" time="0.016"><failure message="AssertionError: Pagination did not detect lack of progress&#10;assert 4 &lt;= 3&#10; +  where 4 = len([&lt;Request('POST', 'https://health.googleapis.com/v4/users/me/dataTypes/steps/dataPoints:dailyRollUp')&gt;, &lt;Request('POST...:dailyRollUp')&gt;, &lt;Request('POST', 'https://health.googleapis.com/v4/users/me/dataTypes/steps/dataPoints:dailyRollUp')&gt;])">backend\test_provider_transport_fuzz.py:63: in test_repeated_pagination_token_stops_with_explicit_provider_error
+    asyncio.run(run())
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\devpa\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\test_provider_transport_fuzz.py:62: in run
+    await client._fetch_daily_steps(date(2026, 10, 7), date(2026, 10, 7))
+backend\google_health_client.py:435: in _fetch_daily_steps
+    response = await client.post(f"{BASE_URL}/steps/dataPoints:dailyRollUp", headers=self.headers, json=body)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1905: in post
+    return await self.request(
+.venv\Lib\site-packages\httpx\_client.py:1585: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1674: in send
+    response = await self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:1702: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:1739: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1776: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_transports\mock.py:34: in handle_async_request
+    response = self.handler(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+backend\test_provider_transport_fuzz.py:54: in respond
+    assert len(calls) &lt;= 3, 'Pagination did not detect lack of progress'
+E   AssertionError: Pagination did not detect lack of progress
+E   assert 4 &lt;= 3
+E    +  where 4 = len([&lt;Request('POST', 'https://health.googleapis.com/v4/users/me/dataTypes/steps/dataPoints:dailyRollUp')&gt;, &lt;Request('POST...:dailyRollUp')&gt;, &lt;Request('POST', 'https://health.googleapis.com/v4/users/me/dataTypes/steps/dataPoints:dailyRollUp')&gt;])</failure></testcase></testsuite></testsuites>

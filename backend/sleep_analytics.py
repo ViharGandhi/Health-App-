@@ -9,6 +9,7 @@ from sleep_trends import range_start
 from sleep_consistency import SleepNight, score_main_sleep
 from sleepscore import SleepCalculator, SleepData
 from sleep_need_inputs import SleepNeedInputs, need_components
+from provider_payload import payload_boundary
 
 
 def demo_sleep_need_inputs(observations: list[dict], today: date, today_strain_pct: float | None = None) -> SleepNeedInputs:
@@ -21,6 +22,7 @@ def demo_sleep_need_inputs(observations: list[dict], today: date, today_strain_p
     return SleepNeedInputs(sleep, strain, {})
 
 
+@payload_boundary
 def sleep_observations(points: list[dict], today: date, *, is_mock: bool = False) -> list[dict]:
     # Select one completed main sleep per historical local wake date, as the HR chart does.
     now = datetime.fromisoformat(f"{today}T23:59:59+00:00") if is_mock else datetime.now(timezone.utc)

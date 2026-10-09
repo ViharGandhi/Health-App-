@@ -199,6 +199,7 @@ class GoogleHealthClient:
                 await asyncio.sleep(delay)
             lane[1] = time.monotonic() + 0.5
 
+    @payload_boundary
     async def _fetch_points(self, data_type: str, filter_expr: str, *, reconcile: bool = True) -> list[dict]:
         """Fetch every page; reconcile wearable data by default, or list raw sessions."""
         url = f"{BASE_URL}/{data_type}/dataPoints" + (":reconcile" if reconcile else "")
@@ -206,6 +207,7 @@ class GoogleHealthClient:
         if reconcile:
             params["dataSourceFamily"] = WEARABLES
         points: list[dict] = []
+        seen_tokens = set()
         async with httpx.AsyncClient(timeout=20.0) as client:
             while True:
                 for attempt in range(4):
@@ -221,10 +223,16 @@ class GoogleHealthClient:
                     await asyncio.sleep(min(delay, 30))
                 response.raise_for_status()
                 payload = response.json()
-                points.extend(payload.get("dataPoints", []))
+                page = payload.get('dataPoints', [])
+                if not isinstance(page, list) or any(not isinstance(point, dict) for point in page):
+                    raise ValueError('Invalid provider page')
+                points.extend(page)
                 token = payload.get("nextPageToken")
                 if not token:
                     return points
+                if not isinstance(token, str) or token in seen_tokens:
+                    raise ValueError('Invalid pagination progress')
+                seen_tokens.add(token)
                 params["pageToken"] = token
 
     async def get_sleep_stage_points(self, start: date | None, end: date) -> list[dict]:
@@ -418,12 +426,14 @@ class GoogleHealthClient:
                 pass
             return values
 
+    @payload_boundary
     async def _fetch_daily_steps(self, start: date, end: date) -> dict[date, int]:
         """Wearable daily rollups preserve absent readings separately from true zeros."""
         values = {}
         lower = start
         async with httpx.AsyncClient(timeout=20.0) as client:
             while lower <= end:
+                seen_tokens = set()
                 upper = min(end + timedelta(days=1), lower + timedelta(days=90))
                 body = {"range": {"start": {"date": {"year": lower.year, "month": lower.month, "day": lower.day}},
                                   "end": {"date": {"year": upper.year, "month": upper.month, "day": upper.day}}},
@@ -450,7 +460,11 @@ class GoogleHealthClient:
                                 values[day] = int(step_count)
                     if not payload.get("nextPageToken"):
                         break
-                    body["pageToken"] = payload["nextPageToken"]
+                    token = payload['nextPageToken']
+                    if not isinstance(token, str) or token in seen_tokens:
+                        raise ValueError('Invalid pagination progress')
+                    seen_tokens.add(token)
+                    body["pageToken"] = token
                 lower = upper
         return values
 
