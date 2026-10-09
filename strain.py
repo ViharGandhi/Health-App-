@@ -4,7 +4,7 @@ from datetime import date, datetime, time, timedelta, timezone
 from enum import IntEnum
 import math
 from statistics import mean, median
-from backend.validity import resting_hr
+from backend.validity import resting_hr, finite_number
 
 
 @dataclass(frozen=True)
@@ -100,6 +100,8 @@ def clean_samples(samples: list, window: dict, config=StrainConfig()) -> list:
 
 
 def strain_score(load: float, config=StrainConfig()) -> float:
+    if not finite_number(load) or not finite_number(config.strain_l) or config.strain_l <= 0:
+        raise ValueError('Strain load must be finite and scale must be positive and finite')
     return min(math.nextafter(21., 0), -21 * math.expm1(-max(0., load) / config.strain_l))
 
 

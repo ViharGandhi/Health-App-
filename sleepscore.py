@@ -364,6 +364,8 @@ class SleepCalculator:
             The ratio (actual / need) at which the sigmoid's inflection
             point sits.  Default 0.75 (75 % of sleep need).
         """
+        if not finite_number(sleep_need):
+            raise ValueError('Sleep need must be a finite number')
         night_hours = sleep.total_duration / 3600.0
         nap_hours = sleep.nap_duration_seconds / 3600.0
         total_hours = night_hours + nap_hours
@@ -430,6 +432,11 @@ class SleepCalculator:
         if recent_need_vs_actual is None:
             recent_need_vs_actual = []
 
+        if not all(finite_number(v) for v in (baseline_sleep, yesterday_strain)):
+            raise ValueError('Sleep need inputs must be finite numbers')
+        if any(not finite_number(actual) for _, actual in recent_need_vs_actual):
+            raise ValueError('Actual sleep must be a finite number')
+
         if not recent_need_vs_actual:
             debt_per_night = 0.0
         else:
@@ -445,6 +452,8 @@ class SleepCalculator:
     @staticmethod
     def compute_sleep_debt(need_vs_actual: List[Tuple[float, float]]) -> float:
         """Total sleep debt from the last N days (hours)."""
+        if any(not finite_number(value) for pair in need_vs_actual for value in pair):
+            raise ValueError('Sleep debt inputs must be finite numbers')
         return sum(max(0.0, need - actual) for need, actual in need_vs_actual)
 
     # ── bedtime recommendation ──
