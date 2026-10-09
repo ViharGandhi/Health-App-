@@ -96,7 +96,7 @@ class StrainAnalyticsTests(unittest.TestCase):
         self.assertIsNone(result["days"][0]["score"])
         self.assertIsNone(result["days"][0]["steps"])
         self.assertEqual(result["days"][-1]["steps"], 0)
-        self.assertEqual(result["days"][-1]["score"], self.snapshot(samples, [self.session()]).score_21)
+        self.assertEqual(result["days"][-1]["score"], self.snapshot(samples, [self.session()]).model_dump(mode='json')['score_21'])
         client.get_intraday_heart_rate.assert_awaited_once_with(date(2026, 9, 4), date(2026, 10, 7), preserve_offset=True)
         client.get_workout_sessions.assert_awaited_once()
         client.get_daily_steps.assert_awaited_once()
