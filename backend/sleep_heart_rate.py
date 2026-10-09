@@ -6,12 +6,14 @@ import random
 
 from sleep_stage_ranges import instant, adapt_google_sleep, stage_stats
 from sleep_selection import main_sleep_key
+from provider_payload import payload_boundary
 
 
 def local_time(value: str, offset: str) -> str:
     return instant(value).astimezone(timezone(timedelta(seconds=float(offset.removesuffix("s"))))).isoformat()
 
 
+@payload_boundary
 def select_sleep(points: list[dict], today: date, sleep_id: str | None = None, *, now: datetime | None = None) -> dict | None:
     now = now or datetime.now(timezone.utc)
     candidates = []

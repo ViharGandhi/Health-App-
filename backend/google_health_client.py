@@ -43,6 +43,7 @@ def _day_filter(field: str, start: date, end: date) -> str:
             f'{field} < "{(end + timedelta(days=1)).isoformat()}"')
 
 
+@payload_boundary
 def _local_datetime(value: str, offset: str, *, preserve_offset: bool = False) -> datetime:
     """Return wall-clock time in the offset supplied by Google."""
     instant = datetime.fromisoformat(value.replace("Z", "+00:00"))
@@ -51,6 +52,7 @@ def _local_datetime(value: str, offset: str, *, preserve_offset: bool = False) -
     return local if preserve_offset else local.replace(tzinfo=None)
 
 
+@payload_boundary
 def _google_date(value: dict) -> date:
     return date(value["year"], value["month"], value["day"])
 

@@ -10,6 +10,7 @@ import json
 
 from google_health_client import _local_datetime
 from models import StrainResponse
+from provider_payload import payload_boundary
 from strain import StrainConfig, calculate_strain, day_window, strain_analytics
 
 
@@ -77,6 +78,7 @@ async def load_strain_days(client, start, end, now, age, config=StrainConfig()):
         return {day: values[day] for day in days}, list(sessions.values())
 
 
+@payload_boundary
 def sleep_windows(points: list[dict]) -> list[dict]:
     sleeps = {}
     for point in points:

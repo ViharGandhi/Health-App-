@@ -195,6 +195,7 @@ def stats_to_dict(stats: NightStageStats) -> dict:
     return result
 
 
+@payload_boundary
 def stats_from_dict(value: dict) -> NightStageStats:
     return NightStageStats(**{**value, "night_date": date.fromisoformat(value["night_date"]),
                              "start_utc": instant(value["start_utc"]), "end_utc": instant(value["end_utc"])})

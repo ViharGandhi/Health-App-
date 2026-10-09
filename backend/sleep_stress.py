@@ -142,6 +142,7 @@ def adapt_google_hr(point: dict) -> HrSample:
     return HrSample(_instant(metric["sampleTime"]["physicalTime"]), float(metric["beatsPerMinute"]))
 
 
+@payload_boundary
 def adapt_google_hrv(points: list[dict], anchor: str) -> list[HrvWindow]:
     """Infer cadence from adjacent samples; anchor must be verified on a real device.
 
