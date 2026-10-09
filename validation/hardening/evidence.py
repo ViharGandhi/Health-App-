@@ -152,6 +152,8 @@ async def extra_profiles():
 def run():
     OUT.mkdir(exist_ok=True)
     original.curve()
+    svg = OUT / 'sleep-duration-curve.svg'
+    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text(encoding='utf-8').splitlines()) + '\n', encoding='utf-8')
     original.replay()
     asyncio.run(original.profiles())
     asyncio.run(extra_profiles())
