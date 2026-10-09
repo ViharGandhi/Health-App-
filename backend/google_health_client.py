@@ -17,6 +17,7 @@ from typing import Optional
 import httpx
 from health_read_store import HealthReadStore, ReadRange, read_range, exact_key, CacheInvalidated
 from read_metrics import count
+from sleep_selection import main_sleep_key
 
 
 BASE_URL = "https://health.googleapis.com/v4/users/me/dataTypes"
@@ -441,6 +442,8 @@ class GoogleHealthClient:
                                   and physical_end <= datetime.now(timezone.utc) and math.isfinite(asleep_minutes)
                                   and 0 <= asleep_minutes <= (physical_end - physical_start).total_seconds() / 60)
             records.append({
+                'sleep_id': point.get('name') or metadata.get('externalId') or f'sleep-{physical_end.isoformat()}',
+                'physical_start': physical_start, 'physical_end': physical_end,
                 "date": end_dt.date(), "sleep_start_time": start_dt, "sleep_end_time": end_dt,
                 "sleep_onset_time": onset, "wake_up_time": wake,
                 "main_sleep": metadata.get("mainSleep"),
@@ -466,10 +469,11 @@ class GoogleHealthClient:
         selected = []
         for day in sorted(by_date):
             sessions = by_date[day]
-            main = [record for record in sessions if record["main_sleep"] is True]
-            if not main and any(record["main_sleep"] is not None for record in sessions):
-                continue
-            selected.append(max(main or sessions, key=lambda record: record["total_duration"]))
+            candidates = [(main_sleep_key(record['main_sleep'], record['physical_start'], record['physical_end'], record['sleep_id']), record)
+                          for record in sessions]
+            candidates = [(key, record) for key, record in candidates if key is not None]
+            if candidates:
+                selected.append(max(candidates, key=lambda item: item[0])[1])
         return selected
 
     async def get_sleep_need_history(self, start: date, end: date) -> dict[date, float | None]:

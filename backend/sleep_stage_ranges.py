@@ -10,7 +10,7 @@ import logging
 
 STAGES = ("awake", "light", "deep", "rem")
 METRICS = STAGES + ("restorative",)
-ALGO_VERSION = "sleep-stage-ranges-1"
+ALGO_VERSION = "sleep-stage-ranges-2"
 
 
 @dataclass(frozen=True)

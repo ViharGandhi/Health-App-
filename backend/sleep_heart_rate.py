@@ -5,6 +5,7 @@ import math
 import random
 
 from sleep_stage_ranges import instant, adapt_google_sleep, stage_stats
+from sleep_selection import main_sleep_key
 
 
 def local_time(value: str, offset: str) -> str:
@@ -27,8 +28,10 @@ def select_sleep(points: list[dict], today: date, sleep_id: str | None = None, *
             continue
         if sleep_id is not None and point["name"] != sleep_id:
             continue
-        candidates.append((wake_date, meta.get("mainSleep") is True, end - start, point["name"], point))
-    return max(candidates, key=lambda item: item[:4])[-1] if candidates else None
+        key = main_sleep_key(meta.get('mainSleep'), start, end, point['name'])
+        if key is not None:
+            candidates.append((wake_date, key, point))
+    return max(candidates, key=lambda item: item[:2])[-1] if candidates else None
 
 
 def build_sleep_heart_rate(point: dict | None, readings: list[dict], is_mock: bool) -> dict:

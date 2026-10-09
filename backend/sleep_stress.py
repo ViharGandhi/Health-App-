@@ -8,6 +8,7 @@ from datetime import date, datetime, timedelta, timezone
 from math import exp, isfinite, log
 from statistics import median
 from validity import valid_metric
+from sleep_selection import main_sleep_key
 
 
 @dataclass(frozen=True)
@@ -29,7 +30,7 @@ class StressConfig:
 
 
 DEFAULT_CONFIG = StressConfig()
-ALGO_VERSION = "sleep-stress-6"
+ALGO_VERSION = "sleep-stress-7"
 
 
 @dataclass(frozen=True)
@@ -270,8 +271,8 @@ def build_baseline(current: NightWindows, history: list[NightWindows],
     for item in by_id.values():
         day = item.night.night_date
         previous_item = by_date.get(day)
-        key = lambda n: (n.night.main_sleep_explicit,
-                         n.night.end_utc - n.night.start_utc, n.night.sleep_id)
+        key = lambda n: main_sleep_key(True if n.night.main_sleep_explicit else None,
+            n.night.start_utc, n.night.end_utc, n.night.sleep_id)
         if previous_item is None or key(item) > key(previous_item):
             by_date[day] = item
     previous = [by_date[day] for day in sorted(by_date, reverse=True)][:config.baseline_nights_target]
@@ -296,6 +297,8 @@ def score_night(current: NightWindows, history: list[NightWindows],
     valid_minutes = sum(window.minutes for window in current.windows)
     result = {
         "sleep_id": night.sleep_id, "night_date": night.night_date.isoformat(),
+        'main_sleep_explicit': night.main_sleep_explicit,
+        'physical_duration_minutes': (night.end_utc - night.start_utc).total_seconds() / 60,
         "main_sleep": night.main_sleep,
         "computed_at": (computed_at or datetime.now(timezone.utc)).isoformat(),
         "algo_version": ALGO_VERSION, "stressed_minutes": None, "stressed_hours": None,
@@ -387,7 +390,9 @@ def summarize_nights(results: list[dict] | tuple[dict, ...]) -> list[dict]:
         by_date.setdefault(item["night_date"], []).append(item)
     totals = []
     for day, sessions in sorted(by_date.items()):
-        main = next((item for item in sessions if item["main_sleep"]), None)
+        candidates = [item for item in sessions if item['main_sleep']]
+        main = max(candidates, key=lambda item: (item.get('main_sleep_explicit', True),
+            item.get('physical_duration_minutes', 0), item['sleep_id']), default=None)
         scored = [item for item in sessions if item["stressed_minutes"] is not None]
         stressed = sum(item["stressed_minutes"] for item in scored)
         valid = sum(item["valid_minutes"] for item in scored)

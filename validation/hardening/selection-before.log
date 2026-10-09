@@ -1,0 +1,46 @@
+FFFFFFFF                                                                 [100%]
+================================== FAILURES ===================================
+_______ test_summary_and_segment_selection_use_physical_duration[day0] ________
+backend\test_main_selection_inventory.py:26: in test_summary_and_segment_selection_use_physical_duration
+    assert summary['total_duration'] == 400 * 60
+E   assert 27000.0 == (400 * 60)
+_______ test_summary_and_segment_selection_use_physical_duration[day1] ________
+backend\test_main_selection_inventory.py:26: in test_summary_and_segment_selection_use_physical_duration
+    assert summary['total_duration'] == 400 * 60
+E   assert 27000.0 == (400 * 60)
+_______ test_summary_and_segment_selection_use_physical_duration[day2] ________
+backend\test_main_selection_inventory.py:26: in test_summary_and_segment_selection_use_physical_duration
+    assert summary['total_duration'] == 400 * 60
+E   assert 27000.0 == (400 * 60)
+_______ test_summary_and_segment_selection_use_physical_duration[day3] ________
+backend\test_main_selection_inventory.py:26: in test_summary_and_segment_selection_use_physical_duration
+    assert summary['total_duration'] == 400 * 60
+E   assert 27000.0 == (400 * 60)
+_______ test_summary_and_segment_selection_use_physical_duration[day4] ________
+backend\test_main_selection_inventory.py:26: in test_summary_and_segment_selection_use_physical_duration
+    assert summary['total_duration'] == 400 * 60
+E   assert 27000.0 == (400 * 60)
+_____ test_unspecified_fallback_remains_eligible_with_secondary_sessions ______
+backend\test_main_selection_inventory.py:35: in test_unspecified_fallback_remains_eligible_with_secondary_sessions
+    assert asyncio.run(client.get_sleep_session(day))['total_duration'] == 400 * 60
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+____________ test_equal_summary_lengths_are_permutation_invariant _____________
+backend\test_main_selection_inventory.py:47: in test_equal_summary_lengths_are_permutation_invariant
+    assert first['sleep_start_time'] == second['sleep_start_time']
+E   assert datetime.datetime(2026, 10, 7, 0, 0) == datetime.datetime(2026, 10, 7, 1, 0)
+__________________ test_equal_physical_lengths_use_stable_id __________________
+backend\test_main_selection_inventory.py:55: in test_equal_physical_lengths_use_stable_id
+    assert asyncio.run(client.get_sleep_session(day))['sleep_id'] == 'b'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'sleep_id'
+=========================== short test summary info ===========================
+FAILED backend/test_main_selection_inventory.py::test_summary_and_segment_selection_use_physical_duration[day0]
+FAILED backend/test_main_selection_inventory.py::test_summary_and_segment_selection_use_physical_duration[day1]
+FAILED backend/test_main_selection_inventory.py::test_summary_and_segment_selection_use_physical_duration[day2]
+FAILED backend/test_main_selection_inventory.py::test_summary_and_segment_selection_use_physical_duration[day3]
+FAILED backend/test_main_selection_inventory.py::test_summary_and_segment_selection_use_physical_duration[day4]
+FAILED backend/test_main_selection_inventory.py::test_unspecified_fallback_remains_eligible_with_secondary_sessions
+FAILED backend/test_main_selection_inventory.py::test_equal_summary_lengths_are_permutation_invariant
+FAILED backend/test_main_selection_inventory.py::test_equal_physical_lengths_use_stable_id
+8 failed in 0.62s
