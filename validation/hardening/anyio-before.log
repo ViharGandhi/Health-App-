@@ -1,0 +1,21 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_______________ test_testclient_import_with_warnings_as_errors ________________
+backend\test_testclient_compatibility.py:10: in test_testclient_import_with_warnings_as_errors
+    assert result.returncode == 0, result.stderr
+E   AssertionError: Traceback (most recent call last):
+E       File "<string>", line 1, in <module>
+E       File "E:\Projects\Health-App-\.venv\Lib\site-packages\starlette\testclient.py", line 40, in <module>
+E         _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+E                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+E       File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\_lazyimport.py", line 35, in __getattr__
+E         emit_deprecation_warning(module_name, name, new_name)
+E       File "E:\Projects\Health-App-\.venv\Lib\site-packages\anyio\_lazyimport.py", line 84, in emit_deprecation_warning
+E         warnings.warn(
+E     DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['E:\\Projects\\Health-App-\\.venv\\Scripts\\python.exe', '-W', 'error::DeprecationWarning', '-c...DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.\n').returncode
+=========================== short test summary info ===========================
+FAILED backend/test_testclient_compatibility.py::test_testclient_import_with_warnings_as_errors
+1 failed in 3.16s
