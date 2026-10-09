@@ -90,7 +90,7 @@ class RecoveryAnalyticsTests(unittest.TestCase):
         self.assertEqual(analytics.status_code, 200)
         self.assertEqual(analytics.json()['current'], current.json())
         self.assertEqual(len(analytics.json()['days']), 30)
-        self.assertEqual(legacy.json()['current'], get_mock_dashboard().recovery.model_dump())
+        self.assertEqual(legacy.json()['current'], get_mock_dashboard(DAY).recovery.model_dump())
         self.assertTrue(all(d['recovery'] is None for d in legacy.json()['days'][:-1]))
 
     def test_period_navigation_date_validation_and_expired_session(self):

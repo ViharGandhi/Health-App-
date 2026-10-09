@@ -1,0 +1,649 @@
+{
+  "checks": 1295,
+  "failures": [
+    {
+      "family": "date joins",
+      "case": "recovery dedup and excluded dates",
+      "expected": {
+        "baseline_days": 60,
+        "recent_nights": 7,
+        "z": 0
+      },
+      "actual": {
+        "baseline_days": 60,
+        "recent_nights": 7,
+        "z": 3.0
+      }
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 0",
+      "expected": 81.48030066227396,
+      "actual": 84.69877955687114
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 2",
+      "expected": 50.85195232901934,
+      "actual": 51.28752608181071
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 4",
+      "expected": 35.42275810650775,
+      "actual": 35.60194725714015
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 8",
+      "expected": 44.25634563573257,
+      "actual": 44.929549343798335
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 10",
+      "expected": 27.68641485853934,
+      "actual": 27.762377591606338
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 11",
+      "expected": 53.81494962766431,
+      "actual": 55.13940719030234
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 13",
+      "expected": 61.89764321763647,
+      "actual": 62.8623469908495
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 14",
+      "expected": 31.475347352335156,
+      "actual": 31.62761005284882
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 16",
+      "expected": 39.16722299363382,
+      "actual": 39.58140876842697
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 17",
+      "expected": 42.885598163208215,
+      "actual": 43.03781088834732
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 18",
+      "expected": 40.29436754034283,
+      "actual": 41.086375404511294
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 19",
+      "expected": 28.265603961629783,
+      "actual": 28.3582131874401
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 21",
+      "expected": 43.81614912624833,
+      "actual": 44.80914239509203
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 23",
+      "expected": 36.87561363671557,
+      "actual": 37.14225788286608
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 27",
+      "expected": 58.66846461903983,
+      "actual": 60.285482311245396
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 29",
+      "expected": 30.752626851515195,
+      "actual": 30.917181463554336
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 30",
+      "expected": 68.29988212689922,
+      "actual": 71.40221378967705
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 32",
+      "expected": 64.01586462300777,
+      "actual": 65.10930633424837
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 34",
+      "expected": 47.20552815304017,
+      "actual": 47.68501873503123
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 35",
+      "expected": 61.15176345869789,
+      "actual": 63.49996651700202
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 36",
+      "expected": 31.686420070824067,
+      "actual": 31.902128091340437
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 37",
+      "expected": 49.52980484589878,
+      "actual": 49.616171399990904
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 38",
+      "expected": 61.522630775231406,
+      "actual": 64.09637831619729
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 41",
+      "expected": 48.18583973281369,
+      "actual": 49.0587325499616
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 42",
+      "expected": 38.77586373236733,
+      "actual": 39.3670460930788
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 43",
+      "expected": 33.60223789837687,
+      "actual": 33.83988493874513
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 47",
+      "expected": 27.964299592507242,
+      "actual": 28.04932298413369
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 51",
+      "expected": 58.83553971881055,
+      "actual": 60.75338710872772
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 52",
+      "expected": 45.554013712655696,
+      "actual": 46.740050579043555
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 53",
+      "expected": 75.71313598743897,
+      "actual": 77.92736683613657
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 58",
+      "expected": 74.15282762428575,
+      "actual": 77.36899839128994
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 60",
+      "expected": 76.19476485447642,
+      "actual": 78.68498084627214
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 64",
+      "expected": 45.11074972900631,
+      "actual": 46.20774987744795
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 68",
+      "expected": 42.109341706243804,
+      "actual": 42.233645315282054
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 70",
+      "expected": 55.25805555429294,
+      "actual": 57.13267872462039
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 71",
+      "expected": 57.10408354579827,
+      "actual": 58.23525181170404
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 73",
+      "expected": 84.00920233618353,
+      "actual": 86.87913735165648
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 74",
+      "expected": 74.24443942351063,
+      "actual": 77.30693666214924
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 75",
+      "expected": 44.980921207860966,
+      "actual": 45.41797225067981
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 77",
+      "expected": 58.5616304115235,
+      "actual": 60.535140659755335
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 78",
+      "expected": 47.83769339169089,
+      "actual": 48.58865646204154
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 79",
+      "expected": 71.76145555219874,
+      "actual": 74.71119054062237
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 80",
+      "expected": 65.88990165995907,
+      "actual": 67.86042578452998
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 84",
+      "expected": 43.79165807593993,
+      "actual": 44.53257615400306
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 85",
+      "expected": 29.477809527994765,
+      "actual": 29.555527152966917
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 87",
+      "expected": 57.521128790535215,
+      "actual": 59.36797693557246
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 89",
+      "expected": 66.48635719779759,
+      "actual": 69.05759978409708
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 91",
+      "expected": 27.99780129790678,
+      "actual": 28.08247650816163
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 92",
+      "expected": 43.74051894849399,
+      "actual": 44.07597584092902
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 93",
+      "expected": 61.616934590497294,
+      "actual": 64.12061772081356
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 94",
+      "expected": 53.89446846849537,
+      "actual": 54.96819363130274
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 96",
+      "expected": 28.848666640588853,
+      "actual": 28.951765471628946
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 97",
+      "expected": 35.20916437017554,
+      "actual": 35.60655550892512
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 98",
+      "expected": 37.03644976615275,
+      "actual": 37.327054362268804
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 99",
+      "expected": 38.951098934712384,
+      "actual": 39.526946399744155
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 101",
+      "expected": 60.070180272814284,
+      "actual": 62.29574319947862
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 102",
+      "expected": 74.1774520040798,
+      "actual": 76.51454854259627
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 104",
+      "expected": 57.921760262832365,
+      "actual": 59.90873493847177
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 106",
+      "expected": 65.64864956391754,
+      "actual": 68.4925592029006
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 108",
+      "expected": 40.459688046994316,
+      "actual": 41.00248626821766
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 110",
+      "expected": 49.9787178689474,
+      "actual": 50.44473512574803
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 114",
+      "expected": 32.32187329019178,
+      "actual": 32.56566246317409
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 115",
+      "expected": 65.44509190725796,
+      "actual": 66.80592508308966
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 116",
+      "expected": 79.71266205266453,
+      "actual": 82.84290178807063
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 117",
+      "expected": 64.11532659389515,
+      "actual": 66.52424110835265
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 118",
+      "expected": 30.636080875240285,
+      "actual": 30.795276620496864
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 119",
+      "expected": 74.61672199933784,
+      "actual": 77.73851569995227
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 121",
+      "expected": 40.36973396999792,
+      "actual": 40.79508958804172
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 122",
+      "expected": 56.750522157610106,
+      "actual": 57.361963721202955
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 129",
+      "expected": 59.77742103156938,
+      "actual": 62.00653398543407
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 131",
+      "expected": 67.99994814706832,
+      "actual": 70.80448075030877
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 135",
+      "expected": 57.29281641444024,
+      "actual": 59.31548078380535
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 137",
+      "expected": 55.56283006995757,
+      "actual": 57.28374254268756
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 138",
+      "expected": 43.861626998798435,
+      "actual": 43.9918358609715
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 139",
+      "expected": 59.14311149694142,
+      "actual": 60.81205528001351
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 141",
+      "expected": 41.01590557116186,
+      "actual": 41.84876554424537
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 142",
+      "expected": 53.780160241144905,
+      "actual": 55.59037550723254
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 143",
+      "expected": 35.51442328612272,
+      "actual": 35.928733824840954
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 144",
+      "expected": 60.69751771652696,
+      "actual": 62.25233908762656
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 149",
+      "expected": 30.061804198298468,
+      "actual": 30.208693794849715
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 150",
+      "expected": 77.52125053460392,
+      "actual": 79.93764421033919
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 151",
+      "expected": 30.431372683961758,
+      "actual": 30.594638509555093
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 152",
+      "expected": 43.59166423081498,
+      "actual": 44.10828187871013
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 153",
+      "expected": 28.917322705480032,
+      "actual": 29.028147265735605
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 155",
+      "expected": 82.68608144542239,
+      "actual": 85.65214759735686
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 156",
+      "expected": 81.40564952261043,
+      "actual": 84.47601049484408
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 157",
+      "expected": 41.98360772438998,
+      "actual": 42.299516479792814
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 158",
+      "expected": 56.56499485184001,
+      "actual": 58.55759613034278
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 161",
+      "expected": 30.220794664847517,
+      "actual": 30.35646669916752
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 164",
+      "expected": 53.34736118245165,
+      "actual": 53.80653719391005
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 169",
+      "expected": 29.79471713468058,
+      "actual": 29.928067649313665
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 171",
+      "expected": 40.63347713499616,
+      "actual": 41.406500055324415
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 172",
+      "expected": 37.608456064804926,
+      "actual": 38.076578294214386
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 174",
+      "expected": 42.88779858550403,
+      "actual": 43.39043094415725
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 176",
+      "expected": 70.74325346704566,
+      "actual": 73.87525906172586
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 179",
+      "expected": 47.7318748868543,
+      "actual": 48.40527649416519
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 184",
+      "expected": 39.68918733884861,
+      "actual": 39.95474797786239
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 187",
+      "expected": 35.606276171335686,
+      "actual": 35.99903891343912
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 189",
+      "expected": 81.50461408846239,
+      "actual": 84.37293682102724
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 190",
+      "expected": 46.83843711562349,
+      "actual": 47.10900909256013
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 193",
+      "expected": 32.30237073846264,
+      "actual": 32.54755604270661
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 197",
+      "expected": 74.48088199252739,
+      "actual": 77.55657591439166
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 199",
+      "expected": 80.06857700515077,
+      "actual": 82.67497136776961
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 201",
+      "expected": 31.727439123878725,
+      "actual": 31.838228977691504
+    },
+    {
+      "family": "sleep score",
+      "case": "weighted score 202",
+      "expected": 43.45033655423646,
+      "actual": 44.445753915295874
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "checks": 1295,
+  "passed": 1295,
+  "failed": [],
+  "runtime_s": 5.242267000001448,
+  "delta_leaves": 581,
+  "delta_reasons": {
+    "Approved prior-seven-date Recovery window": 2,
+    "Approved duration normalization": 315,
+    "Selected date/profile alignment and approved duration normalization": 201,
+    "RHR rejection diagnostics": 3,
+    "Approved prior-date Recovery weighting": 32,
+    "Stress algorithm cache version": 7,
+    "Corrected regression probe and updated finding interpretation": 21
+  },
+  "unchanged_cases": 1189
+}

@@ -1,0 +1,87 @@
+[
+  {
+    "scenario": "neutral",
+    "prior_hrv_ms": [
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0
+    ],
+    "today_hrv_ms": 40.0,
+    "reference_ms": 40.0,
+    "log_spread": 0.05,
+    "old_z_hrv": -8.881784197001252e-15,
+    "new_z_hrv": -8.881784197001252e-15
+  },
+  {
+    "scenario": "today +20%",
+    "prior_hrv_ms": [
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0
+    ],
+    "today_hrv_ms": 48.0,
+    "reference_ms": 40.0,
+    "log_spread": 0.05,
+    "old_z_hrv": 1.458572454351632,
+    "new_z_hrv": 1.093929340763724
+  },
+  {
+    "scenario": "today -20%",
+    "prior_hrv_ms": [
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0
+    ],
+    "today_hrv_ms": 32.0,
+    "reference_ms": 40.0,
+    "log_spread": 0.05,
+    "old_z_hrv": -1.7851484105136795,
+    "new_z_hrv": -1.3388613078852618
+  },
+  {
+    "scenario": "today doubled",
+    "prior_hrv_ms": [
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0
+    ],
+    "today_hrv_ms": 80.0,
+    "reference_ms": 40.0,
+    "log_spread": 0.05,
+    "old_z_hrv": 5.545177444479554,
+    "new_z_hrv": 4.1588830833596635
+  },
+  {
+    "scenario": "one prior outlier",
+    "prior_hrv_ms": [
+      80.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0,
+      40.0
+    ],
+    "today_hrv_ms": 40.0,
+    "reference_ms": 40.0,
+    "log_spread": 0.05,
+    "old_z_hrv": 1.386294361119882,
+    "new_z_hrv": 1.386294361119882
+  }
+]

@@ -35,7 +35,7 @@ class RecoveryIntegrationTests(unittest.TestCase):
         self.assertEqual(set(data["components"]), {"z_hrv", "z_rhr", "sleep_adj"})
         self.assertEqual(data["sleep_context"]["sleep_min"], 470)
         self.assertEqual(data["baseline_days"], 60)
-        self.assertEqual(data["recent_nights"], 7)
+        self.assertEqual(data["recent_nights"], 6)  # Fixture has today and six prior nights.
         self.assertIsNone(data["strain_component"])
         self.assertIsNone(data["sleep_component"])
         self.assertIn("Estimated", data["status_reason"])

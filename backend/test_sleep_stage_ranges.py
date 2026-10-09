@@ -266,6 +266,7 @@ class StageApiTests(unittest.TestCase):
     def test_connected_endpoint_uses_scoped_store_and_real_adapter(self):
         points = [raw(night(DAY-timedelta(days=i))) for i in range(8)]
         source = type("Client", (), {"get_sleep_stage_points": AsyncMock(return_value=points),
+                                     "account_key": "alice",
                                      "get_health_user_id": AsyncMock(return_value="alice")})()
         with tempfile.TemporaryDirectory() as directory:
             store = SleepStageStore(Path(directory)/"connected.sqlite3")

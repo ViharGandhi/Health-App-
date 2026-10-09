@@ -73,7 +73,7 @@ def log_hrv_stats(values: List[float]) -> Optional[Tuple[float, float]]:
     Returns (mean_ln, sd_ln) or None if fewer than MIN_DAYS_REQUIRED positive
     samples.  *values* must be ordered oldest → newest.
     """
-    positives = [v for v in values if v > 0]
+    positives = [v for v in values if math.isfinite(v) and v > 0]
     if len(positives) < MIN_DAYS_REQUIRED:
         return None
 
@@ -97,7 +97,7 @@ def hrv_z_score(today: float, values: List[float]) -> Optional[float]:
     Z-score of today's HRV against the personal log-domain baseline.
     Positive = HRV above personal norm (better recovery).
     """
-    if today <= 0:
+    if not math.isfinite(today) or today <= 0:
         return None
     stats = log_hrv_stats(values)
     if stats is None or stats[1] <= 0:
@@ -175,6 +175,21 @@ class SleepCalculator:
     OPTIMAL_DEEP_RATIO: float = 0.20   # 20%
     OPTIMAL_REM_RATIO: float  = 0.20   # 20%
     OPTIMAL_CORE_RATIO: float = 0.50   # 50%
+
+    @staticmethod
+    def compute_duration_score(total_hours: float, sleep_need: float,
+                               steepness: float = 8.0, midpoint: float = 0.75) -> float:
+        """Approved rescaling: the original sigmoid reaches 100 at need."""
+        if total_hours <= 0 or sleep_need <= 0:
+            return 0.0
+        ratio = total_hours / sleep_need
+        if ratio <= 1.0:
+            raw = 100.0 / (1.0 + math.exp(-steepness * (ratio - midpoint)))
+            at_need = 100.0 / (1.0 + math.exp(-steepness * (1.0 - midpoint)))
+            return raw / at_need * 100.0
+        if ratio <= 1.10:
+            return 100.0
+        return max(30.0, 100.0 - (ratio - 1.10) * 75.0)
 
     # ── age-adjusted deep target ──
 
@@ -332,18 +347,8 @@ class SleepCalculator:
             return 0.0
 
         # 1. Duration — sigmoid for undersleep, plateau + oversleep penalty
-        ratio = total_hours / sleep_need
-        if ratio <= 1.0:
-            # Sigmoid curve: gentle near full sleep, steep drop-off around
-            # 75% of sleep need (clinically meaningful deprivation threshold),
-            # flattens again at severe deprivation rather than crashing to 0.
-            x = duration_steepness * (ratio - duration_midpoint)
-            duration_score = 100.0 / (1.0 + math.exp(-x))
-        elif ratio <= 1.10:
-            duration_score = 100.0
-        else:
-            excess = ratio - 1.10
-            duration_score = max(30.0, 100.0 - excess * 75.0)
+        duration_score = SleepCalculator.compute_duration_score(total_hours, sleep_need,
+                                                               duration_steepness, duration_midpoint)
 
         # 2. Stage quality — compares stage durations against sleep_need as denominator
         sleep_need_seconds = sleep_need * 3600.0

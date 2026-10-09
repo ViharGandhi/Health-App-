@@ -24,7 +24,8 @@ class HealthTests(unittest.TestCase):
         self.assertEqual(result.previous_range_start, "2026-08-08")
         self.assertEqual(result.previous_range_end, "2026-09-06")
         self.assertEqual(result.averages["hrv"], 55)
-        self.assertAlmostEqual(result.previous_averages["hrv"], 940 / 3)
+        # Zero RMSSD is invalid; only the two positive prior readings count.
+        self.assertAlmostEqual(result.previous_averages["hrv"], 940 / 2)
         self.assertIsNone(result.averages["spo2"])
         self.assertIsNone(result.previous_averages["spo2"])
 

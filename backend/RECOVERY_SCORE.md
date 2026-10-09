@@ -19,7 +19,8 @@ unspecified methods fall back to HRV alone.
 
 Daily records use Google's wearer-local date; the endpoint honors `X-User-Date`.
 Each reconciled date counts once. Baseline: D−67 through D−8 inclusive; recent:
-D−6 through D inclusive. Nonpositive, missing and nonfinite HRV/RHR values are
+D−7 through D−1 inclusive. Today's HRV appears only in the separate 30% term.
+Nonpositive, missing and nonfinite HRV/RHR values are
 discarded. No gaps are imputed. Intraday HRV coverage filtering is not enabled:
 daily summaries supply no coverage duration, and live intraday access has not
 been verified.

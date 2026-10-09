@@ -5,7 +5,7 @@ from __future__ import annotations
 from bisect import bisect_left
 from dataclasses import asdict, dataclass
 from datetime import date, datetime, timedelta, timezone
-from math import exp, log
+from math import exp, isfinite, log
 from statistics import median
 
 
@@ -28,7 +28,7 @@ class StressConfig:
 
 
 DEFAULT_CONFIG = StressConfig()
-ALGO_VERSION = "sleep-stress-2"
+ALGO_VERSION = "sleep-stress-5"
 
 
 @dataclass(frozen=True)
@@ -63,6 +63,7 @@ class SleepNight:
     processed: bool = True
     main_sleep: bool = True
     nap: bool = False
+    main_sleep_explicit: bool = True
 
 
 @dataclass(frozen=True)
@@ -127,6 +128,7 @@ def adapt_google_sleep(point: dict) -> SleepNight:
         type=sleep_type, stages=stages, awakenings=awakenings,
         processed=processed, main_sleep=metadata.get("mainSleep") is not False,
         nap=metadata.get("nap") is True,
+        main_sleep_explicit=metadata.get("mainSleep") is True,
     )
 
 
@@ -219,7 +221,8 @@ def prepare_night(
         duration = (window.end_utc - window.start_utc).total_seconds()
         if (duration <= 0 or interval is None or window.start_utc < night.start_utc
                 or window.end_utc > night.end_utc or window.rmssd_ms is None
-                or window.rmssd_ms <= 0 or (valid and window.start_utc < valid[-1].end_utc)):
+                or not isfinite(window.rmssd_ms) or window.rmssd_ms <= 0
+                or (valid and window.start_utc < valid[-1].end_utc)):
             continue
         if any(_overlap(window.start_utc, window.end_utc, start, end) > 0
                for start, end in night.awakenings):
@@ -254,12 +257,23 @@ def _stage_baseline(windows: list[ValidWindow], config: StressConfig, fallback: 
 def build_baseline(current: NightWindows, history: list[NightWindows],
                    config: StressConfig = DEFAULT_CONFIG) -> tuple[dict[str, StageBaseline], int, bool]:
     first_date = current.night.night_date - timedelta(days=config.baseline_nights_target)
-    previous = sorted((item for item in history
-                       if first_date <= item.night.night_date < current.night.night_date
-                       and item.night.sleep_id != current.night.sleep_id
-                       and item.night.main_sleep
-                       and item.coverage >= config.min_night_coverage and item.windows),
-                      key=lambda item: item.night.end_utc, reverse=True)[:config.baseline_nights_target]
+    # Match stage-store/main-sleep selection: longest main session, then ID.
+    by_id = {}
+    for item in sorted(history, key=lambda n: (n.night.end_utc, n.night.sleep_id)):
+        if (first_date <= item.night.night_date < current.night.night_date
+                and item.night.sleep_id != current.night.sleep_id
+                and item.night.main_sleep and not item.night.nap
+                and item.coverage >= config.min_night_coverage and item.windows):
+            by_id[item.night.sleep_id] = item
+    by_date = {}
+    for item in by_id.values():
+        day = item.night.night_date
+        previous_item = by_date.get(day)
+        key = lambda n: (n.night.main_sleep_explicit,
+                         n.night.end_utc - n.night.start_utc, n.night.sleep_id)
+        if previous_item is None or key(item) > key(previous_item):
+            by_date[day] = item
+    previous = [by_date[day] for day in sorted(by_date, reverse=True)][:config.baseline_nights_target]
     if len(previous) < config.baseline_nights_min:
         return {}, len(previous), False
     pooled = [window for item in previous for window in item.windows]

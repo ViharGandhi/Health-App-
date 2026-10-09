@@ -19,6 +19,7 @@ from datetime import datetime, timedelta, date, timezone
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from strain_service import demo_inputs, calculate_days, strain_response
+from strain import StrainConfig
 from recovery import RecoveryCalculator, RecoveryInput
 from sleepscore import SleepCalculator, SleepData
 from sleep_consistency import SleepConsistencyCalculator, SleepNight
@@ -67,9 +68,10 @@ def _build_mock_hr_samples() -> list[tuple[datetime, float]]:
     return samples, workout_start, workout_end
 
 
-def _build_mock_sleep_data() -> SleepData:
+def _build_mock_sleep_data(today: date | None = None) -> SleepData:
     """Use the same latest sample night as the sleep trend endpoints."""
-    night = _build_sample_sleep_records(date.today(), date.today())[0]
+    today = today or date.today()
+    night = _build_sample_sleep_records(today, today)[0]
     total_s = round(night["time_asleep_minutes"] * 60)
     in_bed_s = round(night["time_in_bed_minutes"] * 60)
     deep_s = round(total_s * 0.17)
@@ -103,23 +105,25 @@ HRV_HISTORY = [38.0, 41.0, 36.5, 40.2, 43.1, 39.8, 42.5, 44.0, 37.9, 41.3, 40.8,
 RHR_BASELINE = 56.0  # bpm
 HRV_BASELINE = 41.2  # ms
 
-def compute_mock_strain() -> StrainResponse:
+def compute_mock_strain(today: date | None = None, age: int = 30, tz=timezone.utc,
+                        sex: str = 'm', config=StrainConfig()) -> StrainResponse:
     # Explicit sample profile: age 30, male, RHR 56 bpm.
-    today = date.today()
+    today = today or date.today()
     start = today - timedelta(days=27)
-    inputs, _ = demo_inputs(start, today, timezone.utc)
-    now = datetime.combine(today, datetime.min.time(), tzinfo=timezone.utc) + timedelta(hours=22)
-    values = calculate_days(start, today, now, timezone.utc, 30, "m", False, inputs)
-    return strain_response(values[today], values, "demo", 30, 72)
+    inputs, _ = demo_inputs(start, today, tz)
+    now = datetime.combine(today, datetime.min.time(), tzinfo=tz) + timedelta(hours=22)
+    values = calculate_days(start, today, now, tz, age, sex, False, inputs, config)
+    return strain_response(values[today], values, "demo", age, 72, config)
 
 
-def compute_mock_sleep() -> SleepResponse:
-    sleep = _build_mock_sleep_data()
+def compute_mock_sleep(today: date | None = None, age: int = USER_AGE,
+                       strain_pct: float | None = None) -> SleepResponse:
+    today = today or date.today()
+    sleep = _build_mock_sleep_data(today)
     from mock_sleep_stage_ranges import mock_stage_points
     from sleep_analytics import sleep_observations, demo_sleep_need_inputs
-    today = date.today()
     nights = sleep_observations(mock_stage_points(today, 9), today, is_mock=True)
-    inputs = demo_sleep_need_inputs(nights, today, compute_mock_strain().score_100)
+    inputs = demo_sleep_need_inputs(nights, today, compute_mock_strain(today).score_100 if strain_pct is None else strain_pct)
     need = inputs.for_tonight(today - timedelta(days=1))
     sleep_need = need.total_need_min / 60
 
@@ -136,19 +140,13 @@ def compute_mock_sleep() -> SleepResponse:
         waking_hr=waking_hr,
         hrv_baseline=HRV_BASELINE,
         sleeping_hr_baseline=sleeping_hr_baseline,
-        age=USER_AGE,
+        age=age,
     )
 
     # Compute sub-scores for frontend display
     total_h = sleep.total_duration / 3600.0
-    ratio = total_h / sleep_need
-    if ratio <= 1.0:
-        x = 8.0 * (ratio - 0.75)
-        dur_score = 100.0 / (1.0 + math.exp(-x))
-    elif ratio <= 1.10:
-        dur_score = 100.0
-    else:
-        dur_score = max(30.0, 100.0 - (ratio - 1.10) * 75.0)
+    dur_score = SleepCalculator.compute_duration_score(
+        total_h + sleep.nap_duration_seconds / 3600, sleep_need)
 
     efficiency = sleep.total_duration / sleep.in_bed_duration * 100
     stages = SleepStages(
@@ -165,14 +163,14 @@ def compute_mock_sleep() -> SleepResponse:
 
     # Stage score
     sn_s = sleep_need * 3600
-    deep_tgt = SleepCalculator.optimal_deep_ratio(USER_AGE)
+    deep_tgt = SleepCalculator.optimal_deep_ratio(age)
     d_s = min(100.0, (sleep.deep_sleep_duration / sn_s / deep_tgt) * 100)
     r_s = min(100.0, (sleep.rem_sleep_duration  / sn_s / 0.20) * 100)
     c_s = min(100.0, (sleep.core_sleep_duration / sn_s / 0.50) * 100)
     stage_score = 0.40 * d_s + 0.40 * r_s + 0.20 * c_s
 
     # Seven sample nights for sleep timing variability.
-    today_dt = date.today()
+    today_dt = today
     mock_nights = _build_sample_sleep_records(today_dt - timedelta(days=6), today_dt)
     consistency_res = SleepConsistencyCalculator.calculate([
         SleepNight(n["date"], n["bed_time"], n["wake_time"]) for n in mock_nights
@@ -251,20 +249,22 @@ def compute_mock_recovery(sleep_score: float, strain_21: float) -> RecoveryRespo
     )
 
 
-def get_mock_dashboard() -> DashboardResponse:
+def get_mock_dashboard(today: date | None = None, age: int | None = None,
+                       tz=timezone.utc, sex: str = 'm', config=StrainConfig()) -> DashboardResponse:
     """
     Computes all three scores using real algorithm code against mock data.
     This is what the frontend sees until the user connects their Fitbit.
     """
-    strain  = compute_mock_strain()
-    sleep   = compute_mock_sleep()
+    today = today or date.today()
+    strain  = compute_mock_strain(today, 30 if age is None else age, tz, sex, config)
+    sleep   = compute_mock_sleep(today, USER_AGE if age is None else age, strain.score_100)
     recovery = compute_mock_recovery(sleep_score=sleep.score, strain_21=strain.score_21)
 
     return DashboardResponse(
         recovery=recovery,
         sleep=sleep,
         strain=strain,
-        date=datetime.now().strftime("%Y-%m-%d"),
+        date=today.isoformat(),
         is_mock=True,
     )
 
@@ -300,8 +300,8 @@ def _build_sample_sleep_records(start: date, end: date) -> list[dict]:
     return records
 
 
-def get_mock_sleep_consistency_trend(timeframe: str = "W") -> SleepTrendResponse:
-    today = date.today()
+def get_mock_sleep_consistency_trend(timeframe: str = "W", today: date | None = None) -> SleepTrendResponse:
+    today = today or date.today()
     start = range_start(today, timeframe)
     records = _build_sample_sleep_records(start - timedelta(days=6), today)
     return build_sleep_trend(records, start, today, timeframe, "consistency", True)
@@ -321,9 +321,9 @@ def get_mock_sleep_efficiency_trend(timeframe: str = "W") -> SleepTrendResponse:
     return build_sleep_trend(records, start, today, timeframe, "efficiency", True)
 
 
-def get_mock_health(timeframe: str = "W") -> HealthResponse:
+def get_mock_health(timeframe: str = "W", today: date | None = None) -> HealthResponse:
     """Illustrative daily vitals, including occasional unmeasured dates."""
-    today = date.today()
+    today = today or date.today()
     start = range_start(today, timeframe)
     history: dict[str, list[dict]] = {key: [] for key in (
         "hrv", "deep_sleep_hrv", "nrem_hr", "rhr", "spo2",

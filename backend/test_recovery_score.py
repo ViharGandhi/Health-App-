@@ -124,11 +124,11 @@ class RecoveryScoreTests(unittest.TestCase):
     def test_windows_exclude_recent_and_old_days_and_deduplicate_dates(self):
         history = reference_history()
         history["hrv"] += [{"date": (DAY - timedelta(days=i)).isoformat(), "value": 4000}
-                           for i in (7, 68, -1)]
+                           for i in (68, -1)]
         history["hrv"].append(history["hrv"][0].copy())
         result = recovery_from_history(history, DAY, 450, 450)
         self.assertEqual(result.baseline_days, 60)
-        self.assertEqual(result.recent_nights, 7)
+        self.assertEqual(result.recent_nights, 6)
         self.assertEqual(result.percent, 50)
 
     def test_same_method_rhr_filter_and_unknown_method_fallback(self):
