@@ -1,0 +1,11 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+__________ test_suite_has_a_timeout_and_blocks_outbound_connections ___________
+backend\test_offline_infrastructure.py:8: in test_suite_has_a_timeout_and_blocks_outbound_connections
+    assert pytestconfig.getoption('timeout') == 30
+E   AssertionError: assert None == 30
+E    +  where None = getoption('timeout')
+E    +    where getoption = <_pytest.config.Config object at 0x000001DD9EAC7320>.getoption
+=========================== short test summary info ===========================
+FAILED backend/test_offline_infrastructure.py::test_suite_has_a_timeout_and_blocks_outbound_connections
+1 failed in 0.65s
