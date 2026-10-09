@@ -18,6 +18,7 @@ import httpx
 from health_read_store import HealthReadStore, ReadRange, read_range, exact_key, CacheInvalidated
 from read_metrics import count
 from sleep_selection import main_sleep_key
+from validity import sleep_duration
 
 
 BASE_URL = "https://health.googleapis.com/v4/users/me/dataTypes"
@@ -51,6 +52,31 @@ def _local_datetime(value: str, offset: str, *, preserve_offset: bool = False) -
 
 def _google_date(value: dict) -> date:
     return date(value["year"], value["month"], value["day"])
+
+
+def _valid_sleep_summary(summary) -> bool:
+    if not isinstance(summary, dict):
+        return False
+    try:
+        for key in ('minutesAsleep', 'minutesAwake', 'minutesInSleepPeriod',
+                    'minutesToFallAsleep', 'minutesAfterWakeUp'):
+            if key in summary and not (key == 'minutesAsleep' and summary[key] is None):
+                if isinstance(summary[key], bool) or not sleep_duration(float(summary[key]), unit='minutes'):
+                    return False
+        stages = summary.get('stagesSummary', [])
+        if not isinstance(stages, list):
+            return False
+        for stage in stages:
+            if not isinstance(stage, dict) or not isinstance(stage.get('type'), str):
+                return False
+            if isinstance(stage.get('minutes'), bool) or not sleep_duration(float(stage['minutes']), unit='minutes'):
+                return False
+            count = float(stage.get('count', 0))
+            if not math.isfinite(count) or count < 0 or not count.is_integer():
+                return False
+    except (ValueError, TypeError, KeyError, OverflowError):
+        return False
+    return True
 
 
 class GoogleHealthClient:
@@ -428,6 +454,9 @@ class GoogleHealthClient:
             start_dt = _local_datetime(interval["startTime"], interval.get("startUtcOffset", "0s"))
             end_dt = _local_datetime(interval["endTime"], interval.get("endUtcOffset", "0s"))
             summary = sleep.get("summary", {})
+            summary_valid = _valid_sleep_summary(summary)
+            if not summary_valid:
+                summary = {}
             onset = start_dt + timedelta(minutes=float(summary.get("minutesToFallAsleep", 0)))
             wake = end_dt - timedelta(minutes=float(summary.get("minutesAfterWakeUp", 0)))
             if onset >= wake:
@@ -437,9 +466,10 @@ class GoogleHealthClient:
             asleep_minutes = float(summary.get("minutesAsleep") or 0)
             physical_start = datetime.fromisoformat(interval["startTime"].replace("Z", "+00:00"))
             physical_end = datetime.fromisoformat(interval["endTime"].replace("Z", "+00:00"))
-            duration_available = (summary.get("minutesAsleep") is not None and metadata.get("processed") is not False
+            duration_available = (summary_valid and summary.get("minutesAsleep") is not None and metadata.get("processed") is not False
                                   and physical_start.tzinfo is not None and physical_end.tzinfo is not None
                                   and physical_end <= datetime.now(timezone.utc) and math.isfinite(asleep_minutes)
+                                  and sleep_duration((physical_end - physical_start).total_seconds())
                                   and 0 <= asleep_minutes <= (physical_end - physical_start).total_seconds() / 60)
             records.append({
                 'sleep_id': point.get('name') or metadata.get('externalId') or f'sleep-{physical_end.isoformat()}',
