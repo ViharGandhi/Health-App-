@@ -118,6 +118,16 @@ app.include_router(sleep_stage_webhook_router)
 
 @app.middleware("http")
 async def data_timings(request: Request, call_next):
+    if request.url.path.startswith('/api/') and not request.url.path.startswith('/api/auth/'):
+        try:
+            _client_day(request)
+            _client_age(request)
+            _client_timezone(request)
+            sex = request.headers.get('x-user-sex')
+            if sex is not None and sex.lower() not in ('m', 'f'):
+                raise HTTPException(400, 'X-User-Sex must be m or f')
+        except HTTPException as error:
+            return JSONResponse({'detail': error.detail}, status_code=error.status_code)
     metrics = {}
     context = read_metrics.set(metrics)
     started = time.perf_counter()
@@ -179,12 +189,19 @@ async def _get_token(request: Request, response: Response) -> Optional[str]:
 def _client_day(request: Request) -> date:
     """Use the wearer's device calendar day for Google daily summaries."""
     supplied = request.headers.get("x-user-date")
-    if supplied:
+    if supplied is not None:
         try:
             return date.fromisoformat(supplied)
         except ValueError:
             raise HTTPException(status_code=400, detail="Invalid X-User-Date")
     return date.today()
+
+
+def _client_timezone(request: Request):
+    try:
+        return ZoneInfo(request.headers.get('x-user-timezone', 'UTC'))
+    except (ZoneInfoNotFoundError, ValueError):
+        raise HTTPException(400, 'Invalid X-User-Timezone')
 
 
 def _client_age(request: Request) -> Optional[int]:
@@ -211,10 +228,7 @@ def _google_client(token: str, request: Request):
     session = get_session(request) or {}
     identity = session.get("health_user_id") or session.get("user_email")
     client = GoogleHealthClient(token, cache=True, account_id=identity) if identity else GoogleHealthClient(token, cache=True)
-    try:
-        client.strain_timezone = ZoneInfo(request.headers.get("x-user-timezone", "UTC"))
-    except ZoneInfoNotFoundError:
-        raise HTTPException(400, "Invalid X-User-Timezone")
+    client.strain_timezone = _client_timezone(request)
     sex = request.headers.get("x-user-sex") or os.getenv("USER_SEX")
     if sex is not None and sex.lower() not in ("m", "f"):
         raise HTTPException(400, "X-User-Sex must be m or f")
