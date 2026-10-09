@@ -60,7 +60,7 @@ from sleep_efficiency import SleepEfficiencyCalculator
 # ── App-layer imports ──────────────────────────────────────────────────────────
 from auth import router as auth_router, get_session, get_valid_access_token, set_session, COOKIE_NAME
 from google_health_client import GoogleHealthClient
-from sleep_trends import build_consistency_scores, build_sleep_trend, range_start
+from sleep_trends import build_consistency_scores, build_sleep_trend, range_start, DateRangeError
 from sleep_stress_store import SleepStressStore
 from sleep_stress_pipeline import compute_connected_sleep_stress
 from sleep_stress import summarize_nights
@@ -148,6 +148,13 @@ async def data_timings(request: Request, call_next):
 async def provider_payload_error(request: Request, error: InvalidProviderPayload):
     return JSONResponse({'detail': 'Google Health returned malformed data; retry or refresh',
                          'reason': 'invalid_provider_payload'}, status_code=502)
+
+
+@app.exception_handler(DateRangeError)
+@app.exception_handler(OverflowError)
+async def unrepresentable_range(request: Request, error):
+    return JSONResponse({'detail': 'Requested date or range cannot be represented',
+                         'reason': 'unrepresentable_range'}, status_code=400)
 
 
 @app.exception_handler(httpx.HTTPStatusError)

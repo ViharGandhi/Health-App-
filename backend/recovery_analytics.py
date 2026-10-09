@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from statistics import mean
 
 from recovery_score import baseline_bounds, positive, recovery_from_history, robust, MIN_BASELINE_DAYS
-from sleep_trends import range_start
+from sleep_trends import range_start, DateRangeError
 from validity import valid_metric
 
 
@@ -126,6 +126,8 @@ def build_recovery_analytics(history: dict, sleeps: list[dict], end: date, timef
 def _months_back(day: date, count: int) -> date:
     import calendar
     year, month = divmod(day.year * 12 + day.month - 1 - count, 12)
+    if not 1 <= year <= 9999:
+        raise DateRangeError('Calendar window cannot be represented')
     return date(year, month + 1, min(day.day, calendar.monthrange(year, month + 1)[1]))
 
 

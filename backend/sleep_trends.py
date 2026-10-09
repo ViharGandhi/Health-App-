@@ -15,6 +15,10 @@ from sleep_consistency import (
 from sleep_efficiency import SleepEfficiencyCalculator
 
 
+class DateRangeError(ValueError):
+    pass
+
+
 def range_start(end: date, timeframe: str) -> date:
     if timeframe == "W":
         return end - timedelta(days=6)
@@ -23,6 +27,8 @@ def range_start(end: date, timeframe: str) -> date:
     months = 6 if timeframe == "6M" else 12
     month_index = end.year * 12 + end.month - 1 - months
     year, month_zero = divmod(month_index, 12)
+    if not 1 <= year <= 9999:
+        raise DateRangeError('Calendar window cannot be represented')
     month = month_zero + 1
     prior = date(year, month, min(end.day, calendar.monthrange(year, month)[1]))
     return prior + timedelta(days=1)
