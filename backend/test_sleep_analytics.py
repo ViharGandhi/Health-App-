@@ -106,6 +106,8 @@ class SleepAnalyticsTests(unittest.TestCase):
         night = sleep_observations(points, day)[-1]
         from datetime import datetime
         current = SimpleNamespace(score=81, sleep_need_hours=7.8,
+                                  components_available={}, defaulted_components={},
+                                  component_coverage=1., partial=False,
                                   sleep_start=datetime.fromisoformat(night['bed_time']).strftime('%I:%M %p'),
                                   sleep_end=datetime.fromisoformat(night['wake_time']).strftime('%I:%M %p'),
                                   stages=SimpleNamespace(total_minutes=night['asleep_minutes']))
