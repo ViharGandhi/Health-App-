@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=65"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stressmon"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.24", "pandas>=2.0", "scipy>=1.10", "matplotlib>=3.7", "PyYAML>=6"]
+
+[project.scripts]
+stressmon = "stressmon.__main__:main"
+
+[tool.setuptools]
+packages = ["stressmon"]
+package-dir = {stressmon = "."}
+
+[tool.setuptools.package-data]
+stressmon = ["config.yaml"]

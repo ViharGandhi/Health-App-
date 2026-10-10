@@ -59,5 +59,5 @@ def test_failed_preparation_does_not_freeze_day_or_advance_sync(tmp_path):
         prepare.side_effect = None
         assert (await sync_dynamic(client, 'first', True, now=NOW, age=22, prepare_sleep=prepare))['sleep_updated']
         assert client.store.sleep_day_prepared(client.account_key, NOW.date())
-        assert [c.args[0] for c in client._fetch_points.await_args_list] == ['heart-rate', 'exercise']
+        assert [c.args[0] for c in client._fetch_points.await_args_list] == ['heart-rate', 'exercise', 'activity-level']
     asyncio.run(run())

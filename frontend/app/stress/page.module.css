@@ -1,0 +1,53 @@
+.page { min-height: 100vh; color: #F5F7FA; background: linear-gradient(#252F37 0, #171C21 380px, #0C1114 100%); padding-bottom: 100px; }
+.container { max-width: 470px; margin: auto; padding: 15px 20px 35px; }
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 29px; }
+.header h1 { font: 800 12px var(--font-body); letter-spacing: .12em; }
+.header a { display: grid; place-items: center; min-width: 32px; min-height: 36px; font-size: 28px; color: #CDD5DB; text-decoration: none; }
+.date { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; font: 800 11px var(--font-body); letter-spacing: .08em; }
+.date button { border: 0; background: none; color: #FFF; font-size: 28px; min-width: 40px; cursor: pointer; }
+.date button:disabled { opacity: .25; cursor: default; }
+.banner { color: #BBDDEB; padding: 11px; border: 1px solid #639BA84D; border-radius: 9px; background: #23414B45; margin-bottom: 24px; font-size: 10px; line-height: 1.7; }
+.banner a { color: #8AC4E5; margin-left: 10px; white-space: nowrap; }
+.hero { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.eyebrow { font: 700 10px var(--font-body); color: #9EA9B1; letter-spacing: .07em; }
+.score { font: 700 52px var(--font-display); }
+.score small { font-size: 16px; color: #929FA8; margin-left: 5px; }
+.latest { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; }
+.latest strong { font-size: 13px; letter-spacing: .05em; }
+.latest span { color: #A0ABB3; font-size: 11px; }
+.legend { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px; }
+.legend span, .totals span { display: flex; align-items: center; gap: 6px; text-transform: capitalize; font-size: 11px; }
+.legend i, .totals i { display: block; width: 8px; height: 8px; }
+.hatched { background: repeating-linear-gradient(125deg, #89939D50 0 2px, #22282D 2px 5px); }
+.caption { font-size: 10px; color: #9FAAB3; line-height: 1.7; margin-top: 12px; }
+.notice { margin: 22px 0; padding: 15px; border-radius: 12px; border: 1px solid #FFFFFF20; background: #252E34; font-size: 12px; line-height: 1.7; }
+.notice p { color: #B4BFC8; margin-top: 9px; }
+.notice button { display: block; margin-top: 12px; padding: 6px 15px; }
+.breakdown, .trends, .context { margin-top: 33px; }
+.container h2 { font: 800 11px var(--font-body); letter-spacing: .08em; }
+.breakdown h2 { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px; }
+.breakdown small { color: #8E9AA4; font-size: 9px; }
+.durationBar { display: flex; height: 10px; background: #20272D; margin: 18px 0; overflow: hidden; }
+.totals { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+.totals > div { display: flex; flex-direction: column; gap: 10px; }
+.totals strong { font: 700 25px var(--font-display); }
+.averages { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+.averages > div { display: flex; flex-direction: column; gap: 10px; padding: 15px; border-radius: 12px; background: #2D353B; }
+.averages span { font-size: 9px; font-weight: 700; color: #A9B3BB; letter-spacing: .05em; }
+.averages strong { font: 700 29px var(--font-display); }
+.averages small { font-size: 12px; color: #929FA8; }
+.trendHeader { display: flex; justify-content: space-between; align-items: center; }
+.trendHeader > div { display: flex; padding: 3px; border-radius: 8px; background: #10161B; }
+.trendHeader button { border: 0; border-radius: 6px; min-width: 42px; height: 31px; color: #9EA7B1; background: none; cursor: pointer; font-weight: 700; }
+.trendHeader button[aria-pressed='true'] { background: #333940; color: #FFF; }
+.trends svg { width: 100%; display: block; margin-top: 12px; }
+.trends text { fill: #A7B0B8; font-size: 9px; }
+.context > div { display: flex; align-items: center; gap: 10px; padding: 16px 0; border-bottom: 1px solid #FFFFFF15; }
+.contextIcon { color: #A4BBC8; display: flex; }
+.context strong { flex: 1; font: 800 11px var(--font-body); text-transform: uppercase; letter-spacing: .05em; }
+.context > div > span:last-child { color: #B9C2C9; font-size: 11px; }
+.method { margin-top: 30px; padding: 16px; border-radius: 12px; background: #242B31; font-size: 12px; line-height: 1.8; }
+.method summary { cursor: pointer; font-weight: 700; }
+.method p { margin-top: 12px; color: #B4C0C9; }
+.method a { display: block; color: #8BC4E6; margin-top: 9px; }
+.preview { display: inline-block; margin-top: 22px; font-size: 12px; color: #8BC4E6; }

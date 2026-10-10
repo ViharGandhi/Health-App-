@@ -39,3 +39,4 @@ backend/data/*.sqlite3-*
 backend/data/*.sqlite
 backend/data/*.sqlite-*
 validation/*.log
+stressmon-output/

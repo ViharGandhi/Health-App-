@@ -1,0 +1,120 @@
+time:
+  display_offset: null # null: use the offset in the sleep/exercise export
+  hrv_window_anchor: unverified # start | end | unverified
+  alignment_min_sleep_share: 0.90
+  alignment_min_margin: 0.05
+  exercise_hr_tolerance: 0.15
+hr:
+  source: Google Fitbit Air
+  min_bpm: 30
+  max_bpm: 220
+  hampel_samples: 15
+  hampel_mads: 3
+  mad_scale: 1.4826
+  min_samples_per_minute: 10
+  window_minutes: 5
+  min_valid_minutes: 3
+hrv:
+  min_coverage: 0.80
+  min_rmssd: 5
+  max_rmssd: 250
+  smoothing_neighbours: 1
+  spectral_features: false # report ln(HF) and LF/HF; never add them to the model
+motion:
+  enabled: false
+  chunk_rows: 50000
+  still_probability: 0.80
+steps:
+  enabled: true # optional; ignored unless the independent alignment check succeeds
+  active_steps_per_minute: 20
+  alignment_min_overlap: 60
+  alignment_min_correlation: 0.30
+  alignment_min_margin: 0.10
+states:
+  sedentary_level: SEDENTARY
+  still_previous_minutes: 3
+  short_awake_minutes: 10
+  vigorous_names: [run, bike, cycl, swim, hiit, row, jump]
+  exercise_mask_hrr: 0.70
+  post_exercise_buffer_min: 20
+  post_exercise_max_min: 60
+  return_to_still_sigmas: 1
+physiology:
+  age: null # null uses the observed HR percentile; enter your age to use Tanaka
+  hrmax_percentile: 0.995
+  hrmax_intercept: 208
+  hrmax_age_slope: 0.7
+  rhr_rolling_minutes: 30
+  rhr_min_valid_minutes: 24
+baselines:
+  mode: auto # auto: retrospective below 14 available days, otherwise causal
+  window_days: 14
+  min_days: 3
+  confidence_days: 7
+  hr_spread_floor: 4.0
+  hrv_spread_floor: 0.15
+  night_spread_floor: 0.10
+score:
+  w_hr_s: 0.55
+  w_hrv: 0.45
+  w_ctx: 0.15
+  k: 0.6
+  z_mid: 2.0
+  z_hr_clip: [-3, 6]
+  z_hrv_clip: [-3, 4]
+  z_night_clip: [-2, 2]
+  max_score: 3.0
+  medium_threshold: 1.0
+  high_threshold: 2.0
+smoothing:
+  mode: retrospective # retrospective | live
+  method: savgol # savgol | gaussian
+  savgol_windows: 7
+  savgol_order: 2
+  gaussian_sigma_minutes: 10
+  gaussian_truncate: 3
+  ema_alpha: 0.3
+calibration:
+  anchors: {SLEEP: 0.5, STILL: 1.2, ACTIVE: 2.2}
+  min_active_windows: 10
+  sparse_active_k: 0.6
+  reference_min_days_full_fit: 5
+  reference_tolerance_minutes: 2.5
+  min_reference_pairs: 10
+  k_bounds: [0.1, 3]
+  z_mid_bounds: [-2, 6]
+  weight_bounds: [0, 1]
+  context_weight_bounds: [0, 0.5]
+  fit_max_evaluations: 1000
+plot:
+  title: STRESS MONITOR
+  width_pixels: 1600
+  height_pixels: 900
+  dpi: 100
+  font_family: DejaVu Sans
+  font_size: 13
+  background: '#171C21'
+  foreground: '#F1F4F6'
+  grid: '#FFFFFF'
+  grid_alpha: 0.10
+  low_color: '#7BA9BD'
+  medium_color: '#51C49F'
+  high_color: '#EDD45B'
+  sleep_color: '#7BA9BD'
+  sleep_alpha: 0.10
+  gap_color: '#939DA5'
+  gap_alpha: 0.12
+  gap_hatch: '///'
+  line_width: 2
+  x_tick_hours: 4
+  y_tick_step: 1
+  incomplete_tolerance_minutes: 5
+  icon_size: 22
+  icon_position: 2.92
+  margin_top: 0.87
+output:
+  directory: stressmon-output
+  float_precision: 5
+app:
+  stale_minutes: 15
+  demo_cutoff: '14:45'

@@ -48,7 +48,7 @@ export interface ActivityData extends ActivitySummary {
 export interface StrainData {
   date: string;
   mode: 'demo' | 'connected';
-  day_window: { start: string; end: string; source: 'sleep' | 'midnight_fallback' };
+  day_window: { start: string; end: string; source: 'local_midnight' };
   strain: number | null;
   label: 'Light' | 'Moderate' | 'High' | 'All Out' | null;
   load: number | null;

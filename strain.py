@@ -69,18 +69,11 @@ def seconds(start: datetime, end: datetime) -> float:
 
 
 def day_window(target: date, now: datetime, sleeps: list[dict], tz, config=StrainConfig()) -> dict:
+    """Strain resets at local midnight, independently of sleep timing."""
     midnight = datetime.combine(target, time.min, tzinfo=tz)
-    main = sorted((s for s in sleeps if not s.get('nap') and s.get('main_sleep') is not False
-                   and seconds(s['start'], s['end']) >= config.min_main_sleep_h * 3600), key=lambda s: s['end'])
     current = target == now.astimezone(tz).date()
-    candidates = [s for s in main if s['end'] <= now and (current or s['end'].astimezone(tz).date() == target)]
-    start = candidates[-1]['end'].astimezone(tz) if candidates else midnight
     end = now.astimezone(tz) if current else midnight + timedelta(days=1)
-    if not current and candidates:
-        following = [s['start'] for s in main if start <= s['start'] <= now]
-        if following:
-            end = min(following).astimezone(tz)
-    return {'start': start, 'end': max(start, end), 'source': 'sleep' if candidates else 'midnight_fallback'}
+    return {'start': midnight, 'end': max(midnight, end), 'source': 'local_midnight'}
 
 
 def clean_samples(samples: list, window: dict, config=StrainConfig()) -> list:

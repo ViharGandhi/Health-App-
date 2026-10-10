@@ -41,7 +41,7 @@ def test_sleep_wake_date_uses_device_offset_and_duration_uses_utc(start, end, of
     user_tz = ZoneInfo('America/Los_Angeles')
     activity_day = night.end_utc.astimezone(user_tz).date()
     window = day_window(activity_day, now, [{'start': night.start_utc, 'end': night.end_utc}], user_tz)
-    assert window['start'].astimezone(timezone.utc) == night.end_utc
+    assert window['start'] == datetime.combine(activity_day, datetime.min.time(), tzinfo=user_tz)
 
 
 @pytest.mark.parametrize('count,recent', [(20, 7), (60, 4), (5, 5)])
@@ -61,4 +61,4 @@ def test_gaps_and_device_stop_syncing_are_not_forward_filled():
 def test_only_a_nap_does_not_define_activity_day_window():
     start = datetime(2026, 10, 7, 12, tzinfo=timezone.utc)
     window = day_window(start.date(), start + timedelta(hours=10), [{'start': start, 'end': start + timedelta(minutes=45), 'nap': True}], timezone.utc)
-    assert window['source'] == 'midnight_fallback'
+    assert window['source'] == 'local_midnight'

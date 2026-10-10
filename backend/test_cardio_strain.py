@@ -95,15 +95,15 @@ def test_zone_boundaries_are_display_only(fraction, zone):
     assert result['activity_zone_minutes'][f'zone{zone}'] == 4
 
 
-def test_sleep_window_ignores_nap_uses_past_sleep_and_fallback():
+def test_calendar_window_is_independent_of_main_sleep_and_naps():
     main = {'start': BASE - timedelta(hours=8), 'end': BASE, 'main_sleep': True}
     nap = {'start': BASE + timedelta(hours=4), 'end': BASE + timedelta(hours=5), 'nap': True}
     next_sleep = {'start': BASE + timedelta(hours=15), 'end': BASE + timedelta(days=1), 'main_sleep': True}
     current = day_window(BASE.date(), BASE + timedelta(hours=14), [main, nap], timezone.utc)
-    assert current['start'] == BASE
+    assert current['start'] == BASE.replace(hour=0)
     past = day_window(BASE.date(), BASE + timedelta(days=1, hours=12), [main, nap, next_sleep], timezone.utc)
-    assert past['start'] == BASE and past['end'] == next_sleep['start']
-    assert day_window(BASE.date(), BASE + timedelta(hours=14), [], timezone.utc)['source'] == 'midnight_fallback'
+    assert past['start'] == BASE.replace(hour=0) and past['end'] == BASE.replace(hour=0) + timedelta(days=1)
+    assert day_window(BASE.date(), BASE + timedelta(hours=14), [], timezone.utc)['source'] == 'local_midnight'
 
 
 def test_dst_coverage_uses_elapsed_seconds_and_distinct_fold_samples():
@@ -179,7 +179,8 @@ def test_connected_api_contract_error_and_demo_use_same_renderer():
         error = TestClient(app).get('/api/strain?date=2026-10-05', headers={'X-User-Age': '30'})
         assert error.status_code == 502 and 'strain' not in error.json()
     demo = TestClient(app).get('/api/strain?demo=true').json()
-    assert set(demo) == set(payload) and demo['mode'] == 'demo' and demo['coverage'] == 1
+    assert set(demo) == set(payload) and demo['mode'] == 'demo'
+    assert demo['coverage'] == pytest.approx(15 / 22)  # Demo supplies HR from 07:00–22:00.
 
 
 def test_past_cache_is_scoped_by_profile_and_user():

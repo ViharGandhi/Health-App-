@@ -32,10 +32,13 @@ async function apiFetch<T>(path: string, day?: string): Promise<T> {
   return res.json() as Promise<T>;
   };
   if (path.startsWith('/api/auth/') || path.startsWith('/api/data/')) return fetchData();
-  return responses.get(JSON.stringify([BACKEND_URL, path, headers]), fetchData);
+  return responses.get(JSON.stringify([BACKEND_URL, path, headers]), fetchData, path.startsWith('/api/stress?') ? 30000 : 120000);
 }
 
 export const api = {
+  getStress: (day: string, demo = false, days: 7 | 28 = 7): Promise<import('./stress').StressData> =>
+    apiFetch<import('./stress').StressData>(`/api/stress?demo=${demo}&days=${days}`, day),
+
   /** Fetch all three scores at once */
   getDashboard: (): Promise<DashboardData> =>
     apiFetch<DashboardData>('/api/dashboard'),

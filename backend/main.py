@@ -276,7 +276,7 @@ def _cached_data_page(function):
         parameters.apply_defaults()
         effective = {k: v for k, v in parameters.arguments.items() if k not in ('request', 'response')}
         strain_revision = dynamic.get('revision', 0) if request.url.path.startswith(('/api/strain', '/api/home', '/api/activity')) or request.url.path == '/api/dashboard' else 0
-        page_version = 'page-v31-activity-v2' if request.url.path in ('/api/home/metrics', '/api/strain/analytics') else 'page-v31'
+        page_version = 'page-v32-midnight' if request.url.path.startswith(('/api/strain', '/api/home', '/api/activity')) or request.url.path == '/api/dashboard' else 'page-v31'
         key = hashlib.sha256(json.dumps([page_version, request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
             str(day), age, str(client.strain_timezone), client.strain_sex, client.strain_sex_defaulted,
             repr(STRAIN_CONFIG), strain_revision, dynamic.get('sleep_revision', 0)], default=str).encode()).hexdigest()
@@ -793,6 +793,18 @@ async def home_metrics_endpoint(request: Request, response: Response, demo: bool
     health = health.model_dump() if hasattr(health, 'model_dump') else health
     return {'is_mock': is_mock, 'date': str(day), 'strain': snapshots[day].model_dump(mode='json'),
             'activities': activities, 'rows': dashboard_rows(sleep, health, values, sessions, steps, snapshots, day)}
+
+
+@app.get('/api/stress')
+async def stress_endpoint(request: Request, response: Response, demo: bool = False, days: Literal['7', '28'] = '7'):
+    from stress_monitor import stress_monitor
+    day, tz = _client_day(request), _client_timezone(request)
+    if day > datetime.now(tz).date():
+        raise HTTPException(400, 'Stress dates cannot be in the future')
+    token = None if demo else await _get_token(request, response)
+    response.headers['Cache-Control'] = 'no-store'
+    return await stress_monitor(_google_client(token, request) if token else None, day, tz,
+                                days=int(days), demo=demo or token is None, age=_client_age(request))
 
 
 @app.get('/api/activity')

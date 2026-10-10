@@ -10,6 +10,9 @@ import { activityHref } from '@/lib/activity';
 import ActivityIcon from '@/components/ActivityIcon';
 import { api } from '@/lib/api';
 import { useRecoveryAnalytics } from '@/lib/useRecoveryAnalytics';
+import { useLocalDay } from '@/lib/useLocalDay';
+import { useStressMonitor } from '@/lib/useStressMonitor';
+import { stressNote } from '@/lib/stress';
 import { BLUE, dateLabel, localDay, recoveryColor, shiftDay } from '@/lib/recovery';
 import type { HomeMetrics } from '@/lib/types';
 import styles from './page.module.css';
@@ -35,6 +38,8 @@ function Chevron({ reverse = false }: { reverse?: boolean }) {
 export default function DashboardPage() {
   const router = useRouter();
   const [day, setDay] = useState<string>();
+  const today = useLocalDay();
+  const selectedDay = day ?? today;
   const [metrics, setMetrics] = useState<HomeMetrics | null>(null);
   const [sample, setSample] = useState<boolean | null>(null);
   useEffect(() => {
@@ -50,15 +55,17 @@ export default function DashboardPage() {
     window.addEventListener('ojas:dynamic-sync', update);
     return () => window.removeEventListener('ojas:dynamic-sync', update);
   }, []);
-  const { data, error, demo, changeDemo } = useRecoveryAnalytics('W', day, sample);
+  const { data, error, demo, changeDemo } = useRecoveryAnalytics('W', selectedDay, sample);
+  const { data: stress, error: stressError } = useStressMonitor(selectedDay, sample);
+  const stressHref = `/stress?date=${selectedDay}${sample ? '&demo=true' : ''}`;
   useEffect(() => {
     if (sample == null) return;
     let active = true;
     setMetrics(null);
     setStrainError(null);
-    api.getHomeMetrics(day, sample).then(value => { if (active) setMetrics(value); }).catch(reason => { if (active) setStrainError(reason instanceof Error ? reason.message : 'Activity data unavailable.'); });
+    api.getHomeMetrics(selectedDay, sample).then(value => { if (active) setMetrics(value); }).catch(reason => { if (active) setStrainError(reason instanceof Error ? reason.message : 'Activity data unavailable.'); });
     return () => { active = false; };
-  }, [day, syncRevision, sample]);
+  }, [selectedDay, syncRevision, sample]);
   const strain = metrics?.strain;
   const activityMessage = 'Activity logging and live workout recording are not connected yet. Recorded device activities are listed here when available.';
   if (error) return <div className={styles.errorState} role="alert">{error}<button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button><Link href="/connect">Connect Google Health</Link></div>;
@@ -84,7 +91,7 @@ export default function DashboardPage() {
     </section>
     <div className={styles.monitorsGrid}>
       <Link className={styles.monitorCard} href="/health"><div className={styles.cardHeaderRow}><span>HEALTH MONITOR</span><Chevron /></div><div className={styles.monitorBody}><span className={styles.checkIconBox} style={{ color: monitorColor }}>{allWithin ? '✓' : '—'}</span><span className={styles.monitorTextStack}><strong style={{ color: monitorColor }}>{allWithin ? 'WITHIN RANGE' : monitor.assessed < monitor.expected ? 'BUILDING RANGE' : 'OUTSIDE RANGE'}</strong><small>{monitor.assessed < monitor.expected ? `${monitor.assessed}/${monitor.expected} Metrics assessed` : `${monitor.within}/${monitor.expected} Metrics${allWithin ? '' : ' within'}`}</small></span></div></Link>
-      <button className={styles.monitorCard} onClick={() => setUnavailable('Daytime Stress Monitor has no calculation or data source connected. Sleep Stress is available in the Sleep section.')}><div className={styles.cardHeaderRow}><span>STRESS MONITOR</span><Chevron /></div><div className={styles.monitorBody}><span className={styles.stressScoreBadge}>—</span><span className={styles.monitorTextStack}><strong>UNAVAILABLE</strong><small>No daytime data</small></span></div></button>
+      <Link className={styles.monitorCard} href={stressHref}><div className={styles.cardHeaderRow}><span>STRESS MONITOR</span><Chevron /></div><div className={styles.monitorBody}><span className={styles.stressScoreBadge}>{stress?.current.latest_score?.toFixed(1) ?? '—'}</span><span className={styles.monitorTextStack}><strong>{stress?.current.latest_level?.toUpperCase() ?? 'UNAVAILABLE'}</strong><small>{stress?.is_mock ? 'Synthetic · unvalidated' : stressError ? 'Could not load data' : stress ? stressNote(stress.current) : 'Loading readings…'}</small></span></div></Link>
     </div>
     <section className={styles.myDaySection}><div className={styles.myDayHeader}><h2>My Day</h2><button className={styles.addButton} aria-label="Add activity" onClick={() => setUnavailable(activityMessage)}>+</button></div>
       <Link className={styles.outlookBanner} href={recoveryHref}><span><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="5" /><path d="M12 0v3m0 18v3M0 12h3m18 0h3M3 3l2 2m14 14 2 2M3 21l2-2M19 5l2-2" /></svg>Your Daily Outlook</span><Chevron /></Link>
@@ -94,7 +101,7 @@ export default function DashboardPage() {
         <div className={styles.actionButtonsRow}><button onClick={() => setUnavailable(activityMessage)}><span>＋</span>ADD ACTIVITY</button><button onClick={() => setUnavailable(activityMessage)}><span>◷</span>START ACTIVITY</button></div>
       </div>
     </section>
-    {metrics ? <HomeDashboard data={metrics} onInfo={setUnavailable} /> : !strainError && <p className={styles.estimateNote} role="status">Loading dashboard metrics and activities…</p>}
+    {metrics ? <HomeDashboard data={metrics} onInfo={setUnavailable} stress={stress} stressError={stressError} stressHref={stressHref} /> : !strainError && <p className={styles.estimateNote} role="status">Loading dashboard metrics and activities…</p>}
     {strainError && <p className={styles.estimateNote} role="alert">{strainError} <button className="btn" onClick={() => window.location.reload()}>Retry</button></p>}
     <p className={styles.estimateNote}>{current.estimated ? `Estimated Recovery · ${current.confidence ?? 'building reference'}${current.confidence ? ' confidence' : ''}` : 'Prototype Recovery estimate'} · Estimated cardio Strain; muscular load is not included.{data.is_mock && ' Synthetic sample data.'}</p>
     {data.is_mock && <RecoveryDemoSwitch value={demo} onChange={changeDemo} />}

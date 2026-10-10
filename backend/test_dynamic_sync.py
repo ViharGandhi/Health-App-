@@ -32,19 +32,21 @@ def test_session_force_delta_and_fifteen_minute_gate_survive_restart():
             result = await sync_dynamic(client, 'visit-one', True, now=NOW, age=22, config=STRAIN_CONFIG)
             assert result['synced']
             calls = client._fetch_points.await_args_list
-            assert [call.args[0] for call in calls] == ['heart-rate', 'exercise', 'sleep']
+            assert [call.args[0] for call in calls] == ['heart-rate', 'exercise', 'activity-level', 'sleep']
+            assert read_range(calls[2].args[1]).start == '2026-09-24T00:00:00.000000'
             query = read_range(calls[0].args[1])
             assert query.start == '2026-10-08T00:00:00.000000'
             assert query.end == '2026-10-08T11:00:00.000000'
             assert client._fetch_daily_steps.await_args.args == (NOW.date(), NOW.date())
             assert not (await sync_dynamic(client, 'visit-one', True, now=NOW + timedelta(minutes=2)))['synced']
             assert not (await sync_dynamic(client, 'visit-one', now=NOW + timedelta(minutes=14)))['synced']
-            assert client._fetch_points.await_count == 3
+            assert client._fetch_points.await_count == 4
             restarted = fixture(path)
             assert (await sync_dynamic(restarted, 'visit-two', True, now=NOW + timedelta(minutes=2), age=22))['synced']
             query = read_range(restarted._fetch_points.await_args_list[0].args[1])
             assert query.start == '2026-10-08T11:00:00.000000'
             assert query.end == '2026-10-08T11:02:00.000000'
+            assert read_range(restarted._fetch_points.await_args_list[2].args[1]).start == '2026-10-08T11:00:00.000000'
             assert not (await sync_dynamic(restarted, 'visit-two', now=NOW + timedelta(minutes=16)))['synced']
             assert (await sync_dynamic(restarted, 'visit-two', now=NOW + timedelta(minutes=17), age=22))['synced']
             assert restarted.store.stored_steps(restarted.account_key, NOW.date(), NOW.date()) == {'2026-10-08': 1234}
@@ -72,7 +74,7 @@ def test_stored_pages_use_incremental_points_without_any_remote_fetch():
                 'utcOffset': '0s', 'civilTime': {'date': {'year': 2026, 'month': 10, 'day': 8},
                 'time': {'hours': 10, 'minutes': 59}}}, 'beatsPerMinute': 120}}
             async def fetch(kind, expression, **kwargs):
-                assert kind in ('heart-rate', 'exercise', 'sleep'), 'unexpected health-data fetch'
+                assert kind in ('heart-rate', 'exercise', 'sleep', 'activity-level'), 'unexpected health-data fetch'
                 return [point] if kind == 'heart-rate' else []
             client._fetch_points.side_effect = fetch
             await sync_dynamic(client, 'visit', True, now=NOW, age=22)
@@ -81,6 +83,7 @@ def test_stored_pages_use_incremental_points_without_any_remote_fetch():
             assert await client.get_daily_steps(NOW.date(), NOW.date()) == {NOW.date(): 1234}
             assert await client.get_health_history(NOW.date(), NOW.date(), ('rhr', 'hrv')) == {'hrv': [], 'rhr': []}
             assert await client.get_sleep_stage_points(NOW.date(), NOW.date()) == []
+            assert await client.get_activity_level_points(NOW.date(), NOW.date()) == []
     asyncio.run(run())
 
 
@@ -93,7 +96,7 @@ def test_simultaneous_app_visits_share_one_sync():
                 sync_dynamic(client, 'tab-two', True, now=NOW, age=22))
             assert sum(result['synced'] for result in (first, second)) == 1
             assert second['data_updated']
-            assert client._fetch_points.await_count == 3
+            assert client._fetch_points.await_count == 4
             assert client._fetch_daily_steps.await_count == 1
             assert client.store.dynamic_status(client.account_key, 'tab-two')['session_seen']
     asyncio.run(run())

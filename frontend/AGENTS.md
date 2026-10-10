@@ -9,6 +9,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 <!-- END:nextjs-agent-rules -->
 
 ## Project Learnings
+- Stress Monitor is an app feature served through the backend and connected to Home/detail UI; a standalone CLI does not satisfy the feature request.
+- Verify sensor availability against official provider endpoints and distinguish a cache audit from a fresh API query before choosing a missing-data policy.
+- Day Strain resets at local calendar midnight; Home and Strain must roll over while open or after a tab resumes, and cached wake-based results must be invalidated.
 - Activity badges and detail headers use monochrome athlete symbols matching the references, not colored platform emojis.
 - Home activity timelines must use recorded local workout start/end times, matching Strain; skin-temperature tiles show measured °C while the personal baseline is building, then switch to the labeled baseline difference.
 - Health Monitor overview follows the supplied compact five-tile grid, centered BPM circle over a blue trace, and report tile; detailed trends remain on metric pages.

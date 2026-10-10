@@ -4,7 +4,7 @@ The connected API and synthetic demo use the same pure HRR/TRIMP calculator in `
 
 ## Calculation
 
-- The current day starts at the latest main wake time; a main sleep lasts at least three hours and is not marked as a nap. Without one, use local midnight. Past days start at their main wake time and end at the next main sleep's start, or midnight.
+- Day Strain resets at local midnight in the requested user timezone. The current window ends at now; completed days end at the next local midnight, including 23/25-hour DST days. Sleep timing does not set this boundary.
 - Keep timezone-aware HR readings within that window, sort and deduplicate timestamps, reject readings outside 30–230 bpm, and reject deviations greater than 35 bpm from the centered five-sample median. Match the supplied reference's repeated edge padding; fewer than five readings skip spike filtering.
 - HRmax is `208 - 0.7 * age`. HRrest is the median of available resting HR values from the last seven calendar nights, or a flagged 60 bpm default. The optional observed sustained HRmax uplift is deferred.
 - Consecutive intervals up to 300 seconds count their actual duration; longer gaps contribute no coverage or load. HRR uses the pair's mean HR and is clipped to 0–1.1. Below HRR 0.20, load is zero.

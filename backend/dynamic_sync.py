@@ -1,7 +1,7 @@
 """Foreground sync: activity deltas plus a once-per-day recognised sleep."""
 import asyncio
 import json
-from datetime import datetime, time, timezone
+from datetime import datetime, time, timedelta, timezone
 
 from health_read_store import read_range
 from strain_service import load_strain_days
@@ -44,18 +44,29 @@ async def sync_dynamic(client, session, force=False, *, now=None, age=None, conf
         # Google supports exercise civil start filters, not an upload-time delta.
         # Today's small session list catches workouts started before the cursor.
         activity_query = read_range(f'exercise.interval.civil_start_time >= "{today}" AND exercise.interval.civil_start_time < "{now.astimezone(tz).replace(tzinfo=None).isoformat()}"')
+        # Bootstrap only the new activity-level stream needed by stress baselines.
+        # HR, workouts and the existing sync cursor retain their delta policy.
+        from stressmon.config import load_config
+        lookback = load_config()['baselines']['window_days']
+        history_end = start.astimezone(tz).replace(tzinfo=None)
+        history_query = read_range(f'activity_level.interval.civil_start_time >= "{today - timedelta(days=lookback)}" AND activity_level.interval.civil_start_time < "{history_end.isoformat()}"')
+        _, missing_levels = await asyncio.to_thread(store.range_read, account, 'activity-level', history_query, True, now=0) if history_query else ([], [])
+        level_start = today - timedelta(days=lookback) if missing_levels else history_end
+        level_query = read_range(f'activity_level.interval.civil_start_time >= "{level_start.isoformat()}" AND activity_level.interval.civil_start_time < "{now.astimezone(tz).replace(tzinfo=None).isoformat()}"')
         epoch = await asyncio.to_thread(store.epoch, account)
-        heart, activities, steps = await asyncio.gather(
+        heart, activities, steps, levels = await asyncio.gather(
             client._fetch_points('heart-rate', heart_query.expression(heart_query.start, heart_query.end), reconcile=True),
             client._fetch_points('exercise', activity_query.expression(activity_query.start, activity_query.end), reconcile=True),
             client._fetch_daily_steps(today, today),
+            client._fetch_points('activity-level', level_query.expression(level_query.start, level_query.end), reconcile=True),
         )
         # Stage all remote reads first. Failed downloads never advance the cursor.
         previous = await asyncio.to_thread(store.local_read, account, 'exercise', activity_query)
         activity_changed = {json.dumps(p, sort_keys=True) for p in previous} != {json.dumps(p, sort_keys=True) for p in activities}
         stored_heart = await asyncio.to_thread(store.range_write, account, 'heart-rate', heart_query, True, heart, epoch=epoch, invalidate=bool(heart))
         stored_activity = await asyncio.to_thread(store.range_write, account, 'exercise', activity_query, True, activities, epoch=epoch, invalidate=activity_changed)
-        if not stored_heart or not stored_activity:
+        stored_levels = await asyncio.to_thread(store.range_write, account, 'activity-level', level_query, True, levels, epoch=epoch, invalidate=False)
+        if not stored_heart or not stored_activity or not stored_levels:
             raise ValueError('Unsupported dynamic reading schema; checkpoint retained')
         sleep_updated = await sync_sleep_day(client, today, now, epoch)
         client.stored_only = True

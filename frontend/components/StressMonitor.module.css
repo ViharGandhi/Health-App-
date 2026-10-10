@@ -1,0 +1,15 @@
+.card { padding: 14px 15px 12px; margin-bottom: 16px; border-radius: 14px; background: linear-gradient(145deg, #30343A, #292D32); }
+.heading { display: flex; justify-content: space-between; align-items: center; color: #F7F8FA; text-decoration: none; }
+.heading strong { font: 800 11px var(--font-body); letter-spacing: .08em; }
+.heading > span { font-size: 27px; color: #939FA8; line-height: 1; }
+.status { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 17px; color: #AEB6BE; font-size: 11px; }
+.status strong { font: 800 11px var(--font-body); letter-spacing: .055em; white-space: nowrap; }
+.status b { color: #F7F8FA; font: 700 18px var(--font-display); margin-left: 5px; }
+.chart { margin-top: 10px; }
+.chart > svg { width: 100%; display: block; }
+.chart text { fill: #A3ADB5; font: 600 9px var(--font-display); }
+.chart .empty { fill: #C0C7CC; font: 500 11px var(--font-body); }
+.note { color: #A5AFB8; font-size: 10px; line-height: 1.6; margin-top: 8px; }
+.scrubber { display: grid; gap: 8px; font-size: 11px; color: #ADB9C2; margin: 10px 0; }
+.scrubber input { width: 100%; accent-color: #7BA9BD; }
+.scrubber output { min-height: 30px; color: #E0E7EC; }

@@ -244,6 +244,10 @@ class GoogleHealthClient:
                 f'{field} < "{(end + timedelta(days=1)).isoformat()}"')
         return await self._points("sleep", expr, reconcile=False)
 
+    async def get_activity_level_points(self, start: date, end: date) -> list[dict]:
+        """Recorded activity intervals; unknown or absent levels stay unknown."""
+        return await self._points('activity-level', _day_filter('activity_level.interval.civil_start_time', start, end))
+
     async def get_health_user_id(self) -> str:
         async with httpx.AsyncClient(timeout=20.0) as client:
             response = await client.get("https://health.googleapis.com/v4/users/me/identity", headers=self.headers)
