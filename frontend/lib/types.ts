@@ -25,6 +25,26 @@ export interface WorkoutDetail {
   zone_minutes: ZoneMinutes;
 }
 
+export interface ActivitySummary {
+  id: string; activity_name: string; exercise_type: string | null;
+  start: string; end: string; duration_min: number;
+  strain: number | null; avg_hr: number | null; max_hr: number | null;
+}
+export interface HomeMetricRow {
+  key: string; title: string; value: number | null; previous: number | null; unit: string; href: string;
+}
+export interface HomeMetrics {
+  is_mock: boolean; date: string; strain: StrainData; activities: ActivitySummary[]; rows: HomeMetricRow[];
+}
+export interface ActivityData extends ActivitySummary {
+  date: string; is_mock: boolean; steps: number | null; calories: number | null;
+  averages: Record<'strain' | 'avg_hr' | 'max_hr' | 'steps' | 'calories', number | null>;
+  comparison_count: number; coverage: number; unrecorded_minutes: number;
+  zones: { zone: number; minutes: number | null; percent: number | null; low: number | null; high: number | null; typical: { low: number; high: number } | null }[];
+  heart_rate: { timestamp: string; bpm: number }[];
+  muscular_split: { cardio: number; muscular: number } | null; route_sample: boolean;
+}
+
 export interface StrainData {
   date: string;
   mode: 'demo' | 'connected';
@@ -99,7 +119,7 @@ export interface StrainDay {
   strength_minutes: number;
   strength_activities: Record<string, number>;
   steps: number | null;
-  activities: { name: string; start: string; end: string; minutes: number; strain: number | null }[];
+  activities: { id: string; exercise_type: string | null; name: string; start: string; end: string; minutes: number; strain: number | null }[];
 }
 export interface StrainAnalytics {
   date: string;

@@ -38,6 +38,8 @@
 .sleepBadge strong { font: 700 21px var(--font-display); }
 .sleepBadge small { font: 600 9px var(--font-body); margin-left: 2px; }
 .workoutBadge { background: #009FE8; }
+.sampleBanner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; margin-bottom: 15px; padding: 10px; border: 1px solid #7BA1BB55; border-radius: 8px; color: #BED5E5; font-size: 10px; }
+.sampleBanner a { color: #FFF; }
 .activityName { font: 800 10px var(--font-body); letter-spacing: .06em; text-transform: uppercase; }
 .activityTimeline { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
 .timeStack { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; color: #BAC3CB; font: 600 11px var(--font-display); }

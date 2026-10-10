@@ -43,8 +43,9 @@ export const api = {
   getRecovery: (demo: RecoveryDemo = 'estimate'): Promise<RecoveryData> =>
     apiFetch<RecoveryData>(`/api/recovery?demo=${demo}`),
 
-  getRecoveryAnalytics: (timeframe: RecoveryRange = 'W', endDate?: string, demo: RecoveryDemo = 'estimate'): Promise<RecoveryAnalytics> => {
+  getRecoveryAnalytics: (timeframe: RecoveryRange = 'W', endDate?: string, demo: RecoveryDemo = 'estimate', sample = false): Promise<RecoveryAnalytics> => {
     const params = new URLSearchParams({ timeframe, demo });
+    if (sample) params.set('sample', 'true');
     if (endDate) params.set('end_date', endDate);
     return apiFetch<RecoveryAnalytics>(`/api/recovery/analytics?${params}`);
   },
@@ -94,6 +95,12 @@ export const api = {
     if (day) params.set('date', day);
     return apiFetch<StrainData>(`/api/strain?${params}`);
   },
+
+  getHomeMetrics: (day?: string, demo = false): Promise<import('./types').HomeMetrics> =>
+    apiFetch<import('./types').HomeMetrics>(`/api/home/metrics?demo=${demo}`, day),
+
+  getActivity: (id: string, day?: string, demo = false, source = 'home'): Promise<import('./types').ActivityData> =>
+    apiFetch<import('./types').ActivityData>(`/api/activity?${new URLSearchParams({ id, demo: String(demo), source })}`, day),
 
   getStrainAnalytics: (timeframe: import('./types').StrainRange = 'W', metric: import('./types').StrainMetric = 'strain', endDate?: string, demo = false): Promise<import('./types').StrainAnalytics> => {
     const params = new URLSearchParams({ timeframe, metric, demo: String(demo) });

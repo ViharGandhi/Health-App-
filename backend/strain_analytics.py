@@ -2,6 +2,7 @@
 
 from datetime import date, timedelta
 from statistics import mean
+from hashlib import sha256
 
 from sleep_trends import range_start
 
@@ -10,6 +11,11 @@ ZONE_KEYS = tuple(f"zone{i}" for i in range(1, 6))
 METRICS = ("strain", "zones_1_3", "zones_4_5", "strength", "steps")
 STRENGTH_TYPES = {"WEIGHTLIFTING", "WEIGHT_MACHINES", "WEIGHTS", "STRENGTH_TRAINING",
                   "FREE_WEIGHTS", "FUNCTIONAL_STRENGTH_TRAINING", "POWERLIFTING", "RESISTANCE_BANDS"}
+
+
+def activity_id(session):
+    key = f"{session['start'].isoformat()}/{session['end'].isoformat()}/{session.get('exercise_type')}/{session['activity_name']}"
+    return sha256(key.encode()).hexdigest()[:20]
 
 
 def strain_range_start(end: date, timeframe: str, metric: str) -> date:
@@ -44,7 +50,7 @@ def strain_day(day: date, samples: list, sessions: list, snapshot, steps: int | 
         name = session["activity_name"]
         if session.get("exercise_type") in STRENGTH_TYPES:
             strength[name] = strength.get(name, 0) + duration
-        activities.append({"name": name, "start": session["start"].isoformat(), "end": session["end"].isoformat(),
+        activities.append({"id": activity_id(session), "exercise_type": session.get('exercise_type'), "name": name, "start": session["start"].isoformat(), "end": session["end"].isoformat(),
                            "minutes": duration, "strain": next((workout.strain for workout in snapshot.workouts
                                if workout.start == session["start"] and workout.end == session["end"]), None),
                            "_json_strain": next((workout.model_dump(mode='json')['strain'] for workout in snapshot.workouts

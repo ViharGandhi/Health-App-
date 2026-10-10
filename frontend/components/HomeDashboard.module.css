@@ -1,0 +1,21 @@
+.dashboard { margin-top: 30px; }
+.heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+.heading h2 { font-size: 21px; font-weight: 600; }
+.heading button { border: 0; background: none; color: #8B959E; font: 800 9px var(--font-body); letter-spacing: .09em; cursor: pointer; }
+.heading button span { font-size: 18px; margin-left: 5px; }
+.row { display: flex; width: 100%; align-items: center; gap: 9px; min-height: 61px; margin-bottom: 12px; padding: 10px 12px; border: 0; border-radius: 12px; background: #353C42; color: #FFF; text-align: left; text-decoration: none; cursor: pointer; }
+.icon { display: flex; flex: 0 0 22px; color: #8D989F; }
+.name { flex: 1; font: 800 10px var(--font-body); letter-spacing: .065em; }
+.values { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.2; gap: 2px; }
+.values strong { font: 700 24px var(--font-display); white-space: nowrap; }
+.values small { color: #AEB7BD; font: 600 11px var(--font-display); }
+.arrow { align-self: center; width: 8px; font-size: 9px; }
+.stress { padding: 16px 14px 8px; margin-bottom: 16px; border-radius: 13px; background: #2A2E34; }
+.stressHeader, .stressStatus { display: flex; justify-content: space-between; align-items: center; }
+.stressHeader strong { font: 800 11px var(--font-body); letter-spacing: .08em; }
+.stressHeader button { border: 0; background: none; color: #A2ADB5; font-size: 24px; cursor: pointer; }
+.stressStatus { margin-top: 12px; font-size: 11px; color: #AEB7BD; }
+.stressStatus strong { font-size: 11px; letter-spacing: .05em; }
+.stressChart { margin-top: 10px; }
+.stressChart svg { width: 100%; display: block; }
+.note { font-size: 10px; color: #9AA5AD; line-height: 1.6; }

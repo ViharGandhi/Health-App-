@@ -30,3 +30,4 @@
 .previewLinks { text-align: center; padding-top: 22px; }
 .previewLinks a { color: #9CABB8; font-size: 10px; }
 @media (min-width: 361px) and (max-width: 390px) { .period { gap: 5px; } .period > span { font-size: 8px; } .period > div { gap: 5px; font-size: 8px; } }
+.activityRow { color: #FFF; text-decoration: none; }

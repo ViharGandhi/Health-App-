@@ -5,10 +5,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import CircleDial from '@/components/CircleDial';
 import RecoveryDemoSwitch from '@/components/RecoveryDemoSwitch';
+import HomeDashboard from '@/components/HomeDashboard';
+import { activityHref } from '@/lib/activity';
+import ActivityIcon from '@/components/ActivityIcon';
 import { api } from '@/lib/api';
 import { useRecoveryAnalytics } from '@/lib/useRecoveryAnalytics';
 import { BLUE, dateLabel, localDay, recoveryColor, shiftDay } from '@/lib/recovery';
-import type { StrainData } from '@/lib/types';
+import type { HomeMetrics } from '@/lib/types';
 import styles from './page.module.css';
 
 function formatTime(value?: string | null): string {
@@ -32,8 +35,14 @@ function Chevron({ reverse = false }: { reverse?: boolean }) {
 export default function DashboardPage() {
   const router = useRouter();
   const [day, setDay] = useState<string>();
-  const [strain, setStrain] = useState<StrainData | null>(null);
-  const [strainError, setStrainError] = useState(false);
+  const [metrics, setMetrics] = useState<HomeMetrics | null>(null);
+  const [sample, setSample] = useState<boolean | null>(null);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSample(params.get('demo') === 'true');
+    if (params.get('date')) setDay(params.get('date')!);
+  }, []);
+  const [strainError, setStrainError] = useState<string | null>(null);
   const [unavailable, setUnavailable] = useState<string | null>(null);
   const [syncRevision, setSyncRevision] = useState(0);
   useEffect(() => {
@@ -41,14 +50,16 @@ export default function DashboardPage() {
     window.addEventListener('ojas:dynamic-sync', update);
     return () => window.removeEventListener('ojas:dynamic-sync', update);
   }, []);
-  const { data, error, demo, changeDemo } = useRecoveryAnalytics('W', day);
+  const { data, error, demo, changeDemo } = useRecoveryAnalytics('W', day, sample);
   useEffect(() => {
+    if (sample == null) return;
     let active = true;
-    setStrain(current => current?.date === (day ?? localDay()) ? current : null);
-    setStrainError(false);
-    api.getStrain(day).then(value => { if (active) setStrain(value); }).catch(() => { if (active) setStrainError(true); });
+    setMetrics(null);
+    setStrainError(null);
+    api.getHomeMetrics(day, sample).then(value => { if (active) setMetrics(value); }).catch(reason => { if (active) setStrainError(reason instanceof Error ? reason.message : 'Activity data unavailable.'); });
     return () => { active = false; };
-  }, [day, syncRevision]);
+  }, [day, syncRevision, sample]);
+  const strain = metrics?.strain;
   const activityMessage = 'Activity logging and live workout recording are not connected yet. Recorded device activities are listed here when available.';
   if (error) return <div className={styles.errorState} role="alert">{error}<button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button><Link href="/connect">Connect Google Health</Link></div>;
   if (!data) return <div className={styles.pageWrapper}><div className={styles.loading} role="status">Loading your overview…</div></div>;
@@ -59,6 +70,7 @@ export default function DashboardPage() {
   const monitorColor = allWithin ? '#00DCA0' : '#AEB8C1';
   const recoveryHref = `/recovery${day ? `?date=${day}` : ''}`;
   return <div className={styles.pageWrapper}><div className={styles.container}>
+    {sample && <div className={styles.sampleBanner}>SAMPLE DATA · Walking, running & strength preview <a href="/">Live data →</a></div>}
     <header className={styles.topHeader}>
       <div className={styles.headerLeft}><Link className={styles.avatarCircle} href="/health" aria-label="Your health"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></Link><span className={styles.streakBadge} title="Activity streak unavailable">🔥 <span>—</span></span></div>
       <div className={styles.datePill}><button aria-label="Previous day" onClick={() => setDay(shiftDay(data.range_end, -1))}><Chevron reverse /></button><span>{data.range_end === localDay() ? 'TODAY' : dateLabel(data.range_end)}</span><button aria-label="Next day" disabled={data.range_end >= localDay()} onClick={() => setDay(shiftDay(data.range_end, 1))}><Chevron /></button></div>
@@ -78,12 +90,13 @@ export default function DashboardPage() {
       <Link className={styles.outlookBanner} href={recoveryHref}><span><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="5" /><path d="M12 0v3m0 18v3M0 12h3m18 0h3M3 3l2 2m14 14 2 2M3 21l2-2M19 5l2-2" /></svg>Your Daily Outlook</span><Chevron /></Link>
       <div className={styles.activitiesContainer}><div className={styles.activitiesHeaderRow}><span>{data.range_end === localDay() ? "TODAY'S ACTIVITIES" : 'ACTIVITIES'}</span><Link href="/strain" aria-label="View activity details">↗</Link></div>
         <Link href="/sleep" className={styles.activityItem}><div className={styles.activityLeftPart}><div className={styles.sleepBadge}><svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5z" /></svg><strong>{duration(sleep?.asleep_minutes ?? null)}</strong></div><span className={styles.activityName}>SLEEP</span></div><div className={styles.activityTimeline}><div className={styles.timeStack}><span>{formatTime(sleep?.bed_time)}</span><span>{formatTime(sleep?.wake_time)}</span></div><i /></div></Link>
-        {strain?.workouts.map((workout, index) => <Link href="/strain" className={styles.activityItem} key={`${workout.activity_name}-${index}`}><div className={styles.activityLeftPart}><div className={`${styles.sleepBadge} ${styles.workoutBadge}`} title="Duration recorded in heart-rate zones"><svg width="20" height="25" viewBox="0 0 24 30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="13" cy="4" r="2" /><path d="m11 8-3 7 5 4-2 9M11 8l5 5h4M8 15l-4 4m9 0 5 8" /></svg><strong>{Math.round(Object.values(workout.zone_minutes).reduce((sum, minutes) => sum + minutes, 0))}<small>min</small></strong></div><span className={styles.activityName}>{workout.activity_name}</span></div><div className={`${styles.activityTimeline} ${styles.workoutTimeline}`} title="Recorded local activity start and end times"><div className={styles.timeStack}><span>{workout.start.slice(11, 16)}</span><span>{workout.end.slice(11, 16)}</span></div><i /></div></Link>)}
+        {metrics?.activities.map(workout => <Link href={activityHref(workout.id, metrics.date, metrics.is_mock)} className={styles.activityItem} key={workout.id}><div className={styles.activityLeftPart}><div className={`${styles.sleepBadge} ${styles.workoutBadge}`} title="Estimated cardio Activity Strain"><ActivityIcon name={workout.activity_name} type={workout.exercise_type} /><strong>{workout.strain?.toFixed(1) ?? '—'}</strong></div><span className={styles.activityName}>{workout.activity_name}</span></div><div className={`${styles.activityTimeline} ${styles.workoutTimeline}`} title="Recorded local activity start and end times"><div className={styles.timeStack}><span>{workout.start.slice(11, 16)}</span><span>{workout.end.slice(11, 16)}</span></div><i /></div></Link>)}
         <div className={styles.actionButtonsRow}><button onClick={() => setUnavailable(activityMessage)}><span>＋</span>ADD ACTIVITY</button><button onClick={() => setUnavailable(activityMessage)}><span>◷</span>START ACTIVITY</button></div>
       </div>
     </section>
-    {strainError && <p className={styles.estimateNote} role="alert">Activity data unavailable. <button className="btn" onClick={() => window.location.reload()}>Retry</button></p>}
-    <p className={styles.estimateNote}>{current.estimated ? `Estimated Recovery · ${current.confidence ?? 'building reference'}${current.confidence ? ' confidence' : ''}` : 'Prototype Recovery estimate'}{data.is_mock ? ' · Synthetic sample vitals and sleep; activity uses the existing demo fixture.' : ' · Experimental Strain uses a default capacity estimate.'}</p>
+    {metrics ? <HomeDashboard data={metrics} onInfo={setUnavailable} /> : !strainError && <p className={styles.estimateNote} role="status">Loading dashboard metrics and activities…</p>}
+    {strainError && <p className={styles.estimateNote} role="alert">{strainError} <button className="btn" onClick={() => window.location.reload()}>Retry</button></p>}
+    <p className={styles.estimateNote}>{current.estimated ? `Estimated Recovery · ${current.confidence ?? 'building reference'}${current.confidence ? ' confidence' : ''}` : 'Prototype Recovery estimate'} · Estimated cardio Strain; muscular load is not included.{data.is_mock && ' Synthetic sample data.'}</p>
     {data.is_mock && <RecoveryDemoSwitch value={demo} onChange={changeDemo} />}
     {unavailable && <UnavailableDialog message={unavailable} onClose={() => setUnavailable(null)} />}
   </div></div>;

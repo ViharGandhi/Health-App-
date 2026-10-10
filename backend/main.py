@@ -53,6 +53,7 @@ load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 # ── Algorithm imports ──────────────────────────────────────────────────────────
 from strain import StrainConfig, strain_analytics
 from strain_service import fetch_strain_inputs, calculate_days, strain_response, demo_inputs, load_strain_days
+from activity_details import activity_id, activity_summary, build_activity, dashboard_rows, showcase_inputs
 from sleepscore import SleepCalculator, SleepData
 from sleep_consistency import SleepConsistencyCalculator, SleepNight
 from sleep_efficiency import SleepEfficiencyCalculator
@@ -259,7 +260,7 @@ def _cached_data_page(function):
     @wraps(function)
     async def wrapped(*args, **kwargs):
         request, response = kwargs.get('request'), kwargs.get('response')
-        if request is None or response is None or kwargs.get('demo') is True:
+        if request is None or response is None or kwargs.get('demo') is True or kwargs.get('sample') is True:
             return await function(*args, **kwargs)
         session = get_session(request) or {}
         if not (session.get('health_user_id') or session.get('user_email')):
@@ -274,8 +275,9 @@ def _cached_data_page(function):
         parameters = inspect.signature(function).bind(*args, **kwargs)
         parameters.apply_defaults()
         effective = {k: v for k, v in parameters.arguments.items() if k not in ('request', 'response')}
-        strain_revision = dynamic.get('revision', 0) if request.url.path.startswith('/api/strain') or request.url.path == '/api/dashboard' else 0
-        key = hashlib.sha256(json.dumps(['page-v31', request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
+        strain_revision = dynamic.get('revision', 0) if request.url.path.startswith(('/api/strain', '/api/home', '/api/activity')) or request.url.path == '/api/dashboard' else 0
+        page_version = 'page-v31-activity-v2' if request.url.path in ('/api/home/metrics', '/api/strain/analytics') else 'page-v31'
+        key = hashlib.sha256(json.dumps([page_version, request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
             str(day), age, str(client.strain_timezone), client.strain_sex, client.strain_sex_defaulted,
             repr(STRAIN_CONFIG), strain_revision, dynamic.get('sleep_revision', 0)], default=str).encode()).hexdigest()
         frozen = daily_sleep and await asyncio.to_thread(client.store.sleep_day_prepared, client.account_key, day)
@@ -634,11 +636,13 @@ async def recovery_endpoint(request: Request, response: Response, demo: Literal[
 async def recovery_analytics_endpoint(request: Request, response: Response,
                                       timeframe: Literal["W", "M", "6M"] = "W",
                                       end_date: date | None = None,
-                                      demo: Literal["legacy", "estimate"] = "estimate"):
+                                      demo: Literal["legacy", "estimate"] = "estimate", sample: bool = False):
     today = _client_day(request)
     end = end_date or today
     if end > today:
         raise HTTPException(400, "Recovery history cannot end in the future")
+    if sample:
+        return await _demo_recovery_analytics(end, timeframe, demo, request)
     token = await _get_token(request, response)
     if not token:
         if get_session(request):
@@ -715,13 +719,13 @@ async def sleep_need_endpoint(request: Request, response: Response):
 
 @app.get("/api/sleep/analytics")
 @_cached_data_page
-async def sleep_analytics_endpoint(request: Request, response: Response, timeframe: Literal["W", "M", "6M"] = "W"):
+async def sleep_analytics_endpoint(request: Request, response: Response, timeframe: Literal["W", "M", "6M"] = "W", demo: bool = False):
     today = _client_day(request)
     start = range_start(today, timeframe)
     history_start = min(range_start(start - timedelta(days=1), timeframe) - timedelta(days=8), today - timedelta(days=34))
     session = get_session(request)
-    token = await _get_token(request, response)
-    if not token and session:
+    token = None if demo else await _get_token(request, response)
+    if not token and session and not demo:
         raise HTTPException(401, "Reconnect Google Health to refresh sleep data")
     if not token:
         points = mock_stage_points(today, (today - history_start).days + 1)
@@ -747,6 +751,62 @@ async def sleep_analytics_endpoint(request: Request, response: Response, timefra
     tonight = inputs.for_tonight(today)
     result["tonight_sleep_need"] = asdict(tonight) if tonight else None
     return result
+
+
+async def _activity_inputs(request, response, demo, source='home'):
+    day = _client_day(request)
+    token = None if demo else await _get_token(request, response)
+    if not token and not demo and get_session(request):
+        raise HTTPException(401, 'Reconnect Google Health to load activities.')
+    client = _google_client(token or 'demo', request)
+    lower = day - timedelta(days=30)
+    age = _client_age(request)
+    is_mock = not token
+    if is_mock:
+        age = age if age is not None else 30
+        inputs, steps = (demo_inputs if source == 'strain' else showcase_inputs)(lower, day, client.strain_timezone)
+        now = datetime.combine(day, datetime.min.time(), tzinfo=client.strain_timezone) + timedelta(hours=22)
+        values = await asyncio.to_thread(calculate_days, lower, day, now, client.strain_timezone, age, client.strain_sex, False, inputs, STRAIN_CONFIG)
+        sessions = inputs[1]
+        samples = inputs[0]
+    else:
+        calculated, steps = await asyncio.gather(
+            load_strain_days(client, lower, day, datetime.now(timezone.utc), age, STRAIN_CONFIG),
+            client.get_daily_steps(lower, day))
+        values, sessions = calculated
+        samples = None
+    return day, client, age, is_mock, values, sessions, steps, samples
+
+
+@app.get('/api/home/metrics')
+@_cached_data_page
+async def home_metrics_endpoint(request: Request, response: Response, demo: bool = False):
+    day, client, age, is_mock, values, sessions, steps, _ = await _activity_inputs(request, response, demo)
+    sleep, health = await asyncio.gather(
+        sleep_analytics_endpoint.__wrapped__(request=request, response=response, timeframe='W', demo=is_mock),
+        asyncio.to_thread(get_mock_health, 'M', day) if is_mock else health_endpoint.__wrapped__(request=request, response=response, timeframe='M'))
+    snapshots = {when: strain_response(value, values, 'demo' if is_mock else 'connected', age, config=STRAIN_CONFIG)
+                 for when, value in values.items()}
+    current = values[day]
+    activities = [activity_summary(s, current) for s in sorted(sessions, key=lambda s: s['start'])
+                  if s['end'] >= current['day_window']['start'] and s['start'] <= current['day_window']['end']]
+    health = health.model_dump() if hasattr(health, 'model_dump') else health
+    return {'is_mock': is_mock, 'date': str(day), 'strain': snapshots[day].model_dump(mode='json'),
+            'activities': activities, 'rows': dashboard_rows(sleep, health, values, sessions, steps, snapshots, day)}
+
+
+@app.get('/api/activity')
+@_cached_data_page
+async def activity_endpoint(request: Request, response: Response, id: str, demo: bool = False, source: Literal['home', 'strain'] = 'home'):
+    day, client, _, is_mock, values, sessions, _, samples = await _activity_inputs(request, response, demo, source)
+    current = values[day]
+    session = next((s for s in sessions if activity_id(s) == id and s['end'] >= current['day_window']['start']
+                    and s['start'] <= current['day_window']['end']), None)
+    if session is None:
+        raise HTTPException(404, 'Activity not found for this day.')
+    if samples is None:
+        samples = await client.get_intraday_heart_rate(day - timedelta(days=2), day + timedelta(days=1), preserve_offset=True)
+    return build_activity(session, current, samples, values, sessions, day, is_mock, STRAIN_CONFIG)
 
 
 @app.get("/api/sleep/heart-rate")

@@ -15,6 +15,7 @@ export default function DynamicSync() {
   const [lastSynced, setLastSynced] = useState<number | null>(null);
   const [connected, setConnected] = useState(false);
   useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('demo') === 'true') return;
     appSession ??= crypto.randomUUID();
     schedule ??= new DynamicSyncSchedule(async (force, homeVisit) => {
       const session = force && !homeVisit ? (reloadSession ??= crypto.randomUUID()) : appSession!;
