@@ -4,7 +4,7 @@ from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 import pytest
-from stress_monitor import category, summarize, stress_monitor, _day
+from stress_monitor import category, summarize, stress_monitor, _day, recording_timezone
 
 UTC = timezone.utc
 START = datetime(2026, 10, 10, tzinfo=UTC)
@@ -156,3 +156,48 @@ def test_endpoint_demo_and_input_validation():
         assert monthly['current']['points'] == response.json()['current']['points']
         assert client.get('/api/stress?days=365').status_code == 422
         assert client.get('/api/stress?demo=true', headers={'X-User-Date': '2099-01-01'}).status_code == 400
+
+
+def test_live_recording_offset_aligns_sleep_bands_day_boundary_and_hr_queries():
+    class Client:
+        async def get_sleep_stage_points(self, *args):
+            return [{'sleep': {'interval': {
+                'startTime': '2026-10-10T19:50:00Z', 'endTime': '2026-10-11T01:53:00Z',
+                'startUtcOffset': '19800s', 'endUtcOffset': '19800s'},
+                'metadata': {'mainSleep': True, 'processed': True}}},
+                {'sleep': {'interval': {
+                    'startTime': '2026-10-11T08:54:00Z', 'endTime': '2026-10-11T10:34:00Z',
+                    'endUtcOffset': '7200s'}, 'metadata': {'nap': True, 'processed': True}}}]
+        async def get_intraday_heart_rate(self, *args, **kwargs):
+            return []
+        async def get_activity_level_points(self, *args):
+            return []
+        async def get_workout_sessions(self, *args, **kwargs):
+            return []
+        async def _points(self, kind, expression):
+            assert '2026-10-11T18:30:00+00:00' in expression
+            return []
+    result = asyncio.run(stress_monitor(Client(), date(2026, 10, 11), ZoneInfo('Europe/Berlin'),
+                                       now=datetime(2026, 10, 12, tzinfo=UTC)))
+    assert result['timezone'] == 'UTC+05:30'
+    current = result['current']
+    assert current['start'].astimezone(UTC) == datetime(2026, 10, 10, 18, 30, tzinfo=UTC)
+    assert current['elapsed_minutes'] == 1440
+    sleep, nap = current['overlays']
+    assert (sleep['start'].hour, sleep['start'].minute, sleep['end'].hour, sleep['end'].minute) == (1, 20, 7, 23)
+    assert (nap['start'].hour, nap['start'].minute, nap['end'].hour, nap['end'].minute) == (14, 24, 16, 4)
+
+
+def test_recording_timezone_uses_latest_completed_sleep_and_browser_fallback():
+    browser = ZoneInfo('Europe/Berlin')
+    now = datetime(2026, 10, 11, 12, tzinfo=UTC)
+    def point(end, offset, **metadata):
+        return {'sleep': {'interval': {'endTime': end, 'endUtcOffset': offset}, 'metadata': metadata}}
+    rows = [point('2026-10-10T01:00:00Z', '7200s', mainSleep=True),
+            point('2026-10-11T01:53:00Z', '19800s', mainSleep=True),
+            point('2026-10-11T10:00:00Z', '-14400s', processed=False),
+            point('2026-10-11T11:00:00Z', '-14400s', nap=True),
+            point('2026-10-12T01:00:00Z', '-14400s', mainSleep=True)]
+    assert str(recording_timezone(rows, date(2026, 10, 11), now, browser)) == 'UTC+05:30'
+    assert recording_timezone([], date(2026, 10, 11), now, browser) is browser
+    assert recording_timezone([point('2026-10-11T01:00:00Z', 'invalid')], date(2026, 10, 11), now, browser) is browser
