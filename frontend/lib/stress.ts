@@ -27,6 +27,11 @@ export function stressNote(day: StressDay) {
   return `Estimated${day.low_confidence ? ' · low confidence' : ''} · ${day.baseline_days} baseline days`;
 }
 export function stressTime(value: string, timezone: string) {
+  const offset = /^UTC([+-])(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(timezone);
+  if (offset) {
+    const seconds = (Number(offset[2]) * 3600 + Number(offset[3]) * 60 + Number(offset[4] ?? 0)) * (offset[1] === '+' ? 1 : -1);
+    return new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' }).format(new Date(Date.parse(value) + seconds * 1000));
+  }
   return new Intl.DateTimeFormat('en-GB', { timeZone: timezone, hour: '2-digit', minute: '2-digit' }).format(new Date(value));
 }
 export function stressDuration(minutes: number) {

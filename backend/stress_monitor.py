@@ -13,6 +13,26 @@ def category(score):
     return 'low' if score < 1 else 'medium' if score < 2 else 'high'
 
 
+def recording_timezone(sleeps, day, now, fallback):
+    candidates = []
+    for point in sleeps:
+        sleep = point.get('sleep', {})
+        metadata, interval = sleep.get('metadata', {}), sleep.get('interval', {})
+        if metadata.get('nap') or metadata.get('mainSleep') is False or metadata.get('processed') is False:
+            continue
+        offset = interval.get('endUtcOffset', interval.get('startUtcOffset'))
+        if offset is None or not interval.get('endTime'):
+            continue
+        try:
+            tz = timezone(timedelta(seconds=float(offset.removesuffix('s'))))
+            end = datetime.fromisoformat(interval['endTime'].replace('Z', '+00:00'))
+            if end.tzinfo is not None and end <= now and end.astimezone(tz).date() <= day:
+                candidates.append((end, bool(metadata.get('mainSleep')), tz))
+        except (ValueError, TypeError, AttributeError, OverflowError):
+            continue
+    return max(candidates, key=lambda item: item[:2])[2] if candidates else fallback
+
+
 def summarize(start, end, points):
     seconds = dict.fromkeys(('low', 'medium', 'high'), 0.0)
     weighted = 0.0
@@ -117,13 +137,14 @@ async def stress_monitor(client, end_day, tz, *, days=7, now=None, demo=False, a
         cfg['time']['hrv_window_anchor'] = 'end'
         data, observations, rejected = await asyncio.to_thread(demo_inputs, reference_start, end_day, tz, now, cfg)
     else:
+        sleeps = await client.get_sleep_stage_points(reference_start, end_day + timedelta(days=1))
+        tz = recording_timezone(sleeps, end_day, now, tz)
         end = min(datetime.combine(end_day + timedelta(days=1), time.min, tzinfo=tz), now)
         start = datetime.combine(reference_start, time.min, tzinfo=tz).astimezone(timezone.utc)
         field = 'heart_rate_variability.sample_time.physical_time'
         expression = f'{field} >= "{start.isoformat()}" AND {field} < "{end.astimezone(timezone.utc).isoformat()}"'
-        samples, sleeps, sessions, levels, hrv = await asyncio.gather(
+        samples, sessions, levels, hrv = await asyncio.gather(
             client.get_intraday_heart_rate(reference_start - timedelta(days=1), end_day + timedelta(days=1), preserve_offset=True),
-            client.get_sleep_stage_points(reference_start, end_day + timedelta(days=1)),
             client.get_workout_sessions(reference_start - timedelta(days=1), end_day, preserve_offset=True),
             client.get_activity_level_points(reference_start, end_day),
             client._points('heart-rate-variability', expression))

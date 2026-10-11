@@ -9,6 +9,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 <!-- END:nextjs-agent-rules -->
 
 ## Project Learnings
+- Stress Monitor uses the Fitbit sleep recording offset for its day boundaries, sleep bands and time labels so they match Sleep; browser timezone is a fallback when no recording offset exists.
 - Stress Monitor is an app feature served through the backend and connected to Home/detail UI; a standalone CLI does not satisfy the feature request.
 - Verify sensor availability against official provider endpoints and distinguish a cache audit from a fresh API query before choosing a missing-data policy.
 - Day Strain resets at local calendar midnight; Home and Strain must roll over while open or after a tab resumes, and cached wake-based results must be invalidated.
