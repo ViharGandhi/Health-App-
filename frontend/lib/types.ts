@@ -163,6 +163,10 @@ export interface SleepData {
   stage_score: number | null;
   restfulness_score: number;
   hr_dip_score: number;
+  waking_hr?: number | null;
+  waking_hr_date?: string | null;
+  waking_hr_sample_count?: number;
+  hr_dip_pct?: number | null;
   is_mock: boolean;
 }
 

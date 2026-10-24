@@ -53,7 +53,7 @@ export default function HealthTrendDetail({ slug }: { slug: string }) {
           <p className={styles.note}>{range === '6M' ? 'Faint line: daily readings. Horizontal lines: monthly averages. Select a month to see its coverage.' : 'Hover, tap, or use arrow keys to select a date. Gaps are not filled.'}
             {range !== '6M' && !points.some(point => point.baseline != null) ? ' Personal reference building: seven earlier readings within 14 days are needed.' : ''}</p>
           {metric.key === 'rhr' && methods.size > 1 && <p className={styles.note}>This period includes different device RHR calculation methods. Its average combines the recorded estimates; select a date to see its method.</p>}
-          {chosenPoint?.method && <p className={styles.note}>Selected RHR method: {chosenPoint.method === 'WITH_SLEEP' ? 'includes sleep data' : chosenPoint.method === 'ONLY_WITH_AWAKE_DATA' ? 'awake data only' : chosenPoint.method}.</p>}
+          {chosenPoint?.method && <p className={styles.note}>Selected RHR method: {chosenPoint.method === 'ASLEEP_TIME_WEIGHTED_V1' ? 'time-weighted heart rate during asleep stages; saved once per main sleep' : chosenPoint.method === 'WITH_SLEEP' ? 'includes sleep data' : chosenPoint.method === 'ONLY_WITH_AWAKE_DATA' ? 'awake data only' : chosenPoint.method}.</p>}
           {chosenPoint?.estimated && <p className={styles.note}>The device marked this reading as estimated.</p>}
           <section className={healthStyles.meaning}><h2>HOW TO READ THIS</h2><p>{metric.meaning}</p>
             <p>Personal reference lines describe your prior readings; they are not medical limits.</p></section>

@@ -241,6 +241,18 @@ async def callback(request: Request, code: str = "", error: str = "", state: str
         failure = "health_account_not_linked" if identity_resp.status_code == 400 else "health_access_failed"
         return RedirectResponse(f"{FRONTEND_URL}/connect?error={failure}")
 
+    try:
+        identity = identity_resp.json()
+    except ValueError:
+        identity = None
+    health_user_id = identity.get('healthUserId') if isinstance(identity, dict) else None
+    if not isinstance(health_user_id, str) or not health_user_id.strip():
+        return RedirectResponse(f"{FRONTEND_URL}/connect?error=health_access_failed")
+    # Establish the permanent database mapping before declaring login complete.
+    # Email is profile information; access tokens are temporary credentials.
+    from google_health_client import GoogleHealthClient
+    health_client = GoogleHealthClient(tokens['access_token'], cache=True, account_id=health_user_id)
+
     # Fetch user profile
     async with httpx.AsyncClient() as client:
         user_resp = await client.get(
@@ -250,13 +262,18 @@ async def callback(request: Request, code: str = "", error: str = "", state: str
     user_info = user_resp.json() if user_resp.status_code == 200 else {}
 
     session_data = {
-        "health_user_id": identity_resp.json().get("healthUserId"),
+        "health_user_id": health_user_id,
         "access_token":  tokens["access_token"],
         "refresh_token": tokens.get("refresh_token", ""),
         "expires_at":    time.time() + tokens.get("expires_in", 3600),
         "user_email":    user_info.get("email", ""),
         "user_name":     user_info.get("name", ""),
     }
+    if health_client.database is not None:
+        account = health_client.database.ensure_account(health_user_id, email=session_data['user_email'], name=session_data['user_name'])
+        health_client.database.save_credentials(account['provider_account_id'], session_data)
+        with health_client.database.connect() as conn:
+            conn.execute("UPDATE provider_accounts SET status='active',disconnected_at=NULL WHERE provider_account_id=?", (account['provider_account_id'],))
 
     response = RedirectResponse(f"{FRONTEND_URL}/?connected=true")
     response.delete_cookie(OAUTH_COOKIE_NAME)
@@ -288,6 +305,16 @@ async def status(request: Request, response: Response):
 @router.post("/disconnect")
 async def disconnect(request: Request):
     """Clear session cookie — user returns to mock mode."""
+    session = get_session(request) or {}
+    if session.get('health_user_id'):
+        from health_database import database
+        db = database()
+        account = db.account(session['health_user_id'])
+        if account:
+            with db.connect() as conn:
+                conn.execute("UPDATE provider_accounts SET status='disconnected',disconnected_at=? WHERE provider_account_id=?", (int(time.time()), account['provider_account_id']))
+                conn.execute('DELETE FROM provider_credentials WHERE provider_account_id=?', (account['provider_account_id'],))
+                conn.execute('UPDATE scheduled_jobs SET enabled=0 WHERE provider_account_id=?', (account['provider_account_id'],))
     response = JSONResponse({"disconnected": True})
     clear_session(response)
     return response

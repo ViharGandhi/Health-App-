@@ -1,0 +1,1226 @@
+{
+  "audited_date": "2026-10-15",
+  "scope": "Current source contracts; optional/demo/legacy fields may be absent from connected displays. See DATABASE_DATA_INVENTORY.md.",
+  "backend_models": {
+    "AuthStatus": {
+      "connected": {
+        "type": "bool",
+        "default_expression": null
+      },
+      "user_email": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "user_name": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "is_mock": {
+        "type": "bool",
+        "default_expression": "True"
+      }
+    },
+    "ZoneMinutes": {
+      "zone1": {
+        "type": "float",
+        "default_expression": "Field(0.0, description='Minutes in Zone 1 (50-60% MaxHR)')"
+      },
+      "zone2": {
+        "type": "float",
+        "default_expression": "Field(0.0, description='Minutes in Zone 2 (60-70% MaxHR)')"
+      },
+      "zone3": {
+        "type": "float",
+        "default_expression": "Field(0.0, description='Minutes in Zone 3 (70-80% MaxHR)')"
+      },
+      "zone4": {
+        "type": "float",
+        "default_expression": "Field(0.0, description='Minutes in Zone 4 (80-90% MaxHR)')"
+      },
+      "zone5": {
+        "type": "float",
+        "default_expression": "Field(0.0, description='Minutes in Zone 5 (at least 90% MaxHR)')"
+      }
+    },
+    "WorkoutDetail": {
+      "activity_name": {
+        "type": "str",
+        "default_expression": null
+      },
+      "name": {
+        "type": "str",
+        "default_expression": null
+      },
+      "exercise_type": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "start": {
+        "type": "datetime",
+        "default_expression": null
+      },
+      "end": {
+        "type": "datetime",
+        "default_expression": null
+      },
+      "duration_min": {
+        "type": "float",
+        "default_expression": null
+      },
+      "strain": {
+        "type": "float",
+        "default_expression": "Field(description='Cardio strain on the 0–21 scale')"
+      },
+      "load": {
+        "type": "float",
+        "default_expression": null
+      },
+      "avg_hr": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "max_hr": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "zone_minutes": {
+        "type": "ZoneMinutes",
+        "default_expression": null
+      }
+    },
+    "StrainResponse": {
+      "date": {
+        "type": "str",
+        "default_expression": null
+      },
+      "mode": {
+        "type": "Literal['connected', 'demo']",
+        "default_expression": null
+      },
+      "day_window": {
+        "type": "dict",
+        "default_expression": null
+      },
+      "strain": {
+        "type": "Optional[float]",
+        "default_expression": null
+      },
+      "label": {
+        "type": "Optional[str]",
+        "default_expression": null
+      },
+      "load": {
+        "type": "Optional[float]",
+        "default_expression": null
+      },
+      "coverage": {
+        "type": "float",
+        "default_expression": null
+      },
+      "low_coverage": {
+        "type": "bool",
+        "default_expression": null
+      },
+      "calibrating": {
+        "type": "bool",
+        "default_expression": null
+      },
+      "age_missing": {
+        "type": "bool",
+        "default_expression": null
+      },
+      "params": {
+        "type": "dict",
+        "default_expression": null
+      },
+      "analytics": {
+        "type": "dict",
+        "default_expression": null
+      },
+      "suggested_workouts": {
+        "type": "List[dict]",
+        "default_expression": "[]"
+      },
+      "activity_zone_minutes": {
+        "type": "Optional[ZoneMinutes]",
+        "default_expression": "None"
+      },
+      "sample_count": {
+        "type": "int",
+        "default_expression": "0"
+      },
+      "counted_minutes": {
+        "type": "float",
+        "default_expression": "0"
+      },
+      "score_21": {
+        "type": "Optional[float]",
+        "default_expression": "Field(description='Deprecated alias for strain')"
+      },
+      "score_100": {
+        "type": "Optional[float]",
+        "default_expression": "Field(description='Deprecated: new absolute strain / 21 × 100; not capacity normalized')"
+      },
+      "workout_strain": {
+        "type": "Optional[float]",
+        "default_expression": "Field(description='Deprecated name for summed workout TRIMP load, not additive scores')"
+      },
+      "incidental_strain": {
+        "type": "Optional[float]",
+        "default_expression": "Field(description='Deprecated name for non-workout TRIMP load')"
+      },
+      "zone_minutes": {
+        "type": "Optional[ZoneMinutes]",
+        "default_expression": null
+      },
+      "workouts": {
+        "type": "List[WorkoutDetail]",
+        "default_expression": "[]"
+      },
+      "max_hr": {
+        "type": "Optional[float]",
+        "default_expression": "Field(description='Observed maximum cleaned HR; physiological HRmax is params.hr_max')"
+      },
+      "avg_hr": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "age_used": {
+        "type": "Optional[int]",
+        "default_expression": "None"
+      },
+      "age_is_default": {
+        "type": "bool",
+        "default_expression": "False"
+      },
+      "is_calibrating": {
+        "type": "bool",
+        "default_expression": "False"
+      },
+      "is_mock": {
+        "type": "bool",
+        "default_expression": "True"
+      }
+    },
+    "RecoveryResponse": {
+      "estimator": {
+        "type": "str",
+        "default_expression": "'legacy_prototype'"
+      },
+      "rejected_readings": {
+        "type": "Dict[str, int]",
+        "default_expression": "Field(default_factory=dict)"
+      },
+      "data_quality_flag": {
+        "type": "bool",
+        "default_expression": "False"
+      },
+      "score": {
+        "type": "Optional[float]",
+        "default_expression": "Field(description='Demo score or connected estimated percent; null when confidence is low or reference is insufficient')"
+      },
+      "status": {
+        "type": "str",
+        "default_expression": "Field(description='Demo: green/yellow/red; dashboard comparisons: signals/calibrating; connected Recovery: building_reference/ok')"
+      },
+      "z": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "percent": {
+        "type": "Optional[int]",
+        "default_expression": "None"
+      },
+      "zone": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "confidence": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "estimated": {
+        "type": "Optional[bool]",
+        "default_expression": "None"
+      },
+      "components": {
+        "type": "Optional[Dict[str, Optional[float]]]",
+        "default_expression": "None"
+      },
+      "sleep_context": {
+        "type": "Optional[Dict[str, Optional[float]]]",
+        "default_expression": "None"
+      },
+      "baseline_days": {
+        "type": "Optional[int]",
+        "default_expression": "None"
+      },
+      "recent_nights": {
+        "type": "Optional[int]",
+        "default_expression": "None"
+      },
+      "rhr_baseline_days": {
+        "type": "Optional[int]",
+        "default_expression": "None"
+      },
+      "illness_flag": {
+        "type": "Optional[bool]",
+        "default_expression": "None"
+      },
+      "status_reason": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "hrv_component": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "rhr_component": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "sleep_component": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "strain_component": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "acr_penalty": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "today_hrv": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "today_rhr": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "hrv_baseline": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "rhr_baseline": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "hrv_reference_count": {
+        "type": "int",
+        "default_expression": "0"
+      },
+      "rhr_reference_count": {
+        "type": "int",
+        "default_expression": "0"
+      },
+      "rhr_method": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "sleep_hours": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "sleep_efficiency_pct": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "training_recommendation": {
+        "type": "str",
+        "default_expression": null
+      },
+      "is_calibrating": {
+        "type": "bool",
+        "default_expression": "False"
+      },
+      "is_mock": {
+        "type": "bool",
+        "default_expression": "True"
+      }
+    },
+    "SleepStages": {
+      "deep_minutes": {
+        "type": "float",
+        "default_expression": null
+      },
+      "rem_minutes": {
+        "type": "float",
+        "default_expression": null
+      },
+      "core_minutes": {
+        "type": "float",
+        "default_expression": null
+      },
+      "awake_minutes": {
+        "type": "float",
+        "default_expression": null
+      },
+      "total_minutes": {
+        "type": "float",
+        "default_expression": null
+      }
+    },
+    "SleepResponse": {
+      "estimator": {
+        "type": "str",
+        "default_expression": "'legacy_composite_sleep'"
+      },
+      "components_available": {
+        "type": "Dict[str, bool]",
+        "default_expression": "Field(default_factory=dict)"
+      },
+      "defaulted_components": {
+        "type": "Dict[str, float]",
+        "default_expression": "Field(default_factory=dict)"
+      },
+      "component_coverage": {
+        "type": "float",
+        "default_expression": "0.0"
+      },
+      "partial": {
+        "type": "bool",
+        "default_expression": "False"
+      },
+      "status_reason": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "score": {
+        "type": "Optional[float]",
+        "default_expression": "Field(description='Sleep score 0–100; absent without a sleep-need estimate')"
+      },
+      "sleep_need_hours": {
+        "type": "Optional[float]",
+        "default_expression": null
+      },
+      "sleep_need": {
+        "type": "Optional[Dict[str, float]]",
+        "default_expression": "None"
+      },
+      "tonight_sleep_need": {
+        "type": "Optional[Dict[str, float]]",
+        "default_expression": "None"
+      },
+      "total_sleep_hours": {
+        "type": "float",
+        "default_expression": null
+      },
+      "sleep_debt_hours": {
+        "type": "Optional[float]",
+        "default_expression": null
+      },
+      "efficiency_pct": {
+        "type": "Optional[float]",
+        "default_expression": null
+      },
+      "stages": {
+        "type": "SleepStages",
+        "default_expression": null
+      },
+      "sleeping_hrv": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "deep_sleep_hrv": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "sleeping_hr": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "hrv_baseline": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "rhr_baseline": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "hrv_baseline_nights": {
+        "type": "int",
+        "default_expression": "0"
+      },
+      "rhr_baseline_nights": {
+        "type": "int",
+        "default_expression": "0"
+      },
+      "baseline_window_days": {
+        "type": "int",
+        "default_expression": "60"
+      },
+      "baseline_start": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "baseline_end": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "consistency_minutes": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "average_bed_time": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "average_wake_time": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "sleep_start": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "sleep_end": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "duration_score": {
+        "type": "Optional[float]",
+        "default_expression": null
+      },
+      "stage_score": {
+        "type": "Optional[float]",
+        "default_expression": null
+      },
+      "restfulness_score": {
+        "type": "float",
+        "default_expression": null
+      },
+      "hr_dip_score": {
+        "type": "float",
+        "default_expression": null
+      },
+      "waking_hr": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "waking_hr_date": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "waking_hr_sample_count": {
+        "type": "int",
+        "default_expression": "0"
+      },
+      "hr_dip_pct": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "is_mock": {
+        "type": "bool",
+        "default_expression": "True"
+      }
+    },
+    "SleepTrendDay": {
+      "date": {
+        "type": "str",
+        "default_expression": null
+      },
+      "value": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "bed_time": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "wake_time": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "asleep_hours": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "in_bed_hours": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "bed_variability_minutes": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "wake_variability_minutes": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      }
+    },
+    "SleepTrendResponse": {
+      "estimator": {
+        "type": "str",
+        "default_expression": "'pooled_sleep_efficiency'"
+      },
+      "is_mock": {
+        "type": "bool",
+        "default_expression": null
+      },
+      "timeframe": {
+        "type": "str",
+        "default_expression": null
+      },
+      "range_start": {
+        "type": "str",
+        "default_expression": null
+      },
+      "range_end": {
+        "type": "str",
+        "default_expression": null
+      },
+      "average_value": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "recorded_nights": {
+        "type": "int",
+        "default_expression": null
+      },
+      "scored_days": {
+        "type": "int",
+        "default_expression": null
+      },
+      "days": {
+        "type": "List[SleepTrendDay]",
+        "default_expression": null
+      }
+    },
+    "SleepConsistencyScorePoint": {
+      "start_date": {
+        "type": "str",
+        "default_expression": null
+      },
+      "end_date": {
+        "type": "str",
+        "default_expression": null
+      },
+      "score": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "label": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "scored_days": {
+        "type": "int",
+        "default_expression": "0"
+      },
+      "drift_minutes": {
+        "type": "Optional[float]",
+        "default_expression": "Field(default=None, description='Weighted mean of available onset/wake drifts; weekly daily points only')"
+      }
+    },
+    "SleepConsistencyScoreResponse": {
+      "estimator": {
+        "type": "str",
+        "default_expression": "'four_night_clock_consistency'"
+      },
+      "is_mock": {
+        "type": "bool",
+        "default_expression": null
+      },
+      "timeframe": {
+        "type": "str",
+        "default_expression": null
+      },
+      "range_start": {
+        "type": "str",
+        "default_expression": null
+      },
+      "range_end": {
+        "type": "str",
+        "default_expression": null
+      },
+      "latest_sleep_date": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "latest_score": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "latest_label": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "latest_drift_minutes": {
+        "type": "Optional[float]",
+        "default_expression": "Field(default=None, description='Weighted mean drift, not the inverse of the nonlinear score')"
+      },
+      "average_score": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "average_label": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "scored_days": {
+        "type": "int",
+        "default_expression": null
+      },
+      "total_days": {
+        "type": "int",
+        "default_expression": null
+      },
+      "previous_average_score": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "change_percentage_points": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "band_counts": {
+        "type": "Dict[str, int]",
+        "default_expression": "Field(default_factory=dict)"
+      },
+      "y_axis_min": {
+        "type": "int",
+        "default_expression": "0"
+      },
+      "y_axis_max": {
+        "type": "int",
+        "default_expression": "100"
+      },
+      "guide_lines": {
+        "type": "List[int]",
+        "default_expression": "Field(default_factory=lambda: [90, 75, 50])"
+      },
+      "points": {
+        "type": "List[SleepConsistencyScorePoint]",
+        "default_expression": null
+      }
+    },
+    "SleepStressNightResponse": {
+      "withheld_reason": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      },
+      "anchor_verification": {
+        "type": "str",
+        "default_expression": "'synthetic_or_caller_asserted'"
+      },
+      "main_sleep_explicit": {
+        "type": "bool",
+        "default_expression": "True"
+      },
+      "physical_duration_minutes": {
+        "type": "float",
+        "default_expression": "0.0"
+      },
+      "alignment_verified": {
+        "type": "bool",
+        "default_expression": "True"
+      },
+      "sleep_id": {
+        "type": "str",
+        "default_expression": null
+      },
+      "night_date": {
+        "type": "str",
+        "default_expression": null
+      },
+      "main_sleep": {
+        "type": "bool",
+        "default_expression": null
+      },
+      "computed_at": {
+        "type": "str",
+        "default_expression": null
+      },
+      "algo_version": {
+        "type": "str",
+        "default_expression": null
+      },
+      "stressed_minutes": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "stressed_hours": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "stress_pct": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "valid_minutes": {
+        "type": "float",
+        "default_expression": null
+      },
+      "asleep_minutes": {
+        "type": "float",
+        "default_expression": null
+      },
+      "coverage": {
+        "type": "float",
+        "default_expression": null
+      },
+      "confidence": {
+        "type": "str",
+        "default_expression": null
+      },
+      "status": {
+        "type": "str",
+        "default_expression": null
+      },
+      "nights_available": {
+        "type": "int",
+        "default_expression": null
+      },
+      "baseline": {
+        "type": "dict",
+        "default_expression": null
+      },
+      "peak_level": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "mean_level": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "hrv_only_minutes": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "episodes": {
+        "type": "list[dict]",
+        "default_expression": null
+      },
+      "type_fallback": {
+        "type": "bool",
+        "default_expression": null
+      },
+      "config_snapshot": {
+        "type": "dict",
+        "default_expression": null
+      }
+    },
+    "SleepStressHistoryResponse": {
+      "estimator": {
+        "type": "str",
+        "default_expression": "'windowed_sleep_stress'"
+      },
+      "is_mock": {
+        "type": "bool",
+        "default_expression": null
+      },
+      "range_start": {
+        "type": "str",
+        "default_expression": null
+      },
+      "range_end": {
+        "type": "str",
+        "default_expression": null
+      },
+      "nights": {
+        "type": "List[SleepStressNightResponse]",
+        "default_expression": null
+      },
+      "totals": {
+        "type": "List[dict]",
+        "default_expression": null
+      }
+    },
+    "DashboardResponse": {
+      "recovery": {
+        "type": "RecoveryResponse",
+        "default_expression": null
+      },
+      "sleep": {
+        "type": "SleepResponse",
+        "default_expression": null
+      },
+      "strain": {
+        "type": "StrainResponse",
+        "default_expression": null
+      },
+      "date": {
+        "type": "str",
+        "default_expression": null
+      },
+      "is_mock": {
+        "type": "bool",
+        "default_expression": "True"
+      }
+    },
+    "HealthPoint": {
+      "date": {
+        "type": "str",
+        "default_expression": null
+      },
+      "value": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "baseline": {
+        "type": "Optional[float]",
+        "default_expression": "None"
+      },
+      "estimated": {
+        "type": "Optional[bool]",
+        "default_expression": "None"
+      },
+      "method": {
+        "type": "Optional[str]",
+        "default_expression": "None"
+      }
+    },
+    "HeartRatePoint": {
+      "time": {
+        "type": "str",
+        "default_expression": null
+      },
+      "value": {
+        "type": "float",
+        "default_expression": null
+      }
+    },
+    "LatestHeartRate": {
+      "sample_time": {
+        "type": "str",
+        "default_expression": null
+      },
+      "value": {
+        "type": "float",
+        "default_expression": null
+      }
+    },
+    "HealthHeartRateResponse": {
+      "date": {
+        "type": "str",
+        "default_expression": null
+      },
+      "is_mock": {
+        "type": "bool",
+        "default_expression": null
+      },
+      "heart_rate": {
+        "type": "List[HeartRatePoint]",
+        "default_expression": null
+      },
+      "latest_heart_rate": {
+        "type": "Optional[LatestHeartRate]",
+        "default_expression": "None"
+      }
+    },
+    "HealthResponse": {
+      "date": {
+        "type": "str",
+        "default_expression": null
+      },
+      "timeframe": {
+        "type": "str",
+        "default_expression": null
+      },
+      "range_start": {
+        "type": "str",
+        "default_expression": null
+      },
+      "range_end": {
+        "type": "str",
+        "default_expression": null
+      },
+      "previous_range_start": {
+        "type": "str",
+        "default_expression": null
+      },
+      "previous_range_end": {
+        "type": "str",
+        "default_expression": null
+      },
+      "averages": {
+        "type": "dict[str, Optional[float]]",
+        "default_expression": null
+      },
+      "previous_averages": {
+        "type": "dict[str, Optional[float]]",
+        "default_expression": null
+      },
+      "is_mock": {
+        "type": "bool",
+        "default_expression": null
+      },
+      "metrics": {
+        "type": "dict[str, List[HealthPoint]]",
+        "default_expression": null
+      },
+      "heart_rate": {
+        "type": "List[HeartRatePoint]",
+        "default_expression": null
+      },
+      "latest_heart_rate": {
+        "type": "Optional[LatestHeartRate]",
+        "default_expression": "None"
+      }
+    }
+  },
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/api/data/status",
+      "handler": "data_status",
+      "arguments": "request: Request, response: Response",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/data/refresh",
+      "handler": "refresh_data",
+      "arguments": "request: Request, response: Response",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/data/sync",
+      "handler": "sync_data",
+      "arguments": "request: Request, response: Response, session: str, force: bool=False, home_visit: bool=False",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "handler": "root",
+      "arguments": "",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/dashboard",
+      "handler": "dashboard",
+      "arguments": "request: Request, response: Response",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/recovery",
+      "handler": "recovery_endpoint",
+      "arguments": "request: Request, response: Response, demo: Literal['legacy', 'estimate']='legacy'",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/recovery/analytics",
+      "handler": "recovery_analytics_endpoint",
+      "arguments": "request: Request, response: Response, timeframe: Literal['W', 'M', '6M']='W', end_date: date | None=None, demo: Literal['legacy', 'estimate']='estimate', sample: bool=False",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/sleep",
+      "handler": "sleep_endpoint",
+      "arguments": "request: Request, response: Response",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/health/awake-heart-rate",
+      "handler": "awake_heart_rate_endpoint",
+      "arguments": "request: Request, response: Response, day: date | None=None",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/sleep/awake-heart-rate/recalculate",
+      "handler": "recalculate_awake_heart_rate",
+      "arguments": "request: Request, response: Response, sleep_date: date | None=None",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/sleep/need",
+      "handler": "sleep_need_endpoint",
+      "arguments": "request: Request, response: Response",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/sleep/analytics",
+      "handler": "sleep_analytics_endpoint",
+      "arguments": "request: Request, response: Response, timeframe: Literal['W', 'M', '6M']='W', demo: bool=False",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/home/metrics",
+      "handler": "home_metrics_endpoint",
+      "arguments": "request: Request, response: Response, demo: bool=False",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/stress",
+      "handler": "stress_endpoint",
+      "arguments": "request: Request, response: Response, demo: bool=False, days: Literal['7', '28']='7'",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/activity",
+      "handler": "activity_endpoint",
+      "arguments": "request: Request, response: Response, id: str, demo: bool=False, source: Literal['home', 'strain']='home'",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/sleep/heart-rate",
+      "handler": "sleep_heart_rate_endpoint",
+      "arguments": "request: Request, response: Response, night_date: date | None=None, sleep_id: str | None=None",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/sleep/stages/typical-ranges",
+      "handler": "sleep_stage_ranges_endpoint",
+      "arguments": "request: Request, response: Response, days: int=10",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/sleep/stress",
+      "handler": "sleep_stress_endpoint",
+      "arguments": "request: Request, response: Response, days: int=7, timeframe: Literal['W', 'M', '6M'] | None=None",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/strain/analytics",
+      "handler": "strain_analytics_endpoint",
+      "arguments": "request: Request, response: Response, timeframe: Literal['W', 'M', '6M']='W', metric: Literal['strain', 'zones_1_3', 'zones_4_5', 'strength', 'steps']='strain', end_date: Optional[date]=None, demo: bool=False",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/strain",
+      "handler": "strain_endpoint",
+      "arguments": "request: Request, response: Response, date: Optional[date]=None, demo: bool=False",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/health/heart-rate",
+      "handler": "health_heart_rate_endpoint",
+      "arguments": "request: Request, response: Response",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "handler": "health_endpoint",
+      "arguments": "request: Request, response: Response, timeframe: Literal['W', 'M', '6M', '1Y']='W'",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/sleep/consistency",
+      "handler": "sleep_consistency_endpoint",
+      "arguments": "request: Request, response: Response, timeframe: Literal['W', 'M', '6M', '1Y']='W'",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/sleep/consistency/score",
+      "handler": "sleep_consistency_score_endpoint",
+      "arguments": "request: Request, response: Response, timeframe: Literal['W', 'M', '6M', 'Y']='W'",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/api/sleep/efficiency",
+      "handler": "sleep_efficiency_endpoint",
+      "arguments": "request: Request, response: Response, timeframe: Literal['W', 'M', '6M', '1Y']='W'",
+      "source": "backend/main.py"
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "handler": "login",
+      "arguments": "request: Request",
+      "source": "backend/auth.py"
+    },
+    {
+      "method": "GET",
+      "path": "/callback",
+      "handler": "callback",
+      "arguments": "request: Request, code: str='', error: str='', state: str=''",
+      "source": "backend/auth.py"
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "handler": "status",
+      "arguments": "request: Request, response: Response",
+      "source": "backend/auth.py"
+    },
+    {
+      "method": "POST",
+      "path": "/disconnect",
+      "handler": "disconnect",
+      "arguments": "request: Request",
+      "source": "backend/auth.py"
+    },
+    {
+      "method": "POST",
+      "path": "/api/webhooks/google-health/sleep-stages",
+      "handler": "sleep_stage_webhook",
+      "arguments": "request: Request",
+      "source": "backend/sleep_stage_webhooks.py"
+    }
+  ],
+  "frontend_contracts": {
+    "frontend/lib/types.ts": {
+      "ZoneMinutes": "export interface ZoneMinutes {\n  zone1: number;\n  zone2: number;\n  zone3: number;\n  zone4: number;\n  zone5: number;\n}",
+      "WorkoutDetail": "export interface WorkoutDetail {\n  activity_name: string;\n  name: string;\n  exercise_type: string | null;\n  start: string;\n  end: string;\n  duration_min: number;\n  strain: number;\n  load: number;\n  avg_hr: number | null;\n  max_hr: number | null;\n  zone_minutes: ZoneMinutes;\n}",
+      "ActivitySummary": "export interface ActivitySummary {\n  id: string; activity_name: string; exercise_type: string | null;\n  start: string; end: string; duration_min: number;\n  strain: number | null; avg_hr: number | null; max_hr: number | null;\n}",
+      "HomeMetricRow": "export interface HomeMetricRow {\n  key: string; title: string; value: number | null; previous: number | null; unit: string; href: string;\n}",
+      "HomeMetrics": "export interface HomeMetrics {\n  is_mock: boolean; date: string; strain: StrainData; activities: ActivitySummary[]; rows: HomeMetricRow[];\n}",
+      "ActivityData": "export interface ActivityData extends ActivitySummary {\n  date: string; is_mock: boolean; steps: number | null; calories: number | null;\n  averages: Record<'strain' | 'avg_hr' | 'max_hr' | 'steps' | 'calories', number | null>;\n  comparison_count: number; coverage: number; unrecorded_minutes: number;\n  zones: { zone: number; minutes: number | null; percent: number | null; low: number | null; high: number | null; typical: { low: number; high: number } | null }[];\n  heart_rate: { timestamp: string; bpm: number }[];\n  muscular_split: { cardio: number; muscular: number } | null; route_sample: boolean;\n}",
+      "StrainData": "export interface StrainData {\n  date: string;\n  mode: 'demo' | 'connected';\n  day_window: { start: string; end: string; source: 'local_midnight' };\n  strain: number | null;\n  label: 'Light' | 'Moderate' | 'High' | 'All Out' | null;\n  load: number | null;\n  coverage: number;\n  low_coverage: boolean;\n  calibrating: boolean;\n  age_missing: boolean;\n  params: { hr_max: number | null; hr_rest: number; hr_rest_source: 'recovery' | 'default'; strain_l: number; sex: 'm' | 'f'; sex_source: 'profile' | 'default' };\n  analytics: { avg_strain_7d: number | null; avg_strain_28d: number | null; acute_chronic_ratio: number | null; strain_target: { low: number; high: number; status: 'under' | 'on' | 'over' } | null };\n  suggested_workouts: { start: string; end: string; avg_hr: number }[];\n  score_21: number | null;\n  score_100: number | null;\n  workout_strain: number | null;\n  incidental_strain: number | null;\n  zone_minutes: ZoneMinutes | null;\n  workouts: WorkoutDetail[];\n  max_hr: number | null;\n  avg_hr: number | null;\n  age_used: number | null;\n  age_is_default: boolean;\n  is_calibrating: boolean;\n  is_mock: boolean;\n}",
+      "RecoveryData": "export interface RecoveryData {\n  score: number | null;\n  status: 'green' | 'yellow' | 'red' | 'signals' | 'calibrating' | 'building_reference' | 'ok';\n  z: number | null;\n  percent: number | null;\n  zone: 'below_normal' | 'normal' | 'above_normal' | null;\n  confidence: 'low' | 'medium' | 'high' | null;\n  estimated: boolean | null;\n  components: { z_hrv: number | null; z_rhr: number | null; sleep_adj: number } | null;\n  sleep_context: { sleep_min: number | null; need_min: number | null; performance: number | null } | null;\n  baseline_days: number | null;\n  recent_nights: number | null;\n  rhr_baseline_days: number | null;\n  illness_flag: boolean | null;\n  status_reason: string | null;\n  hrv_component: number | null;\n  rhr_component: number | null;\n  sleep_component: number | null;\n  strain_component: number | null;\n  acr_penalty: number | null;\n  today_hrv: number | null;\n  today_rhr: number | null;\n  hrv_baseline: number | null;\n  rhr_baseline: number | null;\n  hrv_reference_count: number;\n  rhr_reference_count: number;\n  rhr_method: string | null;\n  sleep_hours: number | null;\n  sleep_efficiency_pct: number | null;\n  training_recommendation: string;\n  is_calibrating: boolean;\n  is_mock: boolean;\n}",
+      "StrainMetric": "export type StrainMetric = 'strain' | 'zones_1_3' | 'zones_4_5' | 'strength' | 'steps';",
+      "StrainRange": "export type StrainRange = 'W' | 'M' | '6M';",
+      "StrainDay": "export interface StrainDay {\n  date: string;\n  score: number | null;\n  load: number | null;\n  coverage: number;\n  low_coverage: boolean;\n  zones: ZoneMinutes | null;\n  strength_minutes: number;\n  strength_activities: Record<string, number>;\n  steps: number | null;\n  activities: { id: string; exercise_type: string | null; name: string; start: string; end: string; minutes: number; strain: number | null }[];\n}",
+      "StrainAnalytics": "export interface StrainAnalytics {\n  date: string;\n  today: string;\n  timeframe: StrainRange;\n  range_start: string;\n  range_end: string;\n  previous_range_start: string;\n  previous_range_end: string;\n  is_mock: boolean;\n  current: StrainData;\n  days: StrainDay[];\n  previous_days: StrainDay[];\n  prior_30_day_averages: Record<StrainMetric, number | null>;\n}",
+      "SleepStages": "export interface SleepStages {\n  deep_minutes: number;\n  rem_minutes: number;\n  core_minutes: number;\n  awake_minutes: number;\n  total_minutes: number;\n}",
+      "SleepData": "export interface SleepData {\n  score: number | null;\n  sleep_need_hours: number | null;\n  total_sleep_hours: number;\n  sleep_debt_hours: number | null;\n  efficiency_pct: number | null;\n  stages: SleepStages;\n  sleeping_hrv: number | null;\n  deep_sleep_hrv: number | null;\n  sleeping_hr: number | null;\n  consistency_minutes: number | null;\n  average_bed_time?: string | null;\n  average_wake_time?: string | null;\n  sleep_start: string | null;\n  sleep_end: string | null;\n  duration_score: number | null;\n  stage_score: number | null;\n  restfulness_score: number;\n  hr_dip_score: number;\n  waking_hr?: number | null;\n  waking_hr_date?: string | null;\n  waking_hr_sample_count?: number;\n  hr_dip_pct?: number | null;\n  is_mock: boolean;\n}",
+      "DashboardData": "export interface DashboardData {\n  recovery: RecoveryData;\n  sleep: SleepData;\n  strain: StrainData;\n  date: string;\n  is_mock: boolean;\n}",
+      "SleepTrendDay": "export interface SleepTrendDay {\n  date: string;\n  value: number | null;\n  bed_time: string | null;\n  wake_time: string | null;\n  asleep_hours: number | null;\n  in_bed_hours: number | null;\n  bed_variability_minutes: number | null;\n  wake_variability_minutes: number | null;\n}",
+      "RecoveryMetric": "export type RecoveryMetric = 'recovery' | 'hrv' | 'rhr' | 'respiratory_rate' | 'sleep_performance';",
+      "RecoveryRange": "export type RecoveryRange = 'W' | 'M' | '6M';",
+      "RecoveryDemo": "export type RecoveryDemo = 'estimate' | 'legacy';",
+      "RecoveryDay": "export interface RecoveryDay {\n  date: string;\n  recovery: number | null;\n  zone: RecoveryData['zone'];\n  confidence: RecoveryData['confidence'];\n  sleep_context_missing: boolean;\n  hrv: number | null;\n  rhr: number | null;\n  respiratory_rate: number | null;\n  sleep_performance: number | null;\n}",
+      "RecoveryAnalytics": "export interface RecoveryAnalytics {\n  is_mock: boolean;\n  demo_mode: RecoveryDemo | null;\n  timeframe: RecoveryRange;\n  range_start: string;\n  range_end: string;\n  previous_range_end: string;\n  days: RecoveryDay[];\n  averages: Record<RecoveryMetric, number | null>;\n  previous_averages: Record<RecoveryMetric, number | null>;\n  prior_30_day_averages: Record<Exclude<RecoveryMetric, 'recovery'>, number | null>;\n  typical_ranges: Record<string, { low: number; high: number; days: number } | null>;\n  monthly_buckets: { start_date: string; end_date: string; averages: Record<RecoveryMetric, number | null>; counts: Record<RecoveryMetric, number> }[];\n  current: RecoveryData;\n  sleep: { date: string; performance: number | null; asleep_minutes: number | null; bed_time: string; wake_time: string } | null;\n  health_monitor: { within: number; assessed: number; expected: number };\n  notes: string;\n}",
+      "SleepAnalyticsMetric": "export type SleepAnalyticsMetric = 'performance' | 'hours_percentage' | 'asleep_minutes' | 'need_minutes' | 'restorative' | 'consistency' | 'period_minutes' | 'efficiency';",
+      "SleepAnalyticsDay": "export interface SleepAnalyticsDay {\n  date: string;\n  bucket_start?: string;\n  status: string;\n  sleep_id?: string;\n  bed_time?: string;\n  wake_time?: string;\n  onset_time?: string;\n  sleep_wake_time?: string;\n  period_minutes?: number | null;\n  asleep_minutes?: number | null;\n  awake_minutes?: number | null;\n  deep_minutes?: number | null;\n  rem_minutes?: number | null;\n  restorative?: number | null;\n  consistency?: number | null;\n  efficiency?: number | null;\n  performance?: number | null;\n  need_minutes?: number | null;\n  hours_percentage?: number | null;\n  wake_events?: number | null;\n  need_components?: { baseline: number; strain: number; debt: number; nap_credit: number } | null;\n  segments?: { stage: SleepStage; start: string; end: string }[];\n}",
+      "SleepAnalytics": "export interface SleepAnalytics {\n  is_mock: boolean;\n  timeframe: 'W' | 'M' | '6M';\n  range_start: string;\n  range_end: string;\n  days: SleepAnalyticsDay[];\n  averages: Record<SleepAnalyticsMetric, number | null>;\n  previous_averages: Record<SleepAnalyticsMetric, number | null>;\n  prior_30_averages: Record<SleepAnalyticsMetric, number | null>;\n  notes: { period: string; need: string; timing: string };\n}",
+      "SleepTrend": "export interface SleepTrend {\n  is_mock: boolean;\n  timeframe: 'W' | '6M' | '1Y';\n  range_start: string;\n  range_end: string;\n  average_value: number | null;\n  recorded_nights: number;\n  scored_days: number;\n  days: SleepTrendDay[];\n}",
+      "SleepConsistencyScorePoint": "export interface SleepConsistencyScorePoint {\n  start_date: string;\n  end_date: string;\n  score: number | null;\n  label: string | null;\n  scored_days: number;\n  drift_minutes: number | null;\n}",
+      "SleepConsistencyScore": "export interface SleepConsistencyScore {\n  is_mock: boolean;\n  timeframe: 'W' | 'M' | '6M' | 'Y';\n  range_start: string;\n  range_end: string;\n  latest_sleep_date: string | null;\n  latest_score: number | null;\n  latest_label: string | null;\n  latest_drift_minutes: number | null;\n  average_score: number | null;\n  average_label: string | null;\n  scored_days: number;\n  total_days: number;\n  previous_average_score: number | null;\n  change_percentage_points: number | null;\n  band_counts: Record<'Optimal' | 'Good' | 'Fair' | 'Poor', number>;\n  y_axis_min: number;\n  y_axis_max: number;\n  guide_lines: number[];\n  points: SleepConsistencyScorePoint[];\n}",
+      "SleepStressNight": "export interface SleepStressNight {\n  alignment_verified?: boolean;\n  nights_available?: number;\n  config_snapshot?: { baseline_nights_min: number };\n  sleep_id: string;\n  night_date: string;\n  main_sleep: boolean;\n  stressed_minutes: number | null;\n  stress_pct: number | null;\n  valid_minutes: number;\n  confidence: 'high' | 'medium' | 'low';\n  status: string;\n}",
+      "SleepStressHistory": "export interface SleepStressHistory {\n  is_mock: boolean;\n  range_start: string;\n  range_end: string;\n  nights: SleepStressNight[];\n}",
+      "SleepStageRangeMetric": "export interface SleepStageRangeMetric {\n  minutes: number;\n  pct: number | null;\n  range: { low: number; high: number; center: number; spread: number; n: number } | null;\n  range_minutes: { low: number; high: number } | null;\n  status: 'below' | 'within' | 'above' | null;\n  delta_vs_center_pct: number | null;\n  source: 'personal' | 'population' | null;\n}",
+      "SleepStageRangeNight": "export interface SleepStageRangeNight {\n  sleep_id: string;\n  night_date: string;\n  status: string;\n  total_minutes?: number;\n  nights_used?: number;\n  nights_available?: number;\n  config_snapshot?: { min_nights: number };\n  stages: Partial<Record<'awake' | 'light' | 'deep' | 'rem' | 'restorative', SleepStageRangeMetric>>;\n}",
+      "SleepStageRangeHistory": "export interface SleepStageRangeHistory {\n  is_mock: boolean;\n  nights: SleepStageRangeNight[];\n}",
+      "SleepStage": "export type SleepStage = 'awake' | 'light' | 'deep' | 'rem';",
+      "SleepHeartRate": "export interface SleepHeartRate {\n  is_mock: boolean;\n  status: 'ok' | 'no_sleep' | 'no_readings';\n  sleep_id?: string;\n  night_date?: string;\n  start?: string;\n  end?: string;\n  start_local?: string;\n  end_local?: string;\n  samples: { timestamp: string; local_time: string; bpm: number }[];\n  stage_intervals: { stage: SleepStage; start: string; end: string }[];\n}",
+      "HealthPoint": "export interface HealthPoint {\n  date: string;\n  value: number | null;\n  baseline: number | null;\n  estimated: boolean | null;\n  method: string | null;\n}",
+      "HeartRatePoint": "export interface HeartRatePoint {\n  time: string;\n  value: number;\n}",
+      "LatestHeartRate": "export interface LatestHeartRate {\n  sample_time: string;\n  value: number;\n}",
+      "HealthHeartRateData": "export interface HealthHeartRateData {\n  date: string;\n  is_mock: boolean;\n  heart_rate: HeartRatePoint[];\n  latest_heart_rate: LatestHeartRate | null;\n}",
+      "HealthData": "export interface HealthData {\n  date: string;\n  timeframe: 'W' | 'M' | '6M' | '1Y';\n  range_start: string;\n  range_end: string;\n  previous_range_start: string;\n  previous_range_end: string;\n  averages: Record<string, number | null>;\n  previous_averages: Record<string, number | null>;\n  is_mock: boolean;\n  metrics: Record<string, HealthPoint[]>;\n  heart_rate: HeartRatePoint[];\n  latest_heart_rate: LatestHeartRate | null;\n}",
+      "AuthStatus": "export interface AuthStatus {\n  connected: boolean;\n  is_mock: boolean;\n  can_connect: boolean;\n  user_email: string | null;\n  user_name: string | null;\n}"
+    },
+    "frontend/lib/stress.ts": {
+      "StressLevel": "export type StressLevel = 'low' | 'medium' | 'high';",
+      "StressPoint": "export type StressPoint = { start: string; end: string; score: number | null; state: string; reason: 'exercise_recovery' | 'missing_hr' | 'baseline_building' | null; source: string; hr: number | null };",
+      "StressDay": "export type StressDay = {\n  date: string; start: string; end: string; calendar_end: string; points: StressPoint[];\n  overlays: { kind: 'sleep' | 'activity'; name: string; start: string; end: string }[];\n  average: number | null; minutes: Record<StressLevel, number>; unscored_minutes: number;\n  scored_minutes: number; elapsed_minutes: number; coverage: number;\n  latest_score: number | null; latest_level: StressLevel | null; latest_at: string | null;\n  stale: boolean; hrv_samples: number; awake_hrv_samples: number;\n  status: 'synthetic' | 'estimated' | 'baseline_building' | 'no_hr';\n  baseline_days: number; baseline_mode: string; baseline_leaks: boolean; low_confidence: boolean;\n  hrv_quality_verified: boolean; hrv_quality_rejected: number; sleep_hrv_enabled: boolean; night_context_enabled: boolean;\n  sleep_stress: number | null; non_activity_stress: number | null;\n};",
+      "StressData": "export type StressData = {\n  is_mock: boolean; validated: false; timezone: string; current: StressDay; days: StressDay[];\n  model: string; limitations: string; data_source: string;\n};"
+    }
+  }
+}

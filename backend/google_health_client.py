@@ -20,6 +20,7 @@ from read_metrics import count
 from sleep_selection import main_sleep_key
 from validity import sleep_duration, valid_metric
 from provider_payload import payload_boundary
+from health_persistence import normalized_fetch, normalized_steps, capture_page
 
 
 BASE_URL = "https://health.googleapis.com/v4/users/me/dataTypes"
@@ -30,6 +31,7 @@ _point_cache: OrderedDict = OrderedDict()
 _point_requests: dict = {}
 _request_lanes: OrderedDict = OrderedDict()
 _range_locks: dict = {}
+_transient_heart: OrderedDict = OrderedDict()
 
 
 @lru_cache(maxsize=4)
@@ -92,12 +94,55 @@ class GoogleHealthClient:
         self.cache = cache
         self.account_key = hashlib.sha256((f'account:{account_id}' if account_id else access_token).encode()).hexdigest()
         self.store = (store or read_store(os.getenv('HEALTH_DATA_DB_PATH', str(Path(__file__).parent / 'data' / 'health_cache.sqlite3')))) if cache and account_id else None
+        if self.store:
+            self.account_key = self.store.health_account_key(self.account_key, account_id)
+        self.database = self.db_account = None
+        if self.store is not None and account_id:
+            from health_database import database_for_store
+            self.database = database_for_store(self.store)
+            self.db_account = self.database.ensure_account(account_id)
         self.headers = {
             "Authorization": f"Bearer {access_token}",
             "Accept": "application/json",
         }
 
     async def _points(self, data_type: str, filter_expr: str, *, reconcile: bool = True) -> list[dict]:
+        if data_type == 'heart-rate' and self.store:
+            query = read_range(filter_expr)
+            if getattr(self, 'stored_only', False):
+                saved = await asyncio.to_thread(self.store.local_read, self.account_key, data_type, query, reconcile) if query else []
+                if not saved and query and self.database is not None:
+                    saved = await asyncio.to_thread(self.database.raw_points, self.db_account['user_id'], data_type, query)
+                transient = _transient_heart.get(self.account_key)
+                if transient and transient[0] > time.monotonic() and query:
+                    from health_read_store import point_clock
+                    from heart_rate_retention import sample
+                    def matches(point):
+                        stamp = point_clock(point, query.field)
+                        if stamp is None and query.field.endswith('.civil_time'):
+                            value = sample(point)
+                            stamp = value[1].replace(tzinfo=None).isoformat(timespec='microseconds') if value else None
+                        return stamp is not None and query.start <= stamp < query.end
+                    indexed = {point_clock(p, 'heart_rate.sample_time.physical_time'): p for p in saved}
+                    indexed.update({point_clock(p, 'heart_rate.sample_time.physical_time'): p for p in transient[1]
+                                    if matches(p)})
+                    return list(indexed.values())
+                return saved
+            # Daytime samples are used by callers in memory and never range/exact cached.
+            points = await self._fetch_points(data_type, filter_expr, reconcile=reconcile)
+            if query:
+                await asyncio.to_thread(self.store.range_write, self.account_key, data_type, query, reconcile, points)
+            return points
+        # RHR is our immutable asleep-stage calculation, never a provider read.
+        if data_type == 'daily-resting-heart-rate':
+            query = read_range(filter_expr)
+            if self.store and query:
+                points = await asyncio.to_thread(self.store.sleep_rhr_points, self.account_key, query)
+                if not points and self.database is not None:
+                    from health_normalized_reads import resting_hr_points
+                    points = await asyncio.to_thread(resting_hr_points, self.database, self.db_account['user_id'], query)
+                return points
+            return []
         if self.store and getattr(self, 'stored_only', False):
             count('database_hits')
             query = read_range(filter_expr)
@@ -106,7 +151,11 @@ class GoogleHealthClient:
                 if before:
                     query = read_range(f'{before[1]} >= "1900-01-01" AND {before[1]} < "{before[2]}"')
             if query:
-                return await asyncio.to_thread(self.store.local_read, self.account_key, data_type, query, reconcile)
+                points = (await asyncio.to_thread(self.database.raw_points, self.db_account['user_id'], data_type, query)
+                          if self.database is not None else [])
+                if not points:
+                    points = await asyncio.to_thread(self.store.local_read, self.account_key, data_type, query, reconcile)
+                return points
             return await asyncio.to_thread(self.store.exact_read, self.account_key,
                                           exact_key(data_type, filter_expr, reconcile), now=0) or []
         if not self.cache:
@@ -185,6 +234,12 @@ class GoogleHealthClient:
             if key[0] == self.account_key:
                 _daily_cache.pop(key, None)
 
+    def remember_intraday(self, points):
+        _transient_heart[self.account_key] = (time.monotonic() + 900, points)
+        _transient_heart.move_to_end(self.account_key)
+        while len(_transient_heart) > 64:
+            _transient_heart.popitem(last=False)
+
     async def _pace_request(self) -> None:
         if not self.cache:
             return
@@ -202,6 +257,7 @@ class GoogleHealthClient:
             lane[1] = time.monotonic() + 0.5
 
     @payload_boundary
+    @normalized_fetch
     async def _fetch_points(self, data_type: str, filter_expr: str, *, reconcile: bool = True) -> list[dict]:
         """Fetch every page; reconcile wearable data by default, or list raw sessions."""
         url = f"{BASE_URL}/{data_type}/dataPoints" + (":reconcile" if reconcile else "")
@@ -225,6 +281,7 @@ class GoogleHealthClient:
                     await asyncio.sleep(min(delay, 30))
                 response.raise_for_status()
                 payload = response.json()
+                capture_page(payload)
                 page = payload.get('dataPoints', [])
                 if not isinstance(page, list) or any(not isinstance(point, dict) for point in page):
                     raise ValueError('Invalid provider page')
@@ -415,6 +472,9 @@ class GoogleHealthClient:
     async def get_daily_steps(self, start: date, end: date) -> dict[date, int]:
         if self.store and getattr(self, 'stored_only', False):
             values = await asyncio.to_thread(self.store.stored_steps, self.account_key, start, end)
+            if not values and self.database is not None:
+                from health_normalized_reads import daily_steps
+                values = await asyncio.to_thread(daily_steps, self.database, self.db_account['user_id'], start, end)
             return {date.fromisoformat(day): value for day, value in values.items()}
         if not self.store:
             return await self._fetch_daily_steps(start, end)
@@ -435,6 +495,7 @@ class GoogleHealthClient:
             return values
 
     @payload_boundary
+    @normalized_steps
     async def _fetch_daily_steps(self, start: date, end: date) -> dict[date, int]:
         """Wearable daily rollups preserve absent readings separately from true zeros."""
         values = {}
@@ -460,6 +521,7 @@ class GoogleHealthClient:
                         await asyncio.sleep(min(delay, 30))
                     response.raise_for_status()
                     payload = response.json()
+                    capture_page(payload)
                     for point in payload.get("rollupDataPoints", []):
                         step_count = point.get("steps", {}).get("countSum")
                         if step_count is not None:

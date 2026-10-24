@@ -29,6 +29,7 @@ import asyncio
 import hashlib
 import json
 import inspect
+from contextlib import asynccontextmanager, suppress
 from functools import wraps
 from dataclasses import asdict
 from datetime import datetime, timedelta, date, timezone
@@ -71,6 +72,7 @@ from sleep_heart_rate import select_sleep, build_sleep_heart_rate, mock_sleep_he
 from sleep_analytics import sleep_observations, build_sleep_analytics, timing_records, demo_sleep_need_inputs
 from sleep_need import SleepNeedResult, format_sleep_minutes
 from sleep_need_inputs import SleepNeedInputs, need_components
+from sleep_vitals import load_sleep_vitals, sleep_vitals
 from recovery_score import recovery_from_history, baseline_bounds, MIN_BASELINE_DAYS, MIN_RECENT_NIGHTS
 from recovery_analytics import build_recovery_analytics, mock_recovery_history, VITALS
 from sleep_stage_pipeline import sync_stage_ranges
@@ -95,10 +97,23 @@ from models import (
 # App setup
 # ──────────────────────────────────────────────────────────────────────────────
 
+@asynccontextmanager
+async def lifespan(app):
+    from awake_hr_scheduler import scheduler_loop
+    task = asyncio.create_task(scheduler_loop())
+    try:
+        yield
+    finally:
+        task.cancel()
+        with suppress(asyncio.CancelledError):
+            await task
+
+
 app = FastAPI(
     title="Ojas Fitness API",
     description="Backend for the Ojas fitness dashboard",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
@@ -134,6 +149,20 @@ async def data_timings(request: Request, call_next):
     started = time.perf_counter()
     try:
         response = await call_next(request)
+        client = getattr(request.state, 'normalized_client', None)
+        persisted_paths = {'/api/sleep', '/api/dashboard', '/api/strain', '/api/strain/analytics',
+                           '/api/home/metrics', '/api/recovery', '/api/recovery/analytics', '/api/stress',
+                           '/api/sleep/stages/typical-ranges', '/api/sleep/stress',
+                           '/api/sleep/awake-heart-rate/recalculate', '/api/sleep/consistency/score', '/api/activity'}
+        if client is not None and response.status_code == 200 and request.url.path in persisted_paths:
+            body = b''.join([chunk async for chunk in response.body_iterator])
+            from health_results import persist_response
+            value = json.loads(body)
+            await asyncio.to_thread(persist_response, client, request.url.path, value, _client_day(request),
+                                    hashlib.sha256(str(request.query_params).encode()).hexdigest())
+            async def restored_body():
+                yield body
+            response.body_iterator = restored_body()
         if request.url.path.startswith('/api/') and not request.url.path.startswith('/api/auth/'):
             elapsed = (time.perf_counter() - started) * 1000
             response.headers['Server-Timing'] = f'api;dur={elapsed:.1f}, google;dur={metrics.get("google_ms", 0):.1f}'
@@ -175,9 +204,6 @@ async def google_network_error(request: Request, error: httpx.RequestError):
 
 USER_AGE = int(os.getenv("USER_AGE", "22"))
 
-# HRV baseline — replace with rolling DB value later
-_HRV_BASELINE: float = 41.2
-_RHR_BASELINE: float = 56.0
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -199,6 +225,12 @@ async def _get_token(request: Request, response: Response) -> Optional[str]:
         raise HTTPException(401, 'Google Health session expired; reconnect')
     if token and token != old_token:
         set_session(response, session)
+        if session.get('health_user_id'):
+            from health_database import database
+            db = database()
+            account = db.account(session['health_user_id'])
+            if account:
+                await asyncio.to_thread(db.save_credentials, account['provider_account_id'], session)
     if token:
         request.state.valid_health_token = token
     return token
@@ -224,15 +256,36 @@ def _client_timezone(request: Request):
 
 def _client_age(request: Request) -> Optional[int]:
     supplied = request.headers.get("x-user-age")
-    if supplied is None:
-        return None
-    try:
-        age = int(supplied)
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid X-User-Age")
-    if not 18 <= age <= 100:
-        raise HTTPException(status_code=400, detail="Age must be between 18 and 100")
+    age = None
+    if supplied is not None:
+        try:
+            age = int(supplied)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Invalid X-User-Age")
+        if not 18 <= age <= 100:
+            raise HTTPException(status_code=400, detail="Age must be between 18 and 100")
+    profile = _stored_profile(request)
+    if profile and profile.get('age') is not None and (profile.get('birth_date') or age is None):
+        age = profile['age']
+        if not 18 <= age <= 100:
+            return None  # Existing score models support adults only.
     return age
+
+
+def _stored_profile(request: Request):
+    if hasattr(request.state, 'health_profile'):
+        return request.state.health_profile
+    session = get_session(request) or {}
+    identity = session.get('health_user_id')
+    profile = None
+    if identity:
+        from health_database import database
+        db = database()
+        account = db.account(identity)
+        if account:
+            profile = db.profile(account['user_id'], _client_day(request))
+    request.state.health_profile = profile
+    return profile
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -244,15 +297,24 @@ STRAIN_CONFIG = StrainConfig.from_env(os.environ)
 
 def _google_client(token: str, request: Request):
     session = get_session(request) or {}
-    identity = session.get("health_user_id") or session.get("user_email")
+    identity = session.get("health_user_id")
+    if session and (not isinstance(identity, str) or not identity.strip()):
+        raise HTTPException(401, 'Google Health account identity missing; reconnect to restore your saved account')
     client = GoogleHealthClient(token, cache=True, account_id=identity) if identity else GoogleHealthClient(token, cache=True)
     client.strain_timezone = _client_timezone(request)
     sex = request.headers.get("x-user-sex") or os.getenv("USER_SEX")
+    profile = _stored_profile(request)
+    if profile and profile.get('sex') in ('male', 'female'):
+        sex = {'male': 'm', 'female': 'f'}[profile['sex']]
     if sex is not None and sex.lower() not in ("m", "f"):
         raise HTTPException(400, "X-User-Sex must be m or f")
     client.strain_sex, client.strain_sex_defaulted = (sex or "m").lower(), sex is None
     if getattr(client, 'store', None) is not None:
         client.stored_only = True
+    if getattr(client, 'database', None) is not None:
+        if client.db_account['status'] != 'active':
+            raise HTTPException(401, 'Google Health account is disconnected; reconnect')
+        request.state.normalized_client = client
     return client
 
 
@@ -275,8 +337,8 @@ def _cached_data_page(function):
         parameters = inspect.signature(function).bind(*args, **kwargs)
         parameters.apply_defaults()
         effective = {k: v for k, v in parameters.arguments.items() if k not in ('request', 'response')}
-        strain_revision = dynamic.get('revision', 0) if request.url.path.startswith(('/api/strain', '/api/home', '/api/activity')) or request.url.path == '/api/dashboard' else 0
-        page_version = 'page-v32-midnight' if request.url.path.startswith(('/api/strain', '/api/home', '/api/activity')) or request.url.path == '/api/dashboard' else 'page-v31'
+        strain_revision = dynamic.get('revision', 0) if request.url.path.startswith(('/api/strain', '/api/home', '/api/activity', '/api/health')) or request.url.path == '/api/dashboard' else 0
+        page_version = 'page-v38-normalized-profile' + ('-sleep-6cb9e7a' if request.url.path.startswith(('/api/sleep', '/api/recovery')) or request.url.path == '/api/dashboard' else '')
         key = hashlib.sha256(json.dumps([page_version, request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
             str(day), age, str(client.strain_timezone), client.strain_sex, client.strain_sex_defaulted,
             repr(STRAIN_CONFIG), strain_revision, dynamic.get('sleep_revision', 0)], default=str).encode()).hexdigest()
@@ -290,6 +352,21 @@ def _demo_dashboard(request: Request, day: date | None = None):
     client = _google_client('demo', request)
     return get_mock_dashboard(day or _client_day(request), _client_age(request),
                               client.strain_timezone, client.strain_sex, STRAIN_CONFIG)
+
+
+@app.get('/api/profile')
+async def profile_endpoint(request: Request, response: Response):
+    token = await _get_token(request, response)
+    if not token:
+        raise HTTPException(401, 'Connect Google Health to view your profile')
+    client = _google_client(token, request)
+    if client.database is None:
+        raise HTTPException(401, 'Reconnect Google Health to establish your profile')
+    profile = client.database.profile(client.db_account['user_id'], _client_day(request))
+    return {'user_id': client.db_account['user_id'], 'birth_date': profile.get('birth_date') if profile else None,
+            'age': profile.get('age') if profile else None, 'sex': profile.get('sex') if profile else 'unknown',
+            'timezone': profile.get('timezone') if profile else str(client.strain_timezone),
+            'profile_version_id': profile.get('profile_version_id') if profile else None}
 
 
 @app.get("/api/data/status")
@@ -391,9 +468,12 @@ async def _compute_real_sleep(client: GoogleHealthClient, target_date: date, nee
     )
 
     sleep_need = need.total_need_min / 60 if need else None
-    sleeping_hrv = raw.get("sleeping_hrv")
-    sleeping_hr  = raw.get("sleeping_hr")
-    waking_hr    = raw.get("waking_hr")
+    vitals = await load_sleep_vitals(client, target_date, age)
+    sleeping_hrv = vitals['hrv']
+    sleeping_hr = vitals['rhr']
+    from awake_heart_rate import previous_awake_hr
+    awake_baseline = await previous_awake_hr(client, target_date)
+    waking_hr = awake_baseline.get('value') if awake_baseline else None
 
     score = SleepCalculator.calculate_score(
         sleep=sleep,
@@ -401,14 +481,15 @@ async def _compute_real_sleep(client: GoogleHealthClient, target_date: date, nee
         sleeping_hrv=sleeping_hrv,
         sleeping_hr=sleeping_hr,
         waking_hr=waking_hr,
-        hrv_baseline=_HRV_BASELINE,
-        sleeping_hr_baseline=(_RHR_BASELINE + 4),
+        hrv_baseline=vitals['hrv_baseline'],
+        sleeping_hr_baseline=vitals['rhr_baseline'],
+        allow_waking_hr_fallback=False,
         age=age if age is not None else USER_AGE,
     ) if sleep_need is not None else None
 
     total_h = sleep.total_duration / 3600.0
     dur_score = SleepCalculator.compute_duration_score(
-        total_h + sleep.nap_duration_seconds / 3600, sleep_need) if sleep_need is not None else None
+        total_h, sleep_need) if sleep_need is not None else None
 
     efficiency = SleepEfficiencyCalculator.calculate_single_night(sleep.total_duration, sleep.in_bed_duration)
     stages = SleepStages(
@@ -438,7 +519,8 @@ async def _compute_real_sleep(client: GoogleHealthClient, target_date: date, nee
     available = {
         'duration': need is not None, 'stages': need is not None and raw.get('stage_breakdown_available', False),
         'efficiency': efficiency is not None,
-        'sleeping_hrv': positive(sleeping_hrv), 'sleeping_hr': resting_hr(sleeping_hr) is not None,
+        'sleeping_hrv': positive(sleeping_hrv) and positive(vitals['hrv_baseline']),
+        'sleeping_hr': resting_hr(sleeping_hr) is not None and resting_hr(vitals['rhr_baseline']) is not None,
         'hr_dip': resting_hr(sleeping_hr) is not None and resting_hr(waking_hr) is not None,
         'restfulness': raw.get('restfulness_available', False),
     }
@@ -460,9 +542,17 @@ async def _compute_real_sleep(client: GoogleHealthClient, target_date: date, nee
         efficiency_pct=efficiency,
         stages=stages,
         sleeping_hrv=sleeping_hrv,
+        hrv_baseline=vitals['hrv_baseline'], rhr_baseline=vitals['rhr_baseline'],
+        hrv_baseline_nights=vitals['hrv_baseline_nights'], rhr_baseline_nights=vitals['rhr_baseline_nights'],
+        baseline_window_days=vitals['baseline_window_days'],
+        baseline_start=vitals['baseline_start'], baseline_end=vitals['baseline_end'],
         deep_sleep_hrv=deep_sleep_hrv,
         sleeping_hr=sleeping_hr,
         consistency_minutes=consistency_res.timing_variability_minutes,
+        waking_hr=waking_hr,
+        waking_hr_date=(target_date - timedelta(days=1)).isoformat(),
+        waking_hr_sample_count=awake_baseline.get('sample_count', 0) if awake_baseline else 0,
+        hr_dip_pct=(waking_hr - sleeping_hr) / waking_hr * 100 if waking_hr and sleeping_hr else None,
         average_bed_time=consistency_res.average_bed_time_str,
         average_wake_time=consistency_res.average_wake_time_str,
         sleep_start=raw.get("sleep_start_time") and raw["sleep_start_time"].strftime("%I:%M %p"),
@@ -668,8 +758,14 @@ async def recovery_analytics_endpoint(request: Request, response: Response,
                              record["core_sleep_duration"], record["awake_duration"], record["in_bed_duration"],
                              record["sleep_start_time"], record["sleep_end_time"], record["interruption_count"],
                              sleep_latency_seconds=record.get("sleep_latency_seconds"))
+            vitals = sleep_vitals(history, end, age)
+            from awake_heart_rate import previous_awake_hr
+            awake_baseline = await previous_awake_hr(client, end)
             performance = round(SleepCalculator.calculate_score(data, need.total_need_min / 60,
-                           hrv_baseline=_HRV_BASELINE, sleeping_hr_baseline=_RHR_BASELINE + 4,
+                           sleeping_hrv=vitals['hrv'], sleeping_hr=vitals['rhr'],
+                           waking_hr=awake_baseline.get('value') if awake_baseline else None,
+                           hrv_baseline=vitals['hrv_baseline'], sleeping_hr_baseline=vitals['rhr_baseline'],
+                           allow_waking_hr_fallback=False,
                            age=age if age is not None else USER_AGE), 1)
         sleeps.append({"date": record["date"].isoformat(), "performance": performance,
                        "asleep_minutes": record["total_duration"] / 60 if record["sleep_duration_available"] else None,
@@ -694,6 +790,42 @@ async def sleep_endpoint(request: Request, response: Response):
     tonight = inputs.for_tonight(today)
     sleep.tonight_sleep_need = asdict(tonight) if tonight else None
     return sleep
+
+
+@app.get('/api/health/awake-heart-rate')
+async def awake_heart_rate_endpoint(request: Request, response: Response, day: date | None = None):
+    from awake_heart_rate import read_baseline
+    token = await _get_token(request, response)
+    if not token:
+        raise HTTPException(401, 'Connect Google Health to view awake heart rate')
+    client = _google_client(token, request)
+    if client.store is None:
+        raise HTTPException(401, 'Reconnect Google Health to establish your account identity')
+    day = day or _client_day(request) - timedelta(days=1)
+    saved = await asyncio.to_thread(read_baseline, client.store, client.account_key, day, client.strain_timezone)
+    return saved or {'date': str(day), 'status': 'not_calculated', 'value': None}
+
+
+@app.post('/api/sleep/awake-heart-rate/recalculate')
+async def recalculate_awake_heart_rate(request: Request, response: Response, sleep_date: date | None = None):
+    from awake_heart_rate import collect_awake_hr
+    token = await _get_token(request, response)
+    if not token:
+        raise HTTPException(401, 'Connect Google Health to recalculate awake heart rate')
+    client = _google_client(token, request)
+    if client.store is None:
+        raise HTTPException(401, 'Reconnect Google Health to establish your account identity')
+    target = sleep_date or _client_day(request)
+    if target > datetime.now(client.strain_timezone).date():
+        raise HTTPException(400, 'Future sleep dates cannot be recalculated')
+    try:
+        baseline = await collect_awake_hr(client, target - timedelta(days=1), force=True)
+    except ValueError as error:
+        raise HTTPException(400, str(error)) from error
+    age = _client_age(request)
+    inputs = await _load_sleep_need_inputs(client, target, age)
+    sleep = await _compute_real_sleep(client, target, inputs.for_tonight(target - timedelta(days=1)), age)
+    return {'awake_heart_rate': baseline, 'sleep': sleep.model_dump()}
 
 
 @app.get("/api/sleep/need")
@@ -989,7 +1121,14 @@ async def health_heart_rate_endpoint(request: Request, response: Response):
     today = _client_day(request)
     client = _google_client(token, request)
     samples = await client.get_intraday_heart_rate(today, preserve_offset=True)
-    return build_heart_rate_response(samples, today, False)
+    result = build_heart_rate_response(samples, today, False)
+    store = getattr(client, 'store', None)
+    if store is not None:
+        summary = await asyncio.to_thread(store.intraday_summary, client.account_key, today)
+        if summary:
+            result.daily_average_bpm = summary['average_bpm']
+            result.daily_sample_count = summary['sample_count']
+    return result
 
 
 @app.get("/api/health", response_model=HealthResponse)

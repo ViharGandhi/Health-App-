@@ -44,7 +44,7 @@ def test_session_force_delta_and_fifteen_minute_gate_survive_restart():
             restarted = fixture(path)
             assert (await sync_dynamic(restarted, 'visit-two', True, now=NOW + timedelta(minutes=2), age=22))['synced']
             query = read_range(restarted._fetch_points.await_args_list[0].args[1])
-            assert query.start == '2026-10-08T11:00:00.000000'
+            assert query.start == '2026-10-08T00:00:00.000000'  # Replace today's mean from a full prefix.
             assert query.end == '2026-10-08T11:02:00.000000'
             assert read_range(restarted._fetch_points.await_args_list[2].args[1]).start == '2026-10-08T11:00:00.000000'
             assert not (await sync_dynamic(restarted, 'visit-two', now=NOW + timedelta(minutes=16)))['synced']

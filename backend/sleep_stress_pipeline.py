@@ -45,4 +45,18 @@ async def compute_connected_sleep_stress(
                 scored["confidence"] = "low"
                 scored['withheld_reason'] = 'hrv_anchor_unconfigured'
             nights.append(scored)
+            if getattr(client, 'database', None) is not None:
+                from health_results import Results
+                from health_database import epoch
+                db, user = client.database, client.db_account['user_id']
+                Results(db, user, item.night.night_date).sleep_stress({'nights': [scored]})
+                with db.connect() as conn:
+                    row = conn.execute('SELECT r.calc_run_id FROM sleep_stress_results r JOIN calc_runs c USING(calc_run_id) JOIN sleep_sessions s USING(sleep_session_id) WHERE r.user_id=? AND s.provider_sleep_id=? AND c.is_current=1 ORDER BY c.calc_run_id DESC LIMIT 1', (user, item.night.sleep_id)).fetchone()
+                    if row:
+                        rid = row[0]
+                        conn.execute('DELETE FROM sleep_stress_windows WHERE calc_run_id=?', (rid,))
+                        conn.execute('UPDATE sleep_stress_results SET valid_window_count=? WHERE calc_run_id=?', (len(item.windows) if anchor else 0, rid))
+                        for window in item.windows:
+                            high = None if scored.get('stress_pct') is None else int(any(epoch(e['start']) <= epoch(window.start_utc) < epoch(e['end']) for e in scored.get('episodes', [])))
+                            conn.execute('INSERT INTO sleep_stress_windows VALUES (?,?,?,?,?,?)', (rid, epoch(window.start_utc), epoch(window.end_utc), window.stage, int(anchor is not None), high))
     return nights

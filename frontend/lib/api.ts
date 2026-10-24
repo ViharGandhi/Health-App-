@@ -6,6 +6,7 @@
 
 import type { DashboardData, RecoveryData, RecoveryAnalytics, RecoveryDemo, RecoveryRange, SleepData, StrainData, AuthStatus, HealthData, SleepConsistencyScore, SleepStressHistory, SleepStageRangeHistory, SleepHeartRate } from './types';
 import { RequestCache } from './requestCache';
+import { trackSyncActivity } from './syncActivity';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 const responses = new RequestCache();
@@ -122,11 +123,32 @@ export const api = {
 
   getDataStatus: () => apiFetch<{ last_synced_at: string | null; stored_ranges: number }>('/api/data/status'),
 
+  recalculateSleepAwakeHeartRate: async (): Promise<{ sleep: SleepData }> => trackSyncActivity(async () => {
+    const today = new Date();
+    const age = window.localStorage.getItem('ojas_age');
+    const response = await fetch(`${BACKEND_URL}/api/sleep/awake-heart-rate/recalculate`, {
+      method: 'POST', credentials: 'include', signal: AbortSignal.timeout(180000),
+      headers: {
+        'X-User-Date': `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`,
+        'X-User-Timezone': Intl.DateTimeFormat().resolvedOptions().timeZone,
+        ...(age ? { 'X-User-Age': age } : {}),
+      },
+    });
+    if (!response.ok) {
+      const body = await response.json().catch(() => null);
+      throw new Error(body?.detail || 'Could not recalculate awake heart rate. Try again.');
+    }
+    const result = await response.json();
+    responses.clear();
+    window.dispatchEvent(new CustomEvent('ojas:sleep-sync'));
+    return result;
+  }),
+
   syncNow: async () => {
     await api.syncDynamic(true, crypto.randomUUID());
   },
 
-  syncDynamic: async (force: boolean, session: string, homeVisit = false) => {
+  syncDynamic: async (force: boolean, session: string, homeVisit = false) => trackSyncActivity(async () => {
     const today = new Date();
     const age = window.localStorage.getItem('ojas_age');
     const response = await fetch(`${BACKEND_URL}/api/data/sync?${new URLSearchParams({ force: String(force), session, home_visit: String(homeVisit) })}`, {
@@ -145,7 +167,7 @@ export const api = {
       if (result.sleep_updated) window.dispatchEvent(new CustomEvent('ojas:sleep-sync'));
     }
     return { ...result, connected: true };
-  },
+  }),
 
   /** Start Google OAuth flow (redirects browser to Google) */
   startLogin: () => {

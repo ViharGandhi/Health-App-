@@ -4,12 +4,34 @@ from datetime import timedelta
 
 from health_read_store import read_range
 from sleep_heart_rate import select_sleep
+from sleep_rhr import calculate_sleep_rhr
+
+
+async def save_cached_sleep_rhr(client, today, now, epoch):
+    """One-time conversion for an already logged sleep; no remote requests."""
+    store, account = client.store, client.account_key
+    if await asyncio.to_thread(store.sleep_rhr_saved, account, today):
+        return False
+    query = read_range(f'sleep.interval.civil_end_time >= "{today}" AND sleep.interval.civil_end_time < "{today + timedelta(days=1)}"')
+    points = await asyncio.to_thread(store.local_read, account, 'sleep', query, False)
+    sleep_id = await asyncio.to_thread(store.saved_sleep_id, account, today)
+    night = select_sleep(points, today, sleep_id, now=now)
+    if night is None:
+        return False
+    interval = night['sleep']['interval']
+    query = read_range(f'heart_rate.sample_time.physical_time >= "{interval["startTime"]}" AND heart_rate.sample_time.physical_time < "{interval["endTime"]}"')
+    readings = await asyncio.to_thread(store.local_read, account, 'heart-rate', query)
+    result = calculate_sleep_rhr(night, readings)
+    await asyncio.to_thread(store.save_sleep_rhr, account, today, night['name'], result, epoch)
+    await _persist_normalized_rhr(client, today, night['name'], result)
+    client._invalidate_calculations()
+    return True
 
 
 async def sync_sleep_day(client, today, now, epoch):
     store, account = client.store, client.account_key
     if await asyncio.to_thread(store.sleep_day_saved, account, today):
-        return False
+        return await save_cached_sleep_rhr(client, today, now, epoch)
     query = read_range(f'sleep.interval.civil_end_time >= "{today}" AND sleep.interval.civil_end_time < "{today + timedelta(days=1)}"')
     points = await client._fetch_points('sleep', query.expression(query.start, query.end), reconcile=False)
     ready = [p for p in points if p.get('sleep', {}).get('metadata', {}).get('processed') is not False
@@ -21,7 +43,6 @@ async def sync_sleep_day(client, today, now, epoch):
     requests = []
     for kind, field in (
         ('daily-heart-rate-variability', 'daily_heart_rate_variability.date'),
-        ('daily-resting-heart-rate', 'daily_resting_heart_rate.date'),
         ('daily-respiratory-rate', 'daily_respiratory_rate.date'),
         ('daily-sleep-temperature-derivations', 'daily_sleep_temperature_derivations.date'),
     ):
@@ -43,5 +64,17 @@ async def sync_sleep_day(client, today, now, epoch):
         if not await asyncio.to_thread(store.range_write, account, kind, q, True, payload, epoch=epoch):
             raise ValueError('Unsupported sleep measurement schema; day remains unlocked for retry')
     # Empty optional measurements are frozen too, as requested; no later daily retry.
-    await asyncio.to_thread(store.finish_sleep_day, account, today, night['name'], epoch)
+    sample_query = read_range(f'heart_rate.sample_time.physical_time >= "{interval["startTime"]}" AND heart_rate.sample_time.physical_time < "{interval["endTime"]}"')
+    readings = await asyncio.to_thread(store.local_read, account, 'heart-rate', sample_query)
+    result = calculate_sleep_rhr(night, readings)
+    await asyncio.to_thread(store.finish_sleep_day, account, today, night['name'], epoch, result)
+    await _persist_normalized_rhr(client, today, night['name'], result)
+    client._invalidate_calculations()
     return True
+
+
+async def _persist_normalized_rhr(client, day, sleep_id, result):
+    if getattr(client, 'database', None) is not None:
+        from health_results import Results
+        await asyncio.to_thread(Results(client.database, client.db_account['user_id'], day).sleeping_hr,
+                                day, sleep_id, result)

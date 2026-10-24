@@ -11,15 +11,18 @@ from mock_recovery import MockRecoveryClient
 DAY = date(2026, 10, 7)
 
 
-def test_connected_sleep_reports_defaulted_vital_components():
+def test_connected_sleep_uses_personal_vitals_and_reports_missing_waking_hr():
     async def run():
         client = MockRecoveryClient(DAY)
         inputs = await _load_sleep_need_inputs(client, DAY, 30)
         sleep = await _compute_real_sleep(client, DAY, inputs.for_tonight(DAY), 30)
         assert sleep.partial is True
-        for name in ('sleeping_hrv', 'sleeping_hr', 'hr_dip'):
-            assert sleep.components_available[name] is False
-            assert sleep.defaulted_components[name] == 50.
+        for name in ('sleeping_hrv', 'sleeping_hr'):
+            assert sleep.components_available[name] is True
+            assert name not in sleep.defaulted_components
+        assert sleep.components_available['hr_dip'] is False
+        assert sleep.defaulted_components['hr_dip'] == 50.
+        assert sleep.hrv_baseline_nights > 0 and sleep.rhr_baseline_nights > 0
     asyncio.run(run())
 
 

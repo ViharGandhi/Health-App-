@@ -13,15 +13,20 @@ def duration_component(ratio):
 
 
 @pytest.mark.parametrize('ratio', [.6, .75, .9, 1.])
-def test_approved_rescaling_reaches_full_score(ratio):
+def test_original_duration_curve(ratio):
     raw = lambda r: 100 / (1 + math.exp(-8 * (r - .75)))
-    assert duration_component(ratio) == pytest.approx(raw(ratio) / raw(1) * 100)
+    assert duration_component(ratio) == pytest.approx(raw(ratio))
 
 
-@pytest.mark.parametrize('boundary', [1., 1.1])
+@pytest.mark.parametrize('boundary', [1.1])
 def test_duration_is_continuous_at_branch_boundaries(boundary):
     assert abs(duration_component(boundary + 1e-9) - duration_component(boundary - 1e-9)) < 1e-5
 
 
 def test_oversleep_penalty_is_unchanged():
     assert duration_component(1.3) == pytest.approx(85)
+
+
+def test_original_curve_at_full_need():
+    assert duration_component(1.0) == pytest.approx(88.07970779778823)
+    assert duration_component(1.0 + 1e-9) == pytest.approx(100.0)

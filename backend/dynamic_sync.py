@@ -36,16 +36,18 @@ async def sync_dynamic(client, session, force=False, *, now=None, age=None, conf
         tz = client.strain_timezone
         today = now.astimezone(tz).date()
         midnight = datetime.combine(today, time.min, tzinfo=tz)
-        # No old backfill: the first checkpoint bootstraps today's readings only.
+        # Previous-day finalization is a separate operation, not foreground sync.
         start = datetime.fromisoformat(state['cursor'].replace('Z', '+00:00')) if state['cursor'] else midnight
         if start >= now:
             return {**state, 'synced': False}
-        heart_query = read_range(f'heart_rate.sample_time.physical_time >= "{utc_text(start)}" AND heart_rate.sample_time.physical_time < "{utc_text(now)}"')
+        # Re-read midnight-to-now so corrections and retries replace one exact
+        # daily mean; no daytime samples are needed on disk between refreshes.
+        heart_query = read_range(f'heart_rate.sample_time.physical_time >= "{utc_text(midnight)}" AND heart_rate.sample_time.physical_time < "{utc_text(now)}"')
         # Google supports exercise civil start filters, not an upload-time delta.
         # Today's small session list catches workouts started before the cursor.
         activity_query = read_range(f'exercise.interval.civil_start_time >= "{today}" AND exercise.interval.civil_start_time < "{now.astimezone(tz).replace(tzinfo=None).isoformat()}"')
         # Bootstrap only the new activity-level stream needed by stress baselines.
-        # HR, workouts and the existing sync cursor retain their delta policy.
+        # Today's workouts and activity-level coverage retain the sync cursor.
         from stressmon.config import load_config
         lookback = load_config()['baselines']['window_days']
         history_end = start.astimezone(tz).replace(tzinfo=None)
@@ -61,6 +63,7 @@ async def sync_dynamic(client, session, force=False, *, now=None, age=None, conf
             client._fetch_points('activity-level', level_query.expression(level_query.start, level_query.end), reconcile=True),
         )
         # Stage all remote reads first. Failed downloads never advance the cursor.
+        client.remember_intraday(heart)
         previous = await asyncio.to_thread(store.local_read, account, 'exercise', activity_query)
         activity_changed = {json.dumps(p, sort_keys=True) for p in previous} != {json.dumps(p, sort_keys=True) for p in activities}
         stored_heart = await asyncio.to_thread(store.range_write, account, 'heart-rate', heart_query, True, heart, epoch=epoch, invalidate=bool(heart))

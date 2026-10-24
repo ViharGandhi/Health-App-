@@ -8,10 +8,12 @@ from statistics import mean
 from recovery_score import baseline_bounds, positive, recovery_from_history, robust, MIN_BASELINE_DAYS
 from sleep_trends import range_start, DateRangeError
 from validity import valid_metric
+from sleep_rhr import METHOD as SLEEP_RHR_METHOD
 
 
 METRICS = ("recovery", "hrv", "rhr", "respiratory_rate", "sleep_performance")
 VITALS = ("hrv", "rhr", "respiratory_rate", "skin_temperature", "spo2")
+RHR_METHODS = ("WITH_SLEEP", "ONLY_WITH_AWAKE_DATA", SLEEP_RHR_METHOD)
 
 
 def typical_ranges(history: dict, day: date, age=None, *, diagnostics: dict | None = None) -> dict:
@@ -21,7 +23,7 @@ def typical_ranges(history: dict, day: date, age=None, *, diagnostics: dict | No
     for metric in VITALS:
         values = [p["value"] for p in history.get(metric, [])
                   if start.isoformat() <= p["date"] <= end.isoformat() and valid_metric(metric, p.get("value"), age)
-                  and (metric != "rhr" or today_rhr.get("method") in ("WITH_SLEEP", "ONLY_WITH_AWAKE_DATA")
+                  and (metric != "rhr" or today_rhr.get("method") in RHR_METHODS
                        and p.get("method") == today_rhr["method"])]
         if len(values) < MIN_BASELINE_DAYS:
             ranges[metric] = None
@@ -71,7 +73,7 @@ def build_recovery_analytics(history: dict, sleeps: list[dict], end: date, timef
                "sleep_performance": sleep.get("performance"),
                **{metric: value if valid_metric(metric, value := dated.get(metric, {}).get(key, {}).get("value"), age) else None
                   for metric in VITALS}}
-        if dated.get("rhr", {}).get(key, {}).get("method") != rhr_method or rhr_method not in ("WITH_SLEEP", "ONLY_WITH_AWAKE_DATA"):
+        if dated.get("rhr", {}).get(key, {}).get("method") != rhr_method or rhr_method not in RHR_METHODS:
             row["rhr"] = None
         if key == end.isoformat():
             row.update(recovery=current["score"], zone=current.get("zone"), confidence=current.get("confidence"),
@@ -100,7 +102,7 @@ def build_recovery_analytics(history: dict, sleeps: list[dict], end: date, timef
         else:
             values = [p["value"] for p in history.get(metric, [])
                       if (end - timedelta(days=30)).isoformat() <= p["date"] < end.isoformat() and valid_metric(metric, p.get("value"), age)
-                      and (metric != "rhr" or rhr_method in ("WITH_SLEEP", "ONLY_WITH_AWAKE_DATA") and p.get("method") == rhr_method)]
+                      and (metric != "rhr" or rhr_method in RHR_METHODS and p.get("method") == rhr_method)]
         comparisons[metric] = mean(values) if values else None
     buckets = []
     for offset in range(6, 0, -1):

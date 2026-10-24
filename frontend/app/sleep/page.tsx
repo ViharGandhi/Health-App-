@@ -392,6 +392,11 @@ export default function SleepPage() {
 
             {/* Intraday Sleep Heart Rate Graph */}
             <SleepHeartRateChart night={stageNight} waiting={stageRangesLoading} selectedStage={selectedStage} />
+            {!data.is_mock && <div className={styles.stageRangeNote}>
+              <p>Heart-rate dip: {data.hr_dip_pct == null ? 'Awaiting awake readings' : `${data.hr_dip_pct.toFixed(1)}%`}.
+                {' '}Yesterday’s awake mean: {data.waking_hr == null ? 'Unavailable' : `${data.waking_hr.toFixed(1)} BPM`}.
+                {' '}Uses readings from wake-up to 10 PM, excluding sleep and logged activities.</p>
+            </div>}
 
             {/* Typical Range & Duration Header */}
             <div className={styles.typicalRangeHeader}>

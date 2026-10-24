@@ -3,7 +3,7 @@ import type { RecoveryDay, RecoveryData, RecoveryMetric, RecoveryRange } from '.
 export const recoveryMetrics: { metric: RecoveryMetric; slug: string; title: string; unit: string; digits: number; kind: 'line' | 'bar' }[] = [
   { metric: 'recovery', slug: 'recovery', title: 'RECOVERY', unit: '%', digits: 0, kind: 'bar' },
   { metric: 'hrv', slug: 'hrv', title: 'HEART RATE VARIABILITY', unit: 'ms', digits: 0, kind: 'line' },
-  { metric: 'rhr', slug: 'resting-heart-rate', title: 'RESTING HEART RATE', unit: 'bpm', digits: 0, kind: 'line' },
+  { metric: 'rhr', slug: 'resting-heart-rate', title: 'RESTING HEART RATE', unit: 'bpm', digits: 1, kind: 'line' },
   { metric: 'respiratory_rate', slug: 'respiratory-rate', title: 'RESPIRATORY RATE', unit: 'rpm', digits: 1, kind: 'line' },
   { metric: 'sleep_performance', slug: 'sleep-performance', title: 'SLEEP PERFORMANCE', unit: '%', digits: 0, kind: 'bar' },
 ];

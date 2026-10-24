@@ -117,6 +117,12 @@ class HealthReadStore:
                 CREATE TABLE IF NOT EXISTS sleep_days (
                     account TEXT NOT NULL, day TEXT NOT NULL, sleep_id TEXT NOT NULL,
                     completed REAL NOT NULL, PRIMARY KEY(account,day));
+                CREATE TABLE IF NOT EXISTS sleep_rhr (
+                    account TEXT NOT NULL, day TEXT NOT NULL, sleep_id TEXT NOT NULL,
+                    completed REAL NOT NULL, payload TEXT NOT NULL,
+                    PRIMARY KEY(account,day));
+                CREATE TABLE IF NOT EXISTS health_account_aliases (
+                    identity_key TEXT PRIMARY KEY, account TEXT NOT NULL);
                 CREATE TABLE IF NOT EXISTS page_snapshots (
                     account TEXT NOT NULL, key TEXT NOT NULL, epoch INTEGER NOT NULL,
                     updated REAL NOT NULL, payload TEXT NOT NULL, PRIMARY KEY(account,key));
@@ -130,10 +136,14 @@ class HealthReadStore:
                     PRIMARY KEY(account,kind,field,reconciled,lower_bound,upper_bound,stamp,point_key));
                 CREATE INDEX IF NOT EXISTS local_point_times ON read_points(account,kind,reconciled,field,stamp);
             ''')
+            from heart_rate_retention import SUMMARY_SQL
+            conn.execute(SUMMARY_SQL)
             if 'indexed' not in {r[1] for r in conn.execute('PRAGMA table_info(read_slices)')}:
                 conn.execute('ALTER TABLE read_slices ADD COLUMN indexed INTEGER NOT NULL DEFAULT 0')
             if 'prepared' not in {r[1] for r in conn.execute('PRAGMA table_info(sleep_days)')}:
                 conn.execute('ALTER TABLE sleep_days ADD COLUMN prepared INTEGER NOT NULL DEFAULT 0')
+            if 'rhr_snapshot' not in {r[1] for r in conn.execute('PRAGMA table_info(sleep_days)')}:
+                conn.execute('ALTER TABLE sleep_days ADD COLUMN rhr_snapshot TEXT')
             # Upgrade existing snapshots once; subsequent reads use indexed times.
             with conn:
                 for row in conn.execute('SELECT account,kind,field,reconciled,lower_bound,upper_bound,payload FROM read_slices WHERE indexed=0').fetchall():
@@ -154,6 +164,48 @@ class HealthReadStore:
 
     def connection(self):
         return closing(sqlite3.connect(self.path, timeout=30))
+
+    def intraday_summary(self, account, day):
+        with self.connection() as conn:
+            row = conn.execute('SELECT average_bpm,sample_count FROM daily_intraday_hr WHERE owner=? AND day=?', (account, str(day))).fetchone()
+        return {'average_bpm': row[0], 'sample_count': row[1]} if row else None
+
+    def health_account_key(self, identity_key, health_user_id):
+        """Reconnect to a legacy email-keyed cache only with provider ownership evidence.
+
+        Google Health resource names identify the owner. Never link by display
+        name, matching dates, or similarly shaped measurements.
+        """
+        if not isinstance(health_user_id, str) or not health_user_id.strip():
+            return identity_key
+        owner = f'users/{health_user_id}/' if health_user_id.isdecimal() else None
+        with self.connection() as conn, conn:
+            conn.execute('BEGIN IMMEDIATE')
+            existing = conn.execute('SELECT account FROM health_account_aliases WHERE identity_key=?',
+                                    (identity_key,)).fetchone()
+            if existing:
+                return existing[0]
+            candidates = conn.execute('''SELECT account,COUNT(DISTINCT point_key) AS nights FROM read_points
+                WHERE kind='sleep' AND point_key LIKE ? GROUP BY account ORDER BY nights DESC,account''',
+                (owner + 'dataTypes/sleep/%',)).fetchall() if owner else []
+            for account, _ in candidates:
+                foreign = conn.execute('''SELECT 1 FROM read_points WHERE account=?
+                    AND point_key LIKE 'users/%' AND point_key NOT LIKE ? LIMIT 1''',
+                    (account, owner + '%')).fetchone()
+                if foreign:
+                    continue
+                registered = conn.execute('SELECT identity_key FROM health_account_aliases WHERE account=?',
+                                          (account,)).fetchone()
+                if registered and registered[0] != identity_key:
+                    continue
+                conn.execute('INSERT OR IGNORE INTO health_account_aliases VALUES (?,?)', (identity_key, account))
+                # A concurrent reconnect may have already established the alias.
+                return conn.execute('SELECT account FROM health_account_aliases WHERE identity_key=?',
+                                    (identity_key,)).fetchone()[0]
+            # Pin even a brand-new empty account. Later logins must never select
+            # a different partition just because another cache has more rows.
+            conn.execute('INSERT INTO health_account_aliases VALUES (?,?)', (identity_key, identity_key))
+        return identity_key
 
     def local_read(self, account, kind, query, reconciled=True):
         """Read persisted observations, including expired coverage and incremental streams."""
@@ -205,11 +257,53 @@ class HealthReadStore:
         with self.connection() as conn:
             return bool(conn.execute('SELECT 1 FROM sleep_days WHERE account=? AND day=?', (account, str(day))).fetchone())
 
-    def finish_sleep_day(self, account, day, sleep_id, epoch):
+    def frozen_rhr(self, account, query, points):
+        with self.connection() as conn:
+            rows = conn.execute('SELECT day,rhr_snapshot FROM sleep_days WHERE account=? AND rhr_snapshot IS NOT NULL', (account,)).fetchall()
+        frozen = {day: json.loads(payload) for day, payload in rows
+                  if query.start <= clock(day) < query.end}
+        return [point for point in points
+                if (point_clock(point, query.field) or '')[:10] not in frozen] + [
+                    point for payload in frozen.values() for point in payload]
+
+    def sleep_rhr_saved(self, account, day):
+        with self.connection() as conn:
+            return bool(conn.execute('SELECT 1 FROM sleep_rhr WHERE account=? AND day=?',
+                                     (account, str(day))).fetchone())
+
+    def saved_sleep_id(self, account, day):
+        with self.connection() as conn:
+            row = conn.execute('SELECT sleep_id FROM sleep_days WHERE account=? AND day=?',
+                               (account, str(day))).fetchone()
+        return row[0] if row else None
+
+    def sleep_rhr_points(self, account, query):
+        from sleep_rhr import saved_rhr_points
+        with self.connection() as conn:
+            rows = conn.execute('SELECT day,payload FROM sleep_rhr WHERE account=? AND day>=? AND day<=? ORDER BY day',
+                                (account, query.start[:10], query.end[:10])).fetchall()
+        return saved_rhr_points([(day, json.loads(payload)) for day, payload in rows
+                                 if query.start <= clock(day) < query.end])
+
+    def save_sleep_rhr(self, account, day, sleep_id, result, epoch):
         with self.connection() as conn, conn:
             self._check_epoch(conn, account, epoch)
-            conn.execute('INSERT OR IGNORE INTO sleep_days (account,day,sleep_id,completed) VALUES (?,?,?,?)',
-                         (account, str(day), sleep_id, time.time()))
+            self._insert_sleep_rhr(conn, account, day, sleep_id, result)
+
+    def _insert_sleep_rhr(self, conn, account, day, sleep_id, result):
+        inserted = conn.execute('INSERT OR IGNORE INTO sleep_rhr VALUES (?,?,?,?,?)',
+                                (account, str(day), sleep_id, time.time(), json.dumps(result))).rowcount
+        if inserted:
+            self._invalidate_days(conn, account)
+            conn.execute('DELETE FROM page_snapshots WHERE account=?', (account,))
+
+    def finish_sleep_day(self, account, day, sleep_id, epoch, rhr_result=None):
+        with self.connection() as conn, conn:
+            self._check_epoch(conn, account, epoch)
+            if rhr_result is not None:
+                self._insert_sleep_rhr(conn, account, day, sleep_id, rhr_result)
+            conn.execute('INSERT OR IGNORE INTO sleep_days (account,day,sleep_id,completed,rhr_snapshot) VALUES (?,?,?,?,?)',
+                         (account, str(day), sleep_id, time.time(), '[]'))
 
     def sleep_day_prepared(self, account, day):
         with self.connection() as conn:
@@ -305,6 +399,29 @@ class HealthReadStore:
         with self.connection() as conn, conn:
             conn.execute('BEGIN IMMEDIATE')
             self._check_epoch(conn, account, epoch)
+            if kind == 'heart-rate':
+                from heart_rate_retention import cache_windows, keep_night, save_daily
+                had_points = bool(points)
+                previous_summary = conn.execute('SELECT 1 FROM daily_intraday_hr WHERE owner=? AND day=?', (account, query.start[:10])).fetchone()
+                save_daily(conn, account, points, query.expression(query.start, query.end), now)
+                windows = cache_windows(conn, account)
+                points = keep_night(points, windows)
+                # A daytime request must not claim disk coverage for discarded samples.
+                # Save only intersections with known main-sleep intervals.
+                for start, end in windows:
+                    lower = max(query.start, clock(datetime.fromtimestamp(start, timezone.utc).isoformat()))
+                    upper = min(query.end, clock(datetime.fromtimestamp(end, timezone.utc).isoformat()))
+                    if not query.field.endswith('.physical_time') or lower >= upper:
+                        continue
+                    payload = [p for p in points if lower <= point_clock(p, query.field) < upper]
+                    identity = (account, kind, query.field, reconciled, lower, upper)
+                    conn.execute('''INSERT OR REPLACE INTO read_slices
+                        (account,kind,field,reconciled,lower_bound,upper_bound,fetched,payload)
+                        VALUES (?,?,?,?,?,?,?,?)''', (*identity, now, json.dumps(payload)))
+                    self._index_slice(conn, identity, payload)
+                if invalidate and (had_points or previous_summary is None):
+                    self._invalidate_days(conn, account, query.start[:10], query.end[:10])
+                return True
             for lower, upper in zip(bounds, bounds[1:]):
                 payload = [p for p, stamp in zip(points, positions) if lower <= stamp < upper]
                 serialized = json.dumps(payload)
@@ -361,9 +478,19 @@ class HealthReadStore:
     def _invalidate_days(conn, account, start=None, end=None):
         conn.execute('INSERT INTO calculation_versions VALUES (?,1) ON CONFLICT(account) DO UPDATE SET version=version+1', (account,))
         if start is None:
-            conn.execute('DELETE FROM calculated_days WHERE account=?', (account,))
+            conn.execute("DELETE FROM calculated_days WHERE account=? AND key NOT LIKE 'finalized-strain:%'", (account,))
         else:
-            conn.execute('DELETE FROM calculated_days WHERE account=? AND substr(key,-10)>=? AND substr(key,-10)<=?', (account, start, end))
+            conn.execute("DELETE FROM calculated_days WHERE account=? AND key NOT LIKE 'finalized-strain:%' AND substr(key,-10)>=? AND substr(key,-10)<=?", (account, start, end))
+
+    def reset_sleep_preparation(self, account, day):
+        with self.connection() as conn, conn:
+            conn.execute('UPDATE sleep_days SET prepared=0 WHERE account=? AND day=?', (account, str(day)))
+            conn.execute('DELETE FROM page_snapshots WHERE account=?', (account,))
+
+    def save_steps(self, account, values):
+        with self.connection() as conn, conn:
+            conn.executemany('INSERT OR REPLACE INTO dynamic_steps VALUES (?,?,?)',
+                             [(account, str(day), value) for day, value in values.items()])
 
     def calculation_version(self, account):
         with self.connection() as conn:
@@ -405,6 +532,8 @@ class HealthReadStore:
         return None
 
     def snapshot_write(self, account, key, payload, epoch, *, now=None):
+        from heart_rate_retention import without_day_traces
+        payload = without_day_traces(payload)
         with self.connection() as conn, conn:
             conn.execute('BEGIN IMMEDIATE')
             self._check_epoch(conn, account, epoch)

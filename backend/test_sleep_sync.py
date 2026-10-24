@@ -2,6 +2,7 @@ import asyncio
 from datetime import timedelta
 
 import pytest
+from unittest.mock import AsyncMock
 
 from test_dynamic_sync import fixture, NOW
 from dynamic_sync import sync_dynamic
@@ -35,19 +36,19 @@ def test_first_visit_saves_sleep_and_daily_lock_survives_restart(tmp_path):
         assert result['sleep_updated']
         kinds = [c.args[0] for c in client._fetch_points.await_args_list]
         assert kinds.count('sleep') == 1
-        assert kinds.count('heart-rate') == 1  # Dynamic coverage already contains the sleep.
-        assert set(kinds) == {'heart-rate', 'exercise', 'sleep', 'daily-heart-rate-variability',
-                              'daily-resting-heart-rate', 'daily-respiratory-rate',
+        assert kinds.count('heart-rate') == 2  # Main sleep gets dedicated persisted coverage.
+        assert set(kinds) == {'heart-rate', 'exercise', 'activity-level', 'sleep', 'daily-heart-rate-variability',
+                              'daily-respiratory-rate',
                               'daily-sleep-temperature-derivations', 'heart-rate-variability'}
         assert await client.get_sleep_session(NOW.date()) is not None
         assert len(await client.get_sleep_stage_points(NOW.date(), NOW.date())) == 1
         client._fetch_points.side_effect = AssertionError('page attempted a remote read')
         assert await client.get_daily_hrv(NOW.date()) == 65
-        assert await client.get_resting_heart_rate(NOW.date()) == 55
+        assert await client.get_resting_heart_rate(NOW.date()) is None  # No stages/readings in this fixture.
         restarted = fixture(path)
         result = await sync_dynamic(restarted, 'second', True, now=NOW + timedelta(minutes=2), age=22)
         assert not result['sleep_updated']
-        assert [c.args[0] for c in restarted._fetch_points.await_args_list] == ['heart-rate', 'exercise']
+        assert [c.args[0] for c in restarted._fetch_points.await_args_list] == ['heart-rate', 'exercise', 'activity-level']
         assert restarted.store.dynamic_status(restarted.account_key)['sleep_revision'] == 1
     asyncio.run(run())
 
@@ -64,7 +65,7 @@ def test_overnight_readings_are_limited_to_sleep_and_reuse_dynamic_coverage(tmp_
         from health_read_store import read_range
         gap = read_range(heart[1])
         assert gap.start == '2026-10-07T23:00:00.000000'
-        assert gap.end == '2026-10-08T00:00:00.000000'
+        assert gap.end == '2026-10-08T07:00:00.000000'
     asyncio.run(run())
 
 

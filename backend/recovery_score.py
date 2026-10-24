@@ -135,7 +135,7 @@ def recovery_from_history(history: dict[str, list[dict]], day: date,
     today_rhr = rhr.get(day, {}).get("value")
     method = rhr.get(day, {}).get("method")
     # Unreported/unspecified methods cannot establish that readings are comparable.
-    known_method = method in ("WITH_SLEEP", "ONLY_WITH_AWAKE_DATA")
+    known_method = method in ("WITH_SLEEP", "ONLY_WITH_AWAKE_DATA", "ASLEEP_TIME_WEIGHTED_V1")
     baseline_rhr = [point["value"] for when, point in rhr.items()
                     if start <= when <= end and known_method and point.get("method") == method]
     illness_flag = False

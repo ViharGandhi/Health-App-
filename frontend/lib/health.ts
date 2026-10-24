@@ -4,8 +4,8 @@ export type HealthRange = 'W' | 'M' | '6M';
 export const healthMetrics = [
   { key: 'hrv', slug: 'hrv', title: 'HEART RATE VARIABILITY', unit: 'ms', digits: 0,
     meaning: 'Daily RMSSD reflects beat-to-beat variation. Compare your own repeated readings; one value cannot establish readiness.' },
-  { key: 'rhr', slug: 'resting-heart-rate', title: 'RESTING HEART RATE', unit: 'bpm', digits: 0,
-    meaning: 'A daily resting estimate. Your own pattern is more informative than comparing one number with someone else’s.' },
+  { key: 'rhr', slug: 'resting-heart-rate', title: 'RESTING HEART RATE', unit: 'bpm', digits: 1,
+    meaning: 'Your time-weighted average heart rate during light, deep and REM sleep. Awake stages are excluded. Calculated once when your main sleep is logged and saved for that day.' },
   { key: 'respiratory_rate', slug: 'respiratory-rate', title: 'RESPIRATORY RATE', unit: 'rpm', digits: 1,
     meaning: 'Average breaths per minute during the main sleep period. Look for sustained changes alongside other context.' },
   { key: 'spo2', slug: 'oxygen-saturation', title: 'OXYGEN SATURATION', unit: '%', digits: 1,

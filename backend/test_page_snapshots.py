@@ -20,7 +20,7 @@ def test_authenticated_route_reload_uses_snapshot_and_explicit_refresh_bypasses_
         store = HealthReadStore(Path(directory) / 'health.sqlite3')
         client = GoogleHealthClient('fixture', cache=True, account_id='fixture', store=store)
         calculation = AsyncMock(return_value=compute_mock_strain())
-        with patch('main.get_session', return_value={'user_email': 'fixture@example.test'}), \
+        with patch('main.get_session', return_value={'health_user_id': 'fixture', 'user_email': 'fixture@example.test'}), \
              patch('main._get_token', AsyncMock(return_value='fixture')), \
              patch('main.GoogleHealthClient', return_value=client), \
              patch('main._compute_real_strain', calculation), \

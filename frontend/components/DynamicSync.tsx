@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { usePathname } from 'next/navigation';
 import { api } from '@/lib/api';
 import { DynamicSyncSchedule } from '@/lib/dynamicSyncSchedule';
+import { getSyncActivity, getServerSyncActivity, subscribeSyncActivity } from '@/lib/syncActivity';
+import styles from './DynamicSync.module.css';
 
 let schedule: DynamicSyncSchedule | undefined;
 let appSession: string | undefined;
@@ -11,6 +13,7 @@ let reloadSession: string | undefined;
 
 export default function DynamicSync() {
   const pathname = usePathname();
+  const syncing = useSyncExternalStore(subscribeSyncActivity, getSyncActivity, getServerSyncActivity);
   const [message, setMessage] = useState('');
   const [lastSynced, setLastSynced] = useState<number | null>(null);
   const [connected, setConnected] = useState(false);
@@ -81,11 +84,14 @@ export default function DynamicSync() {
       window.removeEventListener('ojas:sync-status', statusChanged);
     };
   }, [pathname]);
-  if (!connected && !message) return null;
+  if (!connected && !message && !syncing) return null;
   const label = lastSynced == null ? 'Not synced yet' : `Last synced: ${new Date(lastSynced).toLocaleString([], {
     month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
   })}`;
   return <div style={{ margin: '8px 16px', fontSize: 12, color: '#AEB8C1' }}>
+    {syncing && <p className={styles.activity} role="status" aria-live="polite">
+      <span className={styles.spinner} aria-hidden="true" /> Syncing your data...
+    </p>}
     {connected && <p style={{ margin: 0 }}>{label}</p>}
     {message && <p role="status" style={{ margin: '4px 0 0' }}>{message}</p>}
   </div>;

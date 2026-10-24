@@ -18,6 +18,15 @@ _daily_cache = OrderedDict()
 _calculation_locks = {}
 
 
+def strain_profile(client, age, config):
+    return hashlib.sha256(repr(('strain-v3-midnight', str(getattr(client, 'strain_timezone', timezone.utc)),
+        age, getattr(client, 'strain_sex', 'm'), getattr(client, 'strain_sex_defaulted', True), config)).encode()).hexdigest()
+
+
+def finalized_key(client, day, age, config):
+    return f'finalized-strain:{strain_profile(client, age, config)}:{day}'
+
+
 def _encode_day(value):
     if isinstance(value, datetime):
         return {'_datetime': value.isoformat()}
@@ -46,14 +55,16 @@ async def load_strain_days(client, start, end, now, age, config=StrainConfig()):
                                 getattr(client, 'account_key', None))
         return values, inputs[1]
     account = client.account_key
-    profile = hashlib.sha256(repr(('strain-v3-midnight', str(tz), age, sex, defaulted, config)).encode()).hexdigest()
+    profile = strain_profile(client, age, config)
     days = [start + timedelta(days=i) for i in range((end - start).days + 1)]
     keys = {day: f'{profile}:{day}' for day in days}
+    finalized = {day: finalized_key(client, day, age, config) for day in days if day < now.astimezone(tz).date()}
     lock = _calculation_locks.setdefault((asyncio.get_running_loop(), account, profile), asyncio.Lock())
     async with lock:
-        cached = await asyncio.to_thread(store.days_read, account, list(keys.values()),
+        cached = await asyncio.to_thread(store.days_read, account, list(keys.values()) + list(finalized.values()),
                                          now=0 if getattr(client, 'stored_only', False) else None)
         values = {day: json.loads(cached[key], object_hook=_decode_day) for day, key in keys.items() if key in cached}
+        values.update({day: json.loads(cached[key], object_hook=_decode_day) for day, key in finalized.items() if key in cached})
         missing = [day for day in days if day not in values]
         if missing:
             # Only expired/missing days need raw inputs, rather than the whole month.
@@ -70,7 +81,9 @@ async def load_strain_days(client, start, end, now, age, config=StrainConfig()):
                 ttl = 60 if day == today else 900 if day >= today - timedelta(days=3) else 86400
                 entries.append((keys[day], time.time() + ttl, json.dumps(value, default=_encode_day)))
             await asyncio.to_thread(store.days_write, account, entries, version)
-            values.update(calculated)
+            # A missing day can span a finalized day. Never replace its full-day
+            # result with a recalculation using only the retained night samples.
+            values.update({day: value for day, value in calculated.items() if day in missing})
         sessions = {}
         for value in values.values():
             for session in value.get('_sessions', []):

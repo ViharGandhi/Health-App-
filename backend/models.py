@@ -162,6 +162,13 @@ class SleepResponse(BaseModel):
     sleeping_hrv: Optional[float] = None
     deep_sleep_hrv: Optional[float] = None
     sleeping_hr: Optional[float] = None
+    hrv_baseline: Optional[float] = None
+    rhr_baseline: Optional[float] = None
+    hrv_baseline_nights: int = 0
+    rhr_baseline_nights: int = 0
+    baseline_window_days: int = 60
+    baseline_start: Optional[str] = None
+    baseline_end: Optional[str] = None
     consistency_minutes: Optional[float] = None
     average_bed_time: Optional[str] = None
     average_wake_time: Optional[str] = None
@@ -171,6 +178,10 @@ class SleepResponse(BaseModel):
     stage_score: Optional[float]
     restfulness_score: float
     hr_dip_score: float
+    waking_hr: Optional[float] = None
+    waking_hr_date: Optional[str] = None
+    waking_hr_sample_count: int = 0
+    hr_dip_pct: Optional[float] = None
     is_mock: bool = True
 
 
@@ -304,6 +315,8 @@ class HealthHeartRateResponse(BaseModel):
     is_mock: bool
     heart_rate: List[HeartRatePoint]
     latest_heart_rate: Optional[LatestHeartRate] = None
+    daily_average_bpm: Optional[float] = None
+    daily_sample_count: int = 0
 
 
 class HealthResponse(BaseModel):

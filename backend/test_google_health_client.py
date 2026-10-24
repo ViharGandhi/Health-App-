@@ -119,7 +119,7 @@ class GoogleHealthClientTests(unittest.TestCase):
         mock_client = httpx.AsyncClient(transport=transport)
         with patch("google_health_client.httpx.AsyncClient", return_value=mock_client):
             with self.assertRaises(httpx.HTTPStatusError):
-                asyncio.run(GoogleHealthClient("token").get_resting_heart_rate(date(2026, 9, 30)))
+                asyncio.run(GoogleHealthClient("token").get_daily_hrv(date(2026, 9, 30)))
 
     def test_rate_limit_retries_then_returns_points(self):
         calls = 0
@@ -128,13 +128,13 @@ class GoogleHealthClientTests(unittest.TestCase):
             nonlocal calls
             calls += 1
             return (httpx.Response(429, headers={"Retry-After": "0"}) if calls == 1
-                    else httpx.Response(200, json={"dataPoints": [{"dailyRestingHeartRate": {
-                        "beatsPerMinute": "56"}}]}))
+                    else httpx.Response(200, json={"dataPoints": [{"dailyHeartRateVariability": {
+                        "averageHeartRateVariabilityMilliseconds": "56"}}]}))
 
         mock_client = httpx.AsyncClient(transport=httpx.MockTransport(respond))
         with patch("google_health_client.httpx.AsyncClient", return_value=mock_client), \
              patch("google_health_client.asyncio.sleep", new=AsyncMock()) as wait:
-            result = asyncio.run(GoogleHealthClient("token").get_resting_heart_rate(date(2026, 9, 30)))
+            result = asyncio.run(GoogleHealthClient("token").get_daily_hrv(date(2026, 9, 30)))
         self.assertEqual(result, 56)
         self.assertEqual(calls, 2)
         wait.assert_awaited_once_with(0)

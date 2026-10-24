@@ -146,7 +146,7 @@ def compute_mock_sleep(today: date | None = None, age: int = USER_AGE,
     # Compute sub-scores for frontend display
     total_h = sleep.total_duration / 3600.0
     dur_score = SleepCalculator.compute_duration_score(
-        total_h + sleep.nap_duration_seconds / 3600, sleep_need)
+        total_h, sleep_need)
 
     efficiency = sleep.total_duration / sleep.in_bed_duration * 100
     stages = SleepStages(

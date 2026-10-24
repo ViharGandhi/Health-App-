@@ -205,7 +205,7 @@ class SleepCalculator:
     @staticmethod
     def compute_duration_score(total_hours: float, sleep_need: float,
                                steepness: float = 8.0, midpoint: float = 0.75) -> float:
-        """Approved rescaling: the original sigmoid reaches 100 at need."""
+        """Original duration curve from commit 6cb9e7a, without rescaling."""
         if not all(finite_number(v) for v in (total_hours, sleep_need, steepness, midpoint)):
             raise ValueError('Duration inputs must be finite numbers')
         if total_hours <= 0 or sleep_need <= 0:
@@ -213,14 +213,10 @@ class SleepCalculator:
         ratio = total_hours / sleep_need
         if ratio <= 1.0:
             try:
-                raw = 100.0 / (1.0 + math.exp(-steepness * (ratio - midpoint)))
-                at_need = 100.0 / (1.0 + math.exp(-steepness * (1.0 - midpoint)))
+                return 100.0 / (1.0 + math.exp(-steepness * (ratio - midpoint)))
             except OverflowError:
-                # Evaluate the same ratio in log space only when direct exponentiation overflows.
-                log_sigmoid = lambda x: -math.log1p(math.exp(-x)) if x >= 0 else x - math.log1p(math.exp(x))
-                return 100.0 * math.exp(log_sigmoid(steepness * (ratio - midpoint))
-                                        - log_sigmoid(steepness * (1.0 - midpoint)))
-            return raw / at_need * 100.0
+                # Preserve numerical safety at the original sigmoid's zero limit.
+                return 0.0
         if ratio <= 1.10:
             return 100.0
         return max(30.0, 100.0 - (ratio - 1.10) * 75.0)
@@ -351,6 +347,7 @@ class SleepCalculator:
         age: Optional[int] = None,
         duration_steepness: float = 8.0,
         duration_midpoint: float = 0.75,
+        allow_waking_hr_fallback: bool = True,
     ) -> float:
         """
         Calculates sleep score 0–100.
@@ -417,7 +414,7 @@ class SleepCalculator:
         hr_score = SleepCalculator.compute_sleeping_hr_score(sleeping_hr, sleeping_hr_baseline)
 
         # 6. Heart Rate Dip (increased weight to 18%)
-        effective_waking_hr = waking_hr if waking_hr is not None else sleeping_hr_baseline
+        effective_waking_hr = waking_hr if waking_hr is not None else sleeping_hr_baseline if allow_waking_hr_fallback else None
         hr_dip_score = SleepCalculator.compute_hr_dip_score(sleeping_hr, effective_waking_hr)
 
         # 7. Restfulness — WASO-based (increased to 15%)
