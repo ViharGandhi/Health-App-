@@ -74,7 +74,7 @@ export default function DashboardPage() {
   const sleep = data.sleep;
   const monitor = data.health_monitor;
   const allWithin = monitor.assessed === monitor.expected && monitor.within === monitor.assessed;
-  const monitorColor = allWithin ? '#00DCA0' : '#AEB8C1';
+  const monitorColor = allWithin ? '#00D7A1' : '#AEB8C1';
   const recoveryHref = `/recovery${day ? `?date=${day}` : ''}`;
   return <div className={styles.pageWrapper}><div className={styles.container}>
     {sample && <div className={styles.sampleBanner}>SAMPLE DATA · Walking, running & strength preview <a href="/">Live data →</a></div>}
@@ -87,7 +87,7 @@ export default function DashboardPage() {
     <section className={styles.dialsSection} aria-label="Daily scores">
       <CircleDial label="SLEEP" value={sleep?.performance ?? 0} displayText={sleep?.performance == null ? '—' : undefined} maxValue={100} color={BLUE} unit="%" size={94} onClick={() => router.push('/sleep')} />
       <CircleDial label="RECOVERY" value={current.score ?? 0} displayText={current.score == null ? '—' : undefined} maxValue={100} color={recoveryColor(current.zone, current.status)} unit="%" size={94} onClick={() => router.push(recoveryHref)} />
-      <CircleDial label="STRAIN" value={strain?.score_21 ?? 0} displayText={strain?.age_missing || strain?.avg_hr == null ? '—' : undefined} maxValue={21} color="#009FE8" size={94} onClick={() => router.push('/strain')} />
+      <CircleDial label="STRAIN" value={strain?.score_21 ?? 0} displayText={strain?.age_missing || strain?.avg_hr == null ? '—' : undefined} maxValue={21} color="#008ADF" size={94} onClick={() => router.push('/strain')} />
     </section>
     <div className={styles.monitorsGrid}>
       <Link className={styles.monitorCard} href="/health"><div className={styles.cardHeaderRow}><span>HEALTH MONITOR</span><Chevron /></div><div className={styles.monitorBody}><span className={styles.checkIconBox} style={{ color: monitorColor }}>{allWithin ? '✓' : '—'}</span><span className={styles.monitorTextStack}><strong style={{ color: monitorColor }}>{allWithin ? 'WITHIN RANGE' : monitor.assessed < monitor.expected ? 'BUILDING RANGE' : 'OUTSIDE RANGE'}</strong><small>{monitor.assessed < monitor.expected ? `${monitor.assessed}/${monitor.expected} Metrics assessed` : `${monitor.within}/${monitor.expected} Metrics${allWithin ? '' : ' within'}`}</small></span></div></Link>

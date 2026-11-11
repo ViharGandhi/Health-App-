@@ -19,7 +19,7 @@ export default function HomeDashboard({ data, onInfo, stress, stressError, stres
       ? <StrainMetricIcon metric={row.key as StrainMetric} size={21} />
       : ['performance', 'consistency', 'asleep_minutes'].includes(row.key) ? <RecoveryMetricIcon metric="sleep_performance" size={21} /> : <HealthMetricIcon metric={row.key} size={21} />}</span><span className={styles.name}>{row.title}</span>
       <span className={styles.values}><strong>{dashboardValue(row.value, row.key, row.unit)}</strong><small>{dashboardValue(row.previous, row.key, row.unit)}</small></span>
-      <span className={styles.arrow} style={{ color: delta == null || Math.abs(delta) < .05 ? '#9BA4AD' : delta > 0 ? '#00DCA0' : '#F5AC22' }}>{arrow}</span></>;
+      <span className={styles.arrow} style={{ color: delta == null || Math.abs(delta) < .05 ? '#9BA4AD' : delta > 0 ? '#00D7A1' : '#FFA21A' }}>{arrow}</span></>;
     return data.is_mock ? <button className={styles.row} key={row.key} onClick={() => onInfo(`${row.title}: synthetic preview. The smaller value is the prior 30-day average; weekly duration rows compare complete seven-day totals. Open the live tab for your connected trends.`)}>{content}</button>
       : <Link className={styles.row} key={row.key} href={row.href}>{content}</Link>;
   }

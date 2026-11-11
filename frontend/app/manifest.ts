@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Personal Fitbit health trends and recovery signals.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#0B0B0B',
-    theme_color: '#0B0B0B',
+    background_color: '#101418',
+    theme_color: '#101418',
     icons: [{ src: '/icon', sizes: '512x512', type: 'image/png' }],
   };
 }

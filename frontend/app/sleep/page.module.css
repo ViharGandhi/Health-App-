@@ -2,7 +2,7 @@
 
 .pageWrapper {
   min-height: 100dvh;
-  background: linear-gradient(180deg, #252F37 0%, #171B20 650px, #101316 1300px);
+  background: linear-gradient(180deg, #29363E 0%, #172127 650px, #101418 1300px);
   color: var(--text-primary);
   display: flex;
   flex-direction: column;
@@ -22,7 +22,7 @@
   position: sticky;
   top: 0;
   z-index: 5;
-  background: #252F37;
+  background: #29363E;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -63,7 +63,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8E95A2;
+  color: #B0B5BA;
   transition: color 0.15s ease;
 }
 
@@ -160,7 +160,7 @@
 
 /* ---- Main Breakdown Card ---- */
 .breakdownCard {
-  background: linear-gradient(150deg, #2B3036, #202328);
+  background: linear-gradient(150deg, #29363E, #29363E);
   border: 1px solid transparent;
   border-radius: 18px;
   padding: 16px 18px;
@@ -217,7 +217,7 @@
   font-family: var(--font-body);
   font-size: 10px;
   font-weight: 600;
-  color: #8E95A2;
+  color: #B0B5BA;
   letter-spacing: 0.03em;
 }
 
@@ -242,7 +242,7 @@
 }
 
 .segmentInactive {
-  background: #2A2F3A;
+  background: #29363E;
 }
 
 .segmentPoor {
@@ -254,7 +254,7 @@
 }
 
 .segmentOptimal {
-  background: #00DCA0;
+  background: #00D7A1;
 }
 
 .metricValue {
@@ -299,7 +299,7 @@
 .legendBarOptimal {
   width: 12px;
   height: 3.5px;
-  background: #00DCA0;
+  background: #00D7A1;
   border-radius: 2px;
 }
 
@@ -307,7 +307,7 @@
   font-family: var(--font-body);
   font-size: 11px;
   font-weight: 600;
-  color: #8E95A2;
+  color: #B0B5BA;
 }
 
 /* ---- Last Night's Sleep Section ---- */
@@ -353,7 +353,7 @@
 
 .nightSubMuted {
   font-weight: 500;
-  color: #8E95A2;
+  color: #B0B5BA;
 }
 
 .nightEditBtn {
@@ -362,7 +362,7 @@
   gap: 5px;
   background: transparent;
   border: none;
-  color: #8E95A2;
+  color: #B0B5BA;
   font-family: var(--font-body);
   font-size: 11.5px;
   font-weight: 800;
@@ -378,9 +378,9 @@
 
 /* Main Card */
 .nightCard {
-  background: linear-gradient(150deg, #2B3036, #202328);
+  background: linear-gradient(150deg, #29363E, #29363E);
   border: 1px solid transparent;
-  border-radius: 14px;
+  border-radius: 18px;
   padding: 16px 16px 18px;
   display: flex;
   flex-direction: column;
@@ -400,7 +400,7 @@
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #8E95A2;
+  color: #B0B5BA;
 }
 
 .hoursInfoBtn {
@@ -436,7 +436,7 @@
 
 .hoursScoreDelta {
   font-size: 9px;
-  color: #00E5A3;
+  color: #00D7A1;
   margin-left: 2px;
 }
 
@@ -444,7 +444,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 600;
-  color: #8E95A2;
+  color: #B0B5BA;
   margin-top: 3px;
 }
 
@@ -471,7 +471,7 @@
   font-family: var(--font-body);
   font-size: 9px;
   font-weight: 600;
-  color: #5C626E;
+  color: #7F878D;
   line-height: 1;
 }
 
@@ -537,7 +537,7 @@
 
 .hrTooltip span {
   font-size: 8px;
-  color: #8E95A2;
+  color: #B0B5BA;
   margin-top: 2px;
 }
 
@@ -546,7 +546,7 @@
   position: absolute;
   font-family: var(--font-body);
   font-size: 9px;
-  color: #8E95A2;
+  color: #B0B5BA;
 }
 
 .hrChartHint {
@@ -577,7 +577,7 @@
   font-family: var(--font-body);
   font-size: 10px;
   font-weight: 700;
-  color: #8E95A2;
+  color: #B0B5BA;
 }
 
 /* ---- Typical Range Header ---- */
@@ -598,7 +598,7 @@
   font-weight: 800;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: #8E95A2;
+  color: #B0B5BA;
 }
 
 .typicalHatchBox {
@@ -627,7 +627,7 @@
   font-weight: 800;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: #8E95A2;
+  color: #B0B5BA;
 }
 
 .durationValue {
@@ -647,7 +647,7 @@
 .stageRangeNote {
   font-family: var(--font-body);
   font-size: 10px;
-  color: #8E95A2;
+  color: #B0B5BA;
   margin: -8px 0 16px;
 }
 
@@ -662,7 +662,7 @@
 }
 
 .stageItem:focus-visible {
-  outline: 1px solid #8E95A2;
+  outline: 1px solid #B0B5BA;
   outline-offset: 5px;
   border-radius: 3px;
 }
@@ -706,28 +706,28 @@
   font-family: var(--font-body);
   font-size: 10.5px;
   font-weight: 700;
-  color: #8E95A2;
+  color: #B0B5BA;
 }
 
 .stagePctLavender {
   font-family: var(--font-body);
   font-size: 10.5px;
   font-weight: 700;
-  color: #9B8AFB;
+  color: #A995EC;
 }
 
 .stagePctPink {
   font-family: var(--font-body);
   font-size: 10.5px;
   font-weight: 700;
-  color: #FF5CD1;
+  color: #F586E9;
 }
 
 .stagePctPurple {
   font-family: var(--font-body);
   font-size: 10.5px;
   font-weight: 700;
-  color: #B040FF;
+  color: #A953DE;
 }
 
 .stageDurationVal {
@@ -806,7 +806,7 @@
   width: 11px;
   height: 11px;
   border-radius: 2px;
-  background: linear-gradient(135deg, #B040FF 50%, #FF5CD1 50%);
+  background: linear-gradient(135deg, #A953DE 50%, #F586E9 50%);
   display: inline-block;
   flex-shrink: 0;
 }
@@ -842,14 +842,14 @@
 
 .restorativeDelta {
   font-size: 8px;
-  color: #00E5A3;
+  color: #00D7A1;
 }
 
 .restorativeBaseline {
   font-family: var(--font-body);
   font-size: 11.5px;
   font-weight: 600;
-  color: #8E95A2;
+  color: #B0B5BA;
   margin-top: 3px;
 }
 

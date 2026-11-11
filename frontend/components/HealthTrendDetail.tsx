@@ -38,7 +38,7 @@ export default function HealthTrendDetail({ slug }: { slug: string }) {
       <div className={styles.selector}><HealthMetricIcon metric={metric.key} /><select aria-label="Health metric" value={slug} onChange={event => router.push(`/health/${event.target.value}`)}>
         {healthMetrics.map(item => <option key={item.slug} value={item.slug}>{item.title}</option>)}
       </select></div>
-      <div className={styles.stats}><div><div className={styles.eyebrow}>{selection ? selection.label : 'AVERAGE'}</div><div className={styles.average} style={selection ? { color: '#67AEE6' } : undefined}>{value == null ? '—' : value.toFixed(metric.digits)}<small>{value == null ? '' : metric.unit}</small></div></div>
+      <div className={styles.stats}><div><div className={styles.eyebrow}>{selection ? selection.label : 'AVERAGE'}</div><div className={styles.average} style={selection ? { color: '#3299DD' } : undefined}>{value == null ? '—' : value.toFixed(metric.digits)}<small>{value == null ? '' : metric.unit}</small></div></div>
         <div className={styles.tabs} role="group" aria-label="Health history range">{(['W', 'M', '6M'] as const).map(item => <button key={item} aria-pressed={range === item} onClick={() => { if (item !== range) { setSelection(null); setRange(item); } }}>{item}</button>)}</div>
       </div>
       {error ? <div className={styles.loading} role="alert"><p>{error}</p><button className="btn btn-primary" onClick={retry}>Retry</button><Link className={healthStyles.connect} href="/connect">Connect account</Link></div>

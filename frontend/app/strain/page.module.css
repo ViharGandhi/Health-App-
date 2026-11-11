@@ -4,10 +4,10 @@
 .selector::after { content: ''; position: absolute; right: 20px; top: calc(50% - 6px); width: 8px; height: 8px; border-right: 3px solid #FFF; border-bottom: 3px solid #FFF; transform: rotate(45deg); pointer-events: none; }
 .activities { margin-bottom: 30px; }
 .activityRow { display: flex; align-items: center; gap: 13px; padding: 9px 12px 9px 8px; background: #343B41; border-radius: 11px; margin-bottom: 11px; }
-.activityBadge { display: flex; align-items: center; justify-content: center; gap: 8px; flex: 0 0 93px; min-height: 41px; border-radius: 7px; background: #0099E6; }
+.activityBadge { display: flex; align-items: center; justify-content: center; gap: 8px; flex: 0 0 93px; min-height: 41px; border-radius: 7px; background: #008ADF; }
 .activityBadge strong { font: 700 23px var(--font-display); }
 .activityName { flex: 1; font: 800 10px var(--font-body); letter-spacing: .09em; text-transform: uppercase; }
-.activityTimes { display: flex; flex-direction: column; gap: 5px; border-right: 2px solid #0099E6; padding-right: 8px; color: #B0B8BF; font: 600 11px var(--font-display); }
+.activityTimes { display: flex; flex-direction: column; gap: 5px; border-right: 2px solid #008ADF; padding-right: 8px; color: #B0B8BF; font: 600 11px var(--font-display); }
 .cardLink { color: inherit; text-decoration: none; }
 .chartLegend { display: flex; justify-content: flex-end; gap: 13px; margin-top: 16px; margin-bottom: -3px; }
 .chartLegend span { display: flex; align-items: center; gap: 6px; color: #E1E5E8; font: 800 8px var(--font-body); letter-spacing: .06em; }

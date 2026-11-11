@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   z-index: 90;
-  background: rgba(11, 11, 11, 0.94);
+  background: rgba(16, 20, 24, 0.94);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -28,7 +28,7 @@
   max-width: 408px;
   margin: auto;
   border-radius: 20px;
-  background: #20272EF2;
+  background: #29363EF2;
   border: 1px solid #FFFFFF0A;
 }
 
@@ -40,13 +40,13 @@
   gap: 3px;
   flex: 1;
   text-decoration: none;
-  color: #6C7280;
+  color: #7F878D;
   transition: color 0.15s ease;
   user-select: none;
 }
 
 .item:hover {
-  color: #A3A8B5;
+  color: #B0B5BA;
 }
 
 .active {

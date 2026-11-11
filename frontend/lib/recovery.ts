@@ -7,16 +7,16 @@ export const recoveryMetrics: { metric: RecoveryMetric; slug: string; title: str
   { metric: 'respiratory_rate', slug: 'respiratory-rate', title: 'RESPIRATORY RATE', unit: 'rpm', digits: 1, kind: 'line' },
   { metric: 'sleep_performance', slug: 'sleep-performance', title: 'SLEEP PERFORMANCE', unit: '%', digits: 0, kind: 'bar' },
 ];
-export const BLUE = '#7BA1BB';
-export const LINE_BLUE = '#67AEE6';
-export const AMBER = '#F5AC22';
-export const TEAL = '#00DCA0';
+export const BLUE = '#6D97B1';
+export const LINE_BLUE = '#3299DD';
+export const AMBER = '#FFA21A';
+export const TEAL = '#00D7A1';
 
 export function recoveryColor(zone: RecoveryData['zone'], status?: string): string {
-  if (zone === 'above_normal' || status === 'green') return '#16EC06';
+  if (zone === 'above_normal' || status === 'green') return '#00E82D';
   if (zone === 'normal' || status === 'yellow') return '#FFDE00';
   if (zone === 'below_normal' || status === 'red') return '#FF0026';
-  return '#77818B';
+  return '#858A8F';
 }
 export function recoveryLabel(data: RecoveryData): string {
   if (data.zone) return data.zone.replaceAll('_', ' ');

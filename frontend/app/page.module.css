@@ -1,4 +1,4 @@
-.pageWrapper { min-height: 100dvh; background: linear-gradient(180deg, #252F37 0%, #171B20 580px, #101316 1000px); color: #FFF; }
+.pageWrapper { min-height: 100dvh; background: linear-gradient(180deg, #29363E 0%, #172127 580px, #101418 1000px); color: #FFF; }
 .container { max-width: 440px; margin: auto; padding: 14px 16px 110px; }
 .topHeader { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .headerLeft { display: flex; align-items: center; gap: 8px; }
@@ -12,48 +12,48 @@
 .brandBar { text-align: center; color: #D2D7DB; font: 500 19px var(--font-body); letter-spacing: .18em; padding: 29px 0 18px; }
 .dialsSection { display: flex; align-items: flex-start; justify-content: space-around; gap: 10px; margin-bottom: 26px; }
 .monitorsGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.monitorCard { min-width: 0; padding: 15px 12px; border: 0; border-radius: 12px; background: #30373D; color: #FFF; cursor: pointer; text-decoration: none; text-align: left; }
+.monitorCard { min-width: 0; padding: 15px 12px; border: 0; border-radius: 12px; background: #29363E; color: #FFF; cursor: pointer; text-decoration: none; text-align: left; }
 .cardHeaderRow { display: flex; align-items: center; justify-content: space-between; gap: 6px; font: 800 9px var(--font-body); letter-spacing: .045em; white-space: nowrap; }
 .cardHeaderRow svg { flex-shrink: 0; color: #9AA5AD; }
 .monitorBody { display: flex; align-items: center; gap: 7px; margin-top: 16px; }
 .checkIconBox, .stressScoreBadge { flex: 0 0 24px; height: 25px; border-radius: 4px; display: grid; place-items: center; font: 700 19px var(--font-display); }
-.checkIconBox { background: #00DCA020; }
-.stressScoreBadge { color: #7BA1BB; background: #7BA1BB24; }
+.checkIconBox { background: #00D7A120; }
+.stressScoreBadge { color: #6D97B1; background: #6D97B124; }
 .monitorTextStack { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.monitorTextStack strong { font: 800 9px var(--font-body); letter-spacing: .05em; color: #7BA1BB; }
+.monitorTextStack strong { font: 800 9px var(--font-body); letter-spacing: .05em; color: #6D97B1; }
 .monitorTextStack small { font: 600 9px var(--font-body); color: #BAC2CA; line-height: 1.4; }
 .myDaySection { margin-top: 32px; }
 .myDayHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .myDayHeader h2 { font-size: 22px; font-weight: 600; }
-.addButton { width: 35px; height: 35px; border: 0; border-radius: 11px; background: #FFF; color: #20272E; font-size: 30px; line-height: 1; cursor: pointer; }
+.addButton { width: 35px; height: 35px; border: 0; border-radius: 11px; background: #FFF; color: #29363E; font-size: 30px; line-height: 1; cursor: pointer; }
 .outlookBanner { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 13px; border-radius: 12px; background: linear-gradient(110deg, #8D8578BA, #385369D9); color: #FFF; text-decoration: none; }
 .outlookBanner > span { display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 500; }
 .outlookBanner > svg { color: #DDC493; }
-.activitiesContainer { margin-top: 16px; padding: 16px 12px; background: #2B3036; border-radius: 14px; }
+.activitiesContainer { margin-top: 16px; padding: 16px 12px; background: #29363E; border-radius: 18px; }
 .activitiesHeaderRow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; font: 800 10px var(--font-body); letter-spacing: .1em; }
 .activitiesHeaderRow a { color: #B2BCC5; text-decoration: none; font-size: 19px; }
-.activityItem { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px; margin-bottom: 12px; background: #3E444A; border-radius: 10px; color: #FFF; text-decoration: none; }
+.activityItem { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px; margin-bottom: 12px; background: #34434B; border-radius: 10px; color: #FFF; text-decoration: none; }
 .activityLeftPart { display: flex; align-items: center; gap: 13px; min-width: 0; }
-.sleepBadge { display: flex; align-items: center; justify-content: center; gap: 6px; flex: 0 0 88px; height: 39px; padding: 5px; border-radius: 7px; background: #7BA1BB; }
+.sleepBadge { display: flex; align-items: center; justify-content: center; gap: 6px; flex: 0 0 88px; height: 39px; padding: 5px; border-radius: 7px; background: #6D97B1; }
 .sleepBadge strong { font: 700 21px var(--font-display); }
 .sleepBadge small { font: 600 9px var(--font-body); margin-left: 2px; }
-.workoutBadge { background: #009FE8; }
-.sampleBanner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; margin-bottom: 15px; padding: 10px; border: 1px solid #7BA1BB55; border-radius: 8px; color: #BED5E5; font-size: 10px; }
+.workoutBadge { background: #008ADF; }
+.sampleBanner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; margin-bottom: 15px; padding: 10px; border: 1px solid #6D97B155; border-radius: 8px; color: #BED5E5; font-size: 10px; }
 .sampleBanner a { color: #FFF; }
 .activityName { font: 800 10px var(--font-body); letter-spacing: .06em; text-transform: uppercase; }
 .activityTimeline { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
 .timeStack { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; color: #BAC3CB; font: 600 11px var(--font-display); }
-.activityTimeline i { width: 2px; height: 27px; border-radius: 1px; background: #7BA1BB; }
-.workoutTimeline i { background: #009FE8; }
+.activityTimeline i { width: 2px; height: 27px; border-radius: 1px; background: #6D97B1; }
+.workoutTimeline i { background: #008ADF; }
 .actionButtonsRow { display: flex; gap: 10px; margin-top: 18px; }
-.actionButtonsRow button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 11px 5px; background: linear-gradient(#41484F, #343A40); border: 0; border-radius: 8px; color: #E1E5E8; font: 800 9px var(--font-body); letter-spacing: .04em; cursor: pointer; }
+.actionButtonsRow button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 11px 5px; background: linear-gradient(#34434B, #343A40); border: 0; border-radius: 8px; color: #E1E5E8; font: 800 9px var(--font-body); letter-spacing: .04em; cursor: pointer; }
 .actionButtonsRow button span { font-size: 18px; font-weight: 400; }
 .estimateNote { color: #9AA5AD; font-size: 10px; line-height: 1.7; margin-top: 18px; }
 .loading, .errorState { min-height: 80dvh; display: flex; align-items: center; justify-content: center; padding: 24px; font-size: 13px; color: #AFBCC6; }
-.dialog { position: fixed; inset: 0; margin: auto; width: calc(100% - 40px); max-width: 380px; background: #252F37; border: 1px solid #FFFFFF20; border-radius: 16px; color: #FFF; padding: 25px; }
+.dialog { position: fixed; inset: 0; margin: auto; width: calc(100% - 40px); max-width: 380px; background: #29363E; border: 1px solid #FFFFFF20; border-radius: 18px; color: #FFF; padding: 25px; }
 .dialog::backdrop { background: #000A; }
 .dialog h2 { font-size: 18px; margin-bottom: 14px; }
 .dialog p { font-size: 12px; line-height: 1.7; }
 .dialog button { background: #3C4B57; color: #FFF; border: 0; border-radius: 6px; padding: 10px 18px; margin-top: 20px; cursor: pointer; }
-.container :is(a, button):focus-visible { outline: 2px solid #7BA1BB; outline-offset: 3px; }
+.container :is(a, button):focus-visible { outline: 2px solid #6D97B1; outline-offset: 3px; }
 @media (max-width: 360px) { .container { padding-inline: 12px; } .headerLeft { gap: 3px; } .streakBadge { padding: 3px; } .cardHeaderRow { font-size: 8px; } .monitorCard { padding-inline: 10px; } .dialsSection { gap: 5px; } }

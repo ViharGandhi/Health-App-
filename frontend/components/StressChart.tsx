@@ -20,8 +20,8 @@ export default function StressChart({ data, interactive = false }: { data: Stres
       <desc id={`${id}-desc`}>Scale zero to three. Blue is low, green is medium, yellow is high. Gaps are unscored. Shaded bands mark recorded sleep and activities. Times in {timezone}.</desc>
       <defs><pattern id={`${id}-missing`} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="6" stroke="#9CA7AF" strokeOpacity=".13" strokeWidth="2" /></pattern></defs>
       {day.overlays.map((item, i) => <g key={`${item.kind}-${i}`}><title>{item.name}: {stressTime(item.start, timezone)}–{stressTime(item.end, timezone)}</title>
-        <rect x={x(item.start)} y="38" width={x(item.end) - x(item.start)} height="150" fill={item.kind === 'sleep' ? '#7BA9BD16' : '#009FE818'} />
-        <line x1={x(item.start)} x2={x(item.end)} y1="38" y2="38" stroke={item.kind === 'sleep' ? '#7BA9BD' : '#009FE8'} strokeWidth="2" />
+        <rect x={x(item.start)} y="38" width={x(item.end) - x(item.start)} height="150" fill={item.kind === 'sleep' ? '#7BA9BD16' : '#008ADF18'} />
+        <line x1={x(item.start)} x2={x(item.end)} y1="38" y2="38" stroke={item.kind === 'sleep' ? '#7BA9BD' : '#008ADF'} strokeWidth="2" />
         <g transform={`translate(${middle(item.start, item.end) - 9} 10)`} color="#F5F7F8">{item.kind === 'sleep' ? <path d="M14 0a8 8 0 1 1-11 11A8 8 0 0 0 14 0" fill="currentColor" /> : <ActivityIcon name={item.name} size={19} />}</g>
       </g>)}
       {[0, 1, 2, 3].map(value => <g key={value}><line x1="29" x2="338" y1={y(value)} y2={y(value)} stroke="#FFFFFF16" /><text x="4" y={y(value) + 3}>{value}.0</text></g>)}

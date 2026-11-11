@@ -16,13 +16,13 @@ export const sleepMetrics: { slug: string; title: string; metric: SleepAnalytics
 ];
 
 export function ChartLegend({ kind }: { kind: SleepChartKind }) {
-  return kind === 'hours' ? <div className={styles.legend}><span style={{ color: '#7BA1BB' }}><i />HOURS OF SLEEP</span><span style={{ color: '#00DCA0' }}><i />SLEEP NEEDED</span></div>
-    : kind === 'restorative' ? <div className={styles.legend}><span><b className={styles.swatch} style={{ background: '#ED8EF5' }} />DEEP SLEEP</span><span><b className={styles.swatch} style={{ background: '#AF50EC' }} />REM SLEEP</span></div> : null;
+  return kind === 'hours' ? <div className={styles.legend}><span style={{ color: '#6D97B1' }}><i />HOURS OF SLEEP</span><span style={{ color: '#00D7A1' }}><i />SLEEP NEEDED</span></div>
+    : kind === 'restorative' ? <div className={styles.legend}><span><b className={styles.swatch} style={{ background: '#F586E9' }} />DEEP SLEEP</span><span><b className={styles.swatch} style={{ background: '#A953DE' }} />REM SLEEP</span></div> : null;
 }
 
 function DailyScore({ value, baseline, unit = '%' }: { value: number | null | undefined; baseline: number | null; unit?: string }) {
   return <><div className={styles.score}>{value == null ? '—' : `${Math.round(value)}${unit}`}
-    {value != null && baseline != null && value !== baseline && <span className={styles.delta} style={{ color: value > baseline ? '#00DCA0' : '#F59E0B' }}>{value > baseline ? '▲' : '▼'}</span>}</div>
+    {value != null && baseline != null && value !== baseline && <span className={styles.delta} style={{ color: value > baseline ? '#00D7A1' : '#FFA21A' }}>{value > baseline ? '▲' : '▼'}</span>}</div>
     <div className={styles.baseline}>{baseline == null ? '—' : `${Math.round(baseline)}${unit}`}<span className={styles.note}> · prior 30 days</span></div></>;
 }
 
@@ -30,7 +30,7 @@ function Timeline({ night, awake }: { night: SleepAnalyticsDay; awake: boolean }
   const start = night.bed_time ? Date.parse(night.bed_time) : NaN;
   const period = (night.period_minutes ?? 0) * 60000;
   return <div className={styles.track}>{period > 0 && night.segments?.filter(segment => (segment.stage === 'awake') === awake).map((segment, i) =>
-    <span key={i} style={{ left: `${100 * (Date.parse(segment.start) - start) / period}%`, width: `${100 * (Date.parse(segment.end) - Date.parse(segment.start)) / period}%`, background: awake ? '#D2D3D6' : '#7BA1BB', borderRight: '1px solid #303840' }} />)}</div>;
+    <span key={i} style={{ left: `${100 * (Date.parse(segment.start) - start) / period}%`, width: `${100 * (Date.parse(segment.end) - Date.parse(segment.start)) / period}%`, background: awake ? '#D2D3D6' : '#6D97B1', borderRight: '1px solid #303840' }} />)}</div>;
 }
 
 export default function SleepAnalyticsCards({ analytics, stress, stressError }: { analytics: SleepAnalytics; stress?: SleepStressNight; stressError?: string }) {
@@ -50,12 +50,12 @@ export default function SleepAnalyticsCards({ analytics, stress, stressError }: 
       <DailyScore value={night.hours_percentage} baseline={analytics.prior_30_averages.hours_percentage} />
       <div className={styles.row}><span>HOURS OF SLEEP</span><strong>{duration(night.asleep_minutes)}</strong></div>
       <div className={styles.track}><span style={{ width: `${100 * (night.asleep_minutes ?? 0) / max}%` }} /></div>
-      <div className={styles.needTrack} style={{ width: `${100 * (need ?? 0) / max}%` }}>{components && (['baseline', 'strain', 'debt'] as const).map((key, i) => <span key={key} style={{ width: `${100 * components[key] / Math.max(grossNeed, 1)}%`, background: ['#55585E', '#0093E7', '#D2D3D6'][i] }} />)}</div>
+      <div className={styles.needTrack} style={{ width: `${100 * (need ?? 0) / max}%` }}>{components && (['baseline', 'strain', 'debt'] as const).map((key, i) => <span key={key} style={{ width: `${100 * components[key] / Math.max(grossNeed, 1)}%`, background: ['#55585E', '#008ADF', '#D2D3D6'][i] }} />)}</div>
       <div className={styles.row}><span>SLEEP NEEDED</span><strong>{duration(need)}</strong></div>
       {night.need_components && <div className={styles.components}>{(['baseline', 'strain', 'debt'] as const).map((key, i) => <div className={styles.component} key={key}>
-        <span className={styles.swatch} style={{ background: ['#55585E', '#0093E7', '#D2D3D6'][i] }} />{['Baseline sleep', 'Recent strain', 'Sleep debt added'][i]}<strong>{key !== 'baseline' ? '+' : ''}{duration(night.need_components![key])}</strong>
+        <span className={styles.swatch} style={{ background: ['#55585E', '#008ADF', '#D2D3D6'][i] }} />{['Baseline sleep', 'Recent strain', 'Sleep debt added'][i]}<strong>{key !== 'baseline' ? '+' : ''}{duration(night.need_components![key])}</strong>
       </div>)}
-        {components && components.nap_credit > 0 && <div className={styles.component}><span className={styles.swatch} style={{ background: '#7BA1BB' }} />Nap credit<strong>−{duration(components.nap_credit)}</strong></div>}
+        {components && components.nap_credit > 0 && <div className={styles.component}><span className={styles.swatch} style={{ background: '#6D97B1' }} />Nap credit<strong>−{duration(components.nap_credit)}</strong></div>}
         {Math.abs(limitAdjustment) > .01 && <div className={styles.component}><span className={styles.swatch} style={{ background: '#979FA8' }} />Sleep-need limit adjustment<strong>{limitAdjustment >= 0 ? '+' : '−'}{duration(Math.abs(limitAdjustment))}</strong></div>}
       </div>}
       <p className={styles.note}>{need == null ? 'Sleep-need estimate unavailable for this night.' : 'App estimate · Includes weighted sleep debt and nap credit.'}</p>
@@ -76,7 +76,7 @@ export default function SleepAnalyticsCards({ analytics, stress, stressError }: 
     <Link href="/sleep/stress" className={`${styles.card} ${styles.cardLink}`}>
       <div className={styles.heading}>SLEEP STRESS<span className={styles.info} title="High-stress detection from eligible HR/HRV windows. Not a WHOOP stress score.">i</span></div>
       <div className={styles.score}>{stress?.status === 'ok' && stress.stress_pct != null ? `${Math.round(stress.stress_pct)}%` : '—'}</div>
-      <div className={styles.row}><span>HIGH STRESS</span><strong>{duration(high)}</strong></div><div className={styles.track}><span style={{ width: `${stress?.valid_minutes ? 100 * (high ?? 0) / stress.valid_minutes : 0}%`, background: '#F59E0B' }} /></div>
+      <div className={styles.row}><span>HIGH STRESS</span><strong>{duration(high)}</strong></div><div className={styles.track}><span style={{ width: `${stress?.valid_minutes ? 100 * (high ?? 0) / stress.valid_minutes : 0}%`, background: '#FFA21A' }} /></div>
       <div className={styles.row}><span>NO HIGH STRESS DETECTED</span><strong>{duration(other)}</strong></div><div className={styles.track}><span style={{ width: `${stress?.valid_minutes ? 100 * (other ?? 0) / stress.valid_minutes : 0}%` }} /></div>
       <p className={styles.note}>{stress ? stress.status === 'ok' ? `${stress.night_date} · ${duration(stress.valid_minutes)} analyzed · ${stress.confidence} confidence · Unmeasured time is excluded.` : sleepStressStatus(stress) : stressError || 'No analysis for this night.'}</p>
       {analytics.is_mock && stress && stress.sleep_id !== night.sleep_id && <p className={styles.note}>Separate synthetic stress sample for this date.</p>}

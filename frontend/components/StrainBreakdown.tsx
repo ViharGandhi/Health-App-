@@ -9,7 +9,7 @@ export default function StrainBreakdown({ data, metric }: { data: StrainAnalytic
   let labels: string[], colors: string[], values: (number | null)[];
   if (metric === 'strain') {
     labels = ['All Out (18.0+)', 'High (14.0–<18.0)', 'Moderate (10.0–<14.0)', 'Light (<10.0)'];
-    colors = ['#0099E6', '#0585BF', '#086C9C', '#075782']; values = strainBreakdown(data.days);
+    colors = ['#008ADF', '#0585BF', '#086C9C', '#075782']; values = strainBreakdown(data.days);
   } else if (metric === 'strength') {
     const totals = new Map<string, number>();
     const completeWeeks = Math.floor(data.days.length / 7);

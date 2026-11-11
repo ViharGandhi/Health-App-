@@ -27,8 +27,8 @@ import { sleepStressStatus } from '@/lib/sleepStressStatus';
 
 // Segment bar helper: 3 pills (Poor, Sufficient, Optimal)
 function SegmentIndicator({ value, isInverse = false, isConsistency = false }: { value: number; isInverse?: boolean; isConsistency?: boolean }) {
-  if (isConsistency) return <div className={styles.segmentTrack}>{['#FF0026', '#F59E0B', '#5A606D', '#00DCA0'].map((color, index) =>
-    <span key={color} className={styles.segment} style={{ background: index === (value >= 90 ? 3 : value >= 75 ? 2 : value >= 50 ? 1 : 0) ? color : '#2A2F3A' }} />)}</div>;
+  if (isConsistency) return <div className={styles.segmentTrack}>{['#FF0026', '#FFA21A', '#5A606D', '#00D7A1'].map((color, index) =>
+    <span key={color} className={styles.segment} style={{ background: index === (value >= 90 ? 3 : value >= 75 ? 2 : value >= 50 ? 1 : 0) ? color : '#29363E' }} />)}</div>;
   // For stress: 0% is optimal (green). For performance: >= 85% is optimal (green).
   const isOptimal = isInverse ? value <= 15 : value >= 85;
   const isSufficient = isInverse ? value > 15 && value <= 35 : value >= 70 && value < 85;
@@ -169,7 +169,7 @@ export default function SleepPage() {
           <span className={styles.navTitle}>TODAY</span>
 
           <button className={styles.navInfoBtn} aria-label="Info">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8E95A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0B5BA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="16" x2="12" y2="12" />
               <line x1="12" y1="8" x2="12.01" y2="8" />
@@ -196,7 +196,7 @@ export default function SleepPage() {
                 cy={center}
                 r={radius}
                 fill="none"
-                stroke="#7BA1BB"
+                stroke="#6D97B1"
                 strokeWidth={strokeWidth}
                 strokeLinecap="round"
                 strokeDasharray={circumference}
@@ -243,7 +243,7 @@ export default function SleepPage() {
             <div className={styles.metricRight}>
               {hoursVsNeededPct != null && <SegmentIndicator value={hoursVsNeededPct} />}
               <span className={styles.metricValue}>{hoursVsNeededPct == null ? '—' : `${hoursVsNeededPct}%`}</span>
-              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#B0B5BA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 1.5L4.5 5L1 8.5" />
               </svg>
             </div>
@@ -273,7 +273,7 @@ export default function SleepPage() {
             <div className={styles.metricRight}>
               {consistencyPct != null && <SegmentIndicator value={consistencyPct} isConsistency />}
               <span className={styles.metricValue}>{consistencyPct == null ? '—' : `${Math.round(consistencyPct)}%`}</span>
-              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#B0B5BA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 1.5L4.5 5L1 8.5" />
               </svg>
             </div>
@@ -300,7 +300,7 @@ export default function SleepPage() {
             <div className={styles.metricRight}>
               {efficiencyPct != null && <SegmentIndicator value={efficiencyPct} />}
               <span className={styles.metricValue}>{efficiencyPct == null ? '—' : `${efficiencyPct}%`}</span>
-              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#B0B5BA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 1.5L4.5 5L1 8.5" />
               </svg>
             </div>
@@ -328,7 +328,7 @@ export default function SleepPage() {
             <div className={styles.metricRight}>
               {sleepStressPct !== null && <SegmentIndicator value={sleepStressPct} isInverse />}
               <span className={styles.metricValue}>{sleepStressPct === null ? '—' : `${sleepStressPct}%`}</span>
-              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#8E95A2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" stroke="#B0B5BA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 1.5L4.5 5L1 8.5" />
               </svg>
             </div>
@@ -375,7 +375,7 @@ export default function SleepPage() {
             <div className={styles.hoursHeaderRow}>
               <span className={styles.hoursLabel}>HOURS OF SLEEP</span>
               <button className={styles.hoursInfoBtn} aria-label="Hours of sleep info">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8E95A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B0B5BA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <line x1="12" y1="16" x2="12" y2="12" />
                   <line x1="12" y1="8" x2="12.01" y2="8" />
@@ -402,8 +402,8 @@ export default function SleepPage() {
             <div className={styles.typicalRangeHeader}>
               <div className={styles.typicalRangeTitle}>
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none" className={styles.typicalRangeSvg}>
-                  <line x1="0" y1="8" x2="3" y2="8" stroke="#8E95A2" strokeWidth="1.5" />
-                  <line x1="13" y1="8" x2="16" y2="8" stroke="#8E95A2" strokeWidth="1.5" />
+                  <line x1="0" y1="8" x2="3" y2="8" stroke="#B0B5BA" strokeWidth="1.5" />
+                  <line x1="13" y1="8" x2="16" y2="8" stroke="#B0B5BA" strokeWidth="1.5" />
                   <rect x="3" y="2" width="10" height="12" rx="2" stroke="rgba(255, 255, 255, 0.75)" strokeWidth="1.2" strokeDasharray="2 2" fill="none" />
                 </svg>
                 <span>TYPICAL RANGE{stageHistory?.is_mock ? ' · DEMO' : ''}</span>
@@ -423,7 +423,7 @@ export default function SleepPage() {
               <div className={styles.stageItem} {...stageSelection('awake')}>
                 <div className={styles.stageTopRow}>
                   <div className={styles.stageNameGroup}>
-                    <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
+                    <span className={styles.stageCircleIcon} style={{ borderColor: '#B0B5BA' }} />
                     <span className={styles.stageName}>AWAKE</span>
                     <span className={styles.stagePctMuted}>{stageReadings?.awake?.pct == null ? '—' : `${Math.round(stageReadings.awake.pct)}%`}</span>
                   </div>
@@ -431,7 +431,7 @@ export default function SleepPage() {
                 </div>
                 <div className={styles.stageTrackWrapper} title={rangeDescription(stageReadings?.awake)}>
                   <div className={styles.stageTrackBar}>
-                    <div className={styles.stageFill} style={{ width: `${stageReadings?.awake?.pct ?? 0}%`, background: '#E2E6EE' }} />
+                    <div className={styles.stageFill} style={{ width: `${stageReadings?.awake?.pct ?? 0}%`, background: '#DEE2E6' }} />
                   </div>
                   <TypicalRangeMarker metric={stageReadings?.awake} />
                 </div>
@@ -441,7 +441,7 @@ export default function SleepPage() {
               <div className={styles.stageItem} {...stageSelection('light')}>
                 <div className={styles.stageTopRow}>
                   <div className={styles.stageNameGroup}>
-                    <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
+                    <span className={styles.stageCircleIcon} style={{ borderColor: '#B0B5BA' }} />
                     <span className={styles.stageName}>LIGHT</span>
                     <span className={styles.stagePctLavender}>{stageReadings?.light?.pct == null ? '—' : `${Math.round(stageReadings.light.pct)}%`}</span>
                   </div>
@@ -449,7 +449,7 @@ export default function SleepPage() {
                 </div>
                 <div className={styles.stageTrackWrapper} title={rangeDescription(stageReadings?.light)}>
                   <div className={styles.stageTrackBar}>
-                    <div className={styles.stageFill} style={{ width: `${stageReadings?.light?.pct ?? 0}%`, background: '#9B8AFB' }} />
+                    <div className={styles.stageFill} style={{ width: `${stageReadings?.light?.pct ?? 0}%`, background: '#A995EC' }} />
                   </div>
                   <TypicalRangeMarker metric={stageReadings?.light} />
                 </div>
@@ -459,7 +459,7 @@ export default function SleepPage() {
               <div className={styles.stageItem} {...stageSelection('deep')}>
                 <div className={styles.stageTopRow}>
                   <div className={styles.stageNameGroup}>
-                    <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
+                    <span className={styles.stageCircleIcon} style={{ borderColor: '#B0B5BA' }} />
                     <span className={styles.stageName}>SWS (DEEP)</span>
                     <span className={styles.stagePctPink}>{stageReadings?.deep?.pct == null ? '—' : `${Math.round(stageReadings.deep.pct)}%`}</span>
                   </div>
@@ -467,7 +467,7 @@ export default function SleepPage() {
                 </div>
                 <div className={styles.stageTrackWrapper} title={rangeDescription(stageReadings?.deep)}>
                   <div className={styles.stageTrackBar}>
-                    <div className={styles.stageFill} style={{ width: `${stageReadings?.deep?.pct ?? 0}%`, background: '#FF5CD1' }} />
+                    <div className={styles.stageFill} style={{ width: `${stageReadings?.deep?.pct ?? 0}%`, background: '#F586E9' }} />
                   </div>
                   <TypicalRangeMarker metric={stageReadings?.deep} />
                 </div>
@@ -477,7 +477,7 @@ export default function SleepPage() {
               <div className={styles.stageItem} {...stageSelection('rem')}>
                 <div className={styles.stageTopRow}>
                   <div className={styles.stageNameGroup}>
-                    <span className={styles.stageCircleIcon} style={{ borderColor: '#8E95A2' }} />
+                    <span className={styles.stageCircleIcon} style={{ borderColor: '#B0B5BA' }} />
                     <span className={styles.stageName}>REM</span>
                     <span className={styles.stagePctPurple}>{stageReadings?.rem?.pct == null ? '—' : `${Math.round(stageReadings.rem.pct)}%`}</span>
                   </div>
@@ -485,7 +485,7 @@ export default function SleepPage() {
                 </div>
                 <div className={styles.stageTrackWrapper} title={rangeDescription(stageReadings?.rem)}>
                   <div className={styles.stageTrackBar}>
-                    <div className={styles.stageFill} style={{ width: `${stageReadings?.rem?.pct ?? 0}%`, background: '#B040FF' }} />
+                    <div className={styles.stageFill} style={{ width: `${stageReadings?.rem?.pct ?? 0}%`, background: '#A953DE' }} />
                   </div>
                   <TypicalRangeMarker metric={stageReadings?.rem} />
                 </div>
@@ -503,7 +503,7 @@ export default function SleepPage() {
                 <div className={styles.restorativeValGroup}>
                   <span className={styles.restorativeValue}>{stageDuration(restorative?.minutes)}</span>
                   {restorative?.status && restorative.status !== 'within' &&
-                    <span className={styles.restorativeDelta} style={{ color: '#8E95A2' }}>{restorative.status === 'above' ? '▲' : '▼'}</span>}
+                    <span className={styles.restorativeDelta} style={{ color: '#B0B5BA' }}>{restorative.status === 'above' ? '▲' : '▼'}</span>}
                 </div>
                 <span className={styles.restorativeBaseline}>{restorative?.range_minutes
                   ? `${stageDuration(restorative.range_minutes.low)}–${stageDuration(restorative.range_minutes.high)}` : '—'}</span>
