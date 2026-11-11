@@ -60,7 +60,7 @@ export default function SleepAnalyticsDetail({ slug }: { slug: string }) {
     </select></div>
     <section className={styles.stats}><div><div className={styles.eyebrow}>AVERAGE</div><div className={styles.average}>{display(average)}<small>{item.unit}</small></div></div>
       <div className={styles.tabs}>{(['W', 'M', '6M'] as const).map(value => <button key={value} aria-pressed={range === value} onClick={() => setRange(value)}>{value}</button>)}</div></section>
-    <div className={styles.period}><span className={styles.change} style={delta != null && delta < 0 ? { color: '#F59E0B', background: '#F59E0B15' } : undefined} title={item.unit === '%' ? 'Absolute difference in percentage points.' : 'Difference in average duration.'}>
+    <div className={styles.period}><span className={styles.change} style={delta != null && delta < 0 ? { color: '#FFA21A', background: '#FFA21A15' } : undefined} title={item.unit === '%' ? 'Absolute difference in percentage points.' : 'Difference in average duration.'}>
       {delta == null ? '—' : `${delta >= 0 ? '+' : '−'}${item.unit === 'hr' ? duration(Math.abs(delta)) : Math.abs(delta).toFixed(1)}`} vs. prior {period}</span>
       <span>{data ? `${dates(data.range_start)} – ${dates(data.range_end)}, ${data.range_end.slice(2, 4)}` : 'Loading…'}</span></div>
     {error ? <div role="alert"><p>{error}</p><button className="btn" onClick={() => window.location.reload()}>Retry</button></div> : !data ? <p className={styles.description}>Loading sleep history…</p> : <>

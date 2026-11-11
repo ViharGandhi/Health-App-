@@ -25,7 +25,7 @@ type TrendData = Pick<SleepTrend, 'is_mock' | 'range_start' | 'range_end' | 'ave
 };
 
 function bandColor(score: number): string {
-  return score >= 75 ? '#16EC06' : score >= 50 ? '#FFDE00' : '#FF0026';
+  return score >= 75 ? '#00E82D' : score >= 50 ? '#FFDE00' : '#FF0026';
 }
 
 function consistencyTrend(score: SleepConsistencyScore): TrendData {
@@ -322,7 +322,7 @@ function TrendChart({
             height={16}
             rx={4}
             fill="#FFFFFF"
-            stroke={isHoveringAvg ? '#00E676' : 'none'}
+            stroke={isHoveringAvg ? '#00D7A1' : 'none'}
             strokeWidth="1.2"
             style={{ transition: 'stroke 0.15s' }}
           />
@@ -347,7 +347,7 @@ function TrendChart({
               cx={lastRealX}
               cy={lastRealY}
               r="4"
-              fill="#121418"
+              fill="#101418"
               stroke="#588cae"
               strokeWidth="2"
             />
@@ -382,7 +382,7 @@ function TrendChart({
               cx={hx}
               cy={hy}
               r="5"
-              fill="#121418"
+              fill="#101418"
               stroke="#588cae"
               strokeWidth="2.5"
             />
@@ -494,7 +494,7 @@ function ConsistencyBarChart({
         {[0, 50, 75, 90, 100].map((tick) => (
           <g key={tick}>
             <line x1={left - 4} x2={right} y1={toY(tick)} y2={toY(tick)} stroke="#30363C" strokeWidth="0.8" />
-            <text x={left - 11} y={average != null && Math.abs(toY(tick) - toY(average)) < 9 ? toY(tick) - 9 : toY(tick) + 3} fill="#7B828E" fontSize="9" textAnchor="end" fontFamily="var(--font-display)">
+            <text x={left - 11} y={average != null && Math.abs(toY(tick) - toY(average)) < 9 ? toY(tick) - 9 : toY(tick) + 3} fill="#7F878D" fontSize="9" textAnchor="end" fontFamily="var(--font-display)">
               {tick}%
             </text>
           </g>
@@ -534,8 +534,8 @@ function ConsistencyBarChart({
 
         {getXTicks(days, timeframe).map(({ index, top: topLabel, bottom }) => (
           <g key={index} transform={`translate(${toX(index)}, 0)`}>
-            <text x="0" y={height - 17} fill="#7B828E" fontSize="9" textAnchor="middle" fontFamily="var(--font-display)">{topLabel}</text>
-            <text x="0" y={height - 5} fill="#7B828E" fontSize="9" textAnchor="middle" fontFamily="var(--font-display)">{bottom}</text>
+            <text x="0" y={height - 17} fill="#7F878D" fontSize="9" textAnchor="middle" fontFamily="var(--font-display)">{topLabel}</text>
+            <text x="0" y={height - 5} fill="#7F878D" fontSize="9" textAnchor="middle" fontFamily="var(--font-display)">{bottom}</text>
           </g>
         ))}
       </svg>
@@ -566,7 +566,7 @@ function BreakdownBar({ trend, metric }: { trend: TrendData; metric: Metric }) {
         {poorPct > 0 && <div className={styles.barPoor} style={{ width: `${poorPct}%` }} />}
       </div>
       <div className={styles.breakdownLegend}>
-        {/* Optimal: Green #00E676 */}
+        {/* Optimal: Green #00D7A1 */}
         <div className={styles.legendRow}>
           <span className={`${styles.legendDot} ${styles.dotOptimal}`} />
           <span className={styles.legendCount}>{optimal}x</span>
@@ -578,7 +578,7 @@ function BreakdownBar({ trend, metric }: { trend: TrendData; metric: Metric }) {
           <span className={styles.legendCount}>{sufficient}x</span>
           <span className={styles.legendLabel}>Sufficient (80-89%)</span>
         </div>
-        {/* Poor: Yellow/Orange #F59E0B */}
+        {/* Poor: Yellow/Orange #FFA21A */}
         <div className={styles.legendRow}>
           <span className={`${styles.legendDot} ${styles.dotPoor}`} />
           <span className={styles.legendCount}>{poor}x</span>
@@ -593,9 +593,9 @@ function ConsistencyBreakdown({ trend }: { trend: TrendData }) {
   const counts = trend.band_counts;
   if (!counts) return null;
   const bands = [
-    { label: 'Optimal', range: '90–100%', color: '#00E676' },
+    { label: 'Optimal', range: '90–100%', color: '#00D7A1' },
     { label: 'Good', range: '75–89%', color: '#5A606D' },
-    { label: 'Fair', range: '50–74%', color: '#F59E0B' },
+    { label: 'Fair', range: '50–74%', color: '#FFA21A' },
     { label: 'Poor', range: '<50%', color: '#FF0026' },
   ] as const;
 
@@ -697,16 +697,16 @@ export default function SleepTrendView({ metric }: { metric: Metric }) {
           <span className={styles.metricPillIcon}>
             {metric === 'consistency' ? (
               <svg width="22" height="18" viewBox="0 0 24 20" fill="none" aria-hidden="true">
-                <path d="M10.7 2.4a7.2 7.2 0 1 0 7.1 11.3A7.8 7.8 0 0 1 10.7 2.4Z" stroke="#717886" strokeWidth="1.5" />
-                <path d="M15 3.7a6 6 0 1 0 5.4 9.7A6.7 6.7 0 0 1 15 3.7Z" stroke="#717886" strokeWidth="1.2" />
+                <path d="M10.7 2.4a7.2 7.2 0 1 0 7.1 11.3A7.8 7.8 0 0 1 10.7 2.4Z" stroke="#7F878D" strokeWidth="1.5" />
+                <path d="M15 3.7a6 6 0 1 0 5.4 9.7A6.7 6.7 0 0 1 15 3.7Z" stroke="#7F878D" strokeWidth="1.2" />
               </svg>
             ) : (
             <svg width="22" height="18" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="5" y="8" width="2" height="5" rx="0.8" fill="#717886" />
-              <rect x="9" y="5" width="2" height="8" rx="0.8" fill="#717886" />
-              <rect x="13" y="2" width="2" height="11" rx="0.8" fill="#717886" />
-              <path d="M2 14H22M2 11V18M22 13V18" stroke="#717886" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-              <rect x="4" y="10" width="4" height="3" rx="1" stroke="#717886" strokeWidth="1.2" />
+              <rect x="5" y="8" width="2" height="5" rx="0.8" fill="#7F878D" />
+              <rect x="9" y="5" width="2" height="8" rx="0.8" fill="#7F878D" />
+              <rect x="13" y="2" width="2" height="11" rx="0.8" fill="#7F878D" />
+              <path d="M2 14H22M2 11V18M22 13V18" stroke="#7F878D" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              <rect x="4" y="10" width="4" height="3" rx="1" stroke="#7F878D" strokeWidth="1.2" />
             </svg>
             )}
           </span>

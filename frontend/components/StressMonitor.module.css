@@ -1,4 +1,4 @@
-.card { padding: 14px 15px 12px; margin-bottom: 16px; border-radius: 14px; background: linear-gradient(145deg, #30343A, #292D32); }
+.card { padding: 14px 15px 12px; margin-bottom: 16px; border-radius: 18px; background: linear-gradient(145deg, #29363E, #29363E); }
 .heading { display: flex; justify-content: space-between; align-items: center; color: #F7F8FA; text-decoration: none; }
 .heading strong { font: 800 11px var(--font-body); letter-spacing: .08em; }
 .heading > span { font-size: 27px; color: #939FA8; line-height: 1; }

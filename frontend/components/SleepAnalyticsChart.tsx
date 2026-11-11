@@ -70,32 +70,32 @@ export default function SleepAnalyticsChart({ days, kind = 'bars', metric = 'per
       const display = reading(day);
       const label = `${day.bucket_start ? `${day.bucket_start} – ` : ''}${day.date}: ${display}`;
       return <g key={day.date} tabIndex={0} aria-label={label}><title>{label}</title>
-        {timing && time && <rect x={x(i) - width / 2} y={y(time.bed)} width={width} height={Math.max(1, y(time.wake) - y(time.bed))} rx="1.5" fill={daily && i < days.length - 1 ? '#73777C' : '#7BA1BB'} />}
-        {kind === 'restorative' && day.deep_minutes != null && day.rem_minutes != null && <><rect x={x(i) - width / 2} y={y(day.rem_minutes)} width={width} height={196 - y(day.rem_minutes)} fill="#AF50EC" />
-          <rect x={x(i) - width / 2} y={y(day.rem_minutes + day.deep_minutes)} width={width} height={y(day.rem_minutes) - y(day.rem_minutes + day.deep_minutes)} fill="#ED8EF5" /></>}
-        {percent && value != null && <rect x={x(i) - width / 2} y={y(value)} width={width} height={196 - y(value)} rx="1.5" fill="#7BA1BB" />}
+        {timing && time && <rect x={x(i) - width / 2} y={y(time.bed)} width={width} height={Math.max(1, y(time.wake) - y(time.bed))} rx="1.5" fill={daily && i < days.length - 1 ? '#73777C' : '#6D97B1'} />}
+        {kind === 'restorative' && day.deep_minutes != null && day.rem_minutes != null && <><rect x={x(i) - width / 2} y={y(day.rem_minutes)} width={width} height={196 - y(day.rem_minutes)} fill="#A953DE" />
+          <rect x={x(i) - width / 2} y={y(day.rem_minutes + day.deep_minutes)} width={width} height={y(day.rem_minutes) - y(day.rem_minutes + day.deep_minutes)} fill="#F586E9" /></>}
+        {percent && value != null && <rect x={x(i) - width / 2} y={y(value)} width={width} height={196 - y(value)} rx="1.5" fill="#6D97B1" />}
         {(days.length <= 7 || i % Math.ceil(days.length / 7) === 0) && <text x={x(i)} y="230" textAnchor="middle" fill="#A0A5AA" fontSize="9"><tspan>{new Date(`${day.date}T12:00:00`).toLocaleDateString('en', { weekday: 'short' })}</tspan><tspan x={x(i)} dy="12">{Number(day.date.slice(8))}</tspan></text>}
       </g>;
     })}
     {selected != null && days[selected] && <line x1={x(selected)} x2={x(selected)} y1="24" y2="207" stroke="#ADB6C0" strokeDasharray="3 3" />}
     {kind === 'hours' && (['asleep_minutes', 'need_minutes'] as const).map(key => {
-      const color = key === 'asleep_minutes' ? '#7BA1BB' : '#00DCA0';
+      const color = key === 'asleep_minutes' ? '#6D97B1' : '#00D7A1';
       return <g key={key}>{days.slice(1).map((day, i) => day[key] != null && days[i][key] != null && <line key={i} x1={x(i)} x2={x(i + 1)} y1={y(days[i][key]!)} y2={y(day[key]!)} stroke={color} strokeWidth="1.5" />)}
-        {days.map((day, i) => day[key] != null && <g key={i}><title>{day.date}: {key === 'asleep_minutes' ? 'Hours asleep' : 'Sleep needed'} {duration(day[key])}</title><circle cx={x(i)} cy={y(day[key]!)} r="3.5" fill="#252B30" stroke={color} strokeWidth="1.5" /></g>)}</g>;
+        {days.map((day, i) => day[key] != null && <g key={i}><title>{day.date}: {key === 'asleep_minutes' ? 'Hours asleep' : 'Sleep needed'} {duration(day[key])}</title><circle cx={x(i)} cy={y(day[key]!)} r="3.5" fill="#334149" stroke={color} strokeWidth="1.5" /></g>)}</g>;
     })}
     {/* Labels are painted after every plot so neighboring bars/lines cannot cover them. */}
     <g className={styles.chartLabel}>
       {days.map((day, i) => <g key={day.date}>
         {timing && timingValues[i] && timingLabels[i] && showLabel(i) && <>
-          <text x={timingLabelX(i)} y={timingLabels[i]!.bed} textAnchor="middle" fill="#7BA1BB" fontSize="11">{clock(timingValues[i]!.bed)}</text>
-          <text x={timingLabelX(i)} y={timingLabels[i]!.wake} textAnchor="middle" fill="#7BA1BB" fontSize="11">{clock(timingValues[i]!.wake)}</text>
+          <text x={timingLabelX(i)} y={timingLabels[i]!.bed} textAnchor="middle" fill="#6D97B1" fontSize="11">{clock(timingValues[i]!.bed)}</text>
+          <text x={timingLabelX(i)} y={timingLabels[i]!.wake} textAnchor="middle" fill="#6D97B1" fontSize="11">{clock(timingValues[i]!.wake)}</text>
         </>}
         {days.length <= 7 && <>
-          {percent && day[metric] != null && <text x={x(i)} y={y(day[metric]!) - 6} textAnchor="middle" fill="#7BA1BB" fontSize="11">{Math.round(day[metric]!)}%</text>}
+          {percent && day[metric] != null && <text x={x(i)} y={y(day[metric]!) - 6} textAnchor="middle" fill="#6D97B1" fontSize="11">{Math.round(day[metric]!)}%</text>}
           {kind === 'restorative' && day.deep_minutes != null && day.rem_minutes != null && <text x={x(i)} y={y(day.deep_minutes + day.rem_minutes) - 6} textAnchor="middle" fill="white" fontSize="11">{duration(day.deep_minutes + day.rem_minutes)}</text>}
           {kind === 'hours' && <>
-            {day.asleep_minutes != null && <text x={x(i)} y={hourLabels[i].first!} textAnchor="middle" fill="#7BA1BB" fontSize="10">{duration(day.asleep_minutes)}</text>}
-            {day.need_minutes != null && <text x={x(i)} y={hourLabels[i].second!} textAnchor="middle" fill="#00DCA0" fontSize="10">{duration(day.need_minutes)}</text>}
+            {day.asleep_minutes != null && <text x={x(i)} y={hourLabels[i].first!} textAnchor="middle" fill="#6D97B1" fontSize="10">{duration(day.asleep_minutes)}</text>}
+            {day.need_minutes != null && <text x={x(i)} y={hourLabels[i].second!} textAnchor="middle" fill="#00D7A1" fontSize="10">{duration(day.need_minutes)}</text>}
           </>}
         </>}
       </g>)}

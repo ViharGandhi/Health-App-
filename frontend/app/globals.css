@@ -4,34 +4,43 @@
  * Clean sans-serif typography matching WHOOP's aesthetic.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Montserrat:wght@500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&display=swap');
+
+/* D-DIN (SIL OFL, see /fonts/D-DIN-OFL.txt) for scores and numbers */
+@font-face { font-family: 'D-DIN'; src: url('/fonts/D-DIN.otf') format('opentype'); font-weight: 400 500; font-display: swap; }
+@font-face { font-family: 'D-DIN'; src: url('/fonts/D-DIN-Bold.otf') format('opentype'); font-weight: 600 900; font-display: swap; }
 
 /* Reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ---- Exact WHOOP Dark Palette & Tokens ---- */
+/* ---- WHOOP Dark Palette & Tokens (from the reference APK theme) ---- */
 :root {
-  --bg-primary:     #0B0B0B;
-  --bg-surface:     #161616;
-  --bg-card:        #1C1C1E;
-  --bg-elevated:    #242427;
-  --bg-pill:        #232326;
-  --bg-hover:       #2A2A2E;
-  --bg-nav:         rgba(11, 11, 11, 0.95);
+  --bg-primary:     #101418;
+  --bg-surface:     #1B272E;
+  --bg-card:        #29363E;
+  --bg-elevated:    #34434B;
+  --bg-pill:        #34434B;
+  --bg-hover:       #34434B;
+  --bg-nav:         rgba(16, 20, 24, 0.95);
+  --bg-track:       #334149;
+  --bg-screen:      linear-gradient(180deg, #29363E 0%, #172127 35%, #101418 100%);
 
-  --border-subtle:   rgba(255, 255, 255, 0.08);
+  --border-subtle:   #2B3034;
   --border-default:  rgba(255, 255, 255, 0.12);
 
   --text-primary:    #FFFFFF;
-  --text-secondary:  #8E95A2;
-  --text-tertiary:   #5C626E;
+  --text-secondary:  #B0B5BA;
+  --text-tertiary:   #7F878D;
 
   /* WHOOP Signature Metric Colors */
-  --whoop-green:     #16EC06;
+  --whoop-green:     #00E82D;
   --whoop-yellow:    #FFDE00;
   --whoop-red:       #FF0026;
-  --whoop-sleep:     #7BA1BB;
-  --whoop-strain:    #0093E7;
+  --whoop-sleep:     #6D97B1;
+  --whoop-strain:    #008ADF;
+  --whoop-favorable: #00D7A1;
+  --whoop-caution:   #FFA21A;
+  --whoop-blue:      #3299DD;
 
   --recovery-green:  var(--whoop-green);
   --recovery-yellow: var(--whoop-yellow);
@@ -40,17 +49,17 @@
   --strain-blue:     var(--whoop-strain);
 
   --accent-primary:  #FFFFFF;
-  --accent-cta:      #00F19F;
+  --accent-cta:      #00D7A1;
   --accent-warn:     var(--whoop-yellow);
   --accent-danger:   var(--whoop-red);
 
   --page-padding: 16px;
-  --card-radius:  14px;
+  --card-radius:  18px;
   --section-gap:  18px;
 
-  /* WHOOP typography: Proxima Nova for UI & text, DINPro for numbers & data */
-  --font-body: 'Proxima Nova', 'ProximaNova', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'DIN Pro', 'DINPro', 'DIN Alternate', 'Barlow Condensed', 'Montserrat', sans-serif;
+  /* WHOOP typography: Proxima Nova-style UI text (Figtree), DIN-style numbers (D-DIN) */
+  --font-body: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'D-DIN', 'DIN Alternate', 'Figtree', sans-serif;
 
   --shadow-card:     0 2px 8px rgba(0, 0, 0, 0.35);
   --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.5);
@@ -61,7 +70,7 @@ html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoot
 
 body {
   font-family: var(--font-body);
-  background: var(--bg-primary);
+  background: var(--bg-screen) fixed, var(--bg-primary);
   color: var(--text-primary);
   min-height: 100dvh;
   overflow-x: hidden;
@@ -144,7 +153,7 @@ body {
 .pill-yellow { background: rgba(245,197,24,0.15); color: var(--recovery-yellow); }
 .pill-red    { background: rgba(255,59,59,0.15);  color: var(--recovery-red); }
 .pill-blue   { background: rgba(0,161,228,0.15);  color: var(--strain-blue); }
-.pill-purple { background: rgba(155,109,255,0.15); color: #9B6DFF; }
+.pill-purple { background: rgba(169,83,222,0.15); color: #A953DE; }
 
 /* ---- Progress bar ---- */
 .progress-track { height: 4px; background: var(--border-subtle); border-radius: 100px; overflow: hidden; }
@@ -209,7 +218,7 @@ body {
 .text-yellow    { color: var(--recovery-yellow); }
 .text-red       { color: var(--recovery-red); }
 .text-blue      { color: var(--strain-blue); }
-.text-purple    { color: #9B6DFF; }
+.text-purple    { color: #A953DE; }
 .mono           { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
 
 /* ---- Scrollbar ---- */

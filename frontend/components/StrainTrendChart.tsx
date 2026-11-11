@@ -84,7 +84,7 @@ export default function StrainTrendChart({ data, metric, embedded = false, onSel
       {six && months.map((month, index) => {
         const edge = monthEdges[index], center = (x(edge.first) + x(edge.last)) / 2;
         const change = relativeChange(month.value, months[index - 1]?.value ?? null);
-        const color = change == null || Math.abs(change) < .5 ? '#E4E7E9' : change > 0 ? '#00DCA0' : '#F5AC22';
+        const color = change == null || Math.abs(change) < .5 ? '#E4E7E9' : change > 0 ? '#00D7A1' : '#FFA21A';
         return <g key={month.end} opacity={selected == null || selected === index ? 1 : .35}>
           {month.value != null && <><line x1={x(edge.first) - width / 2} x2={x(edge.last) + width / 2} y1={y(month.value)} y2={y(month.value)} stroke={color} strokeWidth="2.5" />
             <text x={center} y={Math.max(13, y(month.value) - 12)} textAnchor="middle" className={shared.valueLabel} fill="#FFF">{strainFormat(month.value, metric)}</text>

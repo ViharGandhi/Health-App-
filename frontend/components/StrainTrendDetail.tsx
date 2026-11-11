@@ -24,7 +24,7 @@ export default function StrainTrendDetail({ slug }: { slug: string }) {
   const average = data ? strainSummary(data.days, metric.key, range, data.today) : null;
   const previous = data ? strainSummary(data.previous_days, metric.key, range, data.today) : null;
   const difference = average == null || previous == null ? null : metric.key === 'strain' ? average - previous : relativeChange(average, previous);
-  const color = metric.key === 'strain' || difference == null || Math.abs(difference) < .05 ? '#B6BCC2' : difference > 0 ? '#00DCA0' : '#F5AC22';
+  const color = metric.key === 'strain' || difference == null || Math.abs(difference) < .05 ? '#B6BCC2' : difference > 0 ? '#00D7A1' : '#FFA21A';
   const suffix = demo ? '?demo=true' : '', prior = range === 'W' ? 'week' : range === 'M' ? 'month' : '6 months';
   const navigate = (end: string) => { setSelected(null); setEndDate(end); };
   const unit = durationMetric(metric.key) ? 'hr' : '';

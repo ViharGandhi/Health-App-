@@ -40,13 +40,13 @@
 .reportActions > button { background: none; border: 0; color: inherit; cursor: pointer; font-size: 25px; }
 .reportActions > .printButton { background: #19576D; padding: 10px 15px; border-radius: 6px; font: 700 11px var(--font-body); }
 .medianLine { width: 13px; border-top: 2px dashed #ADB6BD; }
-.connect { display: block; color: #67AEE6; margin-top: 14px; }
+.connect { display: block; color: #3299DD; margin-top: 14px; }
 .coverage { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin: 17px 0 0; color: #9EABB5; font-size: 10px; }
 .meaning { margin-top: 30px; padding: 17px; background: #232D35; border-radius: 12px; }
 .meaning h2 { font: 800 10px var(--font-body); letter-spacing: .09em; margin-bottom: 11px; }
 .meaning p { color: #BAC6CF; font-size: 11px; line-height: 1.7; }
 .meaning p + p { margin-top: 12px; }
-.change { color: #ADC8E6; background: #67AEE617; white-space: normal !important; }
+.change { color: #ADC8E6; background: #3299DD17; white-space: normal !important; }
 .periodLabel { color: #E1E5E9; font: 800 9px var(--font-body); text-transform: uppercase; text-align: right; }
 @media (max-width: 360px) { .monitorBody { padding-inline: 18px; } .monitorHeart { margin-inline: -18px; } .monitorGrid { gap: 10px; } .monitorTile { padding: 13px 11px 12px; min-height: 123px; } .tileTitle { font-size: 8px; gap: 6px; } }
 @media print {

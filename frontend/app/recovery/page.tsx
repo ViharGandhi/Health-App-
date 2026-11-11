@@ -45,7 +45,7 @@ export default function RecoveryPage() {
             <span className={styles.arrow} style={{ color: changeColor(item.metric, change) }}>{change == null ? '›' : Math.abs(change) < .5 ? '•' : change > 0 ? '▲' : '▼'}</span>
           </Link>;
         })}
-        <div className={styles.comparisonLegend}><i>▲</i><i style={{ color: '#F5AC22' }}>▼</i>{day ? 'Selected day' : 'Today'} vs. last 30 days</div>
+        <div className={styles.comparisonLegend}><i>▲</i><i style={{ color: '#FFA21A' }}>▼</i>{day ? 'Selected day' : 'Today'} vs. last 30 days</div>
       </section>
       <section className={styles.insight}><p>{current?.status === 'building_reference' ? current.status_reason
         : range && current?.today_rhr != null ? `Your RHR (${current.today_rhr.toFixed(1)} bpm) is ${current.today_rhr >= range.low && current.today_rhr <= range.high ? 'within' : 'outside'} your personal typical range of ${range.low.toFixed(1)}–${range.high.toFixed(1)} bpm. Your Recovery estimate is ${recoveryLabel(current)}. Look at the pattern over several days.`

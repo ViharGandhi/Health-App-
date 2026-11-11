@@ -7,7 +7,7 @@ import type { SleepHeartRate, SleepStage, SleepStageRangeNight } from '@/lib/typ
 import { LEFT, RIGHT, chartPosition, heartRatePaths, nearestReading, stageWindows } from '@/lib/sleepHeartRateChart';
 import styles from './page.module.css';
 
-const stageColors = { awake: '#E2E6EE', light: '#9B8AFB', deep: '#FF5CD1', rem: '#B040FF' };
+const stageColors = { awake: '#DEE2E6', light: '#A995EC', deep: '#F586E9', rem: '#A953DE' };
 
 export default function SleepHeartRateChart({ night, waiting, selectedStage }: { night?: SleepStageRangeNight; waiting: boolean; selectedStage: SleepStage | null }) {
   const [result, setResult] = useState<{ data: SleepHeartRate | null; loading: boolean; error: boolean }>({ data: null, loading: true, error: false });

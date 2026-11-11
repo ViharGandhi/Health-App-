@@ -20,7 +20,7 @@ function fmt(minutes: number): string {
 
 const SEGMENTS = [
   { key: 'deep_minutes',  label: 'Deep',  color: '#4A9EFF' },
-  { key: 'rem_minutes',   label: 'REM',   color: '#9B6DFF' },
+  { key: 'rem_minutes',   label: 'REM',   color: '#A953DE' },
   { key: 'core_minutes',  label: 'Core',  color: '#48CFAD' },
   { key: 'awake_minutes', label: 'Awake', color: 'rgba(255,255,255,0.18)' },
 ] as const;

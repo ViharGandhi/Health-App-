@@ -73,7 +73,7 @@ export default function HealthTrendChart({ points = [], heartRate, range = 'W', 
           select(index, true);
         }
       }}>
-      <defs><linearGradient id={id} x1="0" x2="0" y1="0" y2="1"><stop stopColor="#67AEE6" stopOpacity=".13" /><stop offset="1" stopColor="#67AEE6" stopOpacity="0" /></linearGradient></defs>
+      <defs><linearGradient id={id} x1="0" x2="0" y1="0" y2="1"><stop stopColor="#3299DD" stopOpacity=".13" /><stop offset="1" stopColor="#3299DD" stopOpacity="0" /></linearGradient></defs>
       {Array.from({ length: 5 }, (_, index) => {
         const value = high - (high - low) * index / 4;
         return <g key={index}><line x1={left} x2={right} y1={y(value)} y2={y(value)} stroke="#FFFFFF16" /><text x={left - 9} y={y(value) + 3} textAnchor="end" className={styles.axis}>{value.toFixed(digits)}</text></g>;
@@ -82,23 +82,23 @@ export default function HealthTrendChart({ points = [], heartRate, range = 'W', 
         width={monthly ? 32 : range === 'W' && !intraday ? 26 : 10} height={bottom - top + 5} rx="3" fill="#FFFFFF09" />}
       {segments.map((segment, index) => <g key={index} opacity={monthly ? .24 : selection ? .5 : 1}>
         {!monthly && segment.length > 1 && <path d={`${path(segment)} L${x(segment.at(-1)!.index)},${bottom} L${x(segment[0].index)},${bottom} Z`} fill={`url(#${id})`} />}
-        <path d={path(segment)} fill="none" stroke="#67AEE6" strokeWidth={monthly ? 1.2 : 2} strokeLinejoin="round" strokeLinecap="round" />
-        {segment.length === 1 && <circle cx={x(segment[0].index)} cy={y(segment[0].value)} r="3.5" fill="#67AEE6" />}
+        <path d={path(segment)} fill="none" stroke="#3299DD" strokeWidth={monthly ? 1.2 : 2} strokeLinejoin="round" strokeLinecap="round" />
+        {segment.length === 1 && <circle cx={x(segment[0].index)} cy={y(segment[0].value)} r="3.5" fill="#3299DD" />}
       </g>)}
       {!monthly && healthSegments(dayPoints, 'baseline').map((segment, index) => <g key={`baseline-${index}`}>
         <path d={path(segment)} fill="none" stroke="#ADB6BD" strokeWidth="1.3" strokeDasharray="4 4" />
         {segment.length === 1 && <line x1={x(segment[0].index) - 5} x2={x(segment[0].index) + 5} y1={y(segment[0].value)} y2={y(segment[0].value)} stroke="#ADB6BD" strokeDasharray="3 2" />}
       </g>)}
       {!monthly && dayPoints.map((point, index) => point.value == null || (range !== 'W' || intraday) && index !== latest && index !== chosen ? null
-        : <circle key={index} cx={x(index)} cy={y(point.value)} r="3.5" fill="#202830" stroke="#67AEE6" strokeWidth="1.7" />)}
+        : <circle key={index} cx={x(index)} cy={y(point.value)} r="3.5" fill="#202830" stroke="#3299DD" strokeWidth="1.7" />)}
       {monthly && months.map((month, index) => month.value == null ? null : <g key={month.month}>
-        <line x1={x(month.start) + 2} x2={Math.max(x(month.start) + 4, x(month.end) - 2)} y1={y(month.value)} y2={y(month.value)} stroke="#7BA1BB" strokeWidth="3" />
+        <line x1={x(month.start) + 2} x2={Math.max(x(month.start) + 4, x(month.end) - 2)} y1={y(month.value)} y2={y(month.value)} stroke="#6D97B1" strokeWidth="3" />
         <text x={options[index].x} y={y(month.value) - 10} fill="#FFF" textAnchor="middle" className={styles.valueLabel}>{month.value.toFixed(digits)}</text>
       </g>)}
       {!monthly && dayPoints.map((point, index) => point.value == null || chosen != null || (range !== 'W' || intraday) && index !== latest ? null
-        : <text key={index} x={Math.max(left + 9, Math.min(right - 9, x(index)))} y={Math.max(16, positions[index].first!)} fill="#67AEE6" textAnchor="middle" className={styles.valueLabel}>{point.value.toFixed(digits)}</text>)}
+        : <text key={index} x={Math.max(left + 9, Math.min(right - 9, x(index)))} y={Math.max(16, positions[index].first!)} fill="#3299DD" textAnchor="middle" className={styles.valueLabel}>{point.value.toFixed(digits)}</text>)}
       {selection && <g><line x1={selection.x} x2={selection.x} y1={top} y2={bottom} stroke="#FFF" strokeDasharray="3 3" opacity=".65" />
-        {selection.value != null && <circle cx={selection.x} cy={y(selection.value)} r="5" fill="#67AEE6" stroke="#1D252C" strokeWidth="2" />}</g>}
+        {selection.value != null && <circle cx={selection.x} cy={y(selection.value)} r="5" fill="#3299DD" stroke="#1D252C" strokeWidth="2" />}</g>}
       {monthly ? months.map((month, index) => <text key={month.month} x={options[index].x} y={bottom + 20} textAnchor="middle" className={styles.axis}>{healthDate(`${month.month}-01`, { month: 'short' })}</text>)
         : [...new Set(ticks)].map(index => <text key={index} x={x(index)} y={bottom + 18} textAnchor="middle" className={styles.axis}>
           {intraday ? dayPoints[index].date : healthDate(dayPoints[index].date, range === 'W' ? { weekday: 'short' } : { month: 'short', day: 'numeric' })}

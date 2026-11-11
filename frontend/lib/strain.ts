@@ -1,6 +1,6 @@
 import type { StrainDay, StrainMetric, StrainRange, ZoneMinutes } from './types';
 
-export const STRAIN_BLUE = '#0099E6';
+export const STRAIN_BLUE = '#008ADF';
 export const strainMetrics: { key: StrainMetric; slug: string; title: string }[] = [
   { key: 'strain', slug: 'day-strain', title: 'DAY STRAIN' },
   { key: 'zones_1_3', slug: 'heart-rate-zones-1-3', title: 'HEART RATE ZONES 1-3' },

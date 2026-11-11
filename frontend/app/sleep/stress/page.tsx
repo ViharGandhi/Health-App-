@@ -158,7 +158,7 @@ export default function SleepStressTrendPage() {
             </div>
             <span className={styles.selectorTitle}>SLEEP STRESS</span>
           </div>
-          <svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="#8E95A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="#B0B5BA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="1 1.5 6 6.5 11 1.5" />
           </svg>
         </div>
@@ -324,7 +324,7 @@ export default function SleepStressTrendPage() {
 
         {/* -- Footnote -- */}
         <div className={styles.footnoteRow}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8E95A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B0B5BA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10" />
             <line x1="12" y1="16" x2="12" y2="12" />
             <line x1="12" y1="8" x2="12.01" y2="8" />

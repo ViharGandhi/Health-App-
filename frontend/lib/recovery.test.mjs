@@ -22,10 +22,10 @@ test('comparison does not invent a percent when the previous period is zero or m
   assert.equal(relativeChange(null, 40), null);
   assert.ok(Math.abs(relativeChange(45, 50) + 10) < 1e-10);
   assert.equal(changeColor('hrv', 0), '#B6BCC2');
-  assert.equal(changeColor('rhr', -3), '#00DCA0');
+  assert.equal(changeColor('rhr', -3), '#00D7A1');
 });
 test('Recovery uses backend zones rather than assigning a zone to missing data', () => {
-  assert.equal(recoveryColor(null), '#77818B');
+  assert.equal(recoveryColor(null), '#858A8F');
   assert.equal(recoveryColor('normal'), '#FFDE00');
-  assert.equal(recoveryColor('above_normal'), '#16EC06');
+  assert.equal(recoveryColor('above_normal'), '#00E82D');
 });

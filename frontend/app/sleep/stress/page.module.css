@@ -32,7 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #373E44;
+  background: #34434B;
   border-radius: 12px;
   padding: 17px;
   margin-bottom: 30px;
@@ -94,7 +94,7 @@
 }
 
 .averageLabelActive {
-  color: #FFAE00;
+  color: #FFA21A;
 }
 
 .scoreRow {
@@ -137,7 +137,7 @@
 
 .deltaArrowAmber {
   font-size: 8px;
-  color: #FFAE00;
+  color: #FFA21A;
 }
 
 .deltaTextAmber {
@@ -146,7 +146,7 @@
 
 .deltaDotAmber {
   font-size: 8px;
-  color: #FFAE00;
+  color: #FFA21A;
 }
 
 /* Right Controls (Timeframe & Date range) */
@@ -160,7 +160,7 @@
 .timeframeToggle {
   display: flex;
   align-items: center;
-  background: #161A20;
+  background: #1B272E;
   border-radius: 10px;
   padding: 3px;
 }
@@ -181,7 +181,7 @@
 }
 
 .toggleActive {
-  background: #34383E;
+  background: #34434B;
   color: #FFFFFF !important;
 }
 
@@ -199,7 +199,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8E95A2;
+  color: #B0B5BA;
   transition: color 0.15s ease;
 }
 
@@ -245,14 +245,14 @@
   width: 8px;
   height: 8px;
   border-radius: 1.5px;
-  background: #F59E0B;
+  background: #FFA21A;
 }
 
 .legendBoxNoHigh {
   width: 8px;
   height: 8px;
   border-radius: 1.5px;
-  background: #7BA1BB;
+  background: #6D97B1;
 }
 
 .legendText {
@@ -358,13 +358,13 @@
 
 .segHigh {
   width: 100%;
-  background: #F59E0B;
+  background: #FFA21A;
   transition: height 0.3s ease;
 }
 
 .segNoHigh {
   width: 100%;
-  background: #7BA1BB;
+  background: #6D97B1;
   transition: height 0.3s ease;
 }
 
@@ -402,7 +402,7 @@
   gap: 6px;
   font-family: var(--font-body);
   font-size: 9.5px;
-  color: #8E95A2;
+  color: #B0B5BA;
 }
 
 .tooltipRow strong {
@@ -413,14 +413,14 @@
   width: 6px;
   height: 6px;
   border-radius: 1px;
-  background: #F59E0B;
+  background: #FFA21A;
 }
 
 .tooltipDotNoHigh {
   width: 6px;
   height: 6px;
   border-radius: 1px;
-  background: #7BA1BB;
+  background: #6D97B1;
 }
 
 /* ---- X-Axis Dates Row ---- */
@@ -452,7 +452,7 @@
 
 .xTickItem:hover .xTickMonth,
 .xTickHighlighted .xTickMonth {
-  color: #00E5A3;
+  color: #00D7A1;
 }
 
 .xTickItem:hover .xTickDay,
@@ -464,7 +464,7 @@
   font-family: var(--font-body);
   font-size: 10px;
   font-weight: 600;
-  color: #8E95A2;
+  color: #B0B5BA;
   transition: color 0.15s ease;
 }
 
@@ -472,7 +472,7 @@
   font-family: var(--font-display);
   font-size: 10.5px;
   font-weight: 700;
-  color: #8E95A2;
+  color: #B0B5BA;
   transition: color 0.15s ease;
 }
 
@@ -482,7 +482,7 @@
   align-items: center;
   gap: 6px;
   margin-bottom: 30px;
-  color: #8E95A2;
+  color: #B0B5BA;
   font-family: var(--font-body);
   font-size: 11px;
   font-weight: 500;
@@ -516,7 +516,7 @@
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.8px;
-  color: #8E95A2;
+  color: #B0B5BA;
   cursor: pointer;
   text-transform: uppercase;
   transition: color 0.15s ease;
@@ -555,7 +555,7 @@
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #00E5A3;
+  color: #00D7A1;
   background: rgba(0, 229, 163, 0.1);
   border-radius: 3px;
   padding: 2px 6px;
