@@ -413,3 +413,9 @@ export interface AuthStatus {
   user_email: string | null;
   user_name: string | null;
 }
+
+/** Session effort (1–10) for one activity; load = rpe × minutes, shown apart from cardio Strain. */
+export interface EffortRating { activity_id: string; date: string; rpe: number; minutes: number; load: number }
+export interface EffortHistory { ratings: EffortRating[]; daily_load: Record<string, number> }
+/** Morning "how do you feel" rating, 1 (very poor) to 5 (great). */
+export interface MorningCheckin { date: string; feeling: number }

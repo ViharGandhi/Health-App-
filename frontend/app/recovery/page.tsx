@@ -8,6 +8,7 @@ import RecoveryDemoSwitch from '@/components/RecoveryDemoSwitch';
 import RecoveryMetricIcon from '@/components/RecoveryMetricIcon';
 import RecoveryTrendChart from '@/components/RecoveryTrendChart';
 import { RecoveryInfo } from '@/components/RecoveryGuide';
+import MorningCheckin from '@/components/MorningCheckin';
 import styles from './page.module.css';
 
 export default function RecoveryPage() {
@@ -47,6 +48,7 @@ export default function RecoveryPage() {
         })}
         <div className={styles.comparisonLegend}><i>▲</i><i style={{ color: '#FFA21A' }}>▼</i>{day ? 'Selected day' : 'Today'} vs. last 30 days</div>
       </section>
+      <MorningCheckin day={day ?? localDay()} isMock={data.is_mock} />
       <section className={styles.insight}><p>{current?.status === 'building_reference' ? current.status_reason
         : range && current?.today_rhr != null ? `Your RHR (${current.today_rhr.toFixed(1)} bpm) is ${current.today_rhr >= range.low && current.today_rhr <= range.high ? 'within' : 'outside'} your personal typical range of ${range.low.toFixed(1)}–${range.high.toFixed(1)} bpm. Your Recovery estimate is ${recoveryLabel(current)}. Look at the pattern over several days.`
         : `Your Recovery estimate is ${current ? recoveryLabel(current) : 'unavailable'}. ${current?.confidence === 'low' ? 'Low confidence: your reference is still short, so treat the percentage as a rough guide.' : 'Compare your trends and consider how you feel.'}`}</p>

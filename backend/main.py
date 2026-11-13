@@ -53,6 +53,7 @@ load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
 # ── Algorithm imports ──────────────────────────────────────────────────────────
 from strain import PERSONAL_HR_MAX_RANGE, StrainConfig, strain_analytics
+import user_inputs
 from strain_service import fetch_strain_inputs, calculate_days, strain_response, demo_inputs, load_strain_days
 from activity_details import activity_id, activity_summary, build_activity, dashboard_rows, showcase_inputs
 from sleepscore import SleepCalculator, SleepData
@@ -89,7 +90,8 @@ from mock_data import (
 from models import (
     DashboardResponse, RecoveryResponse, SleepResponse, StrainResponse,
     SleepStages, SleepTrendResponse, SleepConsistencyScoreResponse,
-    SleepStressHistoryResponse, HealthResponse, HealthHeartRateResponse
+    SleepStressHistoryResponse, HealthResponse, HealthHeartRateResponse,
+    EffortRatingInput, MorningCheckinInput
 )
 
 
@@ -370,6 +372,63 @@ def _demo_dashboard(request: Request, day: date | None = None):
     client = _google_client('demo', request)
     return get_mock_dashboard(day or _client_day(request), _client_age(request),
                               client.strain_timezone, client.strain_sex, STRAIN_CONFIG)
+
+
+async def _input_owner(request: Request, response: Response):
+    """Database and user for saving what the user enters; connected accounts only."""
+    token = await _get_token(request, response)
+    if not token:
+        raise HTTPException(401, 'Connect Google Health to save ratings and check-ins')
+    client = _google_client(token, request)
+    if client.database is None:
+        raise HTTPException(401, 'Reconnect Google Health to save ratings and check-ins')
+    return client.database, client.db_account['user_id']
+
+
+def _input_range(request: Request, start: Optional[date], end: Optional[date]) -> tuple[date, date]:
+    end = end or _client_day(request)
+    start = start or end - timedelta(days=27)
+    if start > end or (end - start).days > 400:
+        raise HTTPException(400, 'Choose a range of at most 400 days')
+    return start, end
+
+
+def _not_future(request: Request, day: date) -> None:
+    if day > _client_day(request):
+        raise HTTPException(400, 'Cannot save an entry for a future day')
+
+
+@app.get('/api/effort')
+async def effort_list(request: Request, response: Response, start: Optional[date] = None, end: Optional[date] = None):
+    db, user = await _input_owner(request, response)
+    return await asyncio.to_thread(user_inputs.efforts, db, user, *_input_range(request, start, end))
+
+
+@app.put('/api/effort')
+async def effort_save(body: EffortRatingInput, request: Request, response: Response):
+    db, user = await _input_owner(request, response)
+    _not_future(request, body.date)
+    return await asyncio.to_thread(user_inputs.save_effort, db, user, body.activity_id, body.date, body.rpe, body.minutes)
+
+
+@app.delete('/api/effort/{activity_id}')
+async def effort_delete(activity_id: str, request: Request, response: Response):
+    db, user = await _input_owner(request, response)
+    await asyncio.to_thread(user_inputs.delete_effort, db, user, activity_id)
+    return {'deleted': True}
+
+
+@app.get('/api/checkins')
+async def checkin_list(request: Request, response: Response, start: Optional[date] = None, end: Optional[date] = None):
+    db, user = await _input_owner(request, response)
+    return {'checkins': await asyncio.to_thread(user_inputs.checkins, db, user, *_input_range(request, start, end))}
+
+
+@app.put('/api/checkins')
+async def checkin_save(body: MorningCheckinInput, request: Request, response: Response):
+    db, user = await _input_owner(request, response)
+    _not_future(request, body.date)
+    return await asyncio.to_thread(user_inputs.save_checkin, db, user, body.date, body.feeling)
 
 
 @app.get('/api/profile')
