@@ -9,7 +9,7 @@ import type { StrainData } from '@/lib/types';
 import StrainMetricIcon from '@/components/StrainMetricIcon';
 import StrainTrendChart from '@/components/StrainTrendChart';
 import StrainGuide from '@/components/StrainGuide';
-import MuscularLoad from '@/components/MuscularLoad';
+import EffortLoad from '@/components/EffortLoad';
 import MockBanner from '@/components/MockBanner';
 import { activityHref } from '@/lib/activity';
 import ActivityIcon from '@/components/ActivityIcon';
@@ -51,7 +51,7 @@ export default function StrainPage() {
       </section>)}</div>
       <p className={shared.note}>Cardio Strain uses heart-rate-reserve TRIMP and the 0–21 curve. Activity zone times use logged activities only. Missing heart-rate and step readings remain blank.</p>
       <p className={shared.note}>7-day average: {strainFormat(data.current.analytics.avg_strain_7d, 'strain')} · 28-day average: {strainFormat(data.current.analytics.avg_strain_28d, 'strain')} · Load this week: {loadTrend(data.current.analytics.load_trend)}</p>
-      <MuscularLoad day={data.date} isMock={data.is_mock} className={shared.note} />
+      <EffortLoad day={data.date} isMock={data.is_mock} className={shared.note} />
       {data.current.suggested_workouts.length > 0 && <p className={shared.note}>{data.current.suggested_workouts.length} unlogged effort period(s) detected. Their load is already included in Day Strain.</p>}
       {data.is_mock && <p className={shared.note}>Synthetic replay · age {data.current.age_used} · RHR {data.current.params.hr_rest} bpm · {data.current.params.sex === 'm' ? 'male' : 'female'} coefficients · target from the sample Recovery. Scores are calculated from raw sample readings.</p>}
       <div className={styles.previewLinks}><a href={demo ? '/strain' : '/strain?demo=true'}>{demo ? 'Return to connected data' : 'Preview sample data'}</a></div>

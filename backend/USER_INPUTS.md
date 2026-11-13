@@ -4,12 +4,18 @@ Two things the user enters, saved per account in the normalized SQLite database
 (`backend/user_inputs.py`, tables created on first use). Demo mode shows the
 controls but saves nothing; saving needs a connected account (401 otherwise).
 
-## Session effort (muscular load)
+## Workout effort (effort load)
 
-- Strength activities get a 1–10 "how hard was this session overall?" rating
-  on their activity page, in the style of the CR-10 session-RPE scale.
-- Muscular load = effort × session minutes, in arbitrary units (Foster 2001;
-  validated for resistance training by Lea et al. 2022).
+- Every workout gets a 1–10 "how hard was this workout overall?" rating on its
+  activity page, grouped like Apple Watch: Easy 1–3, Moderate 4–6, Hard 7–8,
+  All Out 9–10.
+- Until the user rates it, the page shows an estimate from the workout's
+  heart-rate Strain: each Strain band (Light <10, Moderate 10–14, High 14–18,
+  All Out 18+) is spread over the matching effort numbers
+  (`frontend/lib/effort.ts`). The estimate is saved only if the user keeps it.
+- Effort load = effort × workout minutes, in arbitrary units (Foster 2001;
+  validated for resistance training by Lea et al. 2022). Heart rate undercounts
+  lifting, so for strength work the rating carries the load.
 - It is shown on its own: on the activity page and as today / last 7 days /
   4-week weekly average on the Strain page. It is never converted into the
   heart-rate 0–21 Day Strain, because no validated conversion exists.

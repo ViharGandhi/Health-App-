@@ -1,8 +1,9 @@
 """What the user tells us: session effort ratings and morning check-ins.
 
-Muscular load is session RPE: effort (1-10, CR-10 style) x minutes, in arbitrary
-units (Foster 2001; Lea et al. 2022 for resistance training). It is shown on its
-own and never converted into the heart-rate 0-21 Strain.
+Effort load is session RPE: effort (1-10, rated after any workout, grouped like
+Apple Watch as Easy/Moderate/Hard/All Out) x minutes, in arbitrary units (Foster
+2001; Lea et al. 2022 for resistance training). It is shown on its own and never
+converted into the heart-rate 0-21 Strain.
 
 Morning check-ins (1-5) are a single-item wellness rating (Saw et al. 2015). They
 are stored so Recovery can later be compared with how the user felt.
