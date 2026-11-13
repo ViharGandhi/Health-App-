@@ -49,7 +49,7 @@ export default function RecoveryPage() {
       </section>
       <section className={styles.insight}><p>{current?.status === 'building_reference' ? current.status_reason
         : range && current?.today_rhr != null ? `Your RHR (${current.today_rhr.toFixed(1)} bpm) is ${current.today_rhr >= range.low && current.today_rhr <= range.high ? 'within' : 'outside'} your personal typical range of ${range.low.toFixed(1)}–${range.high.toFixed(1)} bpm. Your Recovery estimate is ${recoveryLabel(current)}. Look at the pattern over several days.`
-        : `Your Recovery estimate is ${current ? recoveryLabel(current) : 'unavailable'}. ${current?.confidence === 'low' ? 'The percentage is withheld at low confidence.' : 'Compare your trends and consider how you feel.'}`}</p>
+        : `Your Recovery estimate is ${current ? recoveryLabel(current) : 'unavailable'}. ${current?.confidence === 'low' ? 'Low confidence: your reference is still short, so treat the percentage as a rough guide.' : 'Compare your trends and consider how you feel.'}`}</p>
         {current?.illness_flag && <p className={styles.note}>A breathing-rate or skin-temperature deviation capped this estimate.</p>}
         <Link href="/recovery/recovery">EXPLORE YOUR RECOVERY INSIGHTS →</Link>
       </section>

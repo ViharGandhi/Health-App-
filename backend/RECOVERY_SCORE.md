@@ -19,7 +19,7 @@ unspecified methods fall back to HRV alone.
 
 Daily records use Google's wearer-local date; the endpoint honors `X-User-Date`.
 Each reconciled date counts once. Baseline: D−67 through D−8 inclusive; recent:
-D−7 through D−1 inclusive. Today's HRV appears only in the separate 30% term.
+D−7 through D−1 inclusive. Today's HRV appears only in the separate 60% term.
 Nonpositive, missing and nonfinite HRV/RHR values are
 discarded. No gaps are imputed. Intraday HRV coverage filtering is not enabled:
 daily summaries supply no coverage duration, and live intraday access has not
@@ -28,9 +28,15 @@ been verified.
 ## Calculation and missing data
 
 - HRV uses ln(RMSSD), median/MAD reference with a .05 ln-unit spread floor,
-  and .7 recent-mean/.3 current-night weighting. Missing current HRV uses the
-  recent mean, provided at least four recent readings exist.
-- RHR uses an inverted robust z-score, with a 1 bpm floor and at least 21
+  and .4 recent-mean/.6 current-night weighting, so last night leads and the
+  prior week steadies one noisy reading. The 60% is a judgement; no study fixes
+  it. Missing current HRV uses the recent mean, provided at least four recent
+  readings exist.
+- The HRV z is capped at +1.5 before weighting (`components.z_hrv`; the
+  uncapped value is `z_hrv_raw`). HRV far above normal is not reliably better
+  (parasympathetic saturation, artefacts), so it cannot push Recovery to 100%
+  alone. Low HRV is not capped.
+- RHR uses an inverted robust z-score, with a 1 bpm floor and at least 14
   same-method reference dates. When usable it contributes .4 and HRV .6;
   otherwise HRV contributes alone.
 - The last completed main sleep uses actual `summary.minutesAsleep`, excluding
@@ -46,8 +52,8 @@ been verified.
   at 60% or below the penalty is −.5. Efficiency, stages, composite sleep score
   and strain are not additional Recovery components.
 - Respiratory rate and wrist skin temperature use their own D−67…D−8
-  references. An absolute deviation strictly above 2 × robust SD sets
-  `illness_flag`. As selected, fewer than 21 valid readings or a zero-spread
+  references. A rise strictly above 2 × robust SD sets `illness_flag`; low
+  values never set it. Fewer than 14 valid readings or a zero-spread
   reference leaves that signal unassessed. Absent signals also leave the flag
   false. This is an anomaly heuristic, not an illness diagnosis.
 - Final z is bounded to ±3, then capped at −.5 when flagged. Exact −.5 is
@@ -64,10 +70,11 @@ Connected `/api/recovery` adds `z`, `percent`, `zone`, `confidence`, `estimated`
 `components`, `sleep_context`, `baseline_days`, `recent_nights`,
 `rhr_baseline_days`, `illness_flag` and `status_reason`.
 
-- `building_reference`: fewer than 21 baseline HRV days or four recent nights;
+- `building_reference`: fewer than 14 baseline HRV days or four recent nights;
   z/zone/percent/confidence are null. Counts and an explanation remain present.
-- `ok`: zone available. Percent (and legacy `score`, its alias) is present only
-  at medium/high confidence; both are null at low confidence.
+- `ok`: zone and percent (and legacy `score`, its alias) available. At low
+  confidence the percent is still shown, labelled as a rough guide, so a new
+  device gets a score after about three weeks instead of four.
 - High requires 45 baseline days, six recent nights, usable RHR and sleep.
   Medium requires 28 baseline days and five recent nights. Otherwise low.
 - The existing `today_hrv`, `today_rhr`, 14-day medians and reference counts

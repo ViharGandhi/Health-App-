@@ -106,14 +106,42 @@ def empty_zones():
     return {f'zone{i}': 0. for i in range(1, 6)}
 
 
+PERSONAL_HR_MAX_RANGE = (120, 230)
+
+
+def sustained_peak(samples: list, span_s: float = 60) -> float | None:
+    """Highest mean HR over a densely sampled stretch of about one minute.
+
+    A single reading can be an optical artifact; a held minute is the evidence
+    used to suggest that the max-HR setting is too low.
+    """
+    best, first, total = None, 0, 0.
+    for last, (stamp, bpm) in enumerate(samples):
+        total += bpm
+        while seconds(samples[first][0], stamp) > span_s:
+            total -= samples[first][1]
+            first += 1
+        count = last - first + 1
+        if count >= 10 and seconds(samples[first][0], stamp) >= .75 * span_s:
+            best = max(best or 0., total / count)
+    return best
+
+
 def calculate_strain(samples: list, sessions: list[dict], window: dict, age: int | None,
-                     resting_hrs=(), sex='m', sex_defaulted=False, config=StrainConfig()) -> dict:
+                     resting_hrs=(), sex='m', sex_defaulted=False, config=StrainConfig(),
+                     hr_max: float | None = None) -> dict:
+    """`hr_max` is the user's own maximum heart rate; without it the age estimate is used."""
     if age is not None and not 18 <= age <= 100:
         raise ValueError('Age must be between 18 and 100')
     if sex not in ('m', 'f'):
         raise ValueError('Sex must be m or f')
+    low, high = PERSONAL_HR_MAX_RANGE
+    if hr_max is not None and not (finite_number(hr_max) and low <= hr_max <= high):
+        raise ValueError(f'Max heart rate must be between {low} and {high}')
     cleaned = clean_samples(samples, window, config)
-    hr_max = 208 - .7 * age if age is not None else None
+    personal = hr_max is not None and age is not None
+    hr_max = float(hr_max) if personal else 208 - .7 * age if age is not None else None
+    peak = sustained_peak(cleaned)
     rest = []
     rejected = 0
     for value in resting_hrs:
@@ -124,7 +152,8 @@ def calculate_strain(samples: list, sessions: list[dict], window: dict, age: int
             rest.append(parsed)
     rest = rest[-7:]
     hr_rest = median(rest) if rest else 60.
-    params = {'hr_max': hr_max, 'hr_rest': hr_rest, 'hr_rest_source': 'recovery' if rest else 'default',
+    params = {'hr_max': hr_max, 'hr_max_source': None if hr_max is None else 'profile' if personal else 'age_estimate',
+              'hr_rest': hr_rest, 'hr_rest_source': 'recovery' if rest else 'default',
               'strain_l': config.strain_l, 'sex': sex, 'sex_source': 'default' if sex_defaulted else 'profile',
               'rhr_rejected_count': rejected}
     workouts = sorted((s for s in sessions if s['end'] >= window['start'] and s['start'] <= window['end']), key=lambda s: s['start'])
@@ -179,6 +208,7 @@ def calculate_strain(samples: list, sessions: list[dict], window: dict, age: int
             'calibrating': not rest or sex_defaulted or rejected > 0, 'age_missing': age is None, 'params': params,
             'avg_hr': mean(hr for _, hr in cleaned) if cleaned else None,
             'max_hr': max((bpm for _, bpm in cleaned), default=None), 'zone_minutes': zones if age is not None else None,
+            'peak_hr_sustained': peak, 'hr_max_exceeded': peak is not None and hr_max is not None and peak > hr_max,
             'workouts': output, 'activity_zone_minutes': activity_zones if age is not None and all(d['recorded'] for d in details) else None,
             'workout_load': workout_load if age is not None else None,
             'incidental_load': max(0., load - workout_load) if age is not None else None,
@@ -188,7 +218,6 @@ def calculate_strain(samples: list, sessions: list[dict], window: dict, age: int
 def strain_analytics(history: list[dict], end: date, score, recovery, config=StrainConfig()):
     valid = [d for d in history if d['load'] is not None and d.get('coverage', 0) > 0 and end - timedelta(days=27) <= d['date'] <= end]
     recent = [d for d in valid if d['date'] >= end - timedelta(days=6)]
-    chronic = mean(d['load'] for d in valid) if valid else 0
     target = None
     if recovery is not None and score is not None:
         low, high = ((config.target_high_low, config.target_high_high) if recovery >= config.recovery_high_threshold else
@@ -197,8 +226,27 @@ def strain_analytics(history: list[dict], end: date, score, recovery, config=Str
         target = {'low': low, 'high': high, 'status': 'under' if score < low else 'over' if score > high else 'on'}
     return {'avg_strain_7d': mean(d['strain'] for d in recent) if recent else None,
             'avg_strain_28d': mean(d['strain'] for d in valid) if valid else None,
-            'acute_chronic_ratio': mean(d['load'] for d in recent) / chronic if len(valid) >= 21 and recent and chronic > 0 else None,
+            'load_trend': load_trend(valid, end),
             'strain_target': target}
+
+
+LOAD_TREND_BAND = .15
+
+
+def load_trend(valid: list[dict], end: date) -> dict | None:
+    """This week's cardio load against the three weeks before it, as above/usual/below.
+
+    Replaces the acute:chronic ratio as a risk signal (Impellizzeri 2020). The
+    weeks do not overlap, so this week cannot pull its own reference. The
+    15% band is a display judgement, not a validated threshold.
+    """
+    week = [d['load'] for d in valid if d['date'] >= end - timedelta(days=6)]
+    usual = [d['load'] for d in valid if d['date'] < end - timedelta(days=6)]
+    if len(week) < 4 or len(usual) < 14 or mean(usual) <= 0:
+        return None
+    change = mean(week) / mean(usual) - 1
+    status = 'above' if change > LOAD_TREND_BAND else 'below' if change < -LOAD_TREND_BAND else 'usual'
+    return {'week_load': mean(week), 'usual_load': mean(usual), 'change': change, 'status': status}
 
 
 def detect_unlogged_workouts(samples, workouts, hr_rest, hr_max, config=StrainConfig()):

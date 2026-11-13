@@ -3,11 +3,11 @@ import asyncio
 from bisect import bisect_left, bisect_right
 from collections import OrderedDict
 from datetime import date, datetime, timedelta, timezone
-import math
 import time
 import hashlib
 import json
 
+import demo_athlete
 from google_health_client import _local_datetime
 from models import StrainResponse
 from provider_payload import payload_boundary
@@ -48,16 +48,22 @@ async def load_strain_days(client, start, end, now, age, config=StrainConfig()):
     tz = getattr(client, 'strain_timezone', timezone.utc)
     sex = getattr(client, 'strain_sex', 'm')
     defaulted = getattr(client, 'strain_sex_defaulted', True)
+    hr_max = getattr(client, 'strain_hr_max', None)
     store = getattr(client, 'store', None)
     if store is None:
         inputs = await fetch_strain_inputs(client, start, end)
         values = calculate_days(start, end, now, tz, age, sex, defaulted, inputs, config,
-                                getattr(client, 'account_key', None))
+                                getattr(client, 'account_key', None), hr_max)
         return values, inputs[1]
     account = client.account_key
     profile = strain_profile(client, age, config)
     days = [start + timedelta(days=i) for i in range((end - start).days + 1)]
     keys = {day: f'{profile}:{day}' for day in days}
+    current_day = now.astimezone(tz).date()
+    if hr_max is not None and current_day in keys:
+        # A personal max HR applies from today onward. Daytime samples are not
+        # retained, so earlier days keep the scores already saved for them.
+        keys[current_day] = f'{profile}:hrmax{hr_max}:{current_day}'
     finalized = {day: finalized_key(client, day, age, config) for day in days if day < now.astimezone(tz).date()}
     lock = _calculation_locks.setdefault((asyncio.get_running_loop(), account, profile), asyncio.Lock())
     async with lock:
@@ -72,7 +78,7 @@ async def load_strain_days(client, start, end, now, age, config=StrainConfig()):
             inputs = await fetch_strain_inputs(client, lower, upper)
             version = await asyncio.to_thread(store.calculation_version, account)
             calculated = await asyncio.to_thread(calculate_days, lower, upper, now, tz,
-                                                 age, sex, defaulted, inputs, config)
+                                                 age, sex, defaulted, inputs, config, None, hr_max)
             entries = []
             today = now.astimezone(tz).date()
             for day, value in calculated.items():
@@ -122,13 +128,13 @@ async def fetch_strain_inputs(client, start: date, end: date):
 
 
 def calculate_days(start: date, end: date, now: datetime, tz, age, sex, sex_defaulted,
-                   inputs, config=StrainConfig(), account=None):
+                   inputs, config=StrainConfig(), account=None, hr_max=None):
     samples, sessions, sleeps, rhrs = inputs
     timestamps = None
     results = {}
     day = start
     while day <= end:
-        key = (account, day, str(tz), age, sex, sex_defaulted, config)
+        key = (account, day, str(tz), age, sex, sex_defaulted, config, hr_max)
         cached = _daily_cache.get(key) if account else None
         if cached and cached[0] > time.monotonic():
             results[day] = cached[1]
@@ -141,7 +147,7 @@ def calculate_days(start: date, end: date, now: datetime, tz, age, sex, sex_defa
             rest = [rhrs[day - timedelta(days=i)] for i in range(6, -1, -1) if day - timedelta(days=i) in rhrs]
             left = bisect_left(timestamps, window['start'].astimezone(timezone.utc))
             right = bisect_right(timestamps, window['end'].astimezone(timezone.utc))
-            value = calculate_strain(samples[left:right], sessions, window, age, rest, sex, sex_defaulted, config)
+            value = calculate_strain(samples[left:right], sessions, window, age, rest, sex, sex_defaulted, config, hr_max)
             value.update(date=day, day_window=window)
             results[day] = value
             if account:
@@ -171,6 +177,8 @@ def strain_response(current, history, mode, age, recovery=None, config=StrainCon
         avg_hr=rounded(current['avg_hr']), max_hr=current['max_hr'], age_used=age,
         age_is_default=current['age_missing'], is_calibrating=current['calibrating'], is_mock=mode == 'demo',
         sample_count=current['sample_count'], counted_minutes=current['counted_minutes'],
+        # Days saved before this field existed have no sustained peak.
+        peak_hr_sustained=rounded(current.get('peak_hr_sustained')), hr_max_exceeded=current.get('hr_max_exceeded', False),
     )
     response._raw_strain = score
     for workout, raw in zip(response.workouts, current['workouts']):
@@ -179,34 +187,17 @@ def strain_response(current, history, mode, age, recovery=None, config=StrainCon
 
 
 def demo_inputs(start: date, end: date, tz):
-    """Replay deterministic raw readings, never preset scores or load values."""
+    """Replay the demo athlete's raw readings, never preset scores or load values."""
     samples, sessions, sleeps, rhrs, steps = [], [], [], {}, {}
-    scenarios = [(135, 45), (160, 45), (None, 0), (135, 45), (160, 45), (172, 60), (160, 45)]
     day = start - timedelta(days=7)
     while day <= end + timedelta(days=1):
-        wake = datetime.combine(day, datetime.min.time(), tzinfo=tz) + timedelta(hours=7)
+        wake = datetime.combine(day, datetime.min.time(), tzinfo=tz) + timedelta(hours=demo_athlete.WAKE_HOUR)
         sleeps.append({'start': wake - timedelta(hours=8), 'end': wake, 'main_sleep': True})
-        rhrs[day] = 56.
-        hr, duration = scenarios[(day - date(2026, 10, 7)).days % 7]
-        workout_start = wake + timedelta(hours=10)
-        workout_end = workout_start + timedelta(minutes=duration)
-        if hr:
-            sessions.append({'start': workout_start, 'end': workout_end, 'activity_name': 'Tempo Run' if hr == 160 else 'Easy Jog' if hr == 135 else 'Hard Run',
-                             'exercise_type': 'RUNNING', 'active_minutes': duration})
-        if day.weekday() in (0, 3):
-            sessions.append({'start': wake + timedelta(hours=5), 'end': wake + timedelta(hours=5, minutes=35),
-                             'activity_name': 'Weightlifting', 'exercise_type': 'WEIGHTLIFTING', 'active_minutes': 30})
-        for minute in range(901):
-            stamp = wake + timedelta(minutes=minute)
-            bpm = 68 + 6 * math.sin(minute / 83.333)
-            if hr and workout_start <= stamp <= workout_end:
-                ramp = min((stamp - workout_start).total_seconds() / 300, 1)
-                bpm = 68 + (hr - 68) * ramp
-            if day.weekday() in (0, 3) and wake + timedelta(hours=5) <= stamp <= wake + timedelta(hours=5, minutes=35):
-                bpm = 125
-            if wake + timedelta(hours=3) <= stamp <= wake + timedelta(hours=3, minutes=20):
-                bpm = 120  # Unlogged effort: included once in day load, suggested separately.
-            samples.append((stamp, bpm))
-        steps[day] = 4200 + (duration * 145 if hr else 0)
+        morning = demo_athlete.vitals(day)
+        if morning:
+            rhrs[day] = round(morning['rhr'])
+        day_samples, logged, steps[day] = demo_athlete.day_samples(day, tz)
+        samples += day_samples
+        sessions += logged
         day += timedelta(days=1)
     return (samples, sessions, sleeps, rhrs), steps

@@ -11,15 +11,18 @@ from validity import positive, valid_metric, resting_hr, finite_median as median
 BASELINE_DAYS = 60
 EXCLUDE_RECENT_DAYS = 7
 RECENT_WINDOW = 7
-MIN_BASELINE_DAYS = 21
+MIN_BASELINE_DAYS = 14
 MIN_RECENT_NIGHTS = 4
-W_RECENT = 0.7
-W_TODAY = 0.3
+# Last night leads; the prior week steadies one noisy reading (Plews 2012; Altini).
+W_RECENT = 0.4
+W_TODAY = 0.6
 W_HRV = 0.6
 W_RHR = 0.4
 HRV_SIGMA_FLOOR = 0.05
 RHR_SD_FLOOR = 1.0
 Z_CLIP = 3.0
+# HRV far above normal is not reliably better (parasympathetic saturation, artefacts).
+Z_HRV_HIGH = 1.5
 SLEEP_OK_THRESHOLD = 0.85
 SLEEP_RANGE = 0.25
 SLEEP_MAX_PENALTY = 0.5
@@ -89,7 +92,8 @@ def calculate_recovery(
     mu, sigma = robust(baseline, HRV_SIGMA_FLOOR)
     recent_mean = mean(recent)
     signal = W_RECENT * recent_mean + W_TODAY * log(today_hrv) if positive(today_hrv) else recent_mean
-    z_hrv = (signal - mu) / sigma
+    z_hrv_raw = (signal - mu) / sigma
+    z_hrv = min(z_hrv_raw, Z_HRV_HIGH)
     z_rhr = None
     if resting_hr(today_rhr, age) is not None and len(rhr) >= MIN_BASELINE_DAYS:
         rmed, rsd = robust(rhr, RHR_SD_FLOOR)
@@ -105,10 +109,12 @@ def calculate_recovery(
         confidence = "medium"
     else:
         confidence = "low"
-    percent = round(100 * 0.5 * (1 + erf(z / sqrt(2)))) if confidence != "low" else None
+    # Low confidence (under four weeks of reference) still shows a percent, labelled as such.
+    percent = round(100 * 0.5 * (1 + erf(z / sqrt(2))))
     # Classify and rescale before rounding; rounded z must not move a zone boundary.
     return RecoveryEstimate("ok", round(z, 2), percent, zone, confidence,
-                            {"z_hrv": z_hrv, "z_rhr": z_rhr, "sleep_adj": sleep_adj}, context, **counts)
+                            {"z_hrv": z_hrv, "z_hrv_raw": z_hrv_raw, "z_rhr": z_rhr, "sleep_adj": sleep_adj},
+                            context, **counts)
 
 
 def baseline_bounds(day: date) -> tuple[date, date]:
@@ -123,7 +129,7 @@ def recovery_from_history(history: dict[str, list[dict]], day: date,
 
     The 180-minute exclusion applies to the supplied sleep modifier; daily RMSSD
     summaries have no duration/coverage field, so no historical coverage is inferred.
-    Recent HRV uses the seven prior dates; today appears only in its 30% term.
+    Recent HRV uses the seven prior dates; today appears only in its 60% term.
     """
     start, end = baseline_bounds(day)
     recent_start = day - timedelta(days=RECENT_WINDOW)
@@ -146,8 +152,9 @@ def recovery_from_history(history: dict[str, list[dict]], day: date,
                      if start <= when <= end and positive(point.get("value"))]
         if positive(current) and len(reference) >= MIN_BASELINE_DAYS:
             center, spread = robust(reference, 0.0)
-            # Flat or insufficient references remain unassessed, as requested.
-            illness_flag |= spread > 0 and abs(current - center) > ILLNESS_SD_MULTIPLIER * spread
+            # One-sided: only raised breathing rate or temperature suggests illness.
+            # Flat or insufficient references remain unassessed.
+            illness_flag |= spread > 0 and current - center > ILLNESS_SD_MULTIPLIER * spread
     result = calculate_recovery(
         [point["value"] for when, point in hrv.items() if start <= when <= end],
         [point["value"] for when, point in hrv.items() if recent_start <= when < day],

@@ -44,7 +44,7 @@ def test_sleep_wake_date_uses_device_offset_and_duration_uses_utc(start, end, of
     assert window['start'] == datetime.combine(activity_day, datetime.min.time(), tzinfo=user_tz)
 
 
-@pytest.mark.parametrize('count,recent', [(20, 7), (60, 4), (5, 5)])
+@pytest.mark.parametrize('count,recent', [(13, 7), (60, 4), (5, 5)])
 def test_missing_reference_is_not_imputed(count, recent):
     result = recovery_from_history(reference_history(count, recent), DAY, 450, 450)
     assert result.status == 'building_reference' and result.percent is None

@@ -6,7 +6,8 @@ The connected API and synthetic demo use the same pure HRR/TRIMP calculator in `
 
 - Day Strain resets at local midnight in the requested user timezone. The current window ends at now; completed days end at the next local midnight, including 23/25-hour DST days. Sleep timing does not set this boundary.
 - Keep timezone-aware HR readings within that window, sort and deduplicate timestamps, reject readings outside 30–230 bpm, and reject deviations greater than 35 bpm from the centered five-sample median. Match the supplied reference's repeated edge padding; fewer than five readings skip spike filtering.
-- HRmax is `208 - 0.7 * age`. HRrest is the median of available resting HR values from the last seven calendar nights, or a flagged 60 bpm default. The optional observed sustained HRmax uplift is deferred.
+- HRmax is the user's own value from `X-User-Max-HR` (120–230 bpm) when supplied, otherwise `208 - 0.7 * age`; `params.hr_max_source` says which. Age is still required. A personal value applies from the day it is set: daytime samples are not retained, so days already saved keep their scores. HRrest is the median of available resting HR values from the last seven calendar nights, or a flagged 60 bpm default.
+- The highest mean HR over a densely sampled minute (at least ten readings spanning 45–60 seconds) is reported as `peak_hr_sustained`. When it is above the HRmax in use, `hr_max_exceeded` is set and the UI suggests updating the setting. HRmax is never raised automatically, because wrist sensors can report false highs.
 - Consecutive intervals up to 300 seconds count their actual duration; longer gaps contribute no coverage or load. HRR uses the pair's mean HR and is clipped to 0–1.1. Below HRR 0.20, load is zero.
 - Load is `minutes * HRR * a * exp(b * HRR)`: male coefficients 0.64/1.92, female coefficients 0.86/1.67.
 - Strain is `21 * (1 - exp(-load / STRAIN_L))`, default L=90. API score/load presentation rounds to one decimal; calculations retain precision. Labels use the unrounded score: Light <10, Moderate <14, High <18, All Out otherwise.
@@ -23,11 +24,12 @@ The connected API and synthetic demo use the same pure HRR/TRIMP calculator in `
 | `date`, `mode`, `day_window` | Selected date, connected/demo mode, aware boundaries and source |
 | `coverage`, `low_coverage`, `sample_count`, `counted_minutes` | Data quality and usable duration |
 | `age_missing`, `calibrating`, `params` | Missing age is withheld; calibration flags defaulted resting HR or sex coefficients |
-| `analytics` | 7/28-day mean strain, load-based acute/chronic ratio, optional Recovery target |
+| `analytics` | 7/28-day mean strain, `load_trend` (this week's mean daily load vs the 21 days before it: `above`/`usual`/`below` at a 15% band; needs 4 + 14 days), optional Recovery target |
 | `suggested_workouts` | Unlogged effort intervals without additional load |
 | `activity_zone_minutes` | Logged-activity zone minutes for the screenshot-based UI |
 | `workouts[].strain` | Now the real calculated 0–21 workout score; `load` carries raw TRIMP |
 | `max_hr` | Observed maximum cleaned HR; physiological HRmax is now `params.hr_max` |
+| `peak_hr_sustained`, `hr_max_exceeded` | Highest HR held for about a minute, and whether it is above `params.hr_max` |
 
 No HTTP response fields were removed. Deprecated aliases remain: `score_21` aliases `strain`; `score_100` is `strain / 21 * 100`, without personal capacity normalization; `workout_strain` and `incidental_strain` retain raw load under legacy names. `age_is_default` is a legacy missing-age flag; use `age_missing` instead. `is_calibrating` aliases `calibrating`. Old capacity and linear-conversion Python helpers were removed after checking their consumers.
 

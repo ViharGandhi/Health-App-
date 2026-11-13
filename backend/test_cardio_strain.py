@@ -140,10 +140,16 @@ def test_history_and_target_boundaries(recovery, expected):
     history = [{'date': BASE.date() - timedelta(days=i), 'strain': 10, 'load': 50 if i >= 7 else 100, 'coverage': 1} for i in range(28)]
     result = strain_analytics(history, BASE.date(), 12, recovery)
     assert result['avg_strain_7d'] == result['avg_strain_28d'] == 10
-    assert result['acute_chronic_ratio'] == pytest.approx(100 / 62.5)
+    assert result['load_trend'] == {'week_load': 100, 'usual_load': 50, 'change': 1, 'status': 'above'}
     assert (result['strain_target']['low'], result['strain_target']['high']) == expected
-    assert strain_analytics(history[:20], BASE.date(), 12, None)['acute_chronic_ratio'] is None
+    assert strain_analytics(history[:20], BASE.date(), 12, None)['load_trend'] is None
     assert strain_analytics(history, BASE.date(), 12, None)['strain_target'] is None
+
+
+@pytest.mark.parametrize('week,status', [(57, 'usual'), (43, 'usual'), (58, 'above'), (42, 'below')])
+def test_load_trend_band_uses_separate_weeks(week, status):
+    history = [{'date': BASE.date() - timedelta(days=i), 'strain': 10, 'load': 50 if i >= 7 else week, 'coverage': 1} for i in range(28)]
+    assert strain_analytics(history, BASE.date(), 12, None)['load_trend']['status'] == status
 
 
 @pytest.mark.parametrize('hr,minutes,expected', [(135, 45, 9.6310026881), (160, 45, 14.4548919987), (172, 60, 18.3713504781)])

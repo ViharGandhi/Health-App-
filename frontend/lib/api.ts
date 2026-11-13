@@ -12,12 +12,18 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:800
 const responses = new RequestCache();
 let accountFingerprint: string | undefined;
 
+// The user's own max heart rate replaces the age estimate in Strain.
+function maxHrHeader(): Record<string, string> {
+  const value = window.localStorage.getItem('ojas_max_hr');
+  return value ? { 'X-User-Max-HR': value } : {};
+}
+
 async function apiFetch<T>(path: string, day?: string): Promise<T> {
   const today = new Date();
   const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   const age = window.localStorage.getItem('ojas_age');
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const headers = { 'Content-Type': 'application/json', 'X-User-Date': day ?? localDate, 'X-User-Timezone': timezone, ...(age ? { 'X-User-Age': age } : {}) };
+  const headers = { 'Content-Type': 'application/json', 'X-User-Date': day ?? localDate, 'X-User-Timezone': timezone, ...(age ? { 'X-User-Age': age } : {}), ...maxHrHeader() };
   const fetchData = async () => {
   const res = await fetch(`${BACKEND_URL}${path}`, {
     credentials: 'include', // send session cookie
@@ -132,6 +138,7 @@ export const api = {
         'X-User-Date': `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`,
         'X-User-Timezone': Intl.DateTimeFormat().resolvedOptions().timeZone,
         ...(age ? { 'X-User-Age': age } : {}),
+        ...maxHrHeader(),
       },
     });
     if (!response.ok) {
@@ -155,7 +162,7 @@ export const api = {
       method: 'POST', credentials: 'include', signal: AbortSignal.timeout(120000),
       headers: { 'X-User-Timezone': Intl.DateTimeFormat().resolvedOptions().timeZone,
         'X-User-Date': `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`,
-        ...(age ? { 'X-User-Age': age } : {}) },
+        ...(age ? { 'X-User-Age': age } : {}), ...maxHrHeader() },
     });
     if (response.status === 401) return { synced: false, connected: false };
     if (!response.ok) throw new Error('Activity sync failed. Saved stats are still available.');
