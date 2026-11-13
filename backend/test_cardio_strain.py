@@ -64,8 +64,13 @@ def test_hand_computed_hrr_trimp_and_curve(sex, a, b):
 
 
 def test_min_hrr_and_clip():
-    assert calc(samples(56 + .199 * 131))['load'] == 0
-    assert calc(samples(56 + .2 * 131))['load'] > 0
+    # Outside logged workouts only moderate effort (40% HRR) counts.
+    assert calc(samples(56 + .399 * 131))['load'] == 0
+    assert calc(samples(56 + .4 * 131))['load'] > 0
+    # Inside a logged workout the 20% floor applies.
+    workout = {'start': BASE, 'end': BASE + timedelta(minutes=45), 'activity_name': 'Walk'}
+    assert calc(samples(56 + .199 * 131), [workout])['load'] == 0
+    assert calc(samples(56 + .2 * 131), [workout])['load'] > 0
     assert calc(samples(230, 1))['load'] == pytest.approx(1.1 * .64 * math.exp(1.92 * 1.1))
 
 

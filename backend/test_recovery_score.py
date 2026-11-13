@@ -2,7 +2,7 @@ import math
 import unittest
 from datetime import date, timedelta
 
-from recovery_score import calculate_recovery, recovery_from_history, robust
+from recovery_score import calculate_recovery, recovery_from_history, robust, Z_SCALE
 
 
 DAY = date(2026, 10, 4)
@@ -77,7 +77,7 @@ class RecoveryScoreTests(unittest.TestCase):
         for changes in ({"today_rhr": None}, {"baseline_rhr": [55] * 13}):
             result = self.score(today_hrv=45, **changes)
             self.assertIsNone(result.components["z_rhr"])
-            self.assertAlmostEqual(result.z, result.components["z_hrv"], places=2)
+            self.assertAlmostEqual(result.z, result.components["z_hrv"] / Z_SCALE, places=2)
             self.assertEqual(result.confidence, "medium")
 
     def test_missing_today_hrv_uses_recent_mean(self):
@@ -86,8 +86,10 @@ class RecoveryScoreTests(unittest.TestCase):
         self.assertEqual(result.components["z_hrv"], 1.5)
 
     def test_hrv_upside_is_capped_but_downside_is_not(self):
-        self.assertEqual(self.score(today_hrv=60, today_rhr=None).z, 1.5)
-        self.assertLess(self.score(today_hrv=25, today_rhr=None).z, -1.5)
+        capped = self.score(today_hrv=60, today_rhr=None)
+        self.assertEqual(capped.components["z_hrv"], 1.5)
+        self.assertEqual(capped.z, round(1.5 / Z_SCALE, 2))
+        self.assertLess(self.score(today_hrv=25, today_rhr=None).components["z_hrv"], -1.5)
 
     def test_illness_caps_z_including_positive_signal(self):
         result = self.score(today_hrv=80, illness_flag=True)
@@ -97,7 +99,7 @@ class RecoveryScoreTests(unittest.TestCase):
         self.assertEqual(result.zone, "normal")
 
     def test_extremes_are_clamped(self):
-        for hrv, expected in ((10000, 1.5), (.00001, -3)):
+        for hrv, expected in ((10000, round(1.5 / Z_SCALE, 2)), (.00001, -3)):
             self.assertEqual(self.score(today_hrv=hrv, today_rhr=None).z, expected)
 
     def test_confidence_thresholds_and_low_percent_shown(self):
@@ -144,26 +146,36 @@ class RecoveryScoreTests(unittest.TestCase):
             self.assertEqual(result.rhr_baseline_days, 0)
             self.assertIsNone(result.components["z_rhr"])
 
-    def test_illness_uses_own_robust_reference_and_requires_spread(self):
-        for metric in ("respiratory_rate", "skin_temperature"):
+    def test_illness_flag_is_temperature_led_and_needs_a_spread_reference(self):
+        def history_with(**today):
             history = reference_history()
-            history[metric] = [{"date": (DAY - timedelta(days=8 + i)).isoformat(),
-                                "value": 16 + (i % 3 - 1) * .2} for i in range(60)]
-            history[metric].append({"date": DAY.isoformat(), "value": 20})
-            result = recovery_from_history(history, DAY)
-            self.assertTrue(result.illness_flag)
-            self.assertEqual(result.z, -.5)
-            history[metric][-1]["value"] = 12
-            self.assertFalse(recovery_from_history(history, DAY).illness_flag)
-            history[metric][-1]["value"] = 20
-            history[metric] = history[metric][:13] + history[metric][-1:]
-            self.assertFalse(recovery_from_history(history, DAY).illness_flag)
-            history[metric] = [{"date": (DAY - timedelta(days=8 + i)).isoformat(), "value": 16}
-                               for i in range(60)] + history[metric][-1:]
-            self.assertFalse(recovery_from_history(history, DAY).illness_flag)
+            for metric in ("respiratory_rate", "skin_temperature"):
+                # Median 16, robust SD 1.4826 * .2 = .2965.
+                history[metric] = [{"date": (DAY - timedelta(days=8 + i)).isoformat(),
+                                    "value": 16 + (i % 3 - 1) * .2} for i in range(60)]
+                if metric in today:
+                    history[metric].append({"date": DAY.isoformat(), "value": today[metric]})
+            return history
+        flagged = recovery_from_history(history_with(skin_temperature=20), DAY)
+        self.assertTrue(flagged.illness_flag)
+        self.assertEqual(flagged.z, -.5)
+        # Temperature alone must pass 2.5 SD; 2.02 SD needs breathing raised too.
+        self.assertFalse(recovery_from_history(history_with(skin_temperature=16.6), DAY).illness_flag)
+        self.assertTrue(recovery_from_history(history_with(skin_temperature=16.6, respiratory_rate=16.6), DAY).illness_flag)
+        # Breathing alone never flags; low values never flag.
+        self.assertFalse(recovery_from_history(history_with(respiratory_rate=20), DAY).illness_flag)
+        self.assertFalse(recovery_from_history(history_with(skin_temperature=12, respiratory_rate=12), DAY).illness_flag)
+        short = history_with(skin_temperature=20)
+        short["skin_temperature"] = short["skin_temperature"][:13] + short["skin_temperature"][-1:]
+        self.assertFalse(recovery_from_history(short, DAY).illness_flag)
+        flat = history_with(skin_temperature=20)
+        flat["skin_temperature"] = [{"date": (DAY - timedelta(days=8 + i)).isoformat(), "value": 16}
+                                    for i in range(60)] + flat["skin_temperature"][-1:]
+        self.assertFalse(recovery_from_history(flat, DAY).illness_flag)
 
     def test_zone_uses_unrounded_z(self):
-        result = self.score(today_rhr=53.749, today_hrv=40)
+        # z = .4 * (55 - 54.149) / Z_SCALE = .5006: rounds to .5 but is above the band.
+        result = self.score(today_rhr=54.149, today_hrv=40)
         self.assertEqual(result.z, .5)
         self.assertEqual(result.zone, "above_normal")
 

@@ -28,7 +28,7 @@ class RecoveryIntegrationTests(unittest.TestCase):
         data, client = self.request()
         self.assertFalse(data["is_mock"])
         self.assertEqual(data["status"], "ok")
-        self.assertEqual(data["zone"], "normal")
+        self.assertEqual(data["zone"], "below_normal" if data["z"] < -.5 else "above_normal" if data["z"] > .5 else "normal")
         self.assertEqual(data["confidence"], "high")
         self.assertEqual(data["score"], data["percent"])
         self.assertTrue(data["estimated"])

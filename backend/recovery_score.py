@@ -29,7 +29,16 @@ SLEEP_MAX_PENALTY = 0.5
 ZONE_BAND = 0.5
 MIN_SLEEP_MIN = 180
 ILLNESS_Z_CAP = -0.5
-ILLNESS_SD_MULTIPLIER = 2.0
+# Temperature-led flag: temp > 2.5 robust SD, or temp and breathing both > 1.5.
+# With real Fitbit Air noise this keeps false alarms near 1.5% of normal days
+# (validation/fitbit_air/illness_rules.py); "either > 2 SD" gave 5.5%.
+ILLNESS_TEMP_SD = 2.5
+ILLNESS_PAIR_SD = 1.5
+# Spread of the HRV/RHR composite on ordinary days with a full reference: 0.68,
+# stable for low to high Fitbit Air noise and for HRV alone (0.70). Dividing by it
+# makes the percent read as "better than X% of your usual mornings".
+# Measured by validation/fitbit_air/recovery_check.py.
+Z_SCALE = 0.68
 CONFIDENCE_HIGH_BASELINE = 45
 CONFIDENCE_MED_BASELINE = 28
 
@@ -99,7 +108,7 @@ def calculate_recovery(
         rmed, rsd = robust(rhr, RHR_SD_FLOOR)
         z_rhr = -(today_rhr - rmed) / rsd
     z_base = W_HRV * z_hrv + W_RHR * z_rhr if z_rhr is not None else z_hrv
-    z = clamp(z_base + sleep_adj, -Z_CLIP, Z_CLIP)
+    z = clamp(z_base / Z_SCALE + sleep_adj, -Z_CLIP, Z_CLIP)
     if illness_flag:
         z = min(z, ILLNESS_Z_CAP)
     zone = "below_normal" if z < -ZONE_BAND else "above_normal" if z > ZONE_BAND else "normal"
@@ -144,7 +153,7 @@ def recovery_from_history(history: dict[str, list[dict]], day: date,
     known_method = method in ("WITH_SLEEP", "ONLY_WITH_AWAKE_DATA", "ASLEEP_TIME_WEIGHTED_V1")
     baseline_rhr = [point["value"] for when, point in rhr.items()
                     if start <= when <= end and known_method and point.get("method") == method]
-    illness_flag = False
+    raised = {}
     for metric in ("respiratory_rate", "skin_temperature"):
         readings = points.get(metric, {})
         current = readings.get(day, {}).get("value")
@@ -152,9 +161,12 @@ def recovery_from_history(history: dict[str, list[dict]], day: date,
                      if start <= when <= end and positive(point.get("value"))]
         if positive(current) and len(reference) >= MIN_BASELINE_DAYS:
             center, spread = robust(reference, 0.0)
-            # One-sided: only raised breathing rate or temperature suggests illness.
-            # Flat or insufficient references remain unassessed.
-            illness_flag |= spread > 0 and current - center > ILLNESS_SD_MULTIPLIER * spread
+            # One-sided: only raised values count. Flat or short references stay unassessed.
+            if spread > 0:
+                raised[metric] = (current - center) / spread
+    temp, breathing = raised.get("skin_temperature"), raised.get("respiratory_rate")
+    illness_flag = temp is not None and (temp > ILLNESS_TEMP_SD or breathing is not None
+                                         and temp > ILLNESS_PAIR_SD and breathing > ILLNESS_PAIR_SD)
     result = calculate_recovery(
         [point["value"] for when, point in hrv.items() if start <= when <= end],
         [point["value"] for when, point in hrv.items() if recent_start <= when < day],

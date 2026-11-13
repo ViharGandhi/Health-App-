@@ -4,7 +4,7 @@
  * Automatically uses mock data when no device is connected (handled server-side).
  */
 
-import type { DashboardData, RecoveryData, RecoveryAnalytics, RecoveryDemo, RecoveryRange, SleepData, StrainData, AuthStatus, HealthData, SleepConsistencyScore, SleepStressHistory, SleepStageRangeHistory, SleepHeartRate } from './types';
+import type { DashboardData, RecoveryData, RecoveryAnalytics, RecoveryDemo, RecoveryRange, SleepData, StrainData, AuthStatus, HealthData, SleepConsistencyScore, SleepStressHistory, SleepStageRangeHistory, SleepHeartRate, EffortHistory, EffortRating, MorningCheckin } from './types';
 import { RequestCache } from './requestCache';
 import { trackSyncActivity } from './syncActivity';
 
@@ -16,6 +16,22 @@ let accountFingerprint: string | undefined;
 function maxHrHeader(): Record<string, string> {
   const value = window.localStorage.getItem('ojas_max_hr');
   return value ? { 'X-User-Max-HR': value } : {};
+}
+
+// Ratings and check-ins the user enters; never cached so a save shows at once.
+async function inputFetch<T>(method: 'GET' | 'PUT' | 'DELETE', path: string, body?: unknown): Promise<T> {
+  const today = new Date();
+  const res = await fetch(`${BACKEND_URL}${path}`, {
+    method, credentials: 'include', cache: 'no-store', signal: AbortSignal.timeout(30000),
+    headers: { 'Content-Type': 'application/json', 'X-User-Timezone': Intl.DateTimeFormat().resolvedOptions().timeZone,
+      'X-User-Date': `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}` },
+    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+  });
+  if (!res.ok) {
+    const detail = await res.json().catch(() => null);
+    throw new Error(typeof detail?.detail === 'string' ? detail.detail : 'Could not save. Please retry.');
+  }
+  return res.json() as Promise<T>;
 }
 
 async function apiFetch<T>(path: string, day?: string): Promise<T> {
@@ -126,6 +142,19 @@ export const api = {
     accountFingerprint = fingerprint;
     return status;
   },
+
+  getEfforts: (start?: string, end?: string) =>
+    inputFetch<EffortHistory>('GET', `/api/effort?${new URLSearchParams({ ...(start ? { start } : {}), ...(end ? { end } : {}) })}`),
+
+  saveEffort: (rating: { activity_id: string; date: string; rpe: number; minutes: number }) =>
+    inputFetch<EffortRating>('PUT', '/api/effort', rating),
+
+  deleteEffort: (id: string) => inputFetch<{ deleted: boolean }>('DELETE', `/api/effort/${encodeURIComponent(id)}`),
+
+  getCheckins: (start?: string, end?: string) =>
+    inputFetch<{ checkins: MorningCheckin[] }>('GET', `/api/checkins?${new URLSearchParams({ ...(start ? { start } : {}), ...(end ? { end } : {}) })}`),
+
+  saveCheckin: (checkin: MorningCheckin) => inputFetch<MorningCheckin>('PUT', '/api/checkins', checkin),
 
   getDataStatus: () => apiFetch<{ last_synced_at: string | null; stored_ranges: number }>('/api/data/status'),
 

@@ -1,0 +1,14 @@
+.card { margin: 0 0 26px; padding: 16px; background: var(--bg-card); border-radius: var(--card-radius); }
+.title { font: 800 10px var(--font-body); letter-spacing: .08em; color: var(--text-secondary); margin-bottom: 8px; }
+.question { font-size: 13px; line-height: 1.5; margin-bottom: 12px; }
+.scale { display: grid; gap: 5px; grid-template-columns: repeat(var(--columns), 1fr); }
+/* Ten narrow buttons are too small to tap on a phone; wrap to two rows of five. */
+@media (max-width: 480px) { .scale.long { grid-template-columns: repeat(5, 1fr); } }
+.scale button { display: flex; flex-direction: column; align-items: center; gap: 3px; min-height: 44px; padding: 7px 0; border: 1px solid var(--border-default); border-radius: 10px; background: var(--bg-surface); color: var(--text-primary); cursor: pointer; font: inherit; }
+.scale button strong { font: 700 15px var(--font-display); }
+.scale button small { font-size: 8px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .04em; }
+.scale button.selected { background: var(--whoop-blue); border-color: var(--whoop-blue); }
+.scale button.selected small { color: var(--text-primary); }
+.scale button:disabled { opacity: .6; cursor: default; }
+.status { margin-top: 10px; font-size: 11px; line-height: 1.5; color: var(--text-secondary); }
+.error { margin-top: 10px; font-size: 11px; color: var(--whoop-caution); }

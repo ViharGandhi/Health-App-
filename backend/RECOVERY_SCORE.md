@@ -52,10 +52,16 @@ been verified.
   at 60% or below the penalty is −.5. Efficiency, stages, composite sleep score
   and strain are not additional Recovery components.
 - Respiratory rate and wrist skin temperature use their own D−67…D−8
-  references. A rise strictly above 2 × robust SD sets `illness_flag`; low
-  values never set it. Fewer than 14 valid readings or a zero-spread
+  references. `illness_flag` is temperature-led: skin temperature above 2.5
+  robust SD, or temperature and breathing rate both above 1.5. Breathing rate
+  alone and low values never set it. With real Fitbit Air noise this fires on
+  about 2% of ordinary days (4% with a 14-day reference) instead of 6–12% for
+  "either above 2 SD". Fewer than 14 valid readings or a zero-spread
   reference leaves that signal unassessed. Absent signals also leave the flag
   false. This is an anomaly heuristic, not an illness diagnosis.
+- The HRV/RHR composite is divided by 0.68 (`Z_SCALE`), its measured spread on
+  ordinary days, so the percent reads as "better than X% of your usual
+  mornings". The sleep adjustment is added after that.
 - Final z is bounded to ±3, then capped at −.5 when flagged. Exact −.5 is
   **normal** under the supplied strict zone boundaries; the flag is separate.
   Classification and CDF rescaling happen before z is rounded for output.

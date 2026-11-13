@@ -45,7 +45,7 @@ def mock_recovery_points(day: date, scenario: str = "normal") -> dict[str, list[
         points["daily-respiratory-rate"].append({"dailyRespiratoryRate": {
             "date": google_date, "breathsPerMinute": 20 if offset == 0 and scenario == "illness_flag" else round(16 + rng.gauss(0, .25), 2)}})
         points["daily-sleep-temperature-derivations"].append({"dailySleepTemperatureDerivations": {
-            "date": google_date, "nightlyTemperatureCelsius": round(33 + rng.gauss(0, .18), 2)}})
+            "date": google_date, "nightlyTemperatureCelsius": round(33 + rng.gauss(0, .18) + (1. if offset == 0 and scenario == "illness_flag" else 0), 2)}})
 
     for offset in range(8):
         wake_day = day - timedelta(days=offset)

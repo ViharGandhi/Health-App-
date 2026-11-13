@@ -9,7 +9,7 @@ from __future__ import annotations
 from pydantic import BaseModel, Field, PrivateAttr, field_serializer
 from math import floor
 from typing import Optional, List, Dict, Literal
-from datetime import datetime
+from datetime import datetime, date as date_type
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -334,3 +334,16 @@ class HealthResponse(BaseModel):
     metrics: dict[str, List[HealthPoint]]
     heart_rate: List[HeartRatePoint]
     latest_heart_rate: Optional[LatestHeartRate] = None
+
+
+class EffortRatingInput(BaseModel):
+    """Session RPE for one logged activity; muscular load = rpe x minutes."""
+    activity_id: str = Field(min_length=1, max_length=64, pattern=r'^[A-Za-z0-9_-]+$')
+    date: date_type
+    rpe: int = Field(ge=1, le=10)
+    minutes: float = Field(gt=0, le=600)
+
+
+class MorningCheckinInput(BaseModel):
+    date: date_type
+    feeling: int = Field(ge=1, le=5)
