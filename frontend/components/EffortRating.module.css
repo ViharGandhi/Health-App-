@@ -1,0 +1,21 @@
+.card { margin: 0 0 26px; padding: 16px; background: var(--bg-card); border-radius: var(--card-radius); }
+.header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+.header h2 { font: 800 10px var(--font-body); letter-spacing: .08em; color: var(--text-secondary); }
+.header p { display: flex; align-items: baseline; gap: 8px; }
+.header strong { font: 700 28px var(--font-display); }
+.header span { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+.estimated strong, .estimated span { opacity: .7; }
+.scale { display: flex; align-items: flex-end; gap: 4px; }
+.scale button { flex: 1; min-width: 0; display: flex; align-items: flex-end; justify-content: center; padding: 0 0 5px; border: 0; border-radius: 6px; background: var(--bg-track); color: var(--text-tertiary); font: 700 11px var(--font-display); cursor: pointer; }
+.scale button.filled { background: var(--band); color: #101418; }
+.scale button.ghost { opacity: .45; }
+.scale button:disabled { cursor: default; }
+.scale button:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 2px; }
+.legend { display: flex; gap: 4px; margin-top: 8px; font-size: 9px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .04em; }
+.legend span { display: flex; align-items: center; gap: 4px; min-width: 0; white-space: nowrap; }
+.legend i { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+.status { margin-top: 12px; font-size: 11px; line-height: 1.5; color: var(--text-secondary); }
+.actions { display: flex; gap: 14px; margin-top: 6px; }
+.actions button { border: 0; background: none; padding: 0; color: var(--whoop-blue); font: 700 11px var(--font-body); cursor: pointer; }
+.error { margin-top: 8px; font-size: 11px; color: var(--whoop-caution); }
+.note { margin-top: 10px; font-size: 10px; line-height: 1.5; color: var(--text-tertiary); }
