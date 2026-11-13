@@ -33,7 +33,7 @@ export function RecoveryInfo({ data, onClose }: { data?: RecoveryData; onClose: 
       <div><span>Combined z</span><strong>{data.z?.toFixed(2) ?? '—'}</strong></div>
       <div><span>Reference / recent nights</span><strong>{data.baseline_days ?? 0} / {data.recent_nights ?? 0}</strong></div>
     </div>}
-    {data?.illness_flag && <p className={styles.note}>A breathing-rate or skin-temperature deviation capped this estimate. This flag is not an illness diagnosis.</p>}
+    {data?.illness_flag && <p className={styles.note}>Raised skin temperature (or temperature and breathing rate together) capped this estimate. This flag is not an illness diagnosis.</p>}
     <p className={styles.note}>An experimental app estimate, not a validated clinical score or WHOOP&apos;s proprietary algorithm.</p>
   </div></div>;
 }

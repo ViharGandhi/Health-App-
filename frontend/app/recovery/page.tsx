@@ -52,7 +52,7 @@ export default function RecoveryPage() {
       <section className={styles.insight}><p>{current?.status === 'building_reference' ? current.status_reason
         : range && current?.today_rhr != null ? `Your RHR (${current.today_rhr.toFixed(1)} bpm) is ${current.today_rhr >= range.low && current.today_rhr <= range.high ? 'within' : 'outside'} your personal typical range of ${range.low.toFixed(1)}–${range.high.toFixed(1)} bpm. Your Recovery estimate is ${recoveryLabel(current)}. Look at the pattern over several days.`
         : `Your Recovery estimate is ${current ? recoveryLabel(current) : 'unavailable'}. ${current?.confidence === 'low' ? 'Low confidence: your reference is still short, so treat the percentage as a rough guide.' : 'Compare your trends and consider how you feel.'}`}</p>
-        {current?.illness_flag && <p className={styles.note}>A breathing-rate or skin-temperature deviation capped this estimate.</p>}
+        {current?.illness_flag && <p className={styles.note}>Raised skin temperature (or temperature and breathing rate together) capped this estimate.</p>}
         <Link href="/recovery/recovery">EXPLORE YOUR RECOVERY INSIGHTS →</Link>
       </section>
       <section className={styles.behavior}><div className={styles.cardHeader}><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA5AD" strokeWidth="1.5"><circle cx="12" cy="10" r="5" /><path d="M9 16h6M10 20h4M12 1V0M3 5l-2-1m20 1 2-1M3 12H0m21 0h3" /></svg>BEHAVIOR INSIGHTS</span><span aria-label="Unavailable">›</span></div>

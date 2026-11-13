@@ -10,7 +10,11 @@ from backend.validity import resting_hr, finite_number
 @dataclass(frozen=True)
 class StrainConfig:
     strain_l: float = 90
-    min_hrr: float = .20
+    min_hrr: float = .20  # inside logged workouts
+    # Outside logged workouts only moderate effort or harder counts (ACSM: moderate
+    # starts at 40% HRR). At 20%, hours of standing and slow walking on real Fitbit
+    # Air days added up to 17-19 Strain with no exercise (validation/fitbit_air).
+    incidental_min_hrr: float = .40
     max_gap_s: float = 300
     spike_bpm: float = 35
     hr_floor: float = 30
@@ -40,6 +44,7 @@ class StrainConfig:
                 or config.max_gap_s <= 0 or config.spike_bpm < 0 or config.min_main_sleep_h <= 0
                 or not 0 < config.hr_floor < config.hr_ceiling
                 or config.auto_workout_min <= 0 or not 0 <= config.min_hrr <= 1.1
+                or not 0 <= config.incidental_min_hrr <= 1.1
                 or not 0 <= config.auto_workout_hrr <= 1.1 or not 0 <= config.low_coverage_threshold <= 1
                 or not 0 <= config.recovery_low_threshold < config.recovery_high_threshold <= 100
                 or any(not 0 <= low <= high <= 21 for low, high in (
@@ -170,18 +175,19 @@ def calculate_strain(samples: list, sessions: list[dict], window: dict, age: int
         hr_sum += minutes * hr
         if age is None:
             continue
-        hrr = max(0., min(1.1, (hr - hr_rest) / max(hr_max - hr_rest, 1.)))
-        interval_load = minutes * hrr * a * math.exp(b * hrr) if hrr >= config.min_hrr else 0.
-        load += interval_load
-        zone = f'zone{int(HeartRateZone.zone_for(hr, hr_max))}' if hr >= .5 * hr_max else None
-        if zone:
-            zones[zone] += minutes
         # Compute midpoint in physical time; wall-clock arithmetic is unsafe at DST.
         midpoint = first.astimezone(timezone.utc) + timedelta(seconds=elapsed / 2)
         for detail in details:
             if detail['start'] <= midpoint <= detail['end']:
                 detail['recorded'] = True
         match = next((d for d in details if d['start'] <= midpoint <= d['end']), None)
+        hrr = max(0., min(1.1, (hr - hr_rest) / max(hr_max - hr_rest, 1.)))
+        floor = config.min_hrr if match is not None else config.incidental_min_hrr
+        interval_load = minutes * hrr * a * math.exp(b * hrr) if hrr >= floor else 0.
+        load += interval_load
+        zone = f'zone{int(HeartRateZone.zone_for(hr, hr_max))}' if hr >= .5 * hr_max else None
+        if zone:
+            zones[zone] += minutes
         if match is not None:
             workout_load += interval_load
             match['load'] += interval_load
