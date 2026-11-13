@@ -21,9 +21,12 @@ Daily records use Google's wearer-local date; the endpoint honors `X-User-Date`.
 Each reconciled date counts once. Baseline: D−67 through D−8 inclusive; recent:
 D−7 through D−1 inclusive. Today's HRV appears only in the separate 60% term.
 Nonpositive, missing and nonfinite HRV/RHR values are
-discarded. No gaps are imputed. Intraday HRV coverage filtering is not enabled:
-daily summaries supply no coverage duration, and live intraday access has not
-been verified.
+discarded. No gaps are imputed. Google's daily HRV is the median of the night's 5-minute RMSSD windows (checked on
+real Fitbit Air nights). When the stored windows for last night's main sleep number
+fewer than 36 (3 hours), that median errs by 0.07+ ln units, over 60% of normal
+night-to-night variation, so last night's HRV is set aside and the past week's is
+used (`rejected_readings.hrv_today_low_coverage`). With no windows stored yet the
+daily value is used as before.
 
 ## Calculation and missing data
 

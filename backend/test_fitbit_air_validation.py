@@ -96,3 +96,32 @@ def test_load_matches_an_independent_integral():
 def test_strain_barely_depends_on_sampling_cadence():
     scores_by_cadence = [calculate_strain(wavy_day(c), [RUN], WINDOW, 30, [60] * 7)['strain'] for c in (1, 3, 15)]
     assert max(scores_by_cadence) - min(scores_by_cadence) < .3
+
+
+def test_thin_night_hrv_is_set_aside_for_the_past_week():
+    rng = random.Random(8)
+    history = person(rng)
+    full = recovery_from_history(history, DAY, 450, 450, age=30, today_hrv_windows=36)
+    unknown = recovery_from_history(history, DAY, 450, 450, age=30)
+    thin = recovery_from_history(history, DAY, 450, 450, age=30, today_hrv_windows=35)
+    without_today = {**history, 'hrv': [p for p in history['hrv'] if p['date'] != DAY.isoformat()]}
+    expected = recovery_from_history(without_today, DAY, 450, 450, age=30)
+    assert full.components == unknown.components and not full.rejected_readings['hrv_today_low_coverage']
+    assert thin.components['z_hrv'] == expected.components['z_hrv']
+    assert thin.rejected_readings['hrv_today_low_coverage'] == 1 and thin.data_quality_flag
+
+
+def test_night_window_count_reads_the_main_sleep_that_ended_today(tmp_path):
+    from health_database import HealthDatabase
+    from health_normalized_reads import night_hrv_windows
+    db = HealthDatabase(tmp_path / 'health.sqlite3')
+    user = db.ensure_account('provider-user')['user_id']
+    wake = int(datetime(2026, 11, 13, 1, 30, tzinfo=timezone.utc).timestamp())  # 07:00 at +05:30
+    assert night_hrv_windows(db, user, DAY) is None
+    with db.connect() as conn:
+        conn.execute('INSERT INTO sleep_sessions(user_id,provider_sleep_id,start_ts,end_ts,end_offset_min,is_main_sleep) VALUES (?,?,?,?,?,1)',
+                     (user, 'night', wake - 8 * 3600, wake, 330))
+        conn.executemany('INSERT INTO hrv_samples(user_id,ts,rmssd_ms) VALUES (?,?,?)',
+                         [(user, wake - 8 * 3600 + i * 300, 30.) for i in range(20)] + [(user, wake + 3600, 30.)])
+    assert night_hrv_windows(db, user, DAY) == 20
+    assert night_hrv_windows(db, user, DAY - timedelta(days=1)) is None
