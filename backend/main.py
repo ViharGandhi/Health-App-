@@ -91,7 +91,7 @@ from models import (
     DashboardResponse, RecoveryResponse, SleepResponse, StrainResponse,
     SleepStages, SleepTrendResponse, SleepConsistencyScoreResponse,
     SleepStressHistoryResponse, HealthResponse, HealthHeartRateResponse,
-    EffortRatingInput, MorningCheckinInput
+    EffortRatingInput, MorningCheckinInput, ProfileInput
 )
 
 
@@ -446,6 +446,25 @@ async def profile_endpoint(request: Request, response: Response):
             'profile_version_id': profile.get('profile_version_id') if profile else None}
 
 
+@app.put('/api/profile')
+async def profile_save(body: ProfileInput, request: Request, response: Response):
+    """Remember the date of birth so age, and the age-based max HR, stay current every day."""
+    from health_database import age_on
+    db, user = await _input_owner(request, response)
+    if not 18 <= age_on(body.birth_date, _client_day(request)) <= 100:
+        raise HTTPException(400, 'Age must be between 18 and 100')
+    current = await asyncio.to_thread(db.profile, user, _client_day(request))
+    if (current or {}).get('birth_date') != body.birth_date.isoformat():
+        try:
+            # Effective from the birth date itself, so every scored day uses the age it had then.
+            await asyncio.to_thread(db.save_profile, user, body.birth_date, birth_date=body.birth_date,
+                                    sex=(current or {}).get('sex', 'unknown'), timezone_name=str(_client_timezone(request)))
+        except ValueError as error:
+            raise HTTPException(400, str(error))
+    request.state.__dict__.pop('health_profile', None)
+    return await profile_endpoint(request, response)
+
+
 @app.get("/api/data/status")
 async def data_status(request: Request, response: Response):
     token = await _get_token(request, response)
@@ -694,14 +713,19 @@ async def _compute_connected_recovery(client: GoogleHealthClient, today: date,
         client.get_sleep_session(today),
         _recovery_sleep_need(client, today, age),
     )
-    return await _recovery_response(client, today, history, sleep, need, age)
+    windows = None
+    if getattr(client, 'database', None) is not None:
+        from health_normalized_reads import night_hrv_windows
+        windows = await asyncio.to_thread(night_hrv_windows, client.database, client.db_account['user_id'], today)
+    return await _recovery_response(client, today, history, sleep, need, age, windows)
 
 
 async def _recovery_response(client, today: date, history: dict, sleep: dict | None,
-                             need: SleepNeedResult | None, age: Optional[int] = None) -> RecoveryResponse:
+                             need: SleepNeedResult | None, age: Optional[int] = None,
+                             hrv_windows: Optional[int] = None) -> RecoveryResponse:
     sleep_min = (sleep["total_duration"] / 60
                  if sleep and sleep.get("sleep_duration_available") else None)
-    estimate = recovery_from_history(history, today, sleep_min, need.total_need_min if need else None, age)
+    estimate = recovery_from_history(history, today, sleep_min, need.total_need_min if need else None, age, hrv_windows)
     sleep_hours = round(sleep_min / 60, 2) if sleep_min is not None else None
     efficiency = (SleepEfficiencyCalculator.calculate_single_night(sleep["total_duration"], sleep["in_bed_duration"])
                   if sleep_min is not None else None)
@@ -712,6 +736,8 @@ async def _recovery_response(client, today: date, history: dict, sleep: dict | N
               f"{estimate.recent_nights}/{MIN_RECENT_NIGHTS} recent nights required."
               if estimate.status == "building_reference" else
               "Estimated baseline-relative recovery; above normal means higher than usual, not necessarily better.")
+    if estimate.rejected_readings.get('hrv_today_low_coverage'):
+        reason += " Last night's HRV came from under 3 hours of readings, so your past week's HRV was used instead."
     if estimate.confidence == "low":
         reason += " Low confidence: under four weeks of reference, so treat the percentage as a rough guide."
     return response.model_copy(update={**asdict(estimate), "score": estimate.percent,

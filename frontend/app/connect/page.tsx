@@ -8,9 +8,16 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '@/lib/api';
+import { api, ageOn } from '@/lib/api';
 import type { AuthStatus } from '@/lib/types';
 import styles from './page.module.css';
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+function todayIso() {
+  const today = new Date();
+  return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+}
 
 export default function ConnectPage() {
   const router = useRouter();
@@ -20,8 +27,8 @@ export default function ConnectPage() {
   const [syncing, setSyncing] = useState(false);
   const [lastSynced, setLastSynced] = useState<string | null>(null);
   const [error, setError] = useState('');
-  const [age, setAge] = useState('');
-  const [ageSaved, setAgeSaved] = useState(false);
+  const [birthDate, setBirthDate] = useState('');
+  const [ageSaved, setAgeSaved] = useState('');
   const [ageError, setAgeError] = useState('');
   const [maxHr, setMaxHr] = useState('');
   const [maxHrNote, setMaxHrNote] = useState('');
@@ -29,10 +36,16 @@ export default function ConnectPage() {
 
   useEffect(() => {
     if (status?.connected) api.getDataStatus().then(data => setLastSynced(data.last_synced_at)).catch(() => {});
+    // The account's saved birth date wins over this device's copy.
+    if (status?.connected) api.getProfile().then(profile => {
+      if (!profile.birth_date) return;
+      setBirthDate(profile.birth_date);
+      window.localStorage.setItem('ojas_birth_date', profile.birth_date);
+    }).catch(() => {});
   }, [status?.connected]);
 
   useEffect(() => {
-    setAge(window.localStorage.getItem('ojas_age') ?? '');
+    setBirthDate(window.localStorage.getItem('ojas_birth_date') ?? '');
     setMaxHr(window.localStorage.getItem('ojas_max_hr') ?? '');
     const reason = new URLSearchParams(window.location.search).get('error');
     if (reason) {
@@ -190,18 +203,22 @@ export default function ConnectPage() {
         </div>
       )}
       <div className={`card ${styles.setupCard}`}>
-        <p className="section-title" style={{ marginBottom: 10 }}>Your age</p>
-        <p className={styles.setupText}>Used to estimate maximum heart rate for connected zone calculations. Fitbit Air does not supply a measured maximum heart rate through the current data fields. Demo scores do not use this setting.</p>
-        <label htmlFor="user-age" className={styles.setupText}>Age in years</label>
-        <input id="user-age" type="number" min="18" max="100" value={age} onChange={(event) => { setAge(event.target.value); setAgeSaved(false); }} style={{ width: '100%', margin: '8px 0 12px', padding: 12, borderRadius: 10, border: '1px solid #454545', background: '#151515', color: '#FFFFFF', fontSize: 16 }} />
-        <button type="button" className="btn btn-primary" onClick={() => {
-          const value = Number(age);
-          if (!Number.isInteger(value) || value < 18 || value > 100) { setAgeError('Enter an age from 18 to 100.'); return; }
-          window.localStorage.setItem('ojas_age', String(value));
+        <p className="section-title" style={{ marginBottom: 10 }}>Your date of birth</p>
+        <p className={styles.setupText}>Your age is worked out from this every day, so it stays right after each birthday. It sets the estimated maximum heart rate used for Strain and heart-rate zones; Fitbit Air does not report a measured maximum. Demo scores do not use this setting.</p>
+        <label htmlFor="user-birth-date" className={styles.setupText}>Date of birth</label>
+        <input id="user-birth-date" type="date" value={birthDate} max={todayIso()} onChange={(event) => { setBirthDate(event.target.value); setAgeSaved(''); }} style={{ width: '100%', margin: '8px 0 12px', padding: 12, borderRadius: 10, border: '1px solid #454545', background: '#151515', color: '#FFFFFF', fontSize: 16, colorScheme: 'dark' }} />
+        {ISO_DATE.test(birthDate) && <p className={styles.setupText}>Age {ageOn(birthDate, todayIso())} · estimated max heart rate {Math.round(208 - .7 * ageOn(birthDate, todayIso()))} bpm (208 − 0.7 × age). If you know your measured max, enter it below.</p>}
+        <button type="button" className="btn btn-primary" onClick={async () => {
+          const age = ISO_DATE.test(birthDate) ? ageOn(birthDate, todayIso()) : NaN;
+          if (!(age >= 18 && age <= 100)) { setAgeError('Enter a date of birth for an age from 18 to 100.'); return; }
           setAgeError('');
-          setAgeSaved(true);
-        }}>Save age</button>
-        {ageSaved && <p className={styles.setupText} role="status">Saved on this device.</p>}
+          window.localStorage.setItem('ojas_birth_date', birthDate);
+          window.localStorage.removeItem('ojas_age');
+          if (!status?.connected) { setAgeSaved('Saved on this device.'); return; }
+          try { await api.saveProfile(birthDate); setAgeSaved('Saved to your account and this device.'); }
+          catch (reason) { setAgeSaved('Saved on this device only.'); setAgeError(reason instanceof Error ? reason.message : 'Could not save to your account.'); }
+        }}>Save date of birth</button>
+        {ageSaved && <p className={styles.setupText} role="status">{ageSaved}</p>}
         {ageError && <p className={styles.error} role="alert">{ageError}</p>}
       </div>
       <div className={`card ${styles.setupCard}`}>

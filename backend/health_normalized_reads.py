@@ -1,5 +1,5 @@
 """Compatibility reads from normalized records when the old cache is empty."""
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 
 
 def resting_hr_points(db, user, query):
@@ -21,3 +21,21 @@ def awake_baseline(db, user, day):
     with db.connect() as conn:
         row = conn.execute('SELECT r.* FROM awake_hr_results r JOIN calc_runs c USING(calc_run_id) WHERE r.user_id=? AND r.source_date=? AND c.is_current=1 ORDER BY c.calc_run_id DESC LIMIT 1', (user, str(day))).fetchone()
     return {'date': str(day), 'value': row['mean_bpm'], 'sample_count': row['retained_count'], 'status': 'ok' if row['mean_bpm'] is not None else 'no_readings'} if row else None
+
+
+def night_hrv_windows(db, user, day):
+    """Valid 5-minute HRV windows in the main sleep that ended on local `day`.
+
+    Google's daily HRV is the median of these windows. None means unknown (no main
+    sleep or no windows stored yet), so callers must not treat it as zero coverage.
+    """
+    with db.connect() as conn:
+        sleeps = conn.execute('SELECT start_ts,end_ts,end_offset_min FROM sleep_sessions WHERE user_id=? AND is_main_sleep=1', (user,)).fetchall()
+        nights = [row for row in sleeps if datetime.fromtimestamp(
+            row['end_ts'], timezone(timedelta(minutes=row['end_offset_min'] or 0))).date() == day]
+        if not nights:
+            return None
+        night = max(nights, key=lambda row: row['end_ts'] - row['start_ts'])
+        count = conn.execute('SELECT COUNT(DISTINCT ts) FROM hrv_samples WHERE user_id=? AND ts>=? AND ts<=? AND rmssd_ms>0',
+                             (user, night['start_ts'], night['end_ts'])).fetchone()[0]
+    return count or None

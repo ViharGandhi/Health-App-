@@ -40,6 +40,10 @@ ILLNESS_PAIR_SD = 1.5
 # Measured by validation/fitbit_air/recovery_check.py.
 Z_SCALE = 0.68
 CONFIDENCE_HIGH_BASELINE = 45
+# A nightly HRV median from under 3 hours of 5-minute windows errs by 0.07+ ln units,
+# over 60% of normal night-to-night variation (validation/fitbit_air), so last night's
+# HRV is set aside and the past week's is used instead.
+MIN_HRV_WINDOWS = 36
 CONFIDENCE_MED_BASELINE = 28
 
 
@@ -133,7 +137,7 @@ def baseline_bounds(day: date) -> tuple[date, date]:
 
 def recovery_from_history(history: dict[str, list[dict]], day: date,
                           sleep_min: float | None = None, need_min: float | None = None,
-                          age: int | None = None) -> RecoveryEstimate:
+                          age: int | None = None, today_hrv_windows: int | None = None) -> RecoveryEstimate:
     """Join reconciled local-date daily records without imputing or counting dates twice.
 
     The 180-minute exclusion applies to the supplied sleep modifier; daily RMSSD
@@ -147,6 +151,9 @@ def recovery_from_history(history: dict[str, list[dict]], day: date,
     hrv = points.get("hrv", {})
     rhr = points.get("rhr", {})
     today_hrv = hrv.get(day, {}).get("value")
+    thin_night = today_hrv_windows is not None and today_hrv_windows < MIN_HRV_WINDOWS
+    if thin_night:
+        today_hrv = None
     today_rhr = rhr.get(day, {}).get("value")
     method = rhr.get(day, {}).get("method")
     # Unreported/unspecified methods cannot establish that readings are comparable.
@@ -174,6 +181,7 @@ def recovery_from_history(history: dict[str, list[dict]], day: date,
         sleep_min, need_min, illness_flag, age,
     )
     rejected = dict(result.rejected_readings)
+    rejected['hrv_today_low_coverage'] = int(thin_night)
     rejected['rhr_method'] = sum(start <= when <= end or when == day for when, point in rhr.items()
         if not known_method or point.get('method') != method)
     return replace(result, rejected_readings=rejected, data_quality_flag=any(rejected.values()))

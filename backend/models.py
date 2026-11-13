@@ -347,3 +347,8 @@ class EffortRatingInput(BaseModel):
 class MorningCheckinInput(BaseModel):
     date: date_type
     feeling: int = Field(ge=1, le=5)
+
+
+class ProfileInput(BaseModel):
+    """Date of birth; age (and the age-based max HR) is derived for each day."""
+    birth_date: date_type

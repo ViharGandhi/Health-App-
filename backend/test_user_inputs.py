@@ -62,3 +62,18 @@ def test_endpoints_validate_and_round_trip(owner):
 def test_saving_needs_a_connected_account():
     response = TestClient(main.app).put('/api/checkins', headers=HEADERS, json={'date': '2026-11-13', 'feeling': 3})
     assert response.status_code == 401
+
+
+def test_birth_date_is_remembered_and_drives_age(owner):
+    db, user = owner
+    client = TestClient(main.app)
+    with patch.object(main, '_input_owner', AsyncMock(return_value=owner)), \
+         patch.object(main, '_get_token', AsyncMock(return_value='token')), \
+         patch.object(main, '_google_client', return_value=type('C', (), {'database': db, 'db_account': {'user_id': user}, 'strain_timezone': 'UTC'})()):
+        saved = client.put('/api/profile', headers=HEADERS, json={'birth_date': '2003-11-05'})
+        assert saved.status_code == 200 and saved.json()['age'] == 23 and saved.json()['birth_date'] == '2003-11-05'
+        assert client.put('/api/profile', headers=HEADERS, json={'birth_date': '2003-11-05'}).status_code == 200
+        assert client.put('/api/profile', headers=HEADERS, json={'birth_date': '2015-01-01'}).status_code == 400
+    # Age follows the calendar: 22 the day before the birthday, 23 on it.
+    assert db.profile(user, date(2026, 11, 4))['age'] == 22
+    assert db.profile(user, date(2026, 11, 5))['age'] == 23

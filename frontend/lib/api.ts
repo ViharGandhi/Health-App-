@@ -12,6 +12,20 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:800
 const responses = new RequestCache();
 let accountFingerprint: string | undefined;
 
+/** Whole years on `day` (YYYY-MM-DD) for a YYYY-MM-DD birth date. */
+export function ageOn(birthDate: string, day: string): number {
+  const [by, bm, bd] = birthDate.split('-').map(Number), [y, m, d] = day.split('-').map(Number);
+  return y - by - (m < bm || (m === bm && d < bd) ? 1 : 0);
+}
+
+// Age from the saved birth date, so it stays right after each birthday; older saves kept only an age.
+function storedAge(): string | null {
+  const birthDate = window.localStorage.getItem('ojas_birth_date');
+  if (!birthDate) return window.localStorage.getItem('ojas_age');
+  const today = new Date();
+  return String(ageOn(birthDate, `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`));
+}
+
 // The user's own max heart rate replaces the age estimate in Strain.
 function maxHrHeader(): Record<string, string> {
   const value = window.localStorage.getItem('ojas_max_hr');
@@ -37,7 +51,7 @@ async function inputFetch<T>(method: 'GET' | 'PUT' | 'DELETE', path: string, bod
 async function apiFetch<T>(path: string, day?: string): Promise<T> {
   const today = new Date();
   const localDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-  const age = window.localStorage.getItem('ojas_age');
+  const age = storedAge();
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const headers = { 'Content-Type': 'application/json', 'X-User-Date': day ?? localDate, 'X-User-Timezone': timezone, ...(age ? { 'X-User-Age': age } : {}), ...maxHrHeader() };
   const fetchData = async () => {
@@ -156,11 +170,15 @@ export const api = {
 
   saveCheckin: (checkin: MorningCheckin) => inputFetch<MorningCheckin>('PUT', '/api/checkins', checkin),
 
+  getProfile: () => inputFetch<{ birth_date: string | null; age: number | null }>('GET', '/api/profile'),
+
+  saveProfile: (birthDate: string) => inputFetch<{ birth_date: string | null; age: number | null }>('PUT', '/api/profile', { birth_date: birthDate }),
+
   getDataStatus: () => apiFetch<{ last_synced_at: string | null; stored_ranges: number }>('/api/data/status'),
 
   recalculateSleepAwakeHeartRate: async (): Promise<{ sleep: SleepData }> => trackSyncActivity(async () => {
     const today = new Date();
-    const age = window.localStorage.getItem('ojas_age');
+    const age = storedAge();
     const response = await fetch(`${BACKEND_URL}/api/sleep/awake-heart-rate/recalculate`, {
       method: 'POST', credentials: 'include', signal: AbortSignal.timeout(180000),
       headers: {
@@ -186,7 +204,7 @@ export const api = {
 
   syncDynamic: async (force: boolean, session: string, homeVisit = false) => trackSyncActivity(async () => {
     const today = new Date();
-    const age = window.localStorage.getItem('ojas_age');
+    const age = storedAge();
     const response = await fetch(`${BACKEND_URL}/api/data/sync?${new URLSearchParams({ force: String(force), session, home_visit: String(homeVisit) })}`, {
       method: 'POST', credentials: 'include', signal: AbortSignal.timeout(120000),
       headers: { 'X-User-Timezone': Intl.DateTimeFormat().resolvedOptions().timeZone,
