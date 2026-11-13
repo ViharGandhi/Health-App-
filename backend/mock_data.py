@@ -19,6 +19,7 @@ from datetime import datetime, timedelta, date, timezone
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from strain_service import demo_inputs, calculate_days, strain_response
+from recovery_analytics import demo_recovery_percent
 from strain import StrainConfig
 from recovery import RecoveryCalculator, RecoveryInput
 from sleepscore import SleepCalculator, SleepData
@@ -106,14 +107,14 @@ RHR_BASELINE = 56.0  # bpm
 HRV_BASELINE = 41.2  # ms
 
 def compute_mock_strain(today: date | None = None, age: int = 30, tz=timezone.utc,
-                        sex: str = 'm', config=StrainConfig()) -> StrainResponse:
+                        sex: str = 'm', config=StrainConfig(), recovery_age: int | None = None) -> StrainResponse:
     # Explicit sample profile: age 30, male, RHR 56 bpm.
     today = today or date.today()
     start = today - timedelta(days=27)
     inputs, _ = demo_inputs(start, today, tz)
     now = datetime.combine(today, datetime.min.time(), tzinfo=tz) + timedelta(hours=22)
     values = calculate_days(start, today, now, tz, age, sex, False, inputs, config)
-    return strain_response(values[today], values, "demo", age, 72, config)
+    return strain_response(values[today], values, "demo", age, demo_recovery_percent(today, recovery_age), config)
 
 
 def compute_mock_sleep(today: date | None = None, age: int = USER_AGE,
@@ -258,7 +259,7 @@ def get_mock_dashboard(today: date | None = None, age: int | None = None,
     This is what the frontend sees until the user connects their Fitbit.
     """
     today = today or date.today()
-    strain  = compute_mock_strain(today, 30 if age is None else age, tz, sex, config)
+    strain  = compute_mock_strain(today, 30 if age is None else age, tz, sex, config, age)
     sleep   = compute_mock_sleep(today, USER_AGE if age is None else age, strain.score_100)
     recovery = compute_mock_recovery(sleep_score=sleep.score, strain_21=strain.score_21)
 

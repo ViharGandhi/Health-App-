@@ -32,7 +32,7 @@ class RecoveryIntegrationTests(unittest.TestCase):
         self.assertEqual(data["confidence"], "high")
         self.assertEqual(data["score"], data["percent"])
         self.assertTrue(data["estimated"])
-        self.assertEqual(set(data["components"]), {"z_hrv", "z_rhr", "sleep_adj"})
+        self.assertEqual(set(data["components"]), {"z_hrv", "z_hrv_raw", "z_rhr", "sleep_adj"})
         self.assertEqual(data["sleep_context"]["sleep_min"], 470)
         self.assertEqual(data["baseline_days"], 60)
         self.assertEqual(data["recent_nights"], 6)  # Fixture has today and six prior nights.
@@ -74,7 +74,7 @@ class RecoveryIntegrationTests(unittest.TestCase):
             self.assertIsNone(results[scenario]["zone"])
             self.assertTrue(results[scenario]["is_calibrating"])
         self.assertEqual(results["low_confidence"]["confidence"], "low")
-        self.assertIsNone(results["low_confidence"]["score"])
+        self.assertIsNotNone(results["low_confidence"]["score"])
         self.assertIsNotNone(results["low_confidence"]["zone"])
         for scenario in ("missing_rhr", "method_change"):
             self.assertIsNone(results[scenario]["components"]["z_rhr"])

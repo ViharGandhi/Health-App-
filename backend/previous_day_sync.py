@@ -41,7 +41,8 @@ async def sync_previous_day(client, today, now, age, config=None):
     try:
         inputs = await fetch_strain_inputs(client, day, day)
         values = await asyncio.to_thread(calculate_days, day, day, now, tz, age,
-            getattr(client, 'strain_sex', 'm'), getattr(client, 'strain_sex_defaulted', True), inputs, config)
+            getattr(client, 'strain_sex', 'm'), getattr(client, 'strain_sex_defaulted', True), inputs, config,
+            None, getattr(client, 'strain_hr_max', None))
         result = values[day]
         if result['strain'] is None or result['coverage'] <= 0:
             return False  # No fabricated zero; missing data can be retried next sync.

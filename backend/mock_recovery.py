@@ -25,7 +25,7 @@ def mock_recovery_points(day: date, scenario: str = "normal") -> dict[str, list[
     points = {key: [] for key in ("daily-heart-rate-variability", "daily-resting-heart-rate",
                                  "daily-respiratory-rate", "daily-sleep-temperature-derivations",
                                  "sleep", "heart-rate", "exercise")}
-    count = 20 if scenario == "building_reference" else 24 if scenario == "low_confidence" else 60
+    count = 10 if scenario == "building_reference" else 24 if scenario == "low_confidence" else 60
     recent = 3 if scenario == "sparse_recent" else 7
     for offset in [*range(8, 8 + count), *range(recent)]:
         when = day - timedelta(days=offset)

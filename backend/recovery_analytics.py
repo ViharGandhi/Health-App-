@@ -1,10 +1,10 @@
 """Recorded Recovery/vital trend data for the reference-style UI; gaps stay gaps."""
 
 import math
-import random
 from datetime import date, timedelta
 from statistics import mean
 
+import demo_athlete
 from recovery_score import baseline_bounds, positive, recovery_from_history, robust, MIN_BASELINE_DAYS
 from sleep_trends import range_start, DateRangeError
 from validity import valid_metric
@@ -134,23 +134,24 @@ def _months_back(day: date, count: int) -> date:
 
 
 def mock_recovery_history(start: date, end: date) -> dict:
-    """Date-seeded sample readings, stable across ranges, with outliers and gaps."""
+    """The demo athlete's overnight readings: stable across ranges, with gaps and an artefact."""
     result = {metric: [] for metric in VITALS}
     day = start
     while day <= end:
-        ordinal = day.toordinal()
-        rng = random.Random(ordinal + 7823)
-        if ordinal % 37 != 0:
-            values = {"hrv": max(12, 46 + 4 * math.sin(ordinal / 12) + rng.gauss(0, 3.4)),
-                      "rhr": 59 + 1.2 * math.sin(ordinal / 10) + rng.gauss(0, 1.3),
-                      "respiratory_rate": 15.8 + .15 * math.sin(ordinal / 8) + rng.gauss(0, .24),
-                      "skin_temperature": 33 + rng.gauss(0, .2), "spo2": min(100, 97.5 + rng.gauss(0, .4))}
-            if ordinal % 19 == 0:
-                values["hrv"] += 12
-            for metric, value in values.items():
-                if metric == "skin_temperature" and ordinal % 13 == 0:
-                    continue
-                result[metric].append({"date": day.isoformat(), "value": round(value, 2),
-                                       "method": "WITH_SLEEP" if metric == "rhr" else None})
+        for metric, value in (demo_athlete.vitals(day) or {}).items():
+            result[metric].append({"date": day.isoformat(), "value": round(value, 2),
+                                   "method": "WITH_SLEEP" if metric == "rhr" else None})
         day += timedelta(days=1)
     return result
+
+
+def demo_recovery_percent(day: date, age=None) -> int | None:
+    """The demo athlete's Recovery for `day`, as the Recovery page shows it (weekly view)."""
+    from mock_sleep_stage_ranges import mock_stage_points
+    from sleep_analytics import demo_sleep_need_inputs, sleep_observations
+    sleeps = sleep_observations(mock_stage_points(day, 39), day, is_mock=True)
+    night = next((s for s in sleeps if s["date"] == day.isoformat()), None)
+    need = demo_sleep_need_inputs(sleeps, day).for_tonight(day - timedelta(days=1))
+    return recovery_from_history(mock_recovery_history(baseline_bounds(day)[0], day), day,
+                                 night["asleep_minutes"] if night else None,
+                                 need.total_need_min if need else None, age).percent

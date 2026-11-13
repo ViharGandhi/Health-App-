@@ -56,8 +56,8 @@ export interface StrainData {
   low_coverage: boolean;
   calibrating: boolean;
   age_missing: boolean;
-  params: { hr_max: number | null; hr_rest: number; hr_rest_source: 'recovery' | 'default'; strain_l: number; sex: 'm' | 'f'; sex_source: 'profile' | 'default' };
-  analytics: { avg_strain_7d: number | null; avg_strain_28d: number | null; acute_chronic_ratio: number | null; strain_target: { low: number; high: number; status: 'under' | 'on' | 'over' } | null };
+  params: { hr_max: number | null; hr_max_source?: 'profile' | 'age_estimate' | null; hr_rest: number; hr_rest_source: 'recovery' | 'default'; strain_l: number; sex: 'm' | 'f'; sex_source: 'profile' | 'default' };
+  analytics: { avg_strain_7d: number | null; avg_strain_28d: number | null; load_trend: { week_load: number; usual_load: number; change: number; status: 'above' | 'usual' | 'below' } | null; strain_target: { low: number; high: number; status: 'under' | 'on' | 'over' } | null };
   suggested_workouts: { start: string; end: string; avg_hr: number }[];
   score_21: number | null;
   score_100: number | null;
@@ -66,6 +66,8 @@ export interface StrainData {
   zone_minutes: ZoneMinutes | null;
   workouts: WorkoutDetail[];
   max_hr: number | null;
+  peak_hr_sustained: number | null;
+  hr_max_exceeded: boolean;
   avg_hr: number | null;
   age_used: number | null;
   age_is_default: boolean;
@@ -81,7 +83,7 @@ export interface RecoveryData {
   zone: 'below_normal' | 'normal' | 'above_normal' | null;
   confidence: 'low' | 'medium' | 'high' | null;
   estimated: boolean | null;
-  components: { z_hrv: number | null; z_rhr: number | null; sleep_adj: number } | null;
+  components: { z_hrv: number | null; z_hrv_raw?: number | null; z_rhr: number | null; sleep_adj: number } | null;
   sleep_context: { sleep_min: number | null; need_min: number | null; performance: number | null } | null;
   baseline_days: number | null;
   recent_nights: number | null;

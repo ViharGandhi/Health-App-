@@ -52,7 +52,7 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
 # ── Algorithm imports ──────────────────────────────────────────────────────────
-from strain import StrainConfig, strain_analytics
+from strain import PERSONAL_HR_MAX_RANGE, StrainConfig, strain_analytics
 from strain_service import fetch_strain_inputs, calculate_days, strain_response, demo_inputs, load_strain_days
 from activity_details import activity_id, activity_summary, build_activity, dashboard_rows, showcase_inputs
 from sleepscore import SleepCalculator, SleepData
@@ -74,7 +74,7 @@ from sleep_need import SleepNeedResult, format_sleep_minutes
 from sleep_need_inputs import SleepNeedInputs, need_components
 from sleep_vitals import load_sleep_vitals, sleep_vitals
 from recovery_score import recovery_from_history, baseline_bounds, MIN_BASELINE_DAYS, MIN_RECENT_NIGHTS
-from recovery_analytics import build_recovery_analytics, mock_recovery_history, VITALS
+from recovery_analytics import build_recovery_analytics, demo_recovery_percent, mock_recovery_history, VITALS
 from sleep_stage_pipeline import sync_stage_ranges
 from sleep_stage_webhooks import router as sleep_stage_webhook_router, stage_store
 from health_trends import build_health_response, build_heart_rate_response
@@ -272,6 +272,21 @@ def _client_age(request: Request) -> Optional[int]:
     return age
 
 
+def _client_max_hr(request: Request) -> Optional[float]:
+    """The user's own maximum heart rate, replacing the age estimate in Strain."""
+    supplied = request.headers.get("x-user-max-hr")
+    if supplied is None:
+        return None
+    low, high = PERSONAL_HR_MAX_RANGE
+    try:
+        value = float(supplied)
+    except ValueError:
+        value = None
+    if value is None or not low <= value <= high:  # NaN fails this comparison too.
+        raise HTTPException(status_code=400, detail=f"Max heart rate must be between {low} and {high}")
+    return value
+
+
 def _stored_profile(request: Request):
     if hasattr(request.state, 'health_profile'):
         return request.state.health_profile
@@ -309,6 +324,7 @@ def _google_client(token: str, request: Request):
     if sex is not None and sex.lower() not in ("m", "f"):
         raise HTTPException(400, "X-User-Sex must be m or f")
     client.strain_sex, client.strain_sex_defaulted = (sex or "m").lower(), sex is None
+    client.strain_hr_max = _client_max_hr(request)
     if getattr(client, 'store', None) is not None:
         client.stored_only = True
     if getattr(client, 'database', None) is not None:
@@ -341,7 +357,9 @@ def _cached_data_page(function):
         page_version = 'page-v38-normalized-profile' + ('-sleep-6cb9e7a' if request.url.path.startswith(('/api/sleep', '/api/recovery')) or request.url.path == '/api/dashboard' else '')
         key = hashlib.sha256(json.dumps([page_version, request.url.path, sorted(effective.items()) if daily_sleep else sorted(request.query_params.multi_items()),
             str(day), age, str(client.strain_timezone), client.strain_sex, client.strain_sex_defaulted,
-            repr(STRAIN_CONFIG), strain_revision, dynamic.get('sleep_revision', 0)], default=str).encode()).hexdigest()
+            repr(STRAIN_CONFIG), strain_revision, dynamic.get('sleep_revision', 0),
+            # Appended only when set, so pages saved without a personal max HR stay valid.
+            *([hr_max] if (hr_max := getattr(client, 'strain_hr_max', None)) is not None else [])], default=str).encode()).hexdigest()
         frozen = daily_sleep and await asyncio.to_thread(client.store.sleep_day_prepared, client.account_key, day)
         return await cached_page_result(client, key, request.url.path, response, lambda: function(*args, **kwargs),
                                         frozen=frozen, prepare=getattr(request.state, 'prepare_sleep', False))
@@ -420,7 +438,7 @@ async def _compute_real_strain(client: GoogleHealthClient, target_date: date, ag
     else:
         values = calculate_days(start, target_date, datetime.now(timezone.utc), getattr(client, "strain_timezone", timezone.utc),
                             age, getattr(client, "strain_sex", "m"), getattr(client, "strain_sex_defaulted", True),
-                            (samples, sessions or [], [], {}), STRAIN_CONFIG)
+                            (samples, sessions or [], [], {}), STRAIN_CONFIG, hr_max=getattr(client, "strain_hr_max", None))
     return strain_response(values[target_date], values, "connected", age, config=STRAIN_CONFIG)
 
 
@@ -636,7 +654,7 @@ async def _recovery_response(client, today: date, history: dict, sleep: dict | N
               if estimate.status == "building_reference" else
               "Estimated baseline-relative recovery; above normal means higher than usual, not necessarily better.")
     if estimate.confidence == "low":
-        reason += " Low confidence: zone only; percentage withheld."
+        reason += " Low confidence: under four weeks of reference, so treat the percentage as a rough guide."
     return response.model_copy(update={**asdict(estimate), "score": estimate.percent,
                                        'estimator': 'connected_recovery',
                                        "status_reason": reason,
@@ -1077,7 +1095,7 @@ async def strain_analytics_endpoint(
     if is_mock:
         values = calculate_days(lower, end, now, client.strain_timezone, age, client.strain_sex,
                             False if is_mock else client.strain_sex_defaulted, inputs, STRAIN_CONFIG, client.account_key if token else None)
-    recovery = 72 if is_mock else (await _compute_connected_recovery(client, end, age)).score
+    recovery = demo_recovery_percent(end, _client_age(request)) if is_mock else (await _compute_connected_recovery(client, end, age)).score
     current = strain_response(values[end], values, "demo" if is_mock else "connected", age, recovery, STRAIN_CONFIG)
     if is_mock:
         _, sessions, _, _ = inputs
@@ -1103,7 +1121,7 @@ async def strain_endpoint(request: Request, response: Response, date: Optional[d
         inputs, _ = demo_inputs(start, target, client.strain_timezone)
         now = datetime.combine(target, datetime.min.time(), tzinfo=client.strain_timezone) + timedelta(hours=22)
         values = calculate_days(start, target, now, client.strain_timezone, age, client.strain_sex, False, inputs, STRAIN_CONFIG)
-        return strain_response(values[target], values, "demo", age, 72, STRAIN_CONFIG)
+        return strain_response(values[target], values, "demo", age, demo_recovery_percent(target, _client_age(request)), STRAIN_CONFIG)
     current, recovery = await asyncio.gather(_compute_real_strain(client, target, age), _compute_connected_recovery(client, target, age))
     band = strain_analytics([], target, current.strain, recovery.score, STRAIN_CONFIG)["strain_target"]
     return current.model_copy(update={"analytics": {**current.analytics, "strain_target": band}})

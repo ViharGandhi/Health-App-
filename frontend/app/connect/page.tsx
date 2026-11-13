@@ -23,6 +23,9 @@ export default function ConnectPage() {
   const [age, setAge] = useState('');
   const [ageSaved, setAgeSaved] = useState(false);
   const [ageError, setAgeError] = useState('');
+  const [maxHr, setMaxHr] = useState('');
+  const [maxHrNote, setMaxHrNote] = useState('');
+  const [maxHrError, setMaxHrError] = useState('');
 
   useEffect(() => {
     if (status?.connected) api.getDataStatus().then(data => setLastSynced(data.last_synced_at)).catch(() => {});
@@ -30,6 +33,7 @@ export default function ConnectPage() {
 
   useEffect(() => {
     setAge(window.localStorage.getItem('ojas_age') ?? '');
+    setMaxHr(window.localStorage.getItem('ojas_max_hr') ?? '');
     const reason = new URLSearchParams(window.location.search).get('error');
     if (reason) {
       setError({
@@ -199,6 +203,26 @@ export default function ConnectPage() {
         }}>Save age</button>
         {ageSaved && <p className={styles.setupText} role="status">Saved on this device.</p>}
         {ageError && <p className={styles.error} role="alert">{ageError}</p>}
+      </div>
+      <div className={`card ${styles.setupCard}`}>
+        <p className="section-title" style={{ marginBottom: 10 }}>Your max heart rate</p>
+        <p className={styles.setupText}>Optional. If you know your maximum heart rate from a hard effort or a test, Strain and heart-rate zones use it in place of the age estimate. It applies from today onward; earlier days keep their scores. Leave it empty to use the age estimate.</p>
+        <label htmlFor="user-max-hr" className={styles.setupText}>Max heart rate in bpm</label>
+        <input id="user-max-hr" type="number" min="120" max="230" value={maxHr} onChange={(event) => { setMaxHr(event.target.value); setMaxHrNote(''); }} style={{ width: '100%', margin: '8px 0 12px', padding: 12, borderRadius: 10, border: '1px solid #454545', background: '#151515', color: '#FFFFFF', fontSize: 16 }} />
+        <button type="button" className="btn btn-primary" onClick={() => {
+          setMaxHrError('');
+          if (maxHr.trim() === '') {
+            window.localStorage.removeItem('ojas_max_hr');
+            setMaxHrNote('Cleared. Using the age estimate.');
+            return;
+          }
+          const value = Number(maxHr);
+          if (!Number.isInteger(value) || value < 120 || value > 230) { setMaxHrError('Enter a max heart rate from 120 to 230 bpm.'); return; }
+          window.localStorage.setItem('ojas_max_hr', String(value));
+          setMaxHrNote('Saved on this device.');
+        }}>Save max heart rate</button>
+        {maxHrNote && <p className={styles.setupText} role="status">{maxHrNote}</p>}
+        {maxHrError && <p className={styles.error} role="alert">{maxHrError}</p>}
       </div>
       <div className={`card ${styles.setupCard}`}>
         <p className="section-title" style={{ marginBottom: 10 }}>Install on iPhone</p>

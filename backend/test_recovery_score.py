@@ -26,7 +26,7 @@ class RecoveryScoreTests(unittest.TestCase):
         return calculate_recovery(**inputs)
 
     def test_insufficient_baseline_or_recent_has_no_score_or_zone(self):
-        for changes in ({"baseline_hrv": [40.0] * 20}, {"recent_hrv": [40.0] * 3}):
+        for changes in ({"baseline_hrv": [40.0] * 13}, {"recent_hrv": [40.0] * 3}):
             result = self.score(**changes)
             self.assertEqual(result.status, "building_reference")
             self.assertIsNone(result.z)
@@ -74,7 +74,7 @@ class RecoveryScoreTests(unittest.TestCase):
             self.assertEqual(result.confidence, "medium")
 
     def test_missing_or_insufficient_rhr_uses_hrv_only(self):
-        for changes in ({"today_rhr": None}, {"baseline_rhr": [55] * 20}):
+        for changes in ({"today_rhr": None}, {"baseline_rhr": [55] * 13}):
             result = self.score(today_hrv=45, **changes)
             self.assertIsNone(result.components["z_rhr"])
             self.assertAlmostEqual(result.z, result.components["z_hrv"], places=2)
@@ -82,7 +82,12 @@ class RecoveryScoreTests(unittest.TestCase):
 
     def test_missing_today_hrv_uses_recent_mean(self):
         result = self.score(today_hrv=None, recent_hrv=[45] * 6, today_rhr=None)
-        self.assertAlmostEqual(result.components["z_hrv"], (math.log(45) - math.log(40)) / .05)
+        self.assertAlmostEqual(result.components["z_hrv_raw"], (math.log(45) - math.log(40)) / .05)
+        self.assertEqual(result.components["z_hrv"], 1.5)
+
+    def test_hrv_upside_is_capped_but_downside_is_not(self):
+        self.assertEqual(self.score(today_hrv=60, today_rhr=None).z, 1.5)
+        self.assertLess(self.score(today_hrv=25, today_rhr=None).z, -1.5)
 
     def test_illness_caps_z_including_positive_signal(self):
         result = self.score(today_hrv=80, illness_flag=True)
@@ -92,15 +97,15 @@ class RecoveryScoreTests(unittest.TestCase):
         self.assertEqual(result.zone, "normal")
 
     def test_extremes_are_clamped(self):
-        for hrv, expected in ((10000, 3), (.00001, -3)):
+        for hrv, expected in ((10000, 1.5), (.00001, -3)):
             self.assertEqual(self.score(today_hrv=hrv, today_rhr=None).z, expected)
 
-    def test_confidence_thresholds_and_low_percent_withheld(self):
-        for baseline, recent, confidence in ((21, 4, "low"), (27, 7, "low"),
+    def test_confidence_thresholds_and_low_percent_shown(self):
+        for baseline, recent, confidence in ((14, 4, "low"), (27, 7, "low"),
                                               (28, 5, "medium"), (44, 7, "medium"), (45, 6, "high")):
             result = self.score(baseline_hrv=[40] * baseline, recent_hrv=[40] * recent)
             self.assertEqual(result.confidence, confidence)
-            self.assertEqual(result.percent, None if confidence == "low" else 50)
+            self.assertEqual(result.percent, 50)
             self.assertEqual(result.zone, "normal")
 
     def test_short_sleep_is_discarded_but_180_minutes_is_valid(self):
@@ -148,7 +153,10 @@ class RecoveryScoreTests(unittest.TestCase):
             result = recovery_from_history(history, DAY)
             self.assertTrue(result.illness_flag)
             self.assertEqual(result.z, -.5)
-            history[metric] = history[metric][:20] + history[metric][-1:]
+            history[metric][-1]["value"] = 12
+            self.assertFalse(recovery_from_history(history, DAY).illness_flag)
+            history[metric][-1]["value"] = 20
+            history[metric] = history[metric][:13] + history[metric][-1:]
             self.assertFalse(recovery_from_history(history, DAY).illness_flag)
             history[metric] = [{"date": (DAY - timedelta(days=8 + i)).isoformat(), "value": 16}
                                for i in range(60)] + history[metric][-1:]

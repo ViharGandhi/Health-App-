@@ -80,6 +80,8 @@ class StrainResponse(BaseModel):
     zone_minutes: Optional[ZoneMinutes]
     workouts: List[WorkoutDetail] = []
     max_hr: Optional[float] = Field(description="Observed maximum cleaned HR; physiological HRmax is params.hr_max")
+    peak_hr_sustained: Optional[float] = Field(None, description="Highest heart rate held for about one minute")
+    hr_max_exceeded: bool = Field(False, description="The sustained peak is above params.hr_max; the setting may be too low")
     avg_hr: Optional[float] = None
     age_used: Optional[int] = None
     age_is_default: bool = False

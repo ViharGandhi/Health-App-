@@ -163,7 +163,7 @@ class Results:
                 # Schema's single target cannot encode the app's low/high band;
                 # preserve the band in config_json instead of inventing a midpoint.
                 conn.execute('UPDATE calc_runs SET config_json=? WHERE calc_run_id=?', (json_text({'strain_target': analytics.get('strain_target')}), tr))
-                self.put(conn, 'training_trend_results', calc_run_id=tr, user_id=self.user, as_of_date=day, avg_7d_strain=analytics.get('avg_strain_7d'), avg_28d_strain=analytics.get('avg_strain_28d'), acute_chronic_ratio=analytics.get('acute_chronic_ratio'), target_basis='recovery_band')
+                self.put(conn, 'training_trend_results', calc_run_id=tr, user_id=self.user, as_of_date=day, avg_7d_strain=analytics.get('avg_strain_7d'), avg_28d_strain=analytics.get('avg_strain_28d'), acute_chronic_ratio=None, target_basis='recovery_band')
 
     def recovery(self, data):
         if data.get('estimator') == 'descriptive_vitals':
