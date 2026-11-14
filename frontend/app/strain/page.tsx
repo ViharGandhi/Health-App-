@@ -9,7 +9,7 @@ import type { StrainData } from '@/lib/types';
 import StrainMetricIcon from '@/components/StrainMetricIcon';
 import StrainTrendChart from '@/components/StrainTrendChart';
 import StrainGuide from '@/components/StrainGuide';
-import EffortLoad from '@/components/EffortLoad';
+import TrainingLoadCard from '@/components/TrainingLoadCard';
 import MockBanner from '@/components/MockBanner';
 import { activityHref } from '@/lib/activity';
 import ActivityIcon from '@/components/ActivityIcon';
@@ -46,12 +46,12 @@ export default function StrainPage() {
       <section className={styles.activities} aria-label="Today's activities">{latest?.activities.length ? latest.activities.map(activity => <Link href={`${activityHref(activity.id, latest.date, demo)}&source=strain`} key={activity.id} className={styles.activityRow}>
         <div className={styles.activityBadge} title={activity.strain == null ? 'Activity Strain unavailable' : 'Estimated cardio Strain'}><ActivityIcon name={activity.name} type={activity.exercise_type} /><strong aria-label={activity.strain == null ? 'Activity Strain unavailable' : `Cardio Strain ${activity.strain.toFixed(1)}`}>{activity.strain?.toFixed(1) ?? '—'}</strong></div><span className={styles.activityName}>{activity.name.replaceAll('_', ' ')}</span><div className={styles.activityTimes}><span>{activity.start.slice(11, 16)}</span><span>{activity.end.slice(11, 16)}</span></div>
       </Link>) : <p className={shared.note}>No logged activities for today.</p>}{!!latest?.activities.length && <p className={shared.note}>Activity badges show estimated cardio Strain. Muscular Load is not included.</p>}</section>
+      <TrainingLoadCard demo={demo} />
       <h2 className={shared.weeklyTitle}>Weekly Trends</h2><div className={shared.trendCards}>{strainMetrics.map(item => <section className={shared.trendCard} key={item.key}>
         <Link href={`/strain/${item.slug}${suffix}`} className={`${shared.cardHeader} ${styles.cardLink}`}><span>{item.key === 'strain' ? 'STRAIN' : item.title.replace('HEART RATE', 'HR')}</span><svg width="9" height="15" viewBox="0 0 9 15" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="m2 2 5 5.5-5 5.5" /></svg></Link><StrainTrendChart data={data} metric={item.key} embedded />
       </section>)}</div>
       <p className={shared.note}>Cardio Strain uses heart-rate-reserve TRIMP and the 0–21 curve. Activity zone times use logged activities only. Missing heart-rate and step readings remain blank.</p>
-      <p className={shared.note}>7-day average: {strainFormat(data.current.analytics.avg_strain_7d, 'strain')} · 28-day average: {strainFormat(data.current.analytics.avg_strain_28d, 'strain')} · Load this week: {loadTrend(data.current.analytics.load_trend)}</p>
-      <EffortLoad day={data.date} isMock={data.is_mock} className={shared.note} />
+      <p className={shared.note}>7-day average: {strainFormat(data.current.analytics.avg_strain_7d, 'strain')} · 28-day average: {strainFormat(data.current.analytics.avg_strain_28d, 'strain')} · Heart-rate load this week: {loadTrend(data.current.analytics.load_trend)}</p>
       {data.current.suggested_workouts.length > 0 && <p className={shared.note}>{data.current.suggested_workouts.length} unlogged effort period(s) detected. Their load is already included in Day Strain.</p>}
       {data.is_mock && <p className={shared.note}>Synthetic replay · age {data.current.age_used} · RHR {data.current.params.hr_rest} bpm · {data.current.params.sex === 'm' ? 'male' : 'female'} coefficients · target from the sample Recovery. Scores are calculated from raw sample readings.</p>}
       <div className={styles.previewLinks}><a href={demo ? '/strain' : '/strain?demo=true'}>{demo ? 'Return to connected data' : 'Preview sample data'}</a></div>

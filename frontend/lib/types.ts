@@ -419,3 +419,12 @@ export interface EffortRating { activity_id: string; date: string; rpe: number; 
 export interface EffortHistory { ratings: EffortRating[]; daily_load: Record<string, number> }
 /** Morning "how do you feel" rating, 1 (very poor) to 5 (great). */
 export interface MorningCheckin { date: string; feeling: number }
+/** Effort × minutes per workout (rated, else estimated from Strain): last 7 days vs the 3 weeks before. */
+export type TrainingLoadStatus = 'well_below' | 'below' | 'steady' | 'above' | 'well_above';
+export interface TrainingLoad {
+  is_mock: boolean; date: string;
+  current: { week_load: number; usual_week_load: number; change: number; status: TrainingLoadStatus } | null;
+  days: { date: string; load: number | null; week_load: number | null; usual_week_load: number | null }[];
+  week_workouts: { rated: number; estimated: number };
+  worn_days: { week: number; usual: number };
+}

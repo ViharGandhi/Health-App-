@@ -23,6 +23,21 @@ controls but saves nothing; saving needs a connected account (401 otherwise).
   `PUT /api/effort` saves `{activity_id, date, rpe, minutes}` (rpe 1–10,
   0 < minutes ≤ 600, no future dates); `DELETE /api/effort/{activity_id}` clears.
 
+## Training load (Strain page card)
+
+- Apple Watch-style: each workout's load is effort × minutes, using the user's
+  rating or, if unrated, the estimate from its Strain. Ratings always count,
+  even for lifting too light on heart rate to be scored.
+- The rolling 7-day load is compared with the usual week, from the 21 days
+  before it (Apple compares 7 with 28 days; non-overlapping windows keep this
+  week from pulling its own reference). Days without the band are unknown, not
+  rest: the worn-day mean is scaled to a week. Needs 4 worn days this week and
+  14 in the 3 weeks before.
+- Status: steady within 15%, below/above 15–40%, well below/above beyond 40%.
+  These bands are display judgements; Apple does not publish its thresholds.
+- `GET /api/training-load` (`backend/training_load.py`); not page-cached, so a
+  new rating shows at once.
+
 ## Morning check-in
 
 - One tap on the Recovery page: "How do you feel this morning?" from 1 (awful)

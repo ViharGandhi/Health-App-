@@ -1189,6 +1189,34 @@ async def strain_analytics_endpoint(
     return build_strain_analytics(history, current, start, end, timeframe, metric, is_mock, today)
 
 
+@app.get("/api/training-load")
+async def training_load_endpoint(request: Request, response: Response, demo: bool = False):
+    """Effort x minutes per workout (rated, else estimated from Strain): this week vs usual.
+
+    Not page-cached: a new effort rating must show at once.
+    """
+    import training_load
+    end = _client_day(request)
+    start = end - timedelta(days=training_load.CHART_DAYS + 27)
+    token = None if demo else await _get_token(request, response)
+    if not token and not demo and get_session(request):
+        raise HTTPException(401, "Reconnect Google Health to refresh training load.")
+    client = _google_client(token or "demo", request)
+    age, ratings = _client_age(request), []
+    if token:
+        values, _ = await load_strain_days(client, start, end, datetime.now(timezone.utc), age, STRAIN_CONFIG)
+        if client.database is not None:
+            ratings = (await asyncio.to_thread(user_inputs.efforts, client.database, client.db_account['user_id'], start, end))['ratings']
+    else:
+        age = age if age is not None else 30
+        inputs, _ = demo_inputs(start, end, client.strain_timezone)
+        now = datetime.combine(end, datetime.min.time(), tzinfo=client.strain_timezone) + timedelta(hours=22)
+        values = calculate_days(start, end, now, client.strain_timezone, age, client.strain_sex, False, inputs, STRAIN_CONFIG)
+    worn = {day for day, value in values.items() if value.get('coverage', 0) > 0}
+    rows = training_load.workout_loads(values, ratings)
+    return {'is_mock': not token, 'date': end.isoformat(), **training_load.summarize(rows, worn, end)}
+
+
 @app.get("/api/strain", response_model=StrainResponse)
 @_cached_data_page
 async def strain_endpoint(request: Request, response: Response, date: Optional[date] = None, demo: bool = False):
