@@ -1,0 +1,15 @@
+.card { margin: 0 0 26px; padding: 18px 15px 14px; border-radius: var(--card-radius); background: var(--bg-card); }
+.header { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.header span { font: 800 11px var(--font-body); letter-spacing: .09em; }
+.header small { font: 700 9px var(--font-body); letter-spacing: .06em; color: var(--text-tertiary); }
+.status { display: flex; flex-direction: column; gap: 3px; margin: 12px 0 8px; }
+.status strong { font: 700 26px var(--font-display); }
+.status strong.pending { color: var(--text-secondary); }
+.status span { font-size: 12px; line-height: 1.5; color: var(--text-secondary); }
+.chart { display: block; width: 100%; height: auto; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 6px; font-size: 10px; color: var(--text-tertiary); }
+.legend span { display: flex; align-items: center; gap: 5px; }
+.legend i { width: 14px; height: 3px; border-radius: 2px; }
+.legend i.usual { background: repeating-linear-gradient(90deg, #FFFFFFB3 0 3px, transparent 3px 6px); }
+.legend i.band { height: 8px; background: #FFFFFF26; }
+.note { margin-top: 10px; font-size: 11px; line-height: 1.55; color: var(--text-secondary); }

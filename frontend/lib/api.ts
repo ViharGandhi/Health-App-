@@ -4,7 +4,7 @@
  * Automatically uses mock data when no device is connected (handled server-side).
  */
 
-import type { DashboardData, RecoveryData, RecoveryAnalytics, RecoveryDemo, RecoveryRange, SleepData, StrainData, AuthStatus, HealthData, SleepConsistencyScore, SleepStressHistory, SleepStageRangeHistory, SleepHeartRate, EffortHistory, EffortRating, MorningCheckin } from './types';
+import type { DashboardData, RecoveryData, RecoveryAnalytics, RecoveryDemo, RecoveryRange, SleepData, StrainData, AuthStatus, HealthData, SleepConsistencyScore, SleepStressHistory, SleepStageRangeHistory, SleepHeartRate, EffortHistory, EffortRating, MorningCheckin, TrainingLoad } from './types';
 import { RequestCache } from './requestCache';
 import { trackSyncActivity } from './syncActivity';
 
@@ -68,7 +68,8 @@ async function apiFetch<T>(path: string, day?: string): Promise<T> {
   }
   return res.json() as Promise<T>;
   };
-  if (path.startsWith('/api/auth/') || path.startsWith('/api/data/')) return fetchData();
+  // Training load reflects effort ratings, which must show as soon as they are saved.
+  if (path.startsWith('/api/auth/') || path.startsWith('/api/data/') || path.startsWith('/api/training-load')) return fetchData();
   return responses.get(JSON.stringify([BACKEND_URL, path, headers]), fetchData, path.startsWith('/api/stress?') ? 30000 : 120000);
 }
 
@@ -169,6 +170,8 @@ export const api = {
     inputFetch<{ checkins: MorningCheckin[] }>('GET', `/api/checkins?${new URLSearchParams({ ...(start ? { start } : {}), ...(end ? { end } : {}) })}`),
 
   saveCheckin: (checkin: MorningCheckin) => inputFetch<MorningCheckin>('PUT', '/api/checkins', checkin),
+
+  getTrainingLoad: (demo = false) => apiFetch<TrainingLoad>(`/api/training-load?demo=${demo}`),
 
   getProfile: () => inputFetch<{ birth_date: string | null; age: number | null }>('GET', '/api/profile'),
 
